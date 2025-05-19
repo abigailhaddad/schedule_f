@@ -1,0 +1,768 @@
+/* Enhanced card styles with subtle shadows/borders for better visual hierarchy */
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+/* Card body padding adjustments */
+.card-body {
+    padding: 1.15rem;
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.01);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.8rem 1.15rem;
+}
+
+/* Filter modal improvements */
+.modal-content {
+    border: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 1rem 1.25rem;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding: 0.75rem 1.25rem;
+}
+
+.select-options-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Compact checkboxes with better styling */
+.checkbox-item {
+    padding: 6px 8px;
+    margin-bottom: 2px;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+}
+
+.checkbox-item:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+    transform: translateX(2px);
+}
+
+.checkbox-item .form-check-input {
+    margin: 0 8px 0 0;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox-item .form-check-label {
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    padding: 0;
+    line-height: 1.5;
+}
+
+/* Custom checkbox styling */
+.form-check-input {
+    width: 1.1em;
+    height: 1.1em;
+    cursor: pointer;
+    border: 1.5px solid rgba(var(--bs-primary-rgb), 0.5);
+    position: relative;
+    transition: all 0.15s ease;
+}
+
+.form-check-input:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 1px rgba(var(--bs-primary-rgb), 0.1);
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 1px rgba(var(--bs-primary-rgb), 0.2);
+}
+
+/* Font size override for navbar title */
+#navbar-title {
+    font-size: 2.5rem !important;
+}
+
+/* Styling for filter tags */
+.filter-tag {
+    background-color: var(--bs-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: all 0.15s ease;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.filter-tag .remove-tag, .filter-tag .remove-range-tag, .filter-tag .remove-exact-tag {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    transition: all 0.15s ease;
+    margin-left: 2px;
+}
+
+.filter-tag .remove-tag:hover, .filter-tag .remove-range-tag:hover, .filter-tag .remove-exact-tag:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.filter-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loading state styling */
+.loading {
+    position: relative;
+}
+
+.loading .spinner-border {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Table styling improvements */
+.table {
+    margin-top: 0;
+    margin-bottom: 0; 
+}
+
+.table-responsive {
+    overflow-x: auto;
+    padding: 0;
+}
+
+.card > .card-body.table-responsive {
+    padding: 0;
+}
+
+.table thead th {
+    position: relative;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-top: none; /* Remove top border to avoid double border */
+    border-bottom: 2px solid #dee2e6;
+    padding: 0.65rem 2.5rem 0.65rem 0.75rem; /* Adjusted padding for better vertical rhythm */
+    vertical-align: middle;
+    font-size: 0.9rem; /* Slightly smaller font for cleaner headers */
+    letter-spacing: 0.01em; /* Subtle letter spacing for readability */
+}
+
+.table tbody td {
+    padding: 0.6rem 0.75rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    vertical-align: middle;
+    transition: background-color 0.15s ease;
+}
+
+/* Style DataTables row hover state */
+.table tbody tr:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.04);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: rgba(0,0,0,0.01); /* Subtle alternating row colors */
+}
+
+/* Fix DataTables controls spacing */
+.dataTables_wrapper .row:first-child {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    padding: 0 0.75rem;
+}
+
+/* Improve spacing in card body */
+.card-body {
+    padding: 1.15rem;
+}
+
+/* Tighter pagination controls */
+.dataTables_paginate {
+    padding: 0.5rem !important;
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_info {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Custom styles for badges in table */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+}
+
+/* Character limited text with tooltip */
+.char-limited {
+    padding-bottom: 1px;
+    border-bottom: 1px dotted #ccc;
+    cursor: help;
+}
+
+/* Bootstrap tooltip customization */
+.tooltip {
+    opacity: 1 !important;
+    max-width: 600px !important;
+    z-index: 9999 !important;
+}
+
+.tooltip-inner {
+    max-width: 600px !important;
+    padding: 8px 12px !important;
+    text-align: left !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    word-wrap: break-word !important;
+}
+
+/* Add styles to ensure cell text works properly with DataTables */
+table.dataTable td {
+    overflow: visible !important;  /* Allow popups to overflow */
+    white-space: normal !important; /* Wrap text naturally */
+}
+
+/* Text formatting utilities */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fst-italic {
+    font-style: italic !important;
+}
+
+.fw-medium {
+    font-weight: 500 !important;
+}
+
+/* Statistics card specific styling */
+#statistics h3 {
+    color: var(--bs-primary);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 1.6rem;
+    transition: all 0.3s ease;
+}
+
+#statistics .col:hover h3 {
+    transform: scale(1.05);
+    color: var(--bs-primary);
+}
+
+#statistics p {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+#statistics .col {
+    position: relative;
+    padding: 0.75rem 0.5rem;
+    transition: all 0.2s ease;
+}
+
+#statistics .col:not(:last-child):after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
+    background-color: rgba(0,0,0,0.08);
+}
+
+/* Column header filter button styling - Fixed positioning */
+.column-filter-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 3px;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+    color: rgba(var(--bs-primary-rgb), 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 24px; /* Position to the left of sort buttons */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    z-index: 5;
+    opacity: 0.7;
+}
+
+.column-filter-btn i {
+    font-size: 10px;
+    transition: transform 0.15s ease;
+}
+
+/* Hover effects */
+.column-filter-btn:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.08);
+    color: var(--bs-primary);
+    opacity: 1;
+}
+
+.column-filter-btn:hover i {
+    transform: scale(1.1);
+}
+
+/* Active state styling */
+.column-filter-btn.active {
+    background-color: var(--bs-primary);
+    color: white;
+    opacity: 1;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.column-filter-btn.active i {
+    opacity: 1;
+}
+
+.column-filter-btn.active:hover {
+    background-color: var(--bs-primary);
+    filter: brightness(108%);
+}
+
+/* Positioning for DataTables sort icons */
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after,
+table.dataTable thead .sorting_asc_disabled::after,
+table.dataTable thead .sorting_desc_disabled::after {
+    right: 5px !important; /* Move sort indicator to the right */
+    opacity: 0.5;
+}
+
+/* Active filters container styling */
+.active-filters-container {
+    min-height: 70px;
+    padding-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+/* This class is added via JS when filters are active */
+.active-filters-container.has-filters {
+    background-color: rgba(var(--bs-primary-rgb), 0.03);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+/* Override for DataTables header styling */
+table.dataTable thead > tr > th.sorting,
+table.dataTable thead > tr > th.sorting_asc,
+table.dataTable thead > tr > th.sorting_desc {
+    padding-right: 2.75rem; /* Make space for both filter and sort buttons */
+    white-space: nowrap; /* Prevents text wrapping under buttons */
+}
+
+/* DataTables ColVis button dropdown styling */
+div.dt-button-collection {
+    position: absolute !important; 
+    width: auto !important;
+    padding: 8px !important;
+    margin-top: 3px !important;
+    z-index: 1000 !important;
+    background: white !important;
+    border: 1px solid rgba(0,0,0,0.15) !important;
+    border-radius: 4px !important;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175) !important;
+}
+
+/* RESET ALL BUTTONS FIRST - Most aggressive override */
+div.dt-button-collection button,
+div.dt-button-collection button.dt-button,
+div.dt-button-collection div.dt-button,
+div.dt-button-collection div button,
+button.dt-button:not(.active),
+div.dt-button:not(.active),
+a.dt-button:not(.active) {
+    background: white !important;
+    background-image: none !important;
+    background-color: white !important;
+    color: #333 !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: left !important;
+    width: 100% !important;
+    padding: 8px 16px !important;
+    margin: 2px 0 !important;
+    border-radius: 4px !important;
+    font-weight: normal !important;
+    opacity: 1 !important;
+}
+
+/* Hover state for all buttons */
+div.dt-button-collection button:hover,
+div.dt-button-collection button.dt-button:hover,
+div.dt-button-collection div.dt-button:hover,
+div.dt-button-collection div button:hover,
+button.dt-button:not(.active):hover,
+div.dt-button:not(.active):hover,
+a.dt-button:not(.active):hover {
+    background: rgba(var(--bs-primary-rgb), 0.1) !important;
+    background-image: none !important;
+    background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+    color: var(--bs-primary) !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+/* Active buttons ONLY (visible columns) */
+div.dt-button-collection button.active,
+div.dt-button-collection button.dt-button.active,
+div.dt-button-collection div.dt-button.active,
+div.dt-button-collection div button.active,
+button.dt-button.active,
+div.dt-button.active,
+a.dt-button.active {
+    background: var(--bs-primary) !important;
+    background-image: none !important;
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+    font-weight: normal !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+}
+
+/* Hover state for active buttons */
+div.dt-button-collection button.active:hover,
+div.dt-button-collection button.dt-button.active:hover,
+div.dt-button-collection div.dt-button.active:hover,
+div.dt-button-collection div button.active:hover,
+button.dt-button.active:hover,
+div.dt-button.active:hover,
+a.dt-button.active:hover {
+    background: var(--bs-primary) !important;
+    background-image: none !important;
+    background-color: var(--bs-primary) !important;
+    filter: brightness(110%) !important;
+    box-shadow: none !important;
+}
+
+/* Range slider styling */
+.range-slider-container {
+    padding: 20px 0;
+}
+
+.range-slider {
+    position: relative;
+    width: 100%;
+}
+
+.range-slider .slider-track {
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    position: relative;
+}
+
+.range-slider .slider-range {
+    height: 4px;
+    background-color: var(--bs-primary);
+    border-radius: 2px;
+    position: absolute;
+}
+
+.range-slider input[type="range"] {
+    position: absolute;
+    top: -8px;
+    width: 100%;
+    height: 20px;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: none;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    pointer-events: all;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.range-slider input[type="range"]::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    pointer-events: all;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+}
+
+.range-slider input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.1);
+}
+
+.range-values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.range-values .current-range {
+    font-weight: 600;
+    color: var(--bs-primary);
+    text-align: center;
+    flex: 1;
+}
+
+/* Improve dataTables pagination styling */
+.dataTables_paginate .paginate_button {
+    border-radius: 4px !important;
+    border: none !important;
+    background: none !important;
+    transition: all 0.15s ease !important;
+    margin: 0 2px !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: rgba(var(--bs-primary-rgb), 0.1) !important;
+    border: none !important;
+    transform: translateY(-1px) !important;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: var(--bs-primary) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    font-weight: 500 !important;
+}
+
+.dataTables_paginate .paginate_button.current:hover {
+    background: var(--bs-primary) !important;
+    filter: brightness(110%) !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* Button styling improvements */
+.btn {
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.08);
+}
+
+.btn-primary, .btn-outline-primary {
+    position: relative;
+}
+
+/* Primary buttons get slight highlight */
+.btn-primary:hover {
+    filter: brightness(108%);
+    background-color: var(--bs-primary);
+}
+
+/* Fix table toolbar spacing */
+.dataTables_wrapper {
+    padding: 0;
+}
+
+.dataTables_bottom {
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.dataTables_length select {
+    min-width: 70px;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+.dataTables_length select:hover {
+    border-color: var(--bs-primary);
+}
+
+.dt-buttons {
+    margin: 0 !important;
+}
+
+.dt-button {
+    margin-right: 0.5rem !important;
+}
+
+/* Ensure DataTables buttons match other primary buttons */
+.dt-button.btn-primary {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+.dt-button.btn-primary:hover {
+    filter: brightness(108%) !important;
+    background-color: var(--bs-primary) !important;
+}
+
+/* Better empty table styling */
+.dataTables_empty {
+    padding: 2rem !important;
+    text-align: center !important;
+    color: #6c757d !important;
+    font-style: italic !important;
+}
+
+/* Header controls styling */
+#dt-buttons-container .btn {
+    white-space: nowrap;
+}
+
+.dataTables_length {
+    margin-bottom: 0 !important;
+}
+
+/* Add fade-in animation to table rows */
+@keyframes fadeInRow {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.table tbody tr {
+    animation: fadeInRow 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Stagger the animations for a nice effect */
+.table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+.table tbody tr:nth-child(6) { animation-delay: 0.3s; }
+.table tbody tr:nth-child(7) { animation-delay: 0.35s; }
+.table tbody tr:nth-child(8) { animation-delay: 0.4s; }
+.table tbody tr:nth-child(9) { animation-delay: 0.45s; }
+.table tbody tr:nth-child(10) { animation-delay: 0.5s; }
+
+/* Improve search box appearance */
+.dataTables_filter input {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 0.3rem 0.5rem;
+    transition: all 0.15s ease;
+}
+
+.dataTables_filter input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+    outline: none;
+}
+
+/* Navbar polish */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .container-fluid.py-4 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    .table thead th {
+        padding-right: 2.25rem;
+    }
+
+    #statistics h3 {
+        font-size: 1.4rem;
+    }
+    
+    #statistics p {
+        font-size: 0.8rem;
+    }
+    
+    /* Stack columns in mobile view */
+    #statistics .col:not(:last-child):after {
+        display: none;
+    }
+}

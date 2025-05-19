@@ -15,6 +15,7 @@ import json
 import glob
 import argparse
 import difflib
+import unicodedata
 from pathlib import Path
 from datetime import datetime
 import re
@@ -43,15 +44,33 @@ def find_most_recent_results():
     return None
 
 def clean_text(text):
-    """Normalize text for comparison by keeping only alphanumeric characters and spaces."""
+    """Extract only lowercase letters for comparison, properly handling HTML entities."""
     if not text:
         return ""
     
-    # Strip everything except alphanumeric characters and spaces
-    alphanumeric_only = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    # First handle common HTML entities
+    html_entities = {
+        '&rsquo;': "'", '&lsquo;': "'", 
+        '&rdquo;': '"', '&ldquo;': '"',
+        '&mdash;': '-', '&ndash;': '-',
+        '&nbsp;': ' ', '&amp;': '&',
+        '&quot;': '"', '&apos;': "'",
+        '&hellip;': '...', '&bull;': '•',
+        '&gt;': '>', '&lt;': '<',
+    }
     
-    # Convert to lowercase and normalize whitespace
-    return " ".join(alphanumeric_only.lower().split())
+    # Replace all HTML entities
+    for entity, replacement in html_entities.items():
+        text = text.replace(entity, replacement)
+    
+    # Also handle any other HTML entities (like &#39; etc.)
+    text = re.sub(r'&[a-zA-Z]+;', '', text)  # Remove named entities
+    text = re.sub(r'&#[0-9]+;', '', text)    # Remove numbered entities
+    
+    # Now strip EVERYTHING except lowercase letters
+    letters_only = re.sub(r'[^a-z]', '', text.lower())
+    
+    return letters_only
 
 def verify_quotes(raw_data_path, data_path, output_path=None):
     """Verify if quotes in data.json are present in the original comments."""
@@ -98,60 +117,73 @@ def verify_quotes(raw_data_path, data_path, output_path=None):
             })
             continue
         
-        # Store original forms for reference
-        original_quote = key_quote
+        # Extract only the letters from both texts
+        letters_quote = clean_text(key_quote)
+        letters_original = clean_text(original_text)
         
-        # Prepare normalized versions for comparison
-        clean_quote = clean_text(key_quote)
-        clean_original = clean_text(original_text)
+        # Create debugging info
+        debug_info = {
+            "original_quote": key_quote,
+            "original_text_sample": original_text[:200] + "..." if len(original_text) > 200 else original_text,
+            "letters_quote": letters_quote,
+            "letters_original_sample": letters_original[:200] + "..." if len(letters_original) > 200 else letters_original,
+        }
         
-        # Try different matching approaches
-        # 1. First try direct string match (basic)
-        is_exact_match = key_quote in original_text
+        # Check if all letters from the quote appear in sequence in the original
+        is_match = letters_quote in letters_original
         
-        # 2. If that fails, try with normalized text
-        if not is_exact_match:
-            is_exact_match = clean_quote in clean_original
-        
-        # If not exact, try fuzzy matching
-        if not is_exact_match:
-            # Calculate the highest fuzzy match ratio using difflib
-            matcher = difflib.SequenceMatcher(None, clean_quote, clean_original)
-            best_match_ratio = 0.0
-            
-            # Try sliding windows to find best potential match
-            window_size = len(clean_quote) * 3  # Use a larger window to catch context
-            
-            for i in range(0, len(clean_original) - min(len(clean_quote), 20), 20):
-                # Get a window from the original text
-                window = clean_original[i:i + window_size]
-                matcher.set_seq2(window)
-                ratio = matcher.ratio()
-                if ratio > best_match_ratio:
-                    best_match_ratio = ratio
-        else:
+        if is_match:
+            status = "Letters-only match"
+            verified = True
             best_match_ratio = 1.0
-        
-        # Determine verification status
-        if is_exact_match:
-            status = "Exact match"
-            verified = True
-        elif best_match_ratio >= 0.8:
-            status = f"Close match (similarity: {best_match_ratio:.2f})"
-            verified = True
-        elif best_match_ratio >= 0.6:
-            status = f"Partial match (similarity: {best_match_ratio:.2f})"
-            verified = False
+            
+            # Add index info for debugging
+            quote_index = letters_original.find(letters_quote)
+            debug_info["match_index"] = quote_index
+            debug_info["match_context"] = letters_original[max(0, quote_index-10):min(len(letters_original), quote_index+len(letters_quote)+10)]
         else:
-            status = f"No substantial match (similarity: {best_match_ratio:.2f})"
-            verified = False
+            # If no direct match, try fuzzy matching on letters only
+            matcher = difflib.SequenceMatcher(None, letters_quote, letters_original)
+            best_match_ratio = matcher.ratio()
+            
+            # Get the best match blocks for debugging
+            match_blocks = matcher.get_matching_blocks()
+            best_matches = []
+            for block in match_blocks:
+                if block.size > 5:  # Only record significant matches
+                    best_matches.append({
+                        "quote_start": block.a,
+                        "orig_start": block.b,
+                        "length": block.size,
+                        "quote_text": letters_quote[block.a:block.a+block.size],
+                        "orig_text": letters_original[block.b:block.b+block.size]
+                    })
+            debug_info["best_match_blocks"] = best_matches[:3]  # Show top 3 matches
+            
+            if best_match_ratio >= 0.8:
+                status = f"Close letters match (similarity: {best_match_ratio:.2f})"
+                verified = True
+            else:
+                status = f"No letters match (similarity: {best_match_ratio:.2f})"
+                verified = False
+        
+        # Add debug info to status
+        debug_status = f"{status}\nDEBUG INFO:\n"
+        for key, value in debug_info.items():
+            if isinstance(value, list):
+                debug_status += f"- {key}:\n"
+                for item in value:
+                    debug_status += f"  - {item}\n"
+            else:
+                debug_status += f"- {key}: {value}\n"
         
         verification_results.append({
             'id': comment_id,
             'quote': key_quote,
             'verified': verified,
-            'reason': status,
-            'confidence': best_match_ratio
+            'reason': debug_status if not verified else status,
+            'confidence': best_match_ratio,
+            'debug_info': debug_info
         })
     
     # Generate verification summary
@@ -176,10 +208,12 @@ def verify_quotes(raw_data_path, data_path, output_path=None):
     output_text += f"Date: {summary['timestamp']}\n"
     output_text += f"Total quotes examined: {summary['total_quotes']}\n"
     output_text += f"Verified quotes: {summary['verified_quotes']} ({summary['verification_rate']})\n\n"
-    output_text += f"NOTE ON MATCHING: For verification purposes, this tool strips all non-alphanumeric\n"
-    output_text += f"characters (punctuation, symbols, etc.) and compares only letters, numbers, and spaces.\n"
-    output_text += f"This approach handles issues with Unicode characters, HTML entities, and other\n"
-    output_text += f"special characters that might cause false negatives in exact matching.\n\n"
+    output_text += f"NOTE ON MATCHING: For verification purposes, this tool uses an extremely simplified approach:\n"
+    output_text += f"1. Extract ONLY lowercase letters (a-z) from both texts, ignoring ALL other characters\n"
+    output_text += f"2. Check if the letters from the quote appear in sequence in the original text\n"
+    output_text += f"3. If no exact match, use fuzzy matching on letters only as a fallback\n\n"
+    output_text += f"This approach completely ignores punctuation, spaces, numbers, Unicode characters,\n"
+    output_text += f"HTML entities, and all other non-letter characters, focusing ONLY on the letter sequence.\n\n"
     
     # Group results by verification status
     output_text += "UNVERIFIED QUOTES\n"
@@ -209,6 +243,20 @@ def verify_quotes(raw_data_path, data_path, output_path=None):
                     if entity in result['quote']:
                         output_text += f"{entity} "
                 output_text += "\n"
+            
+            # Add detailed debugging information
+            debug_info = result.get('debug_info', {})
+            if debug_info:
+                output_text += f"DEBUGGING INFORMATION:\n"
+                output_text += f"Letters-only quote: {debug_info.get('letters_quote', '')}\n"
+                output_text += f"Letters-only original sample: {debug_info.get('letters_original_sample', '')[:100]}...\n"
+                
+                # Show best match blocks if available
+                match_blocks = debug_info.get('best_match_blocks', [])
+                if match_blocks:
+                    output_text += f"Best partial matches:\n"
+                    for i, block in enumerate(match_blocks):
+                        output_text += f"  Match {i+1}: '{block.get('quote_text', '')}' at position {block.get('quote_start', 0)} matches '{block.get('orig_text', '')}' at {block.get('orig_start', 0)}\n"
                 
             output_text += f"Status: {result['reason']}\n\n"
     
