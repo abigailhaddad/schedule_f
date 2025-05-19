@@ -87,42 +87,96 @@ console.log('DEBUG MODE ON - any errors will be logged to console');
     }
 
     function loadData() {
-        // Add loading state
         document.querySelector('#statistics').classList.add('loading');
-        
+
         fetch('data.json')
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 state.data = data;
-                
-                // Remove loading placeholders
                 document.querySelector('#statistics').classList.remove('loading');
                 document.querySelector('#filter-buttons').innerHTML = '';
-                
+
                 initializeTable();
                 createFilterButtons();
                 updateStats();
-                
-                // Hide "No filters" message if any filters are active
                 updateNoFiltersMessage();
             })
+            .then(() => {
+                return fetch('search_index.json')
+                    .then(res => res.json())
+                    .then(indexJson => {
+                        console.log('MiniSearch available?', !!window.MiniSearch);
+                        console.log('MiniSearch version:', window.MiniSearch?.version);
+                        
+                        // Log the raw data for debugging
+                        console.log('Raw indexJson:', indexJson);
+                        
+                        try {
+                            // Correctly create a MiniSearch instance from serialized data
+                            // MiniSearch.loadJSON is a static method that returns a new instance
+                            miniSearch = window.MiniSearch.loadJSON(indexJson, {
+                                fields: ['title', 'key_quote', 'comment'],
+                                storeFields: ['id'],
+                                idField: 'id'
+                            });
+                            
+                            console.log('MiniSearch instance created successfully');
+                        } catch (error) {
+                            console.error('Error creating MiniSearch instance:', error);
+                            // Create an empty instance as fallback
+                            miniSearch = new window.MiniSearch({
+                                fields: ['title', 'key_quote', 'comment'],
+                                storeFields: ['id'],
+                                idField: 'id'
+                            });
+                            console.warn('Created empty MiniSearch instance as fallback');
+                        }
+            
+                        return fetch('result_map.json')
+                            .then(res => res.json())
+                            .then(map => {
+                                // Make sure the result map is properly parsed
+                                let parsedMap = typeof map === 'string' ? JSON.parse(map) : map;
+                                console.log('Result map type:', typeof parsedMap);
+                                
+                                resultMap = parsedMap;
+                                setupSearchUI();
+                            });
+                    });
+            })
+            
             .catch(err => {
                 document.querySelector('.card-body').innerHTML += `
                     <div class="alert alert-danger mt-3">
                         <strong>Error Loading Data:</strong><br>${err.message}
                     </div>
                 `;
-                
-                // Remove loading indicators
                 document.querySelector('#statistics').classList.remove('loading');
                 document.querySelector('#filter-buttons').innerHTML = '';
             });
     }
+
+    function setupSearchUI() {
+        const container = document.querySelector('.card-header');
+        const searchInput = document.createElement('input');
+        searchInput.placeholder = 'Search comments...';
+        searchInput.className = 'form-control w-auto ms-3';
+        searchInput.style.maxWidth = '250px';
+        container.appendChild(searchInput);
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim();
+            if (!query || !miniSearch) {
+                state.table.clear().rows.add(state.data).draw();
+                return;
+            }
+            const results = miniSearch.search(query, { fuzzy: 0.2 });
+            const matchingIds = results.map(r => r.id);
+            const filteredData = state.data.filter(item => matchingIds.includes(item.id));
+            state.table.clear().rows.add(filteredData).draw();
+        });
+    }
+
 
     function initializeTable() {
         const columns = createTableColumns();

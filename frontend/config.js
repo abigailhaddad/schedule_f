@@ -61,7 +61,7 @@ window.DATASET_CONFIG = {
         { 
             key: 'id',           
             title: 'Comment ID',           
-            visible: false,
+            visible: true,
             filter: 'text'
         },
     ],
