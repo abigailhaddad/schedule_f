@@ -1,0 +1,2 @@
+data/data.json !text !filter !merge !diff
+data/lookup_table.json !text !filter !merge !diff
