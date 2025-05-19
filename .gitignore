@@ -1,0 +1,25 @@
+# Environment
+.env
+myenv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data and results
+results/
+data/
+analyzed_comments/
+comments.json
+*.json
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
