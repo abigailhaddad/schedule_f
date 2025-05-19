@@ -17,6 +17,7 @@ import argparse
 import difflib
 from pathlib import Path
 from datetime import datetime
+import re
 
 def find_most_recent_results():
     """Find the most recent results directory with both raw_data.json and data.json."""
@@ -40,8 +41,6 @@ def find_most_recent_results():
             return result_dir
     
     return None
-
-import re
 
 def clean_text(text):
     """Normalize text for comparison by keeping only alphanumeric characters and spaces."""
