@@ -26,6 +26,8 @@ import os
 import json
 import glob
 import argparse
+import re
+import html
 from dotenv import load_dotenv
 from litellm import completion
 from pydantic import BaseModel, Field
@@ -61,6 +63,16 @@ class CommentAnalysisResult(BaseModel):
         description="Brief explanation of the stance classification (1-2 sentences)"
     )
 
+def strip_html_tags(text):
+    """Remove HTML tags and decode HTML entities from text."""
+    if not text:
+        return text
+    # First remove HTML tags
+    text = re.sub(r'<[^>]*>', '', text)
+    # Then decode HTML entities like &rsquo; and &ldquo;
+    text = html.unescape(text)
+    return text
+
 class CommentAnalyzer:
     """LiteLLM-based analyzer for public comments using Pydantic models for structured output."""
     def __init__(self, model="gpt-4o-mini"):
@@ -75,9 +87,9 @@ class CommentAnalyzer:
 
 This proposed rule would allow federal agencies to reclassify career civil servants in policy-influencing positions into a new employment category where they could be removed without the standard due process protections normally afforded to career federal employees.
 
-For each comment, provide:
+For each comment (including any attached documents), provide:
 
-1. Stance: Determine if the comment is "{Stance.FOR.value}" (supporting the rule), "{Stance.AGAINST.value}" (opposing the rule), or "{Stance.NEUTRAL.value}".
+1. Stance: Determine if the comment is "{Stance.FOR.value}" (supporting the rule), "{Stance.AGAINST.value}" (opposing the rule), or "{Stance.NEUTRAL.value}. If it says to do something else instead, it's against it.".
 
 2. Themes: Identify which of these themes are present (select all that apply):
    - {Theme.MERIT.value} (mentions civil service protections, merit system, etc.)
@@ -85,6 +97,8 @@ For each comment, provide:
    - {Theme.POLITICIZATION.value} (mentions political interference, partisan influence, etc.)
    - {Theme.SCIENTIFIC.value} (mentions concerns about scientific research, grant-making, etc.)
    - {Theme.INSTITUTIONAL.value} (mentions expertise, continuity, experience, etc.)
+   
+Note: Some comments include text from attached documents. Please consider ALL text in your analysis, including text from attachments if present.
 
 3. Key Quote: Select the most important quote (max 100 words) that best captures the essence of the comment. Important requirements:
    - The quote must be exactly present in the original text - do not paraphrase or modify
@@ -100,7 +114,7 @@ Analyze objectively and avoid inserting personal opinions or biases."""
         """Analyze a comment using LiteLLM with Pydantic for response formatting"""
         identifier = f" (ID: {comment_id})" if comment_id else ""
         try:
-            response = completion(
+            response = completion(temperature=0.0,
                 model=self.model,
                 messages=[
                     {"role": "system", "content": self.get_system_prompt()},
@@ -125,7 +139,7 @@ Analyze objectively and avoid inserting personal opinions or biases."""
             print(f"Error analyzing comment{identifier}: {str(e)}")
             raise
 
-def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-mini", api_key=None):
+def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-mini", api_key=None, resume=False):
     """
     Analyze comments from JSON file and save structured results with robust error handling.
     
@@ -135,6 +149,7 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
         top_n: Optional limit on number of comments to process
         model: Model to use for analysis
         api_key: API key to use for LiteLLM calls (if not in environment)
+        resume: Whether to resume from a previous checkpoint if available
     
     Returns:
         Path to the final results file
@@ -172,6 +187,9 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
     output_dir = os.path.dirname(output_file)
     os.makedirs(output_dir, exist_ok=True)
     
+    # Setup checkpoint file
+    checkpoint_file = os.path.join(output_dir, "analyze_checkpoint.json")
+    
     # Create a temp directory for intermediate results
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     temp_dir = os.path.join(output_dir, f"temp_{timestamp}")
@@ -184,19 +202,42 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
     # Process comments
     results = {}
     error_count = 0
-    with tqdm(total=len(comments_data), desc="Analyzing comments") as pbar:
-        for comment_data in comments_data:
+    already_processed = set()
+    
+    # Check if we should resume from checkpoint
+    if resume and os.path.exists(checkpoint_file):
+        try:
+            print(f"Resuming from checkpoint: {checkpoint_file}")
+            with open(checkpoint_file, 'r', encoding='utf-8') as f:
+                checkpoint_data = json.load(f)
+                results = checkpoint_data.get('results', {})
+                already_processed = set(checkpoint_data.get('processed_ids', []))
+                error_count = checkpoint_data.get('error_count', 0)
+                print(f"Loaded {len(results)} results from checkpoint")
+                print(f"Skipping {len(already_processed)} already processed comment IDs")
+        except Exception as e:
+            print(f"Error loading checkpoint, starting from beginning: {e}")
+            results = {}
+            already_processed = set()
+            error_count = 0
+    
+    # Filter comments to process
+    comments_to_process = [c for c in comments_data if c.get('id') not in already_processed]
+    print(f"Processing {len(comments_to_process)} of {len(comments_data)} comments")
+    
+    with tqdm(total=len(comments_to_process), desc="Analyzing comments") as pbar:
+        for comment_data in comments_to_process:
             # Handle possible different formats in raw_data.json
             if isinstance(comment_data, dict) and 'id' in comment_data:
                 comment_id = comment_data['id']
                 
                 # Check if comment text is directly accessible or in an attributes property
                 if 'attributes' in comment_data and isinstance(comment_data['attributes'], dict):
-                    comment_text = comment_data['attributes'].get('comment', '')
+                    comment_text = strip_html_tags(comment_data['attributes'].get('comment', ''))
                     title = comment_data['attributes'].get('title', '')
                     category = comment_data['attributes'].get('category', '')
                 else:
-                    comment_text = comment_data.get('comment', '')
+                    comment_text = strip_html_tags(comment_data.get('comment', ''))
                     title = comment_data.get('title', '')
                     category = comment_data.get('category', '')
             else:
@@ -263,6 +304,18 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
             
             pbar.update(1)
             
+            # Save checkpoint every 5 comments
+            if len(results) % 5 == 0:
+                # Update checkpoint with current progress
+                checkpoint_data = {
+                    'results': results,
+                    'processed_ids': list(already_processed),
+                    'error_count': error_count
+                }
+                with open(checkpoint_file, 'w', encoding='utf-8') as f:
+                    json.dump(checkpoint_data, f)
+                pbar.write(f"✅ Checkpoint saved after processing {len(results)} comments")
+            
             # Optional: Add a small delay between API calls to avoid rate limits
             time.sleep(0.5)
     
@@ -311,18 +364,36 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
         if isinstance(comment_data, dict) and 'id' in comment_data:
             comment_id = comment_data['id']
             
-            # Get the original comment text
+            # Get the original comment text and metadata
             if 'attributes' in comment_data and isinstance(comment_data['attributes'], dict):
-                comment_text = comment_data['attributes'].get('comment', '')
+                attributes = comment_data['attributes']
+                comment_text = strip_html_tags(attributes.get('comment', ''))
+                agency_id = attributes.get('agencyId', '')
                 
-                # Get the link to the comment if available
-                link = ""
-                if 'links' in comment_data and isinstance(comment_data['links'], dict):
-                    link = comment_data['links'].get('self', '')
+                # Look for attachment texts
+                attachment_texts = attributes.get('attachment_texts', [])
+                attachment_content = ""
+                if attachment_texts:
+                    attachment_content = "\n\n--- ATTACHMENTS ---\n\n"
+                    for attachment in attachment_texts:
+                        attachment_content += f"[ATTACHMENT: {attachment.get('title', 'Untitled')}]\n"
+                        attachment_content += strip_html_tags(attachment.get('text', '[No text extracted]'))
+                        attachment_content += "\n\n"
+                
+                # Create human-readable link from the comment ID
+                link = f"https://www.regulations.gov/comment/{comment_id}"
+                
+                # Combine main comment and attachment text
+                full_text = comment_text
+                if attachment_content:
+                    full_text += "\n\n" + attachment_content
                 
                 original_comments[comment_id] = {
-                    'comment': comment_text,
-                    'link': link
+                    'comment': full_text,  # Combined text from comment and attachments
+                    'original_comment': comment_text,  # Just the main comment
+                    'link': link,
+                    'agencyId': agency_id,
+                    'has_attachments': bool(attachment_texts)
                 }
     
     # Convert to flat format - a list of dictionaries
@@ -335,7 +406,10 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
                 "id": comment_id,
                 "title": result.get("title", ""),
                 "category": result.get("category", ""),
+                "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
                 "comment": original_comments.get(comment_id, {}).get('comment', ''),
+                "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
+                "has_attachments": original_comments.get(comment_id, {}).get('has_attachments', False),
                 "link": original_comments.get(comment_id, {}).get('link', ''),
                 "stance": result.get("analysis", {}).get("stance", ""),
                 "key_quote": result.get("analysis", {}).get("key_quote", ""),
@@ -356,7 +430,10 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
                 "id": comment_id,
                 "title": result.get("title", ""),
                 "category": result.get("category", ""),
+                "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
                 "comment": original_comments.get(comment_id, {}).get('comment', ''),
+                "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
+                "has_attachments": original_comments.get(comment_id, {}).get('has_attachments', False),
                 "link": original_comments.get(comment_id, {}).get('link', ''),
                 "error": result.get("analysis", {}).get("error", "Unknown error"),
                 "stance": "",
@@ -408,6 +485,14 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
             sample = stance_comments[min(2, len(stance_comments)-1)]  # Skip the first entry to get more variety
             print(f"  \"{sample['analysis']['key_quote']}\"")
     
+    # Clean up the checkpoint file when analysis is successfully completed
+    try:
+        if os.path.exists(checkpoint_file):
+            os.remove(checkpoint_file)
+            print(f"Checkpoint file removed: {checkpoint_file}")
+    except Exception as e:
+        print(f"Failed to remove checkpoint file: {e}")
+    
     return output_file
 
 def main():
@@ -423,6 +508,8 @@ def main():
                         help='Model to use for analysis (default: gpt-4o-mini)')
     parser.add_argument('--api_key', type=str, 
                         help='API key to use for LiteLLM calls (if not in environment)')
+    parser.add_argument('--resume', action='store_true',
+                        help='Resume from checkpoint if available')
     args = parser.parse_args()
     
     # Auto-detect most recent raw_data.json if no input file specified
@@ -463,7 +550,8 @@ def main():
         output_file=args.output,
         top_n=args.top_n,
         model=args.model,
-        api_key=args.api_key
+        api_key=args.api_key,
+        resume=args.resume
     )
 
 if __name__ == "__main__":

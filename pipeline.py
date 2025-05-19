@@ -106,6 +106,7 @@ def run_analysis(input_path, output_dir, **kwargs):
         top_n = kwargs.get('top_n', None)
         model = kwargs.get('model', "gpt-4o-mini")
         api_key = kwargs.get('api_key', None)
+        resume = kwargs.get('resume', False)
         
         # Call the analyze function
         analyze_module.analyze_comments(
@@ -113,7 +114,8 @@ def run_analysis(input_path, output_dir, **kwargs):
             output_file=output_path,
             top_n=top_n,
             model=model,
-            api_key=api_key
+            api_key=api_key,
+            resume=resume
         )
         
         # Run quote verification after analysis is complete
@@ -145,12 +147,16 @@ def main():
                         help='Document ID to fetch comments for')
     parser.add_argument('--limit', type=int, default=None, 
                         help='Limit number of comments to fetch')
+    parser.add_argument('--no-attachments', action='store_true',
+                        help='Do not download and extract text from attachments')
     
     # Analysis parameters
     parser.add_argument('--top-n', type=int, default=None, 
                         help='Analyze only the top N comments')
     parser.add_argument('--model', type=str, default='gpt-4o-mini', 
                         help='Model to use for analysis')
+    parser.add_argument('--resume', action='store_true',
+                        help='Resume from checkpoints if available for fetch and/or analyze')
     
     # API keys
     parser.add_argument('--regs-api-key', type=str, default=None, 
@@ -164,13 +170,16 @@ def main():
     fetch_params = {
         'document_id': args.document_id,
         'limit': args.limit,
-        'api_key': args.regs_api_key
+        'api_key': args.regs_api_key,
+        'download_attachments': not args.no_attachments,
+        'resume': args.resume
     }
     
     analyze_params = {
         'top_n': args.top_n,
         'model': args.model,
-        'api_key': args.openai_api_key
+        'api_key': args.openai_api_key,
+        'resume': args.resume
     }
     
     # Handle fetch-only mode
