@@ -19,7 +19,7 @@ This project provides tools to fetch and analyze public comments on regulatory p
 
 2. Install requirements:
    ```
-   pip install requests tqdm python-dotenv litellm pydantic PyPDF2
+   pip install -r requirements.txt
    ```
 
 3. Set up API keys:
