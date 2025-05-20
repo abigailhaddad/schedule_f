@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CommentWithAnalysis } from '@/lib/db/schema';
+import { Comment } from '@/lib/db/schema';
 import { datasetConfig } from '@/lib/config';
 import { useDataTable } from '@/lib/hooks/useDataTable';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -12,7 +12,7 @@ import Badge from '@/components/ui/Badge';
 import SearchInput from '@/components/ui/SearchInput';
 
 interface CommentTableProps {
-  data: CommentWithAnalysis[];
+  data: Comment[];
   filters: Record<string, unknown>;
 }
 
@@ -38,11 +38,11 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     handleSort,
     exportCSV,
     pageSize
-  } = useDataTable<CommentWithAnalysis>({ 
+  } = useDataTable<Comment>({ 
     data, 
     filters,
     initialSorting,
-    searchFields: ['comment', 'originalComment', 'title', 'analysis.keyQuote', 'analysis.themes', 'analysis.rationale']
+    searchFields: ['comment', 'originalComment', 'title', 'keyQuote', 'themes', 'rationale']
   });
   
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(() => {
@@ -113,7 +113,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   }, [showColumnsMenu]);
   
   // Handle row click to navigate to detail page
-  const handleRowClick = (comment: CommentWithAnalysis) => {
+  const handleRowClick = (comment: Comment) => {
     // Create the return URL with current filters, sorting, and search
     const currentParams = new URLSearchParams(searchParams.toString());
     
@@ -234,14 +234,11 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   };
   
   // Map the visible columns to DataTable column format
-  const columns: Column<CommentWithAnalysis>[] = [
+  const columns: Column<Comment>[] = [
     // Add the rest of the columns
     ...getVisibleFields().map(field => {
     // Get the correct key for nested fields when sorting
-    const sortKey = field.key === 'stance' || field.key === 'keyQuote' || 
-                    field.key === 'themes' || field.key === 'rationale'
-                    ? `analysis.${field.key}`
-                    : field.key;
+    const sortKey = field.key;
                     
     return {
       key: sortKey,
@@ -253,16 +250,9 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
                 field.key === 'themes' ? 'w-1/8' :
                 field.key === 'title' ? 'w-1/8' :
                 undefined,
-      render: (item: CommentWithAnalysis) => {
-        let value: unknown;
-        
-        // Get the appropriate value based on the field key
-        if (field.key === 'stance' || field.key === 'keyQuote' || 
-            field.key === 'themes' || field.key === 'rationale') {
-          value = item.analysis?.[field.key as keyof typeof item.analysis] || '';
-        } else {
-          value = item[field.key as keyof typeof item] || '';
-        }
+      render: (item: Comment) => {
+        // Get the value directly from the item
+        const value = item[field.key as keyof typeof item] || '';
         
         // Special case for the title field - make it a clickable link
         if (field.key === 'title') {
