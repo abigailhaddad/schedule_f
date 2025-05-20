@@ -1,5 +1,5 @@
 // lib/db/schema.ts
-import { pgTable, serial, text, timestamp, varchar, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, varchar, boolean, pgEnum } from 'drizzle-orm/pg-core';
 
 export const stanceEnum = pgEnum('stance', ['For', 'Against', 'Neutral/Unclear']);
 
@@ -12,12 +12,7 @@ export const comments = pgTable('comments', {
   originalComment: text('original_comment'),
   hasAttachments: boolean('has_attachments').default(false),
   link: text('link'),
-  createdAt: timestamp('created_at').defaultNow()
-});
-
-export const analyses = pgTable('analyses', {
-  id: serial('id').primaryKey(),
-  commentId: varchar('comment_id').references(() => comments.id),
+  // Analysis fields integrated directly into comments table
   stance: stanceEnum('stance'),
   keyQuote: text('key_quote'),
   rationale: text('rationale'),
@@ -25,13 +20,6 @@ export const analyses = pgTable('analyses', {
   createdAt: timestamp('created_at').defaultNow()
 });
 
-// Type inference but without the circular references
+// Type inference
 export type Comment = typeof comments.$inferSelect;
 export type NewComment = typeof comments.$inferInsert;
-export type Analysis = typeof analyses.$inferSelect;
-export type NewAnalysis = typeof analyses.$inferInsert;
-
-// Type for joined data (flattened to avoid circular references)
-export type CommentWithAnalysis = Comment & {
-  analysis: Analysis | null;
-};

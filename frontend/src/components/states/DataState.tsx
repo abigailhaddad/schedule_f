@@ -1,26 +1,24 @@
 'use client';
 
-import { CommentWithAnalysis } from '@/lib/db/schema';
 import FilterSection from '../FilterSection';
 import CommentTable from '../CommentTable';
 import StatisticsCard from '../StatisticsCard';
+import { useDataContext } from '@/contexts/DataContext';
 
-interface DataStateProps {
-  comments: CommentWithAnalysis[];
-  filters: Record<string, unknown>;
-  onFilterChange: (filters: Record<string, unknown>) => void;
-}
+// DataState no longer needs props as it gets data from context
+export default function DataState() {
+  // Get data and state from context
+  const { data } = useDataContext();
 
-export default function DataState({ comments, filters, onFilterChange }: DataStateProps) {
   return (
     <div className="container-fluid py-4">
       {/* First row: Statistics and Filters side by side */}
       <div className="row mb-4">
         <div className="col-md-6">
-          <StatisticsCard data={comments} />
+          <StatisticsCard data={data} />
         </div>
         <div className="col-md-6">
-          <FilterSection onFilterChange={onFilterChange} />
+          <FilterSection />
         </div>
       </div>
       
@@ -29,7 +27,7 @@ export default function DataState({ comments, filters, onFilterChange }: DataSta
         <div className="col-12">
           <div className="card">
             <div className="card-body table-responsive">
-              <CommentTable data={comments} filters={filters} />
+              <CommentTable />
             </div>
           </div>
         </div>
