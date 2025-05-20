@@ -1,7 +1,7 @@
 // lib/config.ts
 export const datasetConfig = {
     title: 'Public Comments on Schedule F Regulation',
-    subtitle: 'See my git repo: ', 
+    subtitle: 'See my git repo', 
     datasetName: 'Comments',
     keyField: 'id',
     

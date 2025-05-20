@@ -1,11 +1,11 @@
 // components/StatisticsCard.tsx
 'use client';
 
-import { CommentWithAnalysis } from '@/lib/db/schema';
+import { Comment } from '@/lib/db/schema';
 import { datasetConfig } from '@/lib/config';
 
 interface StatisticsCardProps {
-  data: CommentWithAnalysis[];
+  data: Comment[];
 }
 
 // Define a type for the statistics
@@ -29,8 +29,8 @@ export default function StatisticsCard({ data }: StatisticsCardProps) {
             value = data.length;
           } else if (stat.match) {
             value = data.filter(item => {
-              if (stat.key === 'stance' && item.analysis) {
-                return item.analysis.stance === stat.match;
+              if (stat.key === 'stance') {
+                return item.stance === stat.match;
               }
               return false;
             }).length;
