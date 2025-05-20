@@ -25,7 +25,7 @@ type ItemPredicate<T> = (item: T) => boolean;
 
 export class FilterBuilder<T> {
   private filters: Record<string, ItemPredicate<T>> = {};
-  
+
   /**
    * Add a filter predicate with a key
    * @param key - Unique identifier for this filter
@@ -41,7 +41,7 @@ export class FilterBuilder<T> {
     this.filters[key] = predicate;
     return this;
   }
-  
+
   /**
    * Remove a filter by key
    * @param key - Key of the filter to remove
@@ -62,7 +62,7 @@ export class FilterBuilder<T> {
     delete this.filters[key];
     return this;
   }
-  
+
   /**
    * Check if a filter with the given key exists
    * @param key - Key to check
@@ -78,7 +78,7 @@ export class FilterBuilder<T> {
   hasFilter(key: string): boolean {
     return key in this.filters;
   }
-  
+
   /**
    * Build a function that applies all filters to an array of items
    * All filters are combined with AND logic (all filters must pass)
@@ -107,10 +107,12 @@ export class FilterBuilder<T> {
       if (Object.keys(this.filters).length === 0) {
         return items;
       }
-      
+
       // Apply all filters (AND logic)
-      return items.filter(item => 
-        Object.values(this.filters).every(predicate => predicate(item))
+      return items.filter(item =>
+        Object.values(this.filters).every((predicate) => {
+          return predicate(item)
+        })
       );
     };
   }
@@ -164,7 +166,7 @@ export class FilterPredicates {
       return String(itemValue) === String(value);
     };
   }
-  
+
   /**
    * Create a filter for array includes
    * @param key - The property key in the item
@@ -205,7 +207,7 @@ export class FilterPredicates {
       // Extract values and mode from input
       let filterValues: unknown[];
       let filterMode: 'exact' | 'includes' | 'at_least' = 'includes'; // Default mode is 'includes'
-      
+
       if (Array.isArray(values)) {
         filterValues = values;
       } else if (values && typeof values === 'object' && 'values' in values) {
@@ -217,14 +219,14 @@ export class FilterPredicates {
         // Invalid input, show all items
         return true;
       }
-      
+
       if (filterValues.length === 0) return true; // Empty filter = show all
-      
+
       const itemValue = FilterPredicates.getNestedValue(item, key);
-      
+
       // Process item value into a standardized array format
       let itemValues: string[] = [];
-      
+
       // Handle array item values (like themes)
       if (Array.isArray(itemValue)) {
         itemValues = itemValue.map(String);
@@ -237,10 +239,10 @@ export class FilterPredicates {
       else if (itemValue !== undefined && itemValue !== null) {
         itemValues = [String(itemValue)];
       }
-      
+
       // Apply filter based on mode
       const stringFilterValues = filterValues.map(String);
-      
+
       if (filterMode === 'at_least') {
         // For "must include at least" mode, item must contain ALL of the selected filter values
         // (but can have additional values not in the filter)
@@ -248,17 +250,22 @@ export class FilterPredicates {
       } else if (filterMode === 'exact') {
         // For exact mode, lengths must match and all values must be the same (no more, no less)
         if (itemValues.length !== stringFilterValues.length) return false;
-        
+
         // Check if itemValues contains all filterValues and vice versa
         return stringFilterValues.every(value => itemValues.includes(value)) &&
-               itemValues.every(value => stringFilterValues.includes(value));
+          itemValues.every(value => stringFilterValues.includes(value));
       } else {
         // For includes mode (default), any match is sufficient
-        return filterValues.some(value => itemValues.includes(String(value)));
+        return itemValues.some(itemValue => {
+          // Create a regex pattern that matches any of the filter values
+          const pattern = filterValues.map(String).join('|');
+          const regex = new RegExp(pattern, 'i');  // case insensitive
+          return regex.test(itemValue);
+        });
       }
     };
   }
-  
+
   /**
    * Create a filter for text search
    * @param key - The property key in the item
@@ -281,15 +288,15 @@ export class FilterPredicates {
     const lowerSearchText = searchText.toLowerCase();
     return (item: T) => {
       const itemValue = FilterPredicates.getNestedValue(item, key);
-      
+
       if (itemValue === undefined || itemValue === null) {
         return false;
       }
-      
+
       return String(itemValue).toLowerCase().includes(lowerSearchText);
     };
   }
-  
+
   /**
    * Create a filter that searches across multiple fields
    * @param keys - Array of property keys to search in
@@ -319,20 +326,20 @@ export class FilterPredicates {
     return (item: T) => {
       return keys.some(key => {
         const itemValue = FilterPredicates.getNestedValue(item, key);
-        
+
         if (itemValue === undefined || itemValue === null) {
           return false;
         }
-        
+
         if (typeof itemValue === 'object' && !Array.isArray(itemValue)) {
           return false;
         }
-        
+
         return String(itemValue).toLowerCase().includes(lowerSearchText);
       });
     };
   }
-  
+
   /**
    * Get a value from an item by key, supporting nested paths with dot notation
    * @param obj - The object to extract value from
@@ -352,18 +359,18 @@ export class FilterPredicates {
     if (!path.includes('.')) {
       return (obj as Record<string, unknown>)[path];
     }
-    
+
     const parts = path.split('.');
     let current: unknown = obj;
-    
+
     for (const part of parts) {
       if (current === null || current === undefined || typeof current !== 'object') {
         return undefined;
       }
-      
+
       current = (current as Record<string, unknown>)[part];
     }
-    
+
     return current;
   }
 }
