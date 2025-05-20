@@ -2,12 +2,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CommentWithAnalysis } from '@/lib/db/schema';
+import { Comment } from '@/lib/db/schema';
 import { getComments, initDatabase } from '@/lib/actions';
 import { LoadingState, ErrorState, DataState } from './states';
 
 export default function CommentsDataProvider() {
-  const [comments, setComments] = useState<CommentWithAnalysis[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<Record<string, unknown>>({});

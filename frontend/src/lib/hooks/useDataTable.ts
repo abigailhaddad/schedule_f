@@ -138,16 +138,9 @@ export function useDataTable<T extends Record<string, unknown>>({
         }
         
         // Otherwise search in all fields
-        return Object.entries(item).some(([key, value]) => {
+        return Object.entries(item).some(([_, value]) => {
           // Skip searching in complex objects or arrays unless they're strings
           if (typeof value === 'object' && value !== null) {
-            if (key === 'analysis') {
-              // Special case for analysis object
-              const analysisObj = value as Record<string, unknown>;
-              return Object.values(analysisObj).some(
-                v => v !== undefined && String(v).toLowerCase().includes(query)
-              );
-            }
             return false;
           }
           return value !== undefined && String(value).toLowerCase().includes(query);
@@ -232,18 +225,11 @@ export function useDataTable<T extends Record<string, unknown>>({
     const keys = new Set<string>();
     filteredData.forEach(item => {
       Object.keys(item).forEach(key => {
-        // Skip complex objects like 'analysis' for direct export
+        // Skip complex objects for direct export
         if (typeof item[key] !== 'object' || item[key] === null) {
           keys.add(key);
         }
       });
-      // Add analysis fields if they exist
-      const analysis = item['analysis'] as Record<string, unknown> | undefined;
-      if (analysis) {
-        Object.keys(analysis).forEach(key => {
-          keys.add(`analysis.${key}`);
-        });
-      }
     });
     
     // Convert Set to Array and sort
@@ -255,14 +241,7 @@ export function useDataTable<T extends Record<string, unknown>>({
     // Add data rows
     filteredData.forEach(item => {
       const row = headers.map(key => {
-        let value: unknown;
-        if (key.includes('.')) {
-          const [parent, child] = key.split('.');
-          const parentObj = item[parent] as Record<string, unknown> | undefined;
-          value = parentObj ? parentObj[child] : '';
-        } else {
-          value = item[key];
-        }
+        const value = item[key];
         
         // Handle different value types
         if (value === null || value === undefined) {
@@ -292,13 +271,7 @@ export function useDataTable<T extends Record<string, unknown>>({
 
   // Helper function to get nested values
   function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-    if (!path.includes('.')) {
-      return obj[path];
-    }
-    
-    const [parent, child] = path.split('.');
-    const parentObj = obj[parent] as Record<string, unknown> | undefined;
-    return parentObj ? parentObj[child] : undefined;
+    return obj[path];
   }
 
   // Return all the table state and controls
