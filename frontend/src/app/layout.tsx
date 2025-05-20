@@ -1,16 +1,14 @@
 // app/layout.tsx
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { datasetConfig } from '@/lib/config';
-import StyledComponentsRegistry from '@/components/registry';
+import './globals.css'
+import { Inter } from 'next/font/google'
+import { datasetConfig } from '@/lib/config'
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
+export const metadata = {
   title: datasetConfig.title,
   description: 'Regulatory Comments Analysis',
-};
+}
 
 export default function RootLayout({
   children,
@@ -18,12 +16,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <StyledComponentsRegistry>
-          {children}
-        </StyledComponentsRegistry>
+    <html lang="en" className={inter.className}>
+      <body className="bg-light">
+        {children}
       </body>
     </html>
-  );
+  )
 }

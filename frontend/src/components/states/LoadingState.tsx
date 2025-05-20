@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 interface LoadingStateProps {
   checkDatabase: () => Promise<void>;
   checkingDb: boolean;

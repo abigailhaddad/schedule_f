@@ -1,16 +1,14 @@
 // app/page.tsx
-import CommentsDataProvider from '@/components/CommentDataProvider';
-import Navbar from '@/components/Navbar';
-import { ThemeProvider } from '@/components/ThemeProvider';
+import CommentDataProvider from "@/components/CommentDataProvider";
+import Navbar from "@/components/Navbar";
 
-// Keep as Server Component for better SEO and performance
 export default function Home() {
   return (
-    <ThemeProvider>
+    <main className="min-h-screen">
       <Navbar />
-      <div className="container-fluid py-4">
-        <CommentsDataProvider />
+      <div className="w-full px-4 py-4">
+        <CommentDataProvider />
       </div>
-    </ThemeProvider>
+    </main>
   );
 }

@@ -5,130 +5,11 @@ import { useState, useEffect, useRef } from 'react';
 import { CommentWithAnalysis } from '@/lib/db/schema';
 import { Field, datasetConfig } from '@/lib/config';
 import { useDataTable } from '@/lib/hooks/useDataTable';
-import styled from 'styled-components';
-import Button from './ui/Button';
-import Card from './ui/Card';
 
 interface CommentTableProps {
   data: CommentWithAnalysis[];
   filters: Record<string, unknown>;
 }
-
-// Styled components for table
-const StyledTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  
-  thead th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    border-bottom: 2px solid #e5e7eb;
-    padding: 0.75rem;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    
-    &:hover {
-      background-color: #f1f5f9;
-    }
-    
-    &.sorting_asc::after {
-      content: " ↑";
-      opacity: 0.7;
-    }
-    
-    &.sorting_desc::after {
-      content: " ↓";
-      opacity: 0.7;
-    }
-  }
-  
-  tbody tr {
-    border-top: 1px solid #e5e7eb;
-    
-    &:nth-child(even) {
-      background-color: rgba(0, 0, 0, 0.02);
-    }
-    
-    &:hover {
-      background-color: rgba(59, 130, 246, 0.05);
-    }
-  }
-  
-  td {
-    padding: 0.75rem;
-    vertical-align: top;
-  }
-`;
-
-const SearchInput = styled.input`
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  margin-right: 0.75rem;
-  width: 200px;
-  
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-  }
-`;
-
-const ColumnsMenu = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const ColumnsButton = styled(Button)`
-  margin-right: 0.5rem;
-`;
-
-const ColumnsDropdown = styled.div<{ $isOpen: boolean }>`
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 1000;
-  min-width: 10rem;
-  padding: 0.5rem 0;
-  background-color: white;
-  border-radius: 0.375rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-  display: ${props => props.$isOpen ? 'block' : 'none'};
-`;
-
-const ColumnCheckboxItem = styled.div`
-  padding: 0.375rem 1rem;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  
-  &:hover {
-    background-color: #f7fafc;
-  }
-  
-  input {
-    margin-right: 0.5rem;
-  }
-`;
-
-const Badge = styled.span`
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.25rem;
-  background-color: #64748b;
-  color: white;
-  margin-right: 0.25rem;
-  margin-bottom: 0.25rem;
-`;
 
 export default function CommentTable({ data, filters }: CommentTableProps) {
   const { 
@@ -192,43 +73,51 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     }
     
     if (value === null || value === undefined || value === '') {
-      return <span style={{ color: '#6c757d', fontStyle: 'italic' }}>—</span>;
+      return <span className="text-gray-400 italic">—</span>;
     }
     
     // Handle different field formats
     if (field.format === 'multi-label' && typeof value === 'string') {
       const labels = value.split(',').map(label => label.trim()).filter(Boolean);
       return (
-        <>
+        <div className="flex flex-wrap gap-1">
           {labels.map((label, i) => (
-            <Badge key={i}>{label}</Badge>
+            <span key={i} className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
+              {label}
+            </span>
           ))}
-        </>
+        </div>
       );
     }
     
     if (field.format === 'link' && typeof value === 'string') {
       return (
-        <a href={value} target="_blank" rel="noopener noreferrer">
-          Link
+        <a 
+          href={value} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-blue-600 hover:text-blue-800 flex items-center hover:underline"
+        >
+          <span className="mr-1">🔗</span>View
         </a>
       );
     }
     
     if (field.badges && typeof value === 'string' && field.badges[value as keyof typeof field.badges]) {
+      const badgeClass = field.badges[value as keyof typeof field.badges];
+      const badgeColor = getBadgeColorClass(badgeClass);
+      
       return (
-        <Badge style={{ backgroundColor: getBackgroundColor(field.badges[value as keyof typeof field.badges]) }}>
+        <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${badgeColor}`}>
           {value}
-        </Badge>
+        </span>
       );
     }
     
     if (field.charLimit && typeof value === 'string' && value.length > field.charLimit) {
       const truncated = value.substring(0, field.charLimit) + '...';
       return (
-        <span 
-          title={value}
-        >
+        <span title={value} className="cursor-help">
           {truncated}
         </span>
       );
@@ -237,105 +126,138 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     return value;
   };
   
-  // Helper to get background color for badges
-  const getBackgroundColor = (badgeClass: string) => {
-    if (badgeClass.includes('success')) return '#10b981';
-    if (badgeClass.includes('danger')) return '#ef4444';
-    if (badgeClass.includes('warning')) return '#f59e0b';
-    if (badgeClass.includes('primary')) return '#3b82f6';
-    return '#64748b'; // Default secondary color
+  // Helper to get Tailwind color class for badges
+  const getBadgeColorClass = (badgeClass: string) => {
+    if (badgeClass.includes('success')) return 'bg-green-100 text-green-800';
+    if (badgeClass.includes('danger')) return 'bg-red-100 text-red-800';
+    if (badgeClass.includes('warning')) return 'bg-yellow-100 text-yellow-800';
+    if (badgeClass.includes('primary')) return 'bg-blue-100 text-blue-800';
+    return 'bg-gray-100 text-gray-800';
   };
   
   // Get column classes including sorting
   const getColumnClasses = (field: Field) => {
-    const classes = [];
+    const baseClasses = "cursor-pointer transition-colors duration-150";
     
     if (sorting?.column === field.key) {
-      classes.push(sorting.direction === 'asc' ? 'sorting_asc' : 'sorting_desc');
-    } else {
-      classes.push('sorting');
+      return `${baseClasses} ${sorting.direction === 'asc' ? 'text-blue-600' : 'text-blue-600'}`;
     }
     
-    return classes.join(' ');
+    return `${baseClasses} hover:text-blue-500`;
   };
   
   return (
-    <Card>
-      <Card.Header>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h5 style={{ margin: 0 }}>Data Table</h5>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+      <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <h5 className="text-lg font-bold text-white flex items-center">
+            <span className="mr-2">📋</span>
+            Comment Data
+          </h5>
+          <div className="flex flex-wrap items-center gap-2">
             {/* Search input */}
-            <SearchInput
-              type="text"
-              placeholder="Search comments..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                className="bg-white bg-opacity-20 placeholder-white placeholder-opacity-70 text-white border border-transparent rounded py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 focus:border-transparent"
+                placeholder="Search comments..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             
             {/* Column visibility dropdown */}
-            <ColumnsMenu className="columns-dropdown">
-              <ColumnsButton 
-                variant="outline"
-                size="sm"
+            <div className="relative inline-block columns-dropdown">
+              <button 
+                className="flex items-center px-3 py-2 text-sm font-medium bg-white bg-opacity-20 rounded hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 text-white transition-colors"
                 onClick={() => setShowColumnsMenu(!showColumnsMenu)}
               >
-                Columns
-              </ColumnsButton>
-              <ColumnsDropdown $isOpen={showColumnsMenu}>
-                {datasetConfig.fields.map(field => (
-                  <ColumnCheckboxItem key={field.key} onClick={() => toggleColumnVisibility(field.key)}>
-                    <input
-                      type="checkbox"
-                      id={`col-${field.key}`}
-                      checked={visibleColumns[field.key]}
-                      onChange={() => {}}
-                    />
-                    <label htmlFor={`col-${field.key}`}>
-                      {field.title}
-                    </label>
-                  </ColumnCheckboxItem>
-                ))}
-              </ColumnsDropdown>
-            </ColumnsMenu>
+                <span className="mr-1">👁️</span>Columns
+              </button>
+              {showColumnsMenu && (
+                <div className="absolute right-0 z-50 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200">
+                  <div className="py-1 max-h-64 overflow-y-auto">
+                    {datasetConfig.fields.map(field => (
+                      <div 
+                        key={field.key} 
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                        onClick={() => toggleColumnVisibility(field.key)}
+                      >
+                        <input
+                          type="checkbox"
+                          id={`col-${field.key}`}
+                          className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          checked={visibleColumns[field.key]}
+                          onChange={() => {}}
+                        />
+                        <label htmlFor={`col-${field.key}`} className="text-sm text-gray-700 cursor-pointer">
+                          {field.title}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
             
-            <Button 
-              size="sm"
+            <button 
+              className="flex items-center px-3 py-2 text-sm font-medium bg-white bg-opacity-20 rounded hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 text-white transition-colors"
               onClick={exportCSV}
             >
-              Export CSV
-            </Button>
+              <span className="mr-1">📥</span>Export CSV
+            </button>
           </div>
         </div>
-      </Card.Header>
-      <Card.Body noPadding>
-        <div style={{ overflowX: 'auto' }}>
-          <StyledTable>
-            <thead>
+      </div>
+      <div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
                 {getVisibleFields().map(field => (
                   <th 
                     key={field.key} 
-                    className={getColumnClasses(field)}
+                    className={`px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider ${getColumnClasses(field)}`}
                     onClick={() => handleSort(field.key)}
                   >
-                    {field.title}
+                    <div className="flex items-center">
+                      {field.title}
+                      {sorting?.column === field.key && (
+                        <span className="ml-1 text-blue-600">
+                          {sorting.direction === 'asc' ? '↑' : '↓'}
+                        </span>
+                      )}
+                    </div>
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={getVisibleFields().length} style={{ textAlign: 'center', padding: '1.5rem' }}>
-                    No matching records found
+                  <td 
+                    colSpan={getVisibleFields().length} 
+                    className="px-6 py-10 text-center text-gray-500 bg-gray-50"
+                  >
+                    <div className="flex flex-col items-center">
+                      <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="mt-2 text-sm font-medium">No matching records found</p>
+                      <p className="text-xs text-gray-400 mt-1">Try changing your search criteria</p>
+                    </div>
                   </td>
                 </tr>
               ) : (
                 filteredData.map(item => (
-                  <tr key={item.id}>
+                  <tr key={item.id} className="hover:bg-blue-50 transition-colors">
                     {getVisibleFields().map(field => (
-                      <td key={`${item.id}-${field.key}`}>
+                      <td key={`${item.id}-${field.key}`} className="px-4 py-3 whitespace-normal text-sm text-gray-900">
                         {renderCell(item, field)}
                       </td>
                     ))}
@@ -343,28 +265,26 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
                 ))
               )}
             </tbody>
-          </StyledTable>
+          </table>
         </div>
         
         {/* Pagination/Length Controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', borderTop: '1px solid #e5e7eb' }}>
+        <div className="flex justify-between items-center px-6 py-3 bg-gray-50 border-t border-gray-200 text-sm text-gray-500">
           <div>
-            Showing {filteredData.length} of {data.length} entries
+            Showing <span className="font-medium text-gray-700">{filteredData.length}</span> of <span className="font-medium text-gray-700">{data.length}</span> entries
           </div>
-          <div>
-            <label>
-              Show 
-              <select style={{ margin: '0 0.5rem', padding: '0.25rem', borderRadius: '0.25rem', border: '1px solid #e5e7eb' }}>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-              entries
-            </label>
+          <div className="flex items-center">
+            <span className="mr-2">Show</span>
+            <select className="form-select rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span className="ml-2">entries</span>
           </div>
         </div>
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 }
