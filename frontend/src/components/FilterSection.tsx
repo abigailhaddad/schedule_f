@@ -3,15 +3,88 @@
 
 import { useState } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
+import FilterModal from './FilterModal';
+import Card from './ui/Card';
+import Button from './ui/Button';
+import styled from 'styled-components';
 
 interface FilterSectionProps {
   onFilterChange: (filters: Record<string, unknown>) => void;
 }
 
+const FilterTag = styled.div`
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 1rem;
+  padding: 0.35rem 0.8rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+`;
+
+const FilterName = styled.span`
+  margin-right: 0.25rem;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: background-color 0.15s;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+const FilterButtonsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+`;
+
+const NoFiltersMessage = styled.div`
+  color: #6b7280;
+  font-style: italic;
+  text-align: center;
+  padding: 0.75rem 0;
+  width: 100%;
+`;
+
+const FilterTagsContainer = styled.div<{ $hasFilters: boolean }>`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding: ${props => props.$hasFilters ? '0.5rem' : '0'};
+  min-height: 3rem;
+  background-color: ${props => props.$hasFilters ? 'rgba(59, 130, 246, 0.05)' : 'transparent'};
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+`;
+
+const Icon = styled.span`
+  margin-right: 0.375rem;
+`;
+
 export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const [filters, setFilters] = useState<Record<string, unknown>>({});
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [activeField] = useState<Field | null>(null);
+  const [activeField, setActiveField] = useState<Field | null>(null);
   
   const handleFilterChange = (key: string, value: unknown) => {
     const newFilters = { ...filters, [key]: value };
@@ -30,6 +103,16 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     onFilterChange({});
   };
   
+  const openFilterModal = (field: Field) => {
+    setActiveField(field);
+    setShowFilterModal(true);
+  };
+  
+  const closeFilterModal = () => {
+    setShowFilterModal(false);
+    setActiveField(null);
+  };
+  
   // Check if we have any active filters
   const hasActiveFilters = Object.keys(filters).length > 0;
   
@@ -37,9 +120,9 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const renderFilterTags = () => {
     if (!hasActiveFilters) {
       return (
-        <div className="text-muted fst-italic w-100 text-center py-2">
-          No filters applied. Click the <i className="bi bi-funnel"></i> icon next to any column header to filter.
-        </div>
+        <NoFiltersMessage>
+          No filters applied. Use the filter buttons below to filter data.
+        </NoFiltersMessage>
       );
     }
     
@@ -51,15 +134,15 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       // Handle different filter types
       if (Array.isArray(value)) {
         return (value as unknown[]).map((v, i) => (
-          <div className="filter-tag" key={`${key}-${i}`}>
-            {field.title}: {String(v)}
-            <span 
-              className="remove-tag" 
+          <FilterTag key={`${key}-${i}`}>
+            <FilterName>{field.title}: {String(v)}</FilterName>
+            <CloseButton 
               onClick={() => handleFilterChange(key, (value as unknown[]).filter(item => item !== v))}
+              aria-label="Remove filter"
             >
               ×
-            </span>
-          </div>
+            </CloseButton>
+          </FilterTag>
         ));
       }
       
@@ -67,156 +150,63 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     });
   };
   
+  // Render available filters as buttons
+  const renderFilterButtons = () => {
+    const filterableFields = datasetConfig.fields.filter(field => field.filter);
+    
+    return (
+      <FilterButtonsContainer>
+        {filterableFields.map(field => (
+          <Button 
+            key={field.key}
+            variant={filters[field.key] ? 'primary' : 'outline'}
+            size="sm"
+            onClick={() => openFilterModal(field)}
+          >
+            {field.title}
+          </Button>
+        ))}
+      </FilterButtonsContainer>
+    );
+  };
+  
   return (
-    <div className="card">
-      <div className="card-header d-flex justify-content-between align-items-center">
-        <h5 className="m-0">
-          <i className={`bi ${hasActiveFilters ? 'bi-funnel-fill' : 'bi-funnel'} me-2`}></i>
+    <Card>
+      <Card.Header>
+        <div style={{ fontWeight: 600 }}>
+          <Icon>{hasActiveFilters ? '🔍' : '⚙️'}</Icon>
           {hasActiveFilters ? 'Active Filters' : 'Filters'}
-        </h5>
-        <button 
-          id="clear-filters" 
-          className="btn btn-sm btn-primary"
+        </div>
+        <Button 
+          variant="primary"
+          size="sm"
           onClick={clearAllFilters}
           disabled={!hasActiveFilters}
         >
           Clear All
-        </button>
-      </div>
-      <div className="card-body">
-        <div className={`active-filters-container ${hasActiveFilters ? 'has-filters' : ''}`}>
-          <label className="form-label fw-medium">Active Filters:</label>
-          <div id="active-filters" className="d-flex flex-wrap mb-3">
-            {renderFilterTags()}
-          </div>
-        </div>
-      </div>
+        </Button>
+      </Card.Header>
+      <Card.Body>
+        <FilterTagsContainer $hasFilters={hasActiveFilters}>
+          {renderFilterTags()}
+        </FilterTagsContainer>
+        
+        {renderFilterButtons()}
+      </Card.Body>
       
-      {/* Filter Modal */}
-      {activeField && showFilterModal && (
+      {/* Filter Modal - only render when showFilterModal is true */}
+      {activeField && (
         <FilterModal 
           field={activeField}
           currentValue={filters[activeField.key] || null}
-          onClose={() => setShowFilterModal(false)}
+          onClose={closeFilterModal}
           onApply={(value) => {
             handleFilterChange(activeField.key, value);
-            setShowFilterModal(false);
+            closeFilterModal();
           }}
+          isOpen={showFilterModal}
         />
       )}
-    </div>
-  );
-}
-
-// Filter Modal Component
-interface FilterModalProps {
-  field: Field;
-  currentValue: unknown;
-  onClose: () => void;
-  onApply: (value: unknown) => void;
-}
-
-function FilterModal({ field, currentValue, onClose, onApply }: FilterModalProps) {
-  const [value, setValue] = useState<unknown>(currentValue || (field.filter === 'select' || field.filter === 'multi-label' ? [] : ''));
-  
-  const renderFilterContent = () => {
-    switch (field.filter) {
-      case 'select':
-        return (
-          <div>
-            <div className="mb-3">
-              <input 
-                type="text" 
-                className="form-control form-control-sm" 
-                placeholder="Search options..." 
-              />
-            </div>
-            <div className="select-options-container">
-              {field.badges && Object.keys(field.badges).map(option => (
-                <div className="form-check checkbox-item" key={option}>
-                  <input 
-                    className="form-check-input" 
-                    type="checkbox" 
-                    id={`check-${option}`}
-                    checked={Array.isArray(value) && (value as unknown[]).includes(option)}
-                    onChange={e => {
-                      if (e.target.checked) {
-                        setValue([...(Array.isArray(value) ? (value as unknown[]) : []), option]);
-                      } else {
-                        setValue(Array.isArray(value) ? (value as unknown[]).filter((v) => v !== option) : []);
-                      }
-                    }}
-                  />
-                  <label className="form-check-label" htmlFor={`check-${option}`}>
-                    {option}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      case 'text':
-        return (
-          <div className="mb-3">
-            <div className="input-group">
-              <input 
-                type="text" 
-                className="form-control" 
-                value={typeof value === 'string' ? value : ''}
-                onChange={e => setValue(e.target.value)}
-                placeholder="Type and press Enter" 
-              />
-              <button 
-                className="btn btn-outline-primary" 
-                type="button"
-                onClick={() => {
-                  if (typeof value === 'string' && value.trim()) {
-                    onApply([value.trim()]);
-                  }
-                }}
-              >
-                Add
-              </button>
-            </div>
-            <div className="form-text">Press Enter or click Add after typing</div>
-          </div>
-        );
-        
-      // Add other filter types as needed  
-        
-      default:
-        return <p>Unsupported filter type</p>;
-    }
-  };
-  
-  return (
-    <div className="modal fade show" style={{ display: 'block' }}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">
-              <i className="bi bi-funnel me-2"></i>Filter by {field.title}
-            </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
-          </div>
-          <div className="modal-body">
-            {renderFilterContent()}
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
-            <button 
-              type="button" 
-              className="btn btn-primary"
-              onClick={() => onApply(value)}
-            >
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </Card>
   );
 }
