@@ -4,82 +4,10 @@
 import { useState } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
 import FilterModal from './FilterModal';
-import Card from './ui/Card';
-import Button from './ui/Button';
-import styled from 'styled-components';
 
 interface FilterSectionProps {
   onFilterChange: (filters: Record<string, unknown>) => void;
 }
-
-const FilterTag = styled.div`
-  background-color: #3b82f6;
-  color: white;
-  border-radius: 1rem;
-  padding: 0.35rem 0.8rem;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  display: inline-flex;
-  align-items: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-`;
-
-const FilterName = styled.span`
-  margin-right: 0.25rem;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  padding: 0;
-  width: 1.15rem;
-  height: 1.15rem;
-  font-size: 0.75rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 0.25rem;
-  cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transition: background-color 0.15s;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-  }
-`;
-
-const FilterButtonsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-`;
-
-const NoFiltersMessage = styled.div`
-  color: #6b7280;
-  font-style: italic;
-  text-align: center;
-  padding: 0.75rem 0;
-  width: 100%;
-`;
-
-const FilterTagsContainer = styled.div<{ $hasFilters: boolean }>`
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  padding: ${props => props.$hasFilters ? '0.5rem' : '0'};
-  min-height: 3rem;
-  background-color: ${props => props.$hasFilters ? 'rgba(59, 130, 246, 0.05)' : 'transparent'};
-  border-radius: 0.375rem;
-  transition: background-color 0.2s;
-`;
-
-const Icon = styled.span`
-  margin-right: 0.375rem;
-`;
 
 export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const [filters, setFilters] = useState<Record<string, unknown>>({});
@@ -120,9 +48,10 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const renderFilterTags = () => {
     if (!hasActiveFilters) {
       return (
-        <NoFiltersMessage>
-          No filters applied. Use the filter buttons below to filter data.
-        </NoFiltersMessage>
+        <div className="text-center py-4 bg-blue-50 rounded-lg border border-blue-100">
+          <div className="text-blue-600 font-medium mb-1">No filters applied</div>
+          <div className="text-blue-500 text-sm">Use the filter buttons below to refine your data view</div>
+        </div>
       );
     }
     
@@ -134,15 +63,20 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       // Handle different filter types
       if (Array.isArray(value)) {
         return (value as unknown[]).map((v, i) => (
-          <FilterTag key={`${key}-${i}`}>
-            <FilterName>{field.title}: {String(v)}</FilterName>
-            <CloseButton 
+          <div 
+            key={`${key}-${i}`}
+            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+          >
+            <span className="mr-1 font-medium">{field.title}:</span> 
+            <span>{String(v)}</span>
+            <button 
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
               onClick={() => handleFilterChange(key, (value as unknown[]).filter(item => item !== v))}
               aria-label="Remove filter"
             >
               ×
-            </CloseButton>
-          </FilterTag>
+            </button>
+          </div>
         ));
       }
       
@@ -155,44 +89,53 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     const filterableFields = datasetConfig.fields.filter(field => field.filter);
     
     return (
-      <FilterButtonsContainer>
+      <div className="flex flex-wrap gap-2 mt-4">
         {filterableFields.map(field => (
-          <Button 
+          <button 
             key={field.key}
-            variant={filters[field.key] ? 'primary' : 'outline'}
-            size="sm"
+            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors 
+              ${filters[field.key] 
+                ? 'bg-blue-500 text-white hover:bg-blue-600' 
+                : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'}`}
             onClick={() => openFilterModal(field)}
           >
             {field.title}
-          </Button>
+          </button>
         ))}
-      </FilterButtonsContainer>
+      </div>
     );
   };
   
   return (
-    <Card>
-      <Card.Header>
-        <div style={{ fontWeight: 600 }}>
-          <Icon>{hasActiveFilters ? '🔍' : '⚙️'}</Icon>
+    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+      <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-indigo-500 to-indigo-600 flex justify-between items-center">
+        <h5 className="text-lg font-bold text-white flex items-center">
+          <span className="mr-2">{hasActiveFilters ? '🔍' : '⚙️'}</span>
           {hasActiveFilters ? 'Active Filters' : 'Filters'}
-        </div>
-        <Button 
-          variant="primary"
-          size="sm"
-          onClick={clearAllFilters}
-          disabled={!hasActiveFilters}
-        >
-          Clear All
-        </Button>
-      </Card.Header>
-      <Card.Body>
-        <FilterTagsContainer $hasFilters={hasActiveFilters}>
+        </h5>
+        {hasActiveFilters && (
+          <button 
+            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-3 py-1 rounded transition-colors"
+            onClick={clearAllFilters}
+          >
+            Clear All
+          </button>
+        )}
+      </div>
+      <div className="p-4">
+        <div className={`flex flex-wrap mb-4 ${
+          hasActiveFilters ? '' : 'hidden'
+        }`}>
           {renderFilterTags()}
-        </FilterTagsContainer>
+        </div>
         
-        {renderFilterButtons()}
-      </Card.Body>
+        {!hasActiveFilters && renderFilterTags()}
+        
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <h6 className="font-medium text-gray-700 mb-2">Filter Options</h6>
+          {renderFilterButtons()}
+        </div>
+      </div>
       
       {/* Filter Modal - only render when showFilterModal is true */}
       {activeField && (
@@ -207,6 +150,6 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
           isOpen={showFilterModal}
         />
       )}
-    </Card>
+    </div>
   );
 }

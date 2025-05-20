@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
-import styled from 'styled-components';
 import Modal from './ui/Modal';
 import Button from './ui/Button';
 
@@ -13,81 +12,6 @@ interface FilterModalProps {
   onClose: () => void;
   isOpen: boolean;
 }
-
-const Input = styled.input`
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  width: 100%;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-  }
-`;
-
-const CheckboxContainer = styled.div`
-  padding: 0.5rem 0;
-`;
-
-const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  transition: background-color 0.15s;
-  
-  &:hover {
-    background-color: #f7fafc;
-  }
-`;
-
-const Checkbox = styled.input`
-  margin-right: 0.5rem;
-`;
-
-const OptionsContainer = styled.div`
-  max-height: 300px;
-  overflow-y: auto;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-`;
-
-const TextFilterTag = styled.div`
-  background-color: #edf2f7;
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  display: inline-flex;
-  align-items: center;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-`;
-
-const RemoveTag = styled.span`
-  margin-left: 0.5rem;
-  cursor: pointer;
-  font-weight: bold;
-  color: #64748b;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-`;
 
 export default function FilterModal({ field, currentValue, onApply, onClose, isOpen }: FilterModalProps) {
   const [value, setValue] = useState<any>(
@@ -140,9 +64,10 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
       
     return (
       <div>
-        <div style={{ marginBottom: '1rem' }}>
-          <Input 
+        <div className="mb-4">
+          <input 
             type="text" 
+            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Search options..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -150,17 +75,21 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
           />
         </div>
         
-        <OptionsContainer>
+        <div className="max-h-[300px] overflow-y-auto border border-gray-200 rounded p-2 mt-2">
           {filteredOptions.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '1rem', color: '#718096' }}>
+            <div className="text-center py-4 text-gray-500">
               No matching options
             </div>
           ) : (
-            <CheckboxContainer>
+            <div className="py-2">
               {filteredOptions.map(option => (
-                <CheckboxLabel key={option}>
-                  <Checkbox
+                <label 
+                  key={option} 
+                  className="flex items-center mb-2 cursor-pointer text-sm py-1 px-2 rounded hover:bg-gray-50"
+                >
+                  <input
                     type="checkbox"
+                    className="mr-2"
                     checked={Array.isArray(value) && value.includes(option)}
                     onChange={(e) => {
                       if (e.target.checked) {
@@ -171,13 +100,13 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
                     }}
                   />
                   {option}
-                </CheckboxLabel>
+                </label>
               ))}
-            </CheckboxContainer>
+            </div>
           )}
-        </OptionsContainer>
+        </div>
         
-        <ButtonGroup>
+        <div className="flex gap-2 mt-2">
           <Button 
             variant="outline" 
             size="sm"
@@ -192,7 +121,7 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
           >
             Deselect All
           </Button>
-        </ButtonGroup>
+        </div>
       </div>
     );
   };
@@ -220,10 +149,11 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
     
     return (
       <div>
-        <div style={{ marginBottom: '1rem' }}>
-          <InputGroup>
-            <Input
+        <div className="mb-4">
+          <div className="flex">
+            <input
               type="text"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-l text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Type and press Enter"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -234,34 +164,39 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
                 }
               }}
               autoFocus
-              style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             />
             <Button 
               onClick={addTextValue}
-              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              className="rounded-l-none"
             >
               Add
             </Button>
-          </InputGroup>
-          <div style={{ fontSize: '0.75rem', color: '#718096', marginTop: '0.25rem' }}>
+          </div>
+          <div className="text-xs text-gray-500 mt-1">
             Press Enter or click Add after typing
           </div>
         </div>
         
         <div>
           {textValues.length === 0 ? (
-            <div style={{ fontStyle: 'italic', color: '#94a3b8' }}>
+            <div className="italic text-gray-400">
               No filters added yet
             </div>
           ) : (
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className="flex flex-wrap">
               {textValues.map((val, index) => (
-                <TextFilterTag key={index}>
+                <div 
+                  key={index} 
+                  className="bg-gray-200 px-3 py-1 rounded-full inline-flex items-center mr-2 mb-2 text-sm"
+                >
                   {val}
-                  <RemoveTag onClick={() => removeTextValue(val)}>
+                  <span 
+                    className="ml-2 cursor-pointer font-bold text-gray-500 hover:text-gray-700"
+                    onClick={() => removeTextValue(val)}
+                  >
                     ×
-                  </RemoveTag>
-                </TextFilterTag>
+                  </span>
+                </div>
               ))}
             </div>
           )}

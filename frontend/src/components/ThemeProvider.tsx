@@ -41,8 +41,8 @@ const BUTTON_STYLES: Record<string, string> = {
     }
     
     .btn-primary {
-      background-color: var(--bs-primary);
-      border-color: var(--bs-primary);
+      background-color: var(--p);
+      border-color: var(--p);
     }
     
     .btn-primary:hover, .btn-primary:focus {
@@ -63,8 +63,8 @@ const CARD_STYLES: Record<string, string> = {
     }
     
     .card:hover {
-      border-color: var(--bs-primary);
-      box-shadow: 0 1px 2px rgba(var(--bs-primary-rgb), 0.1);
+      border-color: var(--p);
+      box-shadow: 0 1px 2px rgba(var(--p-rgb), 0.1);
     }
   `,
   // Additional card styles...
@@ -93,22 +93,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // Create CSS variables and styles
     const cssVars = `
       :root {
-        --bs-primary: ${colorScheme.primary};
-        --bs-primary-rgb: ${colorScheme.primaryRgb};
-        --accent: ${colorScheme.accent};
-        --success: ${colorScheme.success};
-        --warning: ${colorScheme.warning};
-        --info: ${colorScheme.info};
-        --secondary: ${colorScheme.secondary};
-        --danger: ${colorScheme.danger};
-      }
-
-      .bg-primary {
-        background-color: var(--bs-primary) !important;
-      }
-
-      .text-primary {
-        color: var(--bs-primary) !important;
+        --p: ${colorScheme.primary};
+        --p-rgb: ${colorScheme.primaryRgb};
+        --a: ${colorScheme.accent};
+        --s: ${colorScheme.success};
+        --w: ${colorScheme.warning};
+        --i: ${colorScheme.info};
+        --sc: ${colorScheme.secondary};
+        --e: ${colorScheme.danger};
       }
 
       /* Button Styles */

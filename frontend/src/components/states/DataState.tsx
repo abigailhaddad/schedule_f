@@ -13,19 +13,25 @@ interface DataStateProps {
 
 export default function DataState({ comments, filters, onFilterChange }: DataStateProps) {
   return (
-    <div className="container-fluid">
+    <div className="container-fluid py-4">
+      {/* First row: Statistics and Filters side by side */}
       <div className="row mb-4">
-        <div className="col-12">
+        <div className="col-md-6">
           <StatisticsCard data={comments} />
+        </div>
+        <div className="col-md-6">
+          <FilterSection onFilterChange={onFilterChange} />
         </div>
       </div>
       
+      {/* Second row: Data Table */}
       <div className="row">
-        <div className="col-md-3 mb-4">
-          <FilterSection onFilterChange={onFilterChange} />
-        </div>
-        <div className="col-md-9 mb-4">
-          <CommentTable data={comments} filters={filters} />
+        <div className="col-12">
+          <div className="card">
+            <div className="card-body table-responsive">
+              <CommentTable data={comments} filters={filters} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
