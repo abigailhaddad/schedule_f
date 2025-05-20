@@ -28,9 +28,11 @@ from dotenv import load_dotenv
 from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
+import pandas as pd
 
 # Import from backend packages
-from backend.utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
+from utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
 
 # Load environment variables
 load_dotenv()
@@ -143,6 +145,74 @@ def extract_text_from_pdf(pdf_path):
     except Exception as e:
         print(f"Error extracting text from PDF {pdf_path}: {e}")
         return f"[PDF TEXT EXTRACTION FAILED: {str(e)}]"
+    
+def download_attachment_with_retry(url: str, output_dir: str, max_retries: int = 10, 
+                               base_delay: float = 1.0, max_delay: float = 60.0) -> Optional[str]:
+    """
+    Download an attachment from a URL with exponential backoff retry logic.
+    
+    Args:
+        url: URL of the attachment
+        output_dir: Directory to save the attachment (should be the comment-specific subfolder)
+        max_retries: Maximum number of retries
+        base_delay: Base delay for exponential backoff (seconds)
+        max_delay: Maximum delay for exponential backoff (seconds)
+        
+    Returns:
+        Path to the downloaded file or None if download failed
+    """
+    import os
+    import time
+    import random
+    import requests
+    from urllib.parse import urlparse
+    from typing import Optional
+    
+    # Create directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Get filename from URL
+    parsed_url = urlparse(url)
+    filename = os.path.basename(parsed_url.path)
+    if not filename or filename == '':
+        # Generate a random filename if none is found
+        filename = f"attachment_{random.randint(10000, 99999)}.txt"
+    
+    # Make sure the filename is unique to avoid overwriting
+    base_name, ext = os.path.splitext(filename)
+    if not ext:  # If no extension, default to .txt
+        ext = '.txt'
+    
+    # Add a timestamp to ensure uniqueness
+    timestamp = int(time.time())
+    unique_filename = f"{base_name}_{timestamp}{ext}"
+    
+    output_path = os.path.join(output_dir, unique_filename)
+    
+    print(f"Downloading from {url}")
+    print(f"Target path: {output_path}")
+    
+    # Try downloading with exponential backoff
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+            
+            # Save the file
+            with open(output_path, 'wb') as f:
+                f.write(response.content)
+            
+            print(f"Successfully downloaded to: {output_path}")
+            return output_path
+            
+        except requests.exceptions.RequestException as e:
+            delay = min(base_delay * (2 ** attempt) + random.uniform(0, 1), max_delay)
+            print(f"Attempt {attempt + 1}/{max_retries} failed: {e}")
+            print(f"Retrying in {delay:.2f} seconds...")
+            time.sleep(delay)
+    
+    print(f"Failed to download attachment after {max_retries} attempts: {url}")
+    return None
 
 def get_comment_detail(comment_id, api_key, download_attachments=True, attachments_dir=None):
     """Fetch full detail for a single comment, including attachments."""
@@ -312,6 +382,120 @@ def get_all_comment_details(comment_ids, api_key, download_attachments=True, att
         print(f"Final checkpoint saved with {len(comments)} comments")
     
     return comments
+def download_all_attachments(comments_data, output_dir: str):
+    """
+    Download all attachments for a list of comments using the existing infrastructure.
+    This function reuses the existing extract_text_from_pdf and download_attachment functions
+    to maintain consistency with the API path.
+    
+    Args:
+        comments_data: List of comment objects
+        output_dir: Directory to save attachments
+        
+    Returns:
+        Updated list of comments with local paths to attachments and extracted text
+    """
+    import os
+    
+    print(f"\n=== Downloading attachments ===")
+    
+    total_attachments = sum(len(comment.get("attributes", {}).get("attachments", [])) 
+                           for comment in comments_data)
+    
+    if total_attachments == 0:
+        print("No attachments to download.")
+        return comments_data
+    
+    print(f"Found {total_attachments} attachments to download.")
+    
+    # Create the main attachments directory
+    attachments_base_dir = os.path.join(output_dir, "attachments")
+    os.makedirs(attachments_base_dir, exist_ok=True)
+    
+    # Process each comment
+    downloaded = 0
+    failed = 0
+    
+    for comment in comments_data:
+        comment_id = comment.get("id", "unknown")
+        # Sanitize comment_id to ensure it's a valid folder name
+        comment_id = ''.join(c for c in comment_id if c.isalnum() or c in '-_')
+        if not comment_id:
+            comment_id = f"comment_{len(comments_data)}"
+            
+        attributes = comment.get("attributes", {})
+        attachments = attributes.get("attachments", [])
+        
+        if not attachments:
+            continue
+            
+        print(f"Processing {len(attachments)} attachments for comment {comment_id}")
+        
+        # Create a subfolder for this comment's attachments
+        comment_attachments_dir = os.path.join(attachments_base_dir, comment_id)
+        os.makedirs(comment_attachments_dir, exist_ok=True)
+        
+        # List to store attachment texts
+        attachment_texts = []
+        
+        for i, attachment in enumerate(attachments):
+            url = attachment.get("fileUrl")
+            if url:
+                # Use existing infrastructure - first download the attachment
+                print(f"Downloading attachment {i+1}/{len(attachments)} for comment {comment_id}")
+                
+                # Determine file extension
+                attachment_title = attachment.get("title", "")
+                _, ext = os.path.splitext(url)
+                is_pdf = ext.lower() == '.pdf' or '.pdf' in url.lower()
+                
+                # Create unique filename
+                if not ext:
+                    ext = '.pdf' if is_pdf else '.txt'
+                
+                # Create safe filename
+                safe_title = "".join(c for c in attachment_title if c.isalnum() or c in " ._-").strip()
+                safe_title = safe_title[:50] if safe_title else f"attachment_{i+1}"
+                filename = f"{safe_title}{ext}"
+                output_path = os.path.join(comment_attachments_dir, filename)
+                
+                # Download the attachment using the existing function
+                downloaded_path = download_attachment_with_retry(url, comment_attachments_dir)
+                
+                if downloaded_path:
+                    # Update the attachment with local path
+                    attachments[i]["localPath"] = downloaded_path
+                    downloaded += 1
+                    
+                    # Extract text if it's a PDF using the existing function
+                    if is_pdf:
+                        print(f"Extracting text from PDF: {filename}")
+                        try:
+                            attachment_text = extract_text_from_pdf(downloaded_path)
+                            attachment_texts.append({
+                                "id": f"{comment_id}_attachment_{i+1}",
+                                "title": attachment_title or safe_title,
+                                "text": attachment_text,
+                                "file_path": downloaded_path
+                            })
+                        except Exception as e:
+                            print(f"Error extracting text from PDF {filename}: {e}")
+                            attachment_texts.append({
+                                "id": f"{comment_id}_attachment_{i+1}",
+                                "title": attachment_title or safe_title,
+                                "text": f"[TEXT EXTRACTION FAILED: {str(e)}]",
+                                "file_path": downloaded_path
+                            })
+                else:
+                    failed += 1
+                    print(f"Download failed for {url}")
+        
+        # Add attachment texts to the comment data
+        if attachment_texts:
+            attributes["attachment_texts"] = attachment_texts
+    
+    print(f"Downloaded {downloaded} attachments, {failed} failed.")
+    return comments_data
 
 def save_json(data, filename):
     """Save data to a JSON file."""
@@ -329,10 +513,10 @@ def fetch_comments(document_id, output_dir=None, limit=None, api_key=None, downl
         if os.path.exists(os.path.join(project_root, "backend", "pipeline.py")):
             # Create a timestamped directory in the results folder
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_dir = os.path.join(project_root, "data", "results", f"results_{timestamp}")
+            output_dir = os.path.join(project_root, "results", f"results_{timestamp}")
         else:
             # Fallback to the original behavior
-            output_dir = os.path.join(project_root, "data", "raw")
+            output_dir = os.path.join(project_root, "results", "raw")
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             output_dir = os.path.join(output_dir, f"fetch_{timestamp}")
     
@@ -446,6 +630,102 @@ def fetch_comments(document_id, output_dir=None, limit=None, api_key=None, downl
         print(f"Failed to remove checkpoint file: {e}")
     
     return result_path
+
+def read_comments_from_csv(csv_file_path: str, output_dir: str, limit: Optional[int] = None):
+    """
+    Read comments from a CSV file and save them to a JSON file.
+    
+    Args:
+        csv_file_path: Path to the CSV file
+        output_dir: Directory to save the output JSON file
+        limit: Maximum number of comments to process
+    
+    Returns:
+        Path to the output JSON file
+    """
+    import pandas as pd
+    from pathlib import Path
+    import numpy as np
+    
+    print(f"Reading comments from CSV file: {csv_file_path}")
+    
+    # Read the CSV file normally to get the headers
+    df = pd.read_csv(csv_file_path)
+    
+    # Skip the second row (first data row) which is not a real comment
+    df = df.iloc[1:].reset_index(drop=True)
+    
+    # Apply limit if specified
+    if limit is not None:
+        df = df.head(limit)
+    
+    # Create a list of comments in the same format as the API output
+    comments = []
+    for idx, row in df.iterrows():
+        # Extract the comment ID from the Document ID
+        comment_id = str(row.get('Document ID', ''))
+        if pd.isna(comment_id) or comment_id == '':
+            comment_id = f"comment_{idx}"
+        
+        # Create a comment object with the same structure as the API output
+        comment = {
+            "id": comment_id,
+            "attributes": {
+                "title": str(row.get('Title', '')) if not pd.isna(row.get('Title', '')) else '',
+                "commentOn": str(row.get('Comment on Document ID', '')) if not pd.isna(row.get('Comment on Document ID', '')) else '',
+                "postedDate": str(row.get('Posted Date', '')) if not pd.isna(row.get('Posted Date', '')) else '',
+                "submitterName": f"{str(row.get('First Name', '')) if not pd.isna(row.get('First Name', '')) else ''} {str(row.get('Last Name', '')) if not pd.isna(row.get('Last Name', '')) else ''}".strip(),
+                "organization": str(row.get('Organization Name', '')) if not pd.isna(row.get('Organization Name', '')) else '',
+                "city": str(row.get('City', '')) if not pd.isna(row.get('City', '')) else '',
+                "state": str(row.get('State/Province', '')) if not pd.isna(row.get('State/Province', '')) else '',
+                "country": str(row.get('Country', '')) if not pd.isna(row.get('Country', '')) else '',
+                "comment": str(row.get('Comment', '')) if not pd.isna(row.get('Comment', '')) else '',
+                "documentType": str(row.get('Document Type', '')) if not pd.isna(row.get('Document Type', '')) else '',
+                "attachmentCount": 0,  # Default to 0, will be updated if attachments are found
+                "attachments": []  # Will be populated with attachment info if available
+            }
+        }
+        
+        # Only process Attachment Files - ignore Content Files
+        attachment_files = row.get('Attachment Files', '')
+        
+        # Process attachment files - safely handle NaN or float values
+        if not pd.isna(attachment_files) and attachment_files != '':
+            attachment_files_str = str(attachment_files)
+            if ',' in attachment_files_str:
+                files = attachment_files_str.split(',')
+                for file_url in files:
+                    if file_url.strip():
+                        file_name = Path(file_url.strip()).name
+                        comment["attributes"]["attachments"].append({
+                            "title": file_name,
+                            "fileUrl": file_url.strip(),
+                            "type": "attachment"
+                        })
+            else:
+                # Single URL without commas
+                file_url = attachment_files_str.strip()
+                if file_url:
+                    file_name = Path(file_url).name
+                    comment["attributes"]["attachments"].append({
+                        "title": file_name,
+                        "fileUrl": file_url,
+                        "type": "attachment"
+                    })
+        
+        # Update attachment count
+        comment["attributes"]["attachmentCount"] = len(comment["attributes"]["attachments"])
+        
+        comments.append(comment)
+    
+    # Save comments to a JSON file
+    output_file = os.path.join(output_dir, "raw_data.json")
+    with open(output_file, 'w') as f:
+        json.dump(comments, f, indent=2)
+    
+    print(f"Saved {len(comments)} comments to {output_file}")
+    
+    return output_file
 
 def main():
     """Parse arguments and run the script."""
