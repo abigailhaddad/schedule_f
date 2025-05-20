@@ -32,9 +32,10 @@ export const datasetConfig = {
       },
       { 
         key: 'keyQuote',       
-        title: 'Quote',       
+        title: 'Key Quote',       
         filter: 'text',
-        visible: true 
+        visible: true,
+        charLimit: 200
       },
       { 
         key: 'themes',       
@@ -44,18 +45,37 @@ export const datasetConfig = {
         visible: true 
       },
       { 
+        key: 'rationale',
+        title: 'Rationale',
+        filter: 'text',
+        visible: true,
+        charLimit: 300
+      },
+      { 
         key: 'comment',   
         title: 'Comment',   
         filter: 'text', 
-        visible: false,
+        visible: true,
         charLimit: 800 
+      },
+      {
+        key: 'category',
+        title: 'Category',
+        filter: 'select',
+        visible: true
+      },
+      {
+        key: 'agencyId',
+        title: 'Agency ID',
+        filter: 'text',
+        visible: false
       },
       { 
         key: 'link',        
         title: 'Source Link',        
         filter: 'text',
         format: 'link',
-        visible: false 
+        visible: true 
       },
       { 
         key: 'id',           
@@ -63,6 +83,16 @@ export const datasetConfig = {
         visible: true,
         filter: 'text'
       },
+      {
+        key: 'hasAttachments',
+        title: 'Has Attachments',
+        filter: 'select',
+        visible: true,
+        badges: {
+          'true': 'bg-success',
+          'false': 'bg-danger'
+        }
+      }
     ],
     
     stats: [

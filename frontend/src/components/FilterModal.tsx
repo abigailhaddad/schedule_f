@@ -1,39 +1,92 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Field, datasetConfig } from '@/lib/config';
+import { Field } from '@/lib/config';
 import Modal from './ui/Modal';
 import Button from './ui/Button';
 
 interface FilterModalProps {
   field: Field;
-  currentValue: any;
-  onApply: (value: any) => void;
+  currentValue: unknown;
+  onApply: (value: unknown) => void;
   onClose: () => void;
   isOpen: boolean;
 }
 
 export default function FilterModal({ field, currentValue, onApply, onClose, isOpen }: FilterModalProps) {
-  const [value, setValue] = useState<any>(
-    currentValue || 
-    (field.filter === 'select' || field.filter === 'multi-label' ? [] : '')
-  );
+  // Initialize value based on field type and current value
+  const initialValue = (): string | string[] => {
+    // For select filters, ensure we're working with arrays
+    if (field.filter === 'select' || field.filter === 'multi-label') {
+      // Handle both string and array values from URL params
+      if (typeof currentValue === 'string') {
+        return [currentValue];
+      }
+      // If it's already an array, use it
+      if (Array.isArray(currentValue)) {
+        return currentValue;
+      }
+      // Default to empty array
+      return [];
+    }
+    
+    // For text filters, convert to array if needed
+    if (field.filter === 'text') {
+      if (typeof currentValue === 'string') {
+        return [currentValue];
+      }
+      if (Array.isArray(currentValue)) {
+        return currentValue;
+      }
+      return [];
+    }
+    
+    // For other filters, use the value as is or empty string
+    return typeof currentValue === 'string' ? currentValue : '';
+  };
+
+  const [value, setValue] = useState<string | string[]>(initialValue());
   
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Update local value when currentValue changes
+  // For text filter functionality
+  const [textValues, setTextValues] = useState<string[]>(
+    Array.isArray(currentValue) ? currentValue : []
+  );
+  const [inputValue, setInputValue] = useState('');
+  
+  // Update local state when currentValue changes
   useEffect(() => {
-    setValue(
-      currentValue || 
-      (field.filter === 'select' || field.filter === 'multi-label' ? [] : '')
-    );
+    setValue(initialValue());
+    
+    // Also update textValues when currentValue changes for text filters
+    if (field.filter === 'text') {
+      setTextValues(Array.isArray(currentValue) ? currentValue : []);
+    }
   }, [currentValue, field.filter]);
+  
+  // Add text value function for text filter
+  const addTextValue = () => {
+    if (inputValue.trim() && !textValues.includes(inputValue.trim())) {
+      const newValues = [...textValues, inputValue.trim()];
+      setTextValues(newValues);
+      setInputValue('');
+      setValue(newValues);
+    }
+  };
+  
+  // Remove text value function for text filter
+  const removeTextValue = (val: string) => {
+    const newValues = textValues.filter(v => v !== val);
+    setTextValues(newValues);
+    setValue(newValues);
+  };
   
   // Get all unique values for a field from the data
   const getUniqueValues = (field: Field) => {
     // This would usually come from the database
     // For the sake of this example, we'll use hardcoded values
-    if (field.key === 'stance') {
+    if (field.key === 'stance' || field.key === 'analysis.stance') {
       return ['For', 'Against', 'Neutral/Unclear'];
     }
     
@@ -41,7 +94,7 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
       return Object.keys(field.badges);
     }
     
-    if (field.key === 'themes') {
+    if (field.key === 'themes' || field.key === 'analysis.themes') {
       return [
         'Due process/employee rights',
         'Merit-based system concerns',
@@ -128,25 +181,6 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
   
   // Render text filter
   const renderTextFilter = () => {
-    // For tracking multiple text values
-    const [textValues, setTextValues] = useState<string[]>(Array.isArray(currentValue) ? currentValue : []);
-    const [inputValue, setInputValue] = useState('');
-    
-    const addTextValue = () => {
-      if (inputValue.trim() && !textValues.includes(inputValue.trim())) {
-        const newValues = [...textValues, inputValue.trim()];
-        setTextValues(newValues);
-        setInputValue('');
-        setValue(newValues);
-      }
-    };
-    
-    const removeTextValue = (val: string) => {
-      const newValues = textValues.filter(v => v !== val);
-      setTextValues(newValues);
-      setValue(newValues);
-    };
-    
     return (
       <div>
         <div className="mb-4">

@@ -16,13 +16,10 @@ export default function CommentsDataProvider() {
 
   // Fetch comments data
   useEffect(() => {
-    console.log("🔵 Client: useEffect triggered, starting data fetch");
     
     (async () => {
       try {
-        console.log("🔵 Client: Calling getComments server action");
         const result = await getComments();
-        console.log("🔵 Client: Data fetched, success:", result.success);
         
         if (result.success && result.data) {
           setComments(result.data);

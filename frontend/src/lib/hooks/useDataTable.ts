@@ -1,374 +1,328 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { CommentWithAnalysis } from '@/lib/db/schema';
-import { Field, datasetConfig } from '@/lib/config';
-import MiniSearch from 'minisearch';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+'use client';
 
-type UseDataTableOptions = {
-  data: CommentWithAnalysis[];
-  filters: Record<string, unknown>;
+import { useState, useEffect, useMemo } from 'react';
+import { SortingState } from '@/components/ui/DataTable';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+
+interface UseDataTableOptions<T> {
+  data: T[];
+  filters?: Record<string, unknown>;
+  initialPageSize?: number;
+  initialSorting?: SortingState;
+  searchFields?: string[];
 }
 
-export function useDataTable({ data, filters }: UseDataTableOptions) {
+export function useDataTable<T extends Record<string, unknown>>({
+  data,
+  filters = {},
+  initialPageSize = 10,
+  initialSorting,
+  searchFields = []
+}: UseDataTableOptions<T>) {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  // Initialize from URL params if available
+  const urlSort = searchParams.get('sort');
+  const urlSortDirection = searchParams.get('sortDirection') as 'asc' | 'desc' | null;
+  const urlSearch = searchParams.get('search') || '';
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState(urlSearch);
+  const [sorting, setSorting] = useState<SortingState | undefined>(
+    urlSort && urlSortDirection 
+      ? { column: urlSort, direction: urlSortDirection } 
+      : initialSorting
+  );
+  const [pageSize, setPageSize] = useState(initialPageSize);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isInitialMount, setIsInitialMount] = useState(true);
   
-  // Track initial render
-  const isInitialMount = useRef(true);
-  
-  const [filteredData, setFilteredData] = useState<CommentWithAnalysis[]>(data);
-  const [searchQuery, setSearchQuery] = useState(() => {
-    // Initialize search query from URL
-    return searchParams.get('query') || '';
-  });
-  const [searchIndex, setSearchIndex] = useState<MiniSearch | null>(null);
-  
-  // Initialize sorting state from URL or defaults
-  const [sorting, setSorting] = useState<{column: string, direction: 'asc' | 'desc'} | null>(() => {
-    const sortColumn = searchParams.get('sort');
-    const sortDir = searchParams.get('dir');
-    
-    if (sortColumn && (sortDir === 'asc' || sortDir === 'desc')) {
-      return {
-        column: sortColumn,
-        direction: sortDir
-      };
-    }
-    
-    return null;
-  });
-  
-  // Initialize pagination state from URL or defaults
-  const [currentPage, setCurrentPage] = useState(() => {
-    const pageParam = searchParams.get('page');
-    return pageParam ? parseInt(pageParam, 10) : 1;
-  });
-  
-  const [pageSize, setPageSize] = useState(() => {
-    const sizeParam = searchParams.get('size');
-    return sizeParam ? parseInt(sizeParam, 10) : 10;
-  });
-  
-  // Update URL when pagination state changes
+  // Update URL when sorting or search changes
   useEffect(() => {
-    // Skip URL updates on initial render since we're already getting values from URL
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
+    if (isInitialMount) {
+      setIsInitialMount(false);
       return;
     }
-    
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', currentPage.toString());
-    params.set('size', pageSize.toString());
-    
-    // Don't update URL if it's already the same
-    if (params.toString() === searchParams.toString()) {
-      return;
-    }
-    
-    // Update URL without forcing a navigation
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [currentPage, pageSize, pathname, router, searchParams]);
-  
-  // Update URL when sorting changes
-  useEffect(() => {
-    // Skip URL updates on initial render
-    if (isInitialMount.current) {
-      return;
-    }
-    
+
+    // Create a new URLSearchParams object
     const params = new URLSearchParams(searchParams.toString());
     
+    // Update sorting parameters
     if (sorting) {
       params.set('sort', sorting.column);
-      params.set('dir', sorting.direction);
+      params.set('sortDirection', sorting.direction);
     } else {
       params.delete('sort');
-      params.delete('dir');
+      params.delete('sortDirection');
     }
     
-    // Don't update URL if it's already the same
-    if (params.toString() === searchParams.toString()) {
-      return;
+    // Update search parameter
+    if (searchQuery) {
+      params.set('search', searchQuery);
+    } else {
+      params.delete('search');
     }
     
-    // Update URL without forcing a navigation
+    // Update URL without refreshing page
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [sorting, pathname, router, searchParams]);
-  
-  // Initialize search index
+    
+    // Log the current sorting state for debugging
+    console.log('Sorting updated:', sorting);
+  }, [searchQuery, sorting, router, pathname, searchParams, isInitialMount]);
+
+  // Reset page when filters or search changes
   useEffect(() => {
-    if (!data.length) return;
-    
-    // Create search index
-    const index = new MiniSearch({
-      fields: ['title', 'keyQuote', 'comment', 'originalComment'],
-      storeFields: ['id'],
-      idField: 'id',
-      searchOptions: {
-        fuzzy: 0.2,
-        prefix: true,
-        boost: { keyQuote: 2, title: 1.5 }
-      }
-    });
-    
-    // Format the data for search indexing
-    const searchDocuments = data.map(item => ({
-      id: item.id,
-      title: item.title || '',
-      keyQuote: item.analysis?.keyQuote || '',
-      comment: item.comment || '',
-      originalComment: item.originalComment || ''
-    }));
-    
-    // Add documents to index
-    index.addAll(searchDocuments);
-    setSearchIndex(index);
-  }, [data]);
-  
-  // Apply filters, search, and sorting
-  useEffect(() => {
+    if (!isInitialMount) {
+      setCurrentPage(1);
+    }
+  }, [searchQuery, filters, isInitialMount]);
+
+  // Filter data based on filters and search query
+  const filteredData = useMemo(() => {
+    // Start with all data
     let result = [...data];
-    
+
     // Apply filters
-    if (Object.keys(filters).length > 0) {
-      result = applyFilters(result, filters);
-    }
-    
-    // Apply search
-    if (searchQuery && searchIndex) {
-      result = applySearch(result, searchQuery, searchIndex);
-    }
-    
-    // Apply sorting
-    if (sorting) {
-      result = applySorting(result, sorting);
-    }
-    
-    // Only reset to first page when filters or search changes AFTER the initial render
-    if (!isInitialMount.current) {
-      // Reset to first page when filters or search query changes
-      // Only if the current dependencies change, not on component mount
-      if (searchQuery || Object.keys(filters).length > 0) {
-        setCurrentPage(1);
-      }
-    }
-    
-    setFilteredData(result);
-  }, [data, filters, searchQuery, searchIndex, sorting]);
-  
-  // Filter implementation
-  const applyFilters = (items: CommentWithAnalysis[], filterValues: Record<string, unknown>) => {
-    return items.filter(item => {
-      for (const [key, value] of Object.entries(filterValues)) {
-        if (!value) continue;
-        
-        const field = datasetConfig.fields.find(f => f.key === key);
-        if (!field) continue;
-        
-        // Handle different filter types
-        if (Array.isArray(value) && value.length > 0) {
-          // For analysis fields like stance and themes
-          if (key === 'stance' && item.analysis) {
-            if (!value.includes(item.analysis.stance)) return false;
-          } else if (key === 'themes' && item.analysis) {
-            // Handle multi-label themes (comma-separated)
-            const themes = item.analysis.themes?.split(',').map(t => t.trim().toLowerCase());
-            if (!themes || !value.some(v => themes.includes(String(v).toLowerCase()))) return false;
+    Object.entries(filters).forEach(([key, filterValue]) => {
+      if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
+        result = result.filter(item => {
+          // Get the actual value from the item
+          let itemValue: unknown;
+          
+          // Check if the filter is for nested fields (e.g., 'analysis.stance')
+          if (key.includes('.')) {
+            const [parent, child] = key.split('.');
+            const parentObj = item[parent] as Record<string, unknown> | undefined;
+            itemValue = parentObj ? parentObj[child] : undefined;
           } else {
-            // Standard string comparison for other fields
-            const fieldValue = String(item[key as keyof typeof item] || '').toLowerCase();
-            if (!value.some(v => fieldValue.includes(String(v).toLowerCase()))) return false;
+            itemValue = item[key];
           }
+          
+          // Handle different filter value types
+          if (Array.isArray(filterValue)) {
+            // For array filters (like multi-select), check if the value is in the array
+            if (filterValue.length === 0) return true; // Empty filter = show all
+            
+            // Special handling for themes - check if any selected theme is in the item's themes array
+            if (key === 'themes' || key === 'analysis.themes') {
+              // If itemValue is an array, check if any of the filter values is included
+              if (Array.isArray(itemValue)) {
+                return filterValue.some(theme => itemValue.includes(theme));
+              }
+              // If itemValue is a string, check if it equals any of the filter values
+              return filterValue.includes(String(itemValue));
+            }
+            
+            // Default array handling - exact match
+            return filterValue.includes(String(itemValue));
+          } else {
+            // For single value filters, do direct comparison
+            return String(itemValue) === String(filterValue);
+          }
+        });
+      }
+    });
+
+    // Apply search query if provided
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(item => {
+        // If searchFields are provided, only search in those fields
+        if (searchFields.length > 0) {
+          return searchFields.some(field => {
+            const value = getNestedValue(item, field);
+            return value !== undefined && String(value).toLowerCase().includes(query);
+          });
         }
+        
+        // Otherwise search in all fields
+        return Object.entries(item).some(([key, value]) => {
+          // Skip searching in complex objects or arrays unless they're strings
+          if (typeof value === 'object' && value !== null) {
+            if (key === 'analysis') {
+              // Special case for analysis object
+              const analysisObj = value as Record<string, unknown>;
+              return Object.values(analysisObj).some(
+                v => v !== undefined && String(v).toLowerCase().includes(query)
+              );
+            }
+            return false;
+          }
+          return value !== undefined && String(value).toLowerCase().includes(query);
+        });
+      });
+    }
+
+    return result;
+  }, [data, filters, searchQuery, searchFields]);
+
+  // Sort data if sorting is specified
+  const sortedData = useMemo(() => {
+    if (!sorting) return filteredData;
+    
+    return [...filteredData].sort((a, b) => {
+      const aValue = getNestedValue(a, sorting.column);
+      const bValue = getNestedValue(b, sorting.column);
+      
+      if (aValue === bValue) return 0;
+      
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
+      
+      const modifier = sorting.direction === 'asc' ? 1 : -1;
+      
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue) * modifier;
       }
-      return true;
+      
+      return ((aValue < bValue) ? -1 : 1) * modifier;
     });
-  };
+  }, [filteredData, sorting]);
+
+  // Paginate data
+  const totalItems = sortedData.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
   
-  // Search implementation
-  const applySearch = (items: CommentWithAnalysis[], query: string, index: MiniSearch) => {
-    const searchResults = index.search(query);
-    const resultIds = new Set(searchResults.map(r => r.id));
-    return items.filter(item => resultIds.has(item.id));
-  };
-  
-  // Sorting implementation
-  const applySorting = (items: CommentWithAnalysis[], sortConfig: {column: string, direction: 'asc' | 'desc'}) => {
-    return [...items].sort((a, b) => {
-      const { column, direction } = sortConfig;
-      
-      // Handle analysis fields
-      if (column === 'stance' || column === 'keyQuote' || column === 'themes' || column === 'rationale') {
-        const valueA = a.analysis?.[column as keyof typeof a.analysis]?.toString().toLowerCase() || '';
-        const valueB = b.analysis?.[column as keyof typeof b.analysis]?.toString().toLowerCase() || '';
-        return direction === 'asc' 
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      }
-      
-      // Handle regular fields
-      const valueA = String(a[column as keyof typeof a] || '').toLowerCase();
-      const valueB = String(b[column as keyof typeof b] || '').toLowerCase();
-      
-      return direction === 'asc' 
-        ? valueA.localeCompare(valueB)
-        : valueB.localeCompare(valueA);
-    });
-  };
-  
-  // Calculate paginated data
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
-    return filteredData.slice(start, end);
-  }, [filteredData, currentPage, pageSize]);
-  
-  // Calculate total pages
-  const totalPages = useMemo(() => {
-    return Math.ceil(filteredData.length / pageSize);
-  }, [filteredData, pageSize]);
-  
-  // Helper to check if can go to previous page
-  const canPreviousPage = currentPage > 1;
-  
-  // Helper to check if can go to next page
-  const canNextPage = currentPage < totalPages;
-  
-  // Handle page change with URL update
+    return sortedData.slice(start, end);
+  }, [sortedData, currentPage, pageSize]);
+
+  // Pagination controls
   const goToPage = (page: number) => {
-    const newPage = Math.max(1, Math.min(page, totalPages || 1));
-    setCurrentPage(newPage);
+    setCurrentPage(page);
   };
   
-  // Helper to go to next page
   const nextPage = () => {
-    if (canNextPage) {
-      setCurrentPage(prev => prev + 1);
-    }
+    setCurrentPage(prev => Math.min(prev + 1, totalPages));
   };
   
-  // Helper to go to previous page
   const previousPage = () => {
-    if (canPreviousPage) {
-      setCurrentPage(prev => prev - 1);
-    }
+    setCurrentPage(prev => Math.max(prev - 1, 1));
   };
   
-  // Handle page size change
-  const handlePageSizeChange = (newSize: number) => {
-    setPageSize(newSize);
-    // Don't reset to first page on initial render
-    if (!isInitialMount.current) {
-      setCurrentPage(1); // Reset to first page when changing page size after initial render
-    }
+  const canNextPage = currentPage < totalPages;
+  const canPreviousPage = currentPage > 1;
+
+  // Handle sorting
+  const handleSort = (column: string) => {
+    setSorting(prev => {
+      if (prev?.column === column) {
+        return {
+          column,
+          direction: prev.direction === 'asc' ? 'desc' : 'asc'
+        };
+      }
+      return {
+        column,
+        direction: 'asc'
+      };
+    });
+    
+    // Reset to first page when sorting changes
+    setCurrentPage(1);
   };
-  
-  // Helper for CSV export
+
+  // Export to CSV
   const exportCSV = () => {
-    if (filteredData.length === 0) {
-      alert('No data to export');
-      return;
-    }
-    
-    const visibleFields = datasetConfig.fields.filter(f => f.visible);
-    const headers = visibleFields.map(f => f.title);
-    
-    // Create CSV content
-    let csv = headers.join(',') + '\n';
-    
+    // Get all unique keys from the data
+    const keys = new Set<string>();
     filteredData.forEach(item => {
-      const line = visibleFields.map(field => {
-        // Get appropriate value based on field type
-        let value: string;
-        
-        if (field.key === 'stance' || field.key === 'keyQuote' || 
-            field.key === 'themes' || field.key === 'rationale') {
-          value = String(item.analysis?.[field.key as keyof typeof item.analysis] || '');
+      Object.keys(item).forEach(key => {
+        // Skip complex objects like 'analysis' for direct export
+        if (typeof item[key] !== 'object' || item[key] === null) {
+          keys.add(key);
+        }
+      });
+      // Add analysis fields if they exist
+      const analysis = item['analysis'] as Record<string, unknown> | undefined;
+      if (analysis) {
+        Object.keys(analysis).forEach(key => {
+          keys.add(`analysis.${key}`);
+        });
+      }
+    });
+    
+    // Convert Set to Array and sort
+    const headers = Array.from(keys);
+    
+    // Create CSV header row
+    let csv = headers.map(key => `"${key}"`).join(',') + '\n';
+    
+    // Add data rows
+    filteredData.forEach(item => {
+      const row = headers.map(key => {
+        let value: unknown;
+        if (key.includes('.')) {
+          const [parent, child] = key.split('.');
+          const parentObj = item[parent] as Record<string, unknown> | undefined;
+          value = parentObj ? parentObj[child] : '';
         } else {
-          value = String(item[field.key as keyof typeof item] || '');
+          value = item[key];
         }
         
-        // Format specific field types
-        if (field.format === 'currency' && value) {
-          const num = parseFloat(value);
-          value = !isNaN(num) ? num.toFixed(2) : value;
+        // Handle different value types
+        if (value === null || value === undefined) {
+          return '';
         }
-        
-        // Escape special characters for CSV
-        value = value.replace(/"/g, '""');
-        if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-          value = `"${value}"`;
+        if (typeof value === 'string') {
+          // Escape quotes in string values
+          return `"${value.replace(/"/g, '""')}"`;
         }
-        
         return value;
       });
       
-      csv += line.join(',') + '\n';
+      csv += row.join(',') + '\n';
     });
     
-    // Download the file
+    // Create and download the CSV file
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
-    link.download = `comments-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'export.csv');
+    link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
-  
-  // Sort toggle handler with URL update
-  const handleSort = (column: string) => {
-    if (sorting?.column === column) {
-      // Toggle direction if same column
-      setSorting({
-        column,
-        direction: sorting.direction === 'asc' ? 'desc' : 'asc'
-      });
-    } else {
-      // New column, default to ascending
-      setSorting({
-        column,
-        direction: 'asc'
-      });
+
+  // Helper function to get nested values
+  function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+    if (!path.includes('.')) {
+      return obj[path];
     }
     
-    // Only reset to first page when sorting changes AFTER the initial render
-    if (!isInitialMount.current) {
-      setCurrentPage(1); // Reset to first page when sort changes after initial render
-    }
-  };
-  
-  // Update search query
-  const updateSearchQuery = (query: string) => {
-    setSearchQuery(query);
-    
-    // Only reset to page 1 if we're past the initial render
-    if (!isInitialMount.current) {
-      setCurrentPage(1);
-    }
-  };
-  
+    const [parent, child] = path.split('.');
+    const parentObj = obj[parent] as Record<string, unknown> | undefined;
+    return parentObj ? parentObj[child] : undefined;
+  }
+
+  // Return all the table state and controls
   return {
     filteredData,
+    sortedData,
     paginatedData,
     searchQuery,
-    setSearchQuery: updateSearchQuery,
+    setSearchQuery,
     sorting,
+    setSorting,
     handleSort,
     exportCSV,
-    // Pagination props
+    // Pagination
     pageSize,
-    setPageSize: handlePageSizeChange,
+    setPageSize,
     currentPage,
+    setCurrentPage,
     totalPages,
     goToPage,
     nextPage,
     previousPage,
     canNextPage,
-    canPreviousPage
+    canPreviousPage,
+    totalItems
   };
 } 
