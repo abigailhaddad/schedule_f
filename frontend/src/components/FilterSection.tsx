@@ -16,36 +16,25 @@ export default function FilterSection() {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [activeField, setActiveField] = useState<Field | null>(null);
   
-  // Map field keys to their full path for nested fields
-  // This is needed because some fields in the schema might be nested objects
-  const getFilterKey = (key: string) => {
-    // Map analysis fields to their proper nested path
-    // In schema.ts, stance, keyQuote, themes, and rationale are direct fields on the comments table
-    // But in the frontend data structure, they might be nested under an "analysis" object
-    // Example: "stance" field becomes "analysis.stance" in the filter
-    if (['stance', 'keyQuote', 'themes', 'rationale'].includes(key)) {
-      return `analysis.${key}`;
-    }
-    return key;
-  };
+  // Note: All fields are now directly on the comments table, not nested
   
   // Handle filter change
   // Example: When selecting "For" in the stance filter:
   // 1. key="stance", value="For"
-  // 2. filterKey becomes "analysis.stance"
-  // 3. newFilters becomes { "analysis.stance": "For" }
+  // 2. newFilters becomes { "stance": "For" }
+  // For themes with filter mode:
+  // 1. key="themes", value={ values: ["Merit-based system concerns"], mode: "includes" }
+  // 2. newFilters becomes { "themes": { values: ["Merit-based system concerns"], mode: "includes" } }
   const handleFilterChange = (key: string, value: unknown) => {
     const newFilters = { ...filters };
     
-    // Use the appropriate filter key (mapping to nested fields if needed)
-    const filterKey = getFilterKey(key);
-    
-    // If value is empty, remove the filter
-    // Example: When clearing the "category" filter, delete newFilters["category"]
-    if (!value || (Array.isArray(value) && value.length === 0)) {
-      delete newFilters[filterKey];
+    // If value is empty or empty array, remove the filter
+    if (!value ||
+        (Array.isArray(value) && value.length === 0) ||
+        (value && typeof value === 'object' && 'values' in value && Array.isArray(value.values) && value.values.length === 0)) {
+      delete newFilters[key];
     } else {
-      newFilters[filterKey] = value;
+      newFilters[key] = value;
     }
     
     // Update filters in the context
@@ -78,7 +67,7 @@ export default function FilterSection() {
   const hasActiveFilters = Object.keys(filters).length > 0;
   
   // Helper to render filter tags for active filters
-  // Example: When filters = { "analysis.stance": "For", "category": "Agency Reform" }
+  // Example: When filters = { "stance": "For", "category": "Agency Reform" }
   // This renders two tags: "Stance: For" and "Category: Agency Reform"
   const renderFilterTags = () => {
     if (!hasActiveFilters) {
@@ -91,19 +80,55 @@ export default function FilterSection() {
     }
     
     return Object.entries(filters).map(([key, value]) => {
-      // Find matching field, checking both direct and nested keys
-      // For "analysis.stance", this would find the "stance" field in the config
-      const field = datasetConfig.fields.find(f => {
-        const mappedKey = getFilterKey(f.key);
-        return mappedKey === key || f.key === key;
-      });
+      // Find matching field
+      const field = datasetConfig.fields.find(f => f.key === key);
       
       if (!field) return null;
       
       // Handle different filter types
+      // For themes with filter mode object: { values: ["Transparency", "Accountability"], mode: "includes" }
+      if (value && typeof value === 'object' && 'values' in value && Array.isArray(value.values)) {
+        const filterValue = value as { values: unknown[], mode: 'exact' | 'includes' | 'at_least' };
+        let modeText = '(Any Match)';
+        if (filterValue.mode === 'at_least') {
+          modeText = '(Must Include All)';
+        } else if (filterValue.mode === 'exact') {
+          modeText = '(Exact Match)';
+        }
+        
+        return filterValue.values.map((v, i) => (
+          <div 
+            key={`${key}-${i}`}
+            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+          >
+            <span className="mr-1 font-medium">{field.title} {i === 0 ? modeText : ''}:</span> 
+            <span>{String(v)}</span>
+            <button 
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              onClick={() => {
+                // Create new values array without this value
+                const newValues = (filterValue.values as unknown[]).filter(item => item !== v);
+                if (newValues.length === 0) {
+                  // If removing the last value, remove the filter entirely
+                  handleFilterChange(key, null);
+                } else {
+                  // Otherwise update the values array while keeping the mode
+                  handleFilterChange(key, {
+                    values: newValues,
+                    mode: filterValue.mode
+                  });
+                }
+              }}
+              aria-label="Remove filter"
+            >
+              ×
+            </button>
+          </div>
+        ));
+      }
       // For array values like themes: ["Transparency", "Accountability"]
       // This creates multiple filter tags, one for each array value
-      if (Array.isArray(value)) {
+      else if (Array.isArray(value)) {
         return (value as unknown[]).map((v, i) => (
           <div 
             key={`${key}-${i}`}
@@ -209,7 +234,7 @@ export default function FilterSection() {
       {activeField && (
         <FilterModal 
           field={activeField}
-          currentValue={filters[getFilterKey(activeField.key)] || null}
+          currentValue={filters[activeField.key] || null}
           onClose={closeFilterModal}
           onApply={(value) => {
             handleFilterChange(activeField.key, value);

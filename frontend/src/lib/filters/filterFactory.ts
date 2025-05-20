@@ -119,18 +119,56 @@ export function createFilterFromParams(
     // Apply the appropriate filter type based on the value
     // For example, if the filterKey is 'themes' and the filterValue is an array, we want to use the includes filter
     if (Array.isArray(filterValue)) {
-      builder.addFilter(
-        filterKey,
-        FilterPredicates.includes(filterKey, filterValue)
-      );
-    } else if (typeof filterValue === 'string') {
-      if (filterKey === 'themes' || filterKey === 'analysis.themes') {
-        // Themes are treated as multi-select
-        // For example, filter_themes=Merit-based would filter for comments containing this theme
+      // Check if there's a filter mode parameter for this key
+      const modeKey = `filter_${filterKey}_mode`;
+      const modeValue = searchParams.get(modeKey);
+      
+      if (filterKey === 'themes') {
+        if (modeValue === 'exact' || modeValue === 'at_least') {
+          // Use specified matching mode for themes
+          builder.addFilter(
+            filterKey,
+            FilterPredicates.includes(filterKey, {
+              values: filterValue,
+              mode: modeValue as 'exact' | 'at_least'
+            })
+          );
+        } else {
+          // Default to 'includes' mode
+          builder.addFilter(
+            filterKey,
+            FilterPredicates.includes(filterKey, filterValue)
+          );
+        }
+      } else {
+        // Default to includes mode
         builder.addFilter(
           filterKey,
-          FilterPredicates.includes(filterKey, [filterValue])
+          FilterPredicates.includes(filterKey, filterValue)
         );
+      }
+    } else if (typeof filterValue === 'string') {
+      if (filterKey === 'themes') {
+        // Themes are treated as multi-select
+        // For example, filter_themes=Merit-based would filter for comments containing this theme
+        // Check if there's a filter mode parameter for this key
+        const modeKey = `filter_${filterKey}_mode`;
+        const modeValue = searchParams.get(modeKey);
+        
+        if (modeValue === 'exact' || modeValue === 'at_least') {
+          builder.addFilter(
+            filterKey,
+            FilterPredicates.includes(filterKey, {
+              values: [filterValue],
+              mode: modeValue as 'exact' | 'at_least'
+            })
+          );
+        } else {
+          builder.addFilter(
+            filterKey,
+            FilterPredicates.includes(filterKey, [filterValue])
+          );
+        }
       } else {
         // Other string values use exact match
         // For example, filter_stance=For would filter for comments with stance exactly "For"
@@ -197,6 +235,15 @@ export function createFilterFromObject(
         key,
         FilterPredicates.includes(key, value)
       );
+    } else if (value && typeof value === 'object' && 'values' in value && 'mode' in value) {
+      // Handle object with values and mode (for themes filtering with exact/includes mode)
+      const filterValue = value as { values: unknown[], mode: 'exact' | 'includes' | 'at_least' };
+      if (Array.isArray(filterValue.values) && filterValue.values.length > 0) {
+        builder.addFilter(
+          key,
+          FilterPredicates.includes(key, filterValue)
+        );
+      }
     } else {
       builder.addFilter(
         key,
