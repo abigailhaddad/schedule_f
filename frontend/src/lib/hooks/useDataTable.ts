@@ -89,24 +89,49 @@ export function useDataTable<T extends Record<string, unknown>>({
       if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
         result = result.filter(item => {
           // Get the actual value from the item
-          let itemValue: unknown;
-          
-          // Check if the filter is for nested fields (e.g., 'analysis.stance')
-          if (key.includes('.')) {
-            const [parent, child] = key.split('.');
-            const parentObj = item[parent] as Record<string, unknown> | undefined;
-            itemValue = parentObj ? parentObj[child] : undefined;
-          } else {
-            itemValue = item[key];
-          }
+          let itemValue = item[key];
           
           // Handle different filter value types
-          if (Array.isArray(filterValue)) {
+          // Handle object with values and mode for themes
+          if (filterValue && typeof filterValue === 'object' && 'values' in filterValue && Array.isArray(filterValue.values)) {
+            const { values, mode } = filterValue as { values: unknown[], mode: 'exact' | 'includes' | 'at_least' };
+            
+            if (values.length === 0) return true; // Empty filter = show all
+            
+            // Convert itemValue to an array for consistent processing
+            let itemValues: string[] = [];
+            if (Array.isArray(itemValue)) {
+              itemValues = itemValue.map(String);
+            } else if (typeof itemValue === 'string' && itemValue.includes(',')) {
+              itemValues = itemValue.split(',').map(v => v.trim());
+            } else if (itemValue !== undefined && itemValue !== null) {
+              itemValues = [String(itemValue)];
+            }
+            
+            const stringValues = values.map(String);
+            
+            if (mode === 'at_least') {
+              // For "must include at least" mode, item must contain ALL of the selected filter values
+              // (but can have additional values not in the filter)
+              return stringValues.every(value => itemValues.includes(value));
+            } else if (mode === 'exact') {
+              // For exact mode, lengths must match and all values must be the same (no more, no less)
+              if (itemValues.length !== stringValues.length) return false;
+              
+              // Check if itemValues contains all values and vice versa
+              return stringValues.every(value => itemValues.includes(value)) &&
+                     itemValues.every(value => stringValues.includes(value));
+            } else {
+              // For includes mode (default), any match is sufficient
+              return values.some(value => itemValues.includes(String(value)));
+            }
+          }
+          else if (Array.isArray(filterValue)) {
             // For array filters (like multi-select), check if the value is in the array
             if (filterValue.length === 0) return true; // Empty filter = show all
             
-            // Special handling for themes - check if any selected theme is in the item's themes array
-            if (key === 'themes' || key === 'analysis.themes') {
+            // Use simple array includes for regular array filters
+            if (key === 'themes') {
               // If itemValue is an array, check if any of the filter values is included
               if (Array.isArray(itemValue)) {
                 return filterValue.some(theme => itemValue.includes(theme));

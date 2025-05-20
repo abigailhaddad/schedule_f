@@ -168,16 +168,28 @@ export class FilterPredicates {
   /**
    * Create a filter for array includes
    * @param key - The property key in the item
-   * @param values - Array of values to check for inclusion
+   * @param values - Array of values to check for inclusion or an object with values and mode
    * @returns A predicate function
    * 
    * Example with Comments schema:
    * ```typescript
-   * // Filter comments that have either "Scientific integrity" or "Merit-based system concerns" themes
+   * // Filter comments that have either "Scientific integrity" or "Merit-based system concerns" themes (includes mode)
    * const themesFilter = FilterPredicates.includes<Comment>('themes', [
    *   'Scientific integrity', 
    *   'Merit-based system concerns'
    * ]);
+   * 
+   * // Filter comments that have AT LEAST "Scientific integrity" and "Merit-based system concerns" themes (at_least mode)
+   * const themesFilter = FilterPredicates.includes<Comment>('themes', {
+   *   values: ['Scientific integrity', 'Merit-based system concerns'],
+   *   mode: 'at_least'
+   * });
+   * 
+   * // Filter comments that have EXACTLY "Scientific integrity" and "Merit-based system concerns" themes (exact mode)
+   * const themesFilter = FilterPredicates.includes<Comment>('themes', {
+   *   values: ['Scientific integrity', 'Merit-based system concerns'],
+   *   mode: 'exact'
+   * });
    * 
    * // This works whether themes is stored as:
    * // 1. An array: ['Scientific integrity', 'Merit-based system concerns']
@@ -188,25 +200,62 @@ export class FilterPredicates {
    * const filteredByThemes = allComments.filter(themesFilter);
    * ```
    */
-  static includes<T>(key: string, values: unknown[]): ItemPredicate<T> {
+  static includes<T>(key: string, values: unknown[] | { values: unknown[], mode: 'exact' | 'includes' | 'at_least' }): ItemPredicate<T> {
     return (item: T) => {
-      if (values.length === 0) return true; // Empty filter = show all
+      // Extract values and mode from input
+      let filterValues: unknown[];
+      let filterMode: 'exact' | 'includes' | 'at_least' = 'includes'; // Default mode is 'includes'
+      
+      if (Array.isArray(values)) {
+        filterValues = values;
+      } else if (values && typeof values === 'object' && 'values' in values) {
+        filterValues = values.values as unknown[];
+        if ('mode' in values && ['exact', 'includes', 'at_least'].includes(values.mode as string)) {
+          filterMode = values.mode as 'exact' | 'includes' | 'at_least';
+        }
+      } else {
+        // Invalid input, show all items
+        return true;
+      }
+      
+      if (filterValues.length === 0) return true; // Empty filter = show all
       
       const itemValue = FilterPredicates.getNestedValue(item, key);
       
+      // Process item value into a standardized array format
+      let itemValues: string[] = [];
+      
       // Handle array item values (like themes)
       if (Array.isArray(itemValue)) {
-        return values.some(value => itemValue.includes(value));
+        itemValues = itemValue.map(String);
       }
-      
       // Handle string values that might be comma-separated
-      if (typeof itemValue === 'string' && itemValue.includes(',')) {
-        const itemValues = itemValue.split(',').map(v => v.trim());
-        return values.some(value => itemValues.includes(String(value)));
+      else if (typeof itemValue === 'string' && itemValue.includes(',')) {
+        itemValues = itemValue.split(',').map(v => v.trim());
+      }
+      // Handle single string value
+      else if (itemValue !== undefined && itemValue !== null) {
+        itemValues = [String(itemValue)];
       }
       
-      // Default - check if the value is in the filter values
-      return values.includes(String(itemValue));
+      // Apply filter based on mode
+      const stringFilterValues = filterValues.map(String);
+      
+      if (filterMode === 'at_least') {
+        // For "must include at least" mode, item must contain ALL of the selected filter values
+        // (but can have additional values not in the filter)
+        return stringFilterValues.every(value => itemValues.includes(value));
+      } else if (filterMode === 'exact') {
+        // For exact mode, lengths must match and all values must be the same (no more, no less)
+        if (itemValues.length !== stringFilterValues.length) return false;
+        
+        // Check if itemValues contains all filterValues and vice versa
+        return stringFilterValues.every(value => itemValues.includes(value)) &&
+               itemValues.every(value => stringFilterValues.includes(value));
+      } else {
+        // For includes mode (default), any match is sufficient
+        return filterValues.some(value => itemValues.includes(String(value)));
+      }
     };
   }
   

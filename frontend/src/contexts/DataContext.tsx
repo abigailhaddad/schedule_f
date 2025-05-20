@@ -11,6 +11,8 @@ import {
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { SortingState } from "@/components/ui/DataTable";
+import {  FilterPredicates } from "@/lib/filters/FilterBuilder";
+import { createFilterFromObject } from "@/lib/filters/filterFactory";
 
 interface DataContextProps {
   // Raw data
@@ -199,88 +201,28 @@ export function DataContextProvider({
     }
   }, [searchQuery, filters, isInitialMount]);
 
-  // Helper function to get nested values (e.g., 'analysis.stance')
-  const getNestedValue = (
-    obj: Record<string, unknown>,
-    path: string
-  ): unknown => {
-    if (path.includes(".")) {
-      const [parent, child] = path.split(".");
-      const parentObj = obj[parent] as Record<string, unknown> | undefined;
-      return parentObj ? parentObj[child] : undefined;
-    }
-    return obj[path];
+  // Direct access to object properties by key
+  const getValue = (obj: Record<string, unknown>, key: string): unknown => {
+    return obj[key];
   };
 
-  // Filter data based on filters and search query
+  // Filter data based on filters and search query using FilterBuilder
   const filteredData = useMemo(() => {
-    // Start with all data
-    let result = [...data];
-
-    // Apply filters
-    Object.entries(filters).forEach(([key, filterValue]) => {
-      if (
-        filterValue !== undefined &&
-        filterValue !== null &&
-        filterValue !== ""
-      ) {
-        result = result.filter((item) => {
-          // Get the actual value from the item
-          const itemValue = getNestedValue(item, key);
-
-          // Handle different filter value types
-          if (Array.isArray(filterValue)) {
-            // For array filters (like multi-select), check if the value is in the array
-            if (filterValue.length === 0) return true; // Empty filter = show all
-
-            // Special handling for themes - check if any selected theme is in the item's themes array
-            if (key === "themes" || key === "analysis.themes") {
-              // If itemValue is an array, check if any of the filter values is included
-              if (Array.isArray(itemValue)) {
-                return filterValue.some((theme) => itemValue.includes(theme));
-              }
-              // If itemValue is a string, check if it equals any of the filter values
-              return filterValue.includes(String(itemValue));
-            }
-
-            // Default array handling - exact match
-            return filterValue.includes(String(itemValue));
-          } else {
-            // For single value filters, do direct comparison
-            return String(itemValue) === String(filterValue);
-          }
-        });
-      }
-    });
-
-    // Apply search query if provided
+    // Create a filter builder for the active filters
+    const filterBuilder = createFilterFromObject(filters);
+    
+    // Add search filter if there's a search query
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter((item) => {
-        // If searchFields are provided, only search in those fields
-        if (searchFields.length > 0) {
-          return searchFields.some((field) => {
-            const value = getNestedValue(item, field);
-            return (
-              value !== undefined && String(value).toLowerCase().includes(query)
-            );
-          });
-        }
-
-        // Otherwise search in all fields
-        return Object.values(item).some((value) => {
-          // Skip searching in complex objects or arrays unless they're strings
-          if (typeof value === "object" && value !== null) {
-            return false;
-          }
-          return (
-            value !== undefined && String(value).toLowerCase().includes(query)
-          );
-        });
-      });
+      const searchFilter = FilterPredicates.containsAny<Comment>(
+        searchFields.length > 0 ? searchFields : Object.keys(data[0] || {}),
+        searchQuery
+      );
+      filterBuilder.addFilter('search', searchFilter);
     }
-
-    return result;
+    
+    // Build and apply the filter
+    const filterFunction = filterBuilder.build();
+    return filterFunction(data);
   }, [data, filters, searchQuery, searchFields]);
 
   // Sort data if sorting is specified
@@ -288,8 +230,8 @@ export function DataContextProvider({
     if (!sorting) return filteredData;
 
     return [...filteredData].sort((a, b) => {
-      const aValue = getNestedValue(a, sorting.column);
-      const bValue = getNestedValue(b, sorting.column);
+      const aValue = getValue(a, sorting.column);
+      const bValue = getValue(b, sorting.column);
 
       if (aValue === bValue) return 0;
 
