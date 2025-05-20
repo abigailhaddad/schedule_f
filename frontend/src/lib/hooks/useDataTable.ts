@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { CommentWithAnalysis } from '@/lib/db/schema';
 import { Field, datasetConfig } from '@/lib/config';
 import MiniSearch from 'minisearch';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 type UseDataTableOptions = {
   data: CommentWithAnalysis[];
@@ -9,14 +10,92 @@ type UseDataTableOptions = {
 }
 
 export function useDataTable({ data, filters }: UseDataTableOptions) {
-  const [filteredData, setFilteredData] = useState<CommentWithAnalysis[]>(data);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchIndex, setSearchIndex] = useState<MiniSearch | null>(null);
-  const [sorting, setSorting] = useState<{column: string, direction: 'asc' | 'desc'} | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  // Track initial render
+  const isInitialMount = useRef(true);
+  
+  const [filteredData, setFilteredData] = useState<CommentWithAnalysis[]>(data);
+  const [searchQuery, setSearchQuery] = useState(() => {
+    // Initialize search query from URL
+    return searchParams.get('query') || '';
+  });
+  const [searchIndex, setSearchIndex] = useState<MiniSearch | null>(null);
+  
+  // Initialize sorting state from URL or defaults
+  const [sorting, setSorting] = useState<{column: string, direction: 'asc' | 'desc'} | null>(() => {
+    const sortColumn = searchParams.get('sort');
+    const sortDir = searchParams.get('dir');
+    
+    if (sortColumn && (sortDir === 'asc' || sortDir === 'desc')) {
+      return {
+        column: sortColumn,
+        direction: sortDir
+      };
+    }
+    
+    return null;
+  });
+  
+  // Initialize pagination state from URL or defaults
+  const [currentPage, setCurrentPage] = useState(() => {
+    const pageParam = searchParams.get('page');
+    return pageParam ? parseInt(pageParam, 10) : 1;
+  });
+  
+  const [pageSize, setPageSize] = useState(() => {
+    const sizeParam = searchParams.get('size');
+    return sizeParam ? parseInt(sizeParam, 10) : 10;
+  });
+  
+  // Update URL when pagination state changes
+  useEffect(() => {
+    // Skip URL updates on initial render since we're already getting values from URL
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', currentPage.toString());
+    params.set('size', pageSize.toString());
+    
+    // Don't update URL if it's already the same
+    if (params.toString() === searchParams.toString()) {
+      return;
+    }
+    
+    // Update URL without forcing a navigation
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [currentPage, pageSize, pathname, router, searchParams]);
+  
+  // Update URL when sorting changes
+  useEffect(() => {
+    // Skip URL updates on initial render
+    if (isInitialMount.current) {
+      return;
+    }
+    
+    const params = new URLSearchParams(searchParams.toString());
+    
+    if (sorting) {
+      params.set('sort', sorting.column);
+      params.set('dir', sorting.direction);
+    } else {
+      params.delete('sort');
+      params.delete('dir');
+    }
+    
+    // Don't update URL if it's already the same
+    if (params.toString() === searchParams.toString()) {
+      return;
+    }
+    
+    // Update URL without forcing a navigation
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [sorting, pathname, router, searchParams]);
   
   // Initialize search index
   useEffect(() => {
@@ -67,8 +146,14 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
       result = applySorting(result, sorting);
     }
     
-    // Reset to first page when filters or search changes
-    setCurrentPage(1);
+    // Only reset to first page when filters or search changes AFTER the initial render
+    if (!isInitialMount.current) {
+      // Reset to first page when filters or search query changes
+      // Only if the current dependencies change, not on component mount
+      if (searchQuery || Object.keys(filters).length > 0) {
+        setCurrentPage(1);
+      }
+    }
     
     setFilteredData(result);
   }, [data, filters, searchQuery, searchIndex, sorting]);
@@ -151,9 +236,9 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
   // Helper to check if can go to next page
   const canNextPage = currentPage < totalPages;
   
-  // Handle page change
+  // Handle page change with URL update
   const goToPage = (page: number) => {
-    const newPage = Math.max(1, Math.min(page, totalPages));
+    const newPage = Math.max(1, Math.min(page, totalPages || 1));
     setCurrentPage(newPage);
   };
   
@@ -174,7 +259,10 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
   // Handle page size change
   const handlePageSizeChange = (newSize: number) => {
     setPageSize(newSize);
-    setCurrentPage(1); // Reset to first page when changing page size
+    // Don't reset to first page on initial render
+    if (!isInitialMount.current) {
+      setCurrentPage(1); // Reset to first page when changing page size after initial render
+    }
   };
   
   // Helper for CSV export
@@ -232,7 +320,7 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
     URL.revokeObjectURL(url);
   };
   
-  // Sort toggle handler
+  // Sort toggle handler with URL update
   const handleSort = (column: string) => {
     if (sorting?.column === column) {
       // Toggle direction if same column
@@ -247,13 +335,28 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
         direction: 'asc'
       });
     }
+    
+    // Only reset to first page when sorting changes AFTER the initial render
+    if (!isInitialMount.current) {
+      setCurrentPage(1); // Reset to first page when sort changes after initial render
+    }
+  };
+  
+  // Update search query
+  const updateSearchQuery = (query: string) => {
+    setSearchQuery(query);
+    
+    // Only reset to page 1 if we're past the initial render
+    if (!isInitialMount.current) {
+      setCurrentPage(1);
+    }
   };
   
   return {
     filteredData,
     paginatedData,
     searchQuery,
-    setSearchQuery,
+    setSearchQuery: updateSearchQuery,
     sorting,
     handleSort,
     exportCSV,
