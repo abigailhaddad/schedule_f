@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getCommentById } from '@/lib/actions';
-import { CommentWithAnalysis } from '@/lib/db/schema';
+import { Comment } from '@/lib/db/schema';
 import Navbar from '@/components/Navbar';
 import CommentDetail from '@/components/CommentDetail';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -17,7 +17,7 @@ export default function CommentPageClient({ id }: CommentPageClientProps) {
   const searchParams = useSearchParams();
   const returnUrl = searchParams.get('returnUrl') || '/';
   
-  const [comment, setComment] = useState<CommentWithAnalysis | null>(null);
+  const [comment, setComment] = useState<Comment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
