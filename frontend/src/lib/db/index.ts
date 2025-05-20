@@ -1,13 +1,18 @@
 // lib/db/index.ts
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import { Client } from '@neondatabase/serverless';
 import * as schema from './schema';
 
-// Create a Neon connection
-const sql = neon(process.env.DATABASE_URL!);
+// Use server-side only environment variable
+const DATABASE_URL = process.env.DATABASE_URL;
 
-// Create a Drizzle client
-export const db = drizzle(sql, { schema });
+if (!DATABASE_URL) {
+  throw new Error('DATABASE_URL is not defined');
+}
 
-// Export type-safe queries and schemas
+// Create connection
+const client = new Client(DATABASE_URL);
+export const db = drizzle(client, { schema });
+
+// Export types
 export * from './schema';

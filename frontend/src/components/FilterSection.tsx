@@ -5,15 +5,15 @@ import { useState } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
 
 interface FilterSectionProps {
-  onFilterChange: (filters: Record<string, any>) => void;
+  onFilterChange: (filters: Record<string, unknown>) => void;
 }
 
 export default function FilterSection({ onFilterChange }: FilterSectionProps) {
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [activeField, setActiveField] = useState<Field | null>(null);
+  const [activeField] = useState<Field | null>(null);
   
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = (key: string, value: unknown) => {
     const newFilters = { ...filters, [key]: value };
     
     // If value is empty, remove the filter
@@ -28,11 +28,6 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const clearAllFilters = () => {
     setFilters({});
     onFilterChange({});
-  };
-  
-  const openFilterModal = (field: Field) => {
-    setActiveField(field);
-    setShowFilterModal(true);
   };
   
   // Check if we have any active filters
@@ -55,12 +50,12 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       
       // Handle different filter types
       if (Array.isArray(value)) {
-        return value.map((v, i) => (
+        return (value as unknown[]).map((v, i) => (
           <div className="filter-tag" key={`${key}-${i}`}>
-            {field.title}: {v}
+            {field.title}: {String(v)}
             <span 
               className="remove-tag" 
-              onClick={() => handleFilterChange(key, value.filter(item => item !== v))}
+              onClick={() => handleFilterChange(key, (value as unknown[]).filter(item => item !== v))}
             >
               ×
             </span>
@@ -116,13 +111,13 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
 // Filter Modal Component
 interface FilterModalProps {
   field: Field;
-  currentValue: any;
+  currentValue: unknown;
   onClose: () => void;
-  onApply: (value: any) => void;
+  onApply: (value: unknown) => void;
 }
 
 function FilterModal({ field, currentValue, onClose, onApply }: FilterModalProps) {
-  const [value, setValue] = useState<any>(currentValue || (field.filter === 'select' || field.filter === 'multi-label' ? [] : ''));
+  const [value, setValue] = useState<unknown>(currentValue || (field.filter === 'select' || field.filter === 'multi-label' ? [] : ''));
   
   const renderFilterContent = () => {
     switch (field.filter) {
@@ -143,12 +138,12 @@ function FilterModal({ field, currentValue, onClose, onApply }: FilterModalProps
                     className="form-check-input" 
                     type="checkbox" 
                     id={`check-${option}`}
-                    checked={Array.isArray(value) && value.includes(option)}
+                    checked={Array.isArray(value) && (value as unknown[]).includes(option)}
                     onChange={e => {
                       if (e.target.checked) {
-                        setValue([...value, option]);
+                        setValue([...(Array.isArray(value) ? (value as unknown[]) : []), option]);
                       } else {
-                        setValue(value.filter((v: string) => v !== option));
+                        setValue(Array.isArray(value) ? (value as unknown[]).filter((v) => v !== option) : []);
                       }
                     }}
                   />
@@ -168,7 +163,7 @@ function FilterModal({ field, currentValue, onClose, onApply }: FilterModalProps
               <input 
                 type="text" 
                 className="form-control" 
-                value={value}
+                value={typeof value === 'string' ? value : ''}
                 onChange={e => setValue(e.target.value)}
                 placeholder="Type and press Enter" 
               />
@@ -176,7 +171,7 @@ function FilterModal({ field, currentValue, onClose, onApply }: FilterModalProps
                 className="btn btn-outline-primary" 
                 type="button"
                 onClick={() => {
-                  if (value.trim()) {
+                  if (typeof value === 'string' && value.trim()) {
                     onApply([value.trim()]);
                   }
                 }}
