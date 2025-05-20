@@ -44,71 +44,126 @@ def get_headers(api_key):
     return {"X-Api-Key": api_key}
 
 def get_object_id(document_id, api_key):
-    """Fetch the internal objectId for a documentId."""
+    """Fetch the internal objectId for a documentId, with retry on 429."""
     url = f"https://api.regulations.gov/v4/documents/{document_id}"
-    response = requests.get(url, headers=get_headers(api_key))
-    response.raise_for_status()
+    retries = 0
+
+    while True:
+        response = requests.get(url, headers=get_headers(api_key))
+        if response.status_code == 429:
+            wait_time = min(60, 10 + retries * 5)
+            print(f"⚠️  Got 429 Too Many Requests when fetching objectId. Retrying in {wait_time}s...")
+            time.sleep(wait_time)
+            retries += 1
+            continue
+        response.raise_for_status()
+        break
+
     return response.json()["data"]["attributes"]["objectId"]
 
-def get_comment_ids(object_id, api_key, limit=None, page_size=250):
-    """Retrieve comment IDs for a document with optional limit."""
+
+def get_comment_ids(object_id, api_key, limit=None, page_size=250, start_page=1):
+    """Retrieve comment IDs for a document with optional limit and robust retry on 429."""
     comment_ids = []
-    page = 1
-    total_pages = None
-    pbar = None
-    base_url = "https://api.regulations.gov/v4"
-    
-    while (total_pages is None or page <= total_pages) and (limit is None or len(comment_ids) < limit):
+    page = start_page
+    base_url = "https://api.regulations.gov/v4/comments"
+
+    print(f"🔎 Fetching comment IDs starting from page {start_page}...")
+
+    while True:
         url = (
-            f"{base_url}/comments?"
+            f"{base_url}?"
             f"filter[commentOnId]={object_id}&"
             f"page[size]={page_size}&"
             f"page[number]={page}&"
             f"sort=lastModifiedDate"
         )
-        response = requests.get(url, headers=get_headers(api_key))
-        response.raise_for_status()
-        response_data = response.json()
-        
-        # Get total pages information if we don't have it yet
-        if total_pages is None and 'meta' in response_data:
-            total_count = response_data['meta'].get('totalElements', 0)
-            total_pages = response_data['meta'].get('totalPages', 0)
-            print(f"Found {total_count} total comments across {total_pages} pages")
-            
-            # Initialize progress bar after we know the total
-            if limit is None:
-                pbar = tqdm(total=total_count, desc="Fetching comment IDs")
-            else:
-                pbar = tqdm(total=min(total_count, limit), desc="Fetching comment IDs")
-        
-        data = response_data.get("data", [])
+
+        retries = 0
+        while True:
+            response = requests.get(url, headers=get_headers(api_key))
+            if response.status_code == 429:
+                wait_time = min(60, 10 + retries * 5)
+                print(f"⚠️  Got 429 on page {page}. Retrying in {wait_time}s (attempt {retries + 1})...")
+                time.sleep(wait_time)
+                retries += 1
+                continue
+            response.raise_for_status()
+            break
+
+        data = response.json().get("data", [])
         if not data:
             break
-            
+
         ids = [item["id"] for item in data]
-        
-        # If we have a limit, only take what we need
-        if limit is not None and len(comment_ids) + len(ids) > limit:
-            ids = ids[:limit - len(comment_ids)]
-        
         comment_ids.extend(ids)
-        
-        if pbar:
-            pbar.update(len(ids))
-        
-        # Break if we've reached the limit
-        if limit is not None and len(comment_ids) >= limit:
-            break
-            
+        print(f"  → Retrieved {len(ids)} IDs from page {page}")
+
+        if limit and len(comment_ids) >= limit:
+            return comment_ids[:limit]
+
         page += 1
-        time.sleep(0.5)  # Slightly longer delay to be gentle on the API
-    
-    if pbar:
-        pbar.close()
-    
-    print(f"Retrieved a total of {len(comment_ids)} comment IDs")
+        time.sleep(0.5)  # slight delay between pages
+
+    print(f"✅ Retrieved {len(comment_ids)} comment IDs.")
     return comment_ids
+
+def get_comment_ids(object_id, api_key, limit=None, page_size=250, start_page=1):
+    """Retrieve comment IDs for a document with optional limit and robust retry on 429."""
+    comment_ids = []
+    page = start_page
+    base_url = "https://api.regulations.gov/v4/comments"
+
+    print(f"🔎 Fetching comment IDs starting from page {start_page}...")
+
+    while True:
+        url = (
+            f"{base_url}?"
+            f"filter[commentOnId]={object_id}&"
+            f"page[size]={page_size}&"
+            f"page[number]={page}&"
+            f"sort=lastModifiedDate"
+        )
+
+        retries = 0
+        while True:
+            response = requests.get(url, headers=get_headers(api_key))
+            # Handle 429 (Too Many Requests)
+            if response.status_code == 429:
+                wait_time = min(60, 10 + retries * 5)
+                print(f"⚠️  Got 429 on page {page}. Retrying in {wait_time}s (attempt {retries + 1})...")
+                time.sleep(wait_time)
+                retries += 1
+                continue
+            # NEW: Handle 400 Bad Request for pagination limits
+            if response.status_code == 400:
+                print(f"⚠️  Reached API pagination limit at page {page}. Stopping pagination.")
+                break  # Break out of retry loop
+            # For other errors, raise exception
+            response.raise_for_status()
+            break
+
+        # NEW: If we hit a 400 error, break out of the main loop too
+        if response.status_code == 400:
+            break
+
+        data = response.json().get("data", [])
+        if not data:
+            break
+
+        ids = [item["id"] for item in data]
+        comment_ids.extend(ids)
+        print(f"  → Retrieved {len(ids)} IDs from page {page}")
+
+        if limit and len(comment_ids) >= limit:
+            return comment_ids[:limit]
+
+        page += 1
+        time.sleep(0.5)  # slight delay between pages
+
+    print(f"✅ Retrieved {len(comment_ids)} comment IDs.")
+    return comment_ids
+
 
 def download_attachment(url, output_path, api_key):
     """Download an attachment file from the given URL."""
@@ -324,7 +379,7 @@ def save_json(data, filename):
     print(f"Saved {len(data)} comments to {filename}")
     return filename
 
-def fetch_comments(document_id, output_dir=None, limit=None, api_key=None, download_attachments=True, resume=False):
+def fetch_comments(document_id, output_dir=None, limit=None, api_key=None, download_attachments=True, resume=False, start_page=1):
     """Main function to fetch comments and save to a JSON file with checkpoint support."""
     # Set default output directory
     if output_dir is None:
@@ -399,7 +454,10 @@ def fetch_comments(document_id, output_dir=None, limit=None, api_key=None, downl
 
         limit_msg = f"up to {limit}" if limit else "all"
         print(f"Fetching {limit_msg} comment IDs...")
-        comment_ids = get_comment_ids(object_id, api_key, limit=limit)
+        comment_ids = get_comment_ids(object_id, api_key, limit=limit, start_page=start_page)
+        if not comment_ids:
+            raise RuntimeError("❌ No comment IDs returned. API may have failed or date ranges are wrong.")
+
         
         # Initialize checkpoint
         with open(checkpoint_file, 'w', encoding='utf-8') as f:
