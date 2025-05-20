@@ -138,7 +138,7 @@ export function useDataTable<T extends Record<string, unknown>>({
         }
         
         // Otherwise search in all fields
-        return Object.entries(item).some(([_, value]) => {
+        return Object.values(item).some(value => {
           // Skip searching in complex objects or arrays unless they're strings
           if (typeof value === 'object' && value !== null) {
             return false;
