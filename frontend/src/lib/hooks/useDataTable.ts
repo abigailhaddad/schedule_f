@@ -89,7 +89,7 @@ export function useDataTable<T extends Record<string, unknown>>({
       if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
         result = result.filter(item => {
           // Get the actual value from the item
-          let itemValue = item[key];
+          const itemValue = item[key];
           
           // Handle different filter value types
           // Handle object with values and mode for themes
