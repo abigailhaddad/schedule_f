@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CommentWithAnalysis } from '@/lib/db/schema';
 import { Field, datasetConfig } from '@/lib/config';
 import MiniSearch from 'minisearch';
@@ -13,6 +13,10 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState<MiniSearch | null>(null);
   const [sorting, setSorting] = useState<{column: string, direction: 'asc' | 'desc'} | null>(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   
   // Initialize search index
   useEffect(() => {
@@ -62,6 +66,9 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
     if (sorting) {
       result = applySorting(result, sorting);
     }
+    
+    // Reset to first page when filters or search changes
+    setCurrentPage(1);
     
     setFilteredData(result);
   }, [data, filters, searchQuery, searchIndex, sorting]);
@@ -124,6 +131,50 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
         ? valueA.localeCompare(valueB)
         : valueB.localeCompare(valueA);
     });
+  };
+  
+  // Calculate paginated data
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return filteredData.slice(start, end);
+  }, [filteredData, currentPage, pageSize]);
+  
+  // Calculate total pages
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredData.length / pageSize);
+  }, [filteredData, pageSize]);
+  
+  // Helper to check if can go to previous page
+  const canPreviousPage = currentPage > 1;
+  
+  // Helper to check if can go to next page
+  const canNextPage = currentPage < totalPages;
+  
+  // Handle page change
+  const goToPage = (page: number) => {
+    const newPage = Math.max(1, Math.min(page, totalPages));
+    setCurrentPage(newPage);
+  };
+  
+  // Helper to go to next page
+  const nextPage = () => {
+    if (canNextPage) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+  
+  // Helper to go to previous page
+  const previousPage = () => {
+    if (canPreviousPage) {
+      setCurrentPage(prev => prev - 1);
+    }
+  };
+  
+  // Handle page size change
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setCurrentPage(1); // Reset to first page when changing page size
   };
   
   // Helper for CSV export
@@ -200,10 +251,21 @@ export function useDataTable({ data, filters }: UseDataTableOptions) {
   
   return {
     filteredData,
+    paginatedData,
     searchQuery,
     setSearchQuery,
     sorting,
     handleSort,
-    exportCSV
+    exportCSV,
+    // Pagination props
+    pageSize,
+    setPageSize: handlePageSizeChange,
+    currentPage,
+    totalPages,
+    goToPage,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage
   };
 } 

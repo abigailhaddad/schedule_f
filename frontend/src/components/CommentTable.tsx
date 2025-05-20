@@ -14,11 +14,22 @@ interface CommentTableProps {
 export default function CommentTable({ data, filters }: CommentTableProps) {
   const { 
     filteredData, 
+    paginatedData,
     searchQuery, 
     setSearchQuery, 
     sorting, 
     handleSort, 
-    exportCSV 
+    exportCSV,
+    // Pagination props
+    pageSize,
+    setPageSize,
+    currentPage,
+    totalPages,
+    goToPage,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage 
   } = useDataTable({ data, filters });
   
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(() => {
@@ -146,6 +157,60 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     return `${baseClasses} hover:text-blue-500`;
   };
   
+  // Calculate page numbers to show in pagination
+  const getPageNumbers = () => {
+    const pageNumbers: (number | string)[] = [];
+    const maxPageButtons = 5; // Maximum number of page buttons to show
+    
+    if (totalPages <= maxPageButtons) {
+      // Show all pages if total pages is less than max buttons
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Always include first page
+      pageNumbers.push(1);
+      
+      // Calculate range of page numbers to display
+      const leftSide = Math.floor(maxPageButtons / 2);
+      const rightSide = maxPageButtons - leftSide - 1;
+      
+      if (currentPage > leftSide + 1) {
+        pageNumbers.push('...');
+      }
+      
+      // Calculate start and end of page numbers
+      let start = Math.max(2, currentPage - leftSide);
+      let end = Math.min(totalPages - 1, currentPage + rightSide);
+      
+      // Adjust if close to either end
+      if (currentPage - leftSide < 2) {
+        end = Math.min(totalPages - 1, maxPageButtons - 1);
+      }
+      
+      if (currentPage + rightSide > totalPages - 1) {
+        start = Math.max(2, totalPages - maxPageButtons + 1);
+      }
+      
+      // Add middle page numbers
+      for (let i = start; i <= end; i++) {
+        pageNumbers.push(i);
+      }
+      
+      // Add ellipsis if needed
+      if (end < totalPages - 1) {
+        pageNumbers.push('...');
+      }
+      
+      // Always include last page if not already included
+      if (end < totalPages) {
+        pageNumbers.push(totalPages);
+      }
+    }
+    
+    return pageNumbers;
+  };
+  
   return (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
       <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600">
@@ -238,7 +303,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredData.length === 0 ? (
+              {paginatedData.length === 0 ? (
                 <tr>
                   <td 
                     colSpan={getVisibleFields().length} 
@@ -254,7 +319,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
                   </td>
                 </tr>
               ) : (
-                filteredData.map(item => (
+                paginatedData.map(item => (
                   <tr key={item.id} className="hover:bg-blue-50 transition-colors">
                     {getVisibleFields().map(field => (
                       <td key={`${item.id}-${field.key}`} className="px-4 py-3 whitespace-normal text-sm text-gray-900">
@@ -268,20 +333,79 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
           </table>
         </div>
         
-        {/* Pagination/Length Controls */}
-        <div className="flex justify-between items-center px-6 py-3 bg-gray-50 border-t border-gray-200 text-sm text-gray-500">
-          <div>
-            Showing <span className="font-medium text-gray-700">{filteredData.length}</span> of <span className="font-medium text-gray-700">{data.length}</span> entries
+        {/* Pagination Controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-center px-6 py-3 bg-gray-50 border-t border-gray-200">
+          <div className="flex items-center text-sm text-gray-500 mb-3 sm:mb-0">
+            Showing <span className="font-medium mx-1 text-gray-700">{paginatedData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</span> 
+             to <span className="font-medium mx-1 text-gray-700">{Math.min(currentPage * pageSize, filteredData.length)}</span> 
+             of <span className="font-medium mx-1 text-gray-700">{filteredData.length}</span> entries
           </div>
-          <div className="flex items-center">
-            <span className="mr-2">Show</span>
-            <select className="form-select rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-            <span className="ml-2">entries</span>
+          
+          <div className="flex items-center space-x-2">
+            <div className="flex sm:items-center">
+              <div className="mr-4 flex items-center">
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {[10, 25, 50, 100].map(size => (
+                    <option key={size} value={size}>
+                      {size} rows
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="flex">
+                <button
+                  onClick={() => goToPage(1)}
+                  disabled={!canPreviousPage}
+                  className={`px-2 py-1 text-sm rounded-l-md border border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+                >
+                  «
+                </button>
+                <button
+                  onClick={previousPage}
+                  disabled={!canPreviousPage}
+                  className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+                >
+                  ‹
+                </button>
+                
+                {getPageNumbers().map((page, i) => (
+                  typeof page === 'number' ? (
+                    <button
+                      key={i}
+                      onClick={() => goToPage(page)}
+                      className={`px-3 py-1 text-sm border-t border-b border-gray-300 
+                        ${currentPage === page ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
+                    >
+                      {page}
+                    </button>
+                  ) : (
+                    <span key={i} className="px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500">
+                      {page}
+                    </span>
+                  )
+                ))}
+                
+                <button
+                  onClick={nextPage}
+                  disabled={!canNextPage}
+                  className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+                >
+                  ›
+                </button>
+                <button
+                  onClick={() => goToPage(totalPages)}
+                  disabled={!canNextPage}
+                  className={`px-2 py-1 text-sm rounded-r-md border border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+                >
+                  »
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
