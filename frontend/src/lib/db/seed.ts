@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
-import { NewComment, NewAnalysis, stanceEnum } from './schema';
+import { NewComment, stanceEnum } from './schema';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -53,9 +53,19 @@ const main = async () => {
   console.log(`Found ${jsonData.length} records to process.`);
 
   const commentsToInsert: NewComment[] = [];
-  const analysesToInsert: NewAnalysis[] = [];
 
   for (const item of jsonData) {
+    // Validate the stance value is a valid enum value if present
+    const stance = item.stance 
+      ? stanceEnum.enumValues.includes(item.stance as typeof stanceEnum.enumValues[number]) 
+        ? item.stance as typeof stanceEnum.enumValues[number]
+        : null
+      : null;
+
+    if (item.stance && !stanceEnum.enumValues.includes(item.stance as typeof stanceEnum.enumValues[number])) {
+      console.warn(`Invalid stance value: "${item.stance}" for comment ID: ${item.id}. Setting to null.`);
+    }
+
     const newComment: NewComment = {
       id: item.id,
       title: item.title,
@@ -65,58 +75,45 @@ const main = async () => {
       originalComment: item.original_comment,
       hasAttachments: item.has_attachments,
       link: item.link,
+      // Analysis fields now directly in comments table
+      stance: stance,
+      keyQuote: item.key_quote,
+      rationale: item.rationale,
+      themes: item.themes,
     };
     commentsToInsert.push(newComment);
-
-    if (item.stance && item.key_quote && item.rationale) {
-      // Validate the stance value is a valid enum value
-      if (!stanceEnum.enumValues.includes(item.stance as (typeof stanceEnum.enumValues)[number])) {
-        console.warn(`Invalid stance value: "${item.stance}" for comment ID: ${item.id}. Skipping analysis for this comment.`);
-      } else {
-        const newAnalysis: NewAnalysis = {
-          commentId: item.id,
-          stance: item.stance as typeof stanceEnum.enumValues[number],
-          keyQuote: item.key_quote,
-          rationale: item.rationale,
-          themes: item.themes,
-        };
-        analysesToInsert.push(newAnalysis);
-      }
-    }
   }
 
   if (commentsToInsert.length > 0) {
     console.log(`Inserting ${commentsToInsert.length} comments into the database...`);
     const chunkSize = 100;
     for (let i = 0; i < commentsToInsert.length; i += chunkSize) {
-        const chunk = commentsToInsert.slice(i, i + chunkSize);
-        try {
-            await db.insert(schema.comments).values(chunk).onConflictDoUpdate({ target: schema.comments.id, set: { title: sql`excluded.title`, category: sql`excluded.category`, agencyId: sql`excluded.agency_id`, comment: sql`excluded.comment`, originalComment: sql`excluded.original_comment`, hasAttachments: sql`excluded.has_attachments`, link: sql`excluded.link` } });
-            console.log(`Upserted chunk ${i / chunkSize + 1} of ${Math.ceil(commentsToInsert.length / chunkSize)} for comments`);
-        } catch (error) {
-            console.error(`Error upserting comments chunk ${i / chunkSize + 1}:`, error);
-        }
+      const chunk = commentsToInsert.slice(i, i + chunkSize);
+      try {
+        await db.insert(schema.comments).values(chunk).onConflictDoUpdate({ 
+          target: schema.comments.id, 
+          set: { 
+            title: sql`excluded.title`, 
+            category: sql`excluded.category`, 
+            agencyId: sql`excluded.agency_id`, 
+            comment: sql`excluded.comment`, 
+            originalComment: sql`excluded.original_comment`, 
+            hasAttachments: sql`excluded.has_attachments`, 
+            link: sql`excluded.link`,
+            stance: sql`excluded.stance`,
+            keyQuote: sql`excluded.key_quote`,
+            rationale: sql`excluded.rationale`,
+            themes: sql`excluded.themes`
+          } 
+        });
+        console.log(`Upserted chunk ${i / chunkSize + 1} of ${Math.ceil(commentsToInsert.length / chunkSize)} for comments`);
+      } catch (error) {
+        console.error(`Error upserting comments chunk ${i / chunkSize + 1}:`, error);
+      }
     }
     console.log('Upserting comments completed.');
   } else {
     console.log('No comments found to seed.');
-  }
-
-  if (analysesToInsert.length > 0) {
-    console.log(`Inserting ${analysesToInsert.length} analyses into the database...`);
-    const analysisChunkSize = 100;
-    for (let i = 0; i < analysesToInsert.length; i += analysisChunkSize) {
-        const chunk = analysesToInsert.slice(i, i + analysisChunkSize);
-        try {
-            await db.insert(schema.analyses).values(chunk).onConflictDoNothing();
-            console.log(`Inserted analysis chunk ${i / analysisChunkSize + 1} of ${Math.ceil(analysesToInsert.length / analysisChunkSize)}`);
-        } catch (error) {
-            console.error(`Error inserting analysis chunk ${i / analysisChunkSize + 1}:`, error);
-        }
-    }
-    console.log('Seeding analyses completed.');
-  } else {
-    console.log('No analyses found to seed.');
   }
 
   await client.end();
@@ -126,4 +123,4 @@ const main = async () => {
 main().catch((err) => {
   console.error('Error during seeding process:', err);
   process.exit(1);
-}); 
+});

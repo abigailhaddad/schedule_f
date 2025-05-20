@@ -2,48 +2,32 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CommentWithAnalysis } from '@/lib/db/schema';
+import { Comment } from '@/lib/db/schema';
 import { datasetConfig } from '@/lib/config';
-import { useDataTable } from '@/lib/hooks/useDataTable';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Column, SortingState } from '@/components/ui/DataTable';
+import { Column } from '@/components/ui/DataTable';
 import DataTable from '@/components/ui/DataTable';
 import Badge from '@/components/ui/Badge';
 import SearchInput from '@/components/ui/SearchInput';
+import TextHighlighter from '@/components/ui/TextHighlighter';
+import { useDataContext } from '@/contexts/DataContext';
 
-interface CommentTableProps {
-  data: CommentWithAnalysis[];
-  filters: Record<string, unknown>;
-}
-
-export default function CommentTable({ data, filters }: CommentTableProps) {
+// CommentTable no longer needs props as it gets data from context
+export default function CommentTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   
-  // Get initial sorting from URL if available
-  const urlSort = searchParams.get('sort');
-  const urlSortDirection = searchParams.get('sortDirection') as 'asc' | 'desc' | null;
-  
-  const initialSorting: SortingState | undefined = 
-    urlSort && urlSortDirection 
-      ? { column: urlSort, direction: urlSortDirection } 
-      : undefined;
-  
-  const { 
+  // Get data and state from context
+  const {
     sortedData,
-    searchQuery, 
+    searchQuery,
     setSearchQuery,
     sorting,
     handleSort,
     exportCSV,
     pageSize
-  } = useDataTable<CommentWithAnalysis>({ 
-    data, 
-    filters,
-    initialSorting,
-    searchFields: ['comment', 'originalComment', 'title', 'analysis.keyQuote', 'analysis.themes', 'analysis.rationale']
-  });
+  } = useDataContext();
   
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(() => {
     // Initialize visible columns from config
@@ -113,7 +97,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   }, [showColumnsMenu]);
   
   // Handle row click to navigate to detail page
-  const handleRowClick = (comment: CommentWithAnalysis) => {
+  const handleRowClick = (comment: Comment) => {
     // Create the return URL with current filters, sorting, and search
     const currentParams = new URLSearchParams(searchParams.toString());
     
@@ -121,108 +105,6 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     router.push(`/comment/${comment.id}?returnUrl=${encodeURIComponent(`${pathname}?${currentParams.toString()}`)}`);
   };
   
-  // Highlight search match in text
-  const highlightSearchMatch = (text: string, searchTerm: string, filterType?: string) => {
-    if (!searchTerm || !text) return text;
-    
-    // Escape special characters in the search term
-    const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
-    
-    // Split text by search term matches
-    const parts = text.split(regex);
-    
-    if (parts.length <= 1) return text;
-    
-    // Get highlight color based on filter type
-    const getHighlightColor = (filterType?: string): string => {
-      if (!filterType) return 'bg-yellow-200 text-gray-900';
-      
-      switch (filterType) {
-        case 'title':
-          return 'bg-blue-200 text-blue-900';
-        case 'comment':
-          return 'bg-green-200 text-green-900';
-        case 'themes':
-          return 'bg-purple-200 text-purple-900';
-        case 'keyQuote':
-          return 'bg-orange-200 text-orange-900';
-        case 'rationale':
-          return 'bg-pink-200 text-pink-900';
-        case 'stance':
-          return 'bg-indigo-200 text-indigo-900';
-        default:
-          return 'bg-yellow-200 text-gray-900';
-      }
-    };
-    
-    const highlightClass = getHighlightColor(filterType);
-    
-    // Return text with highlighted spans
-    return (
-      <>
-        {parts.map((part, i) => 
-          regex.test(part) ? (
-            <span key={i} className={`${highlightClass} font-medium px-1 rounded`}>
-              {part}
-            </span>
-          ) : (
-            part
-          )
-        )}
-      </>
-    );
-  };
-  
-  // Find the index of the first search match in text
-  const findFirstMatchIndex = (text: string, searchTerm: string): number => {
-    if (!searchTerm || !text) return -1;
-    
-    const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(escapedSearchTerm, 'gi');
-    const match = regex.exec(text);
-    
-    return match ? match.index : -1;
-  };
-  
-  // Create smart truncated text that ensures search matches are visible
-  const createSmartTruncatedText = (text: string, limit: number, searchTerm: string, filterType?: string) => {
-    if (text.length <= limit) {
-      return searchTerm ? highlightSearchMatch(text, searchTerm, filterType) : text;
-    }
-    
-    // If no search term or empty search term, just truncate
-    if (!searchTerm) {
-      return `${text.substring(0, limit)}...`;
-    }
-    
-    // Find the first search match
-    const matchIndex = findFirstMatchIndex(text, searchTerm);
-    
-    // If no match or match is within visible area, show normal truncation with highlighting
-    if (matchIndex === -1 || matchIndex < limit) {
-      return highlightSearchMatch(`${text.substring(0, limit)}...`, searchTerm, filterType);
-    }
-    
-    // If match is outside visible area, show context around match
-    const contextSize = Math.floor(limit / 2);
-    const matchStart = Math.max(0, matchIndex - (contextSize / 2));
-    const matchEnd = Math.min(text.length, matchStart + contextSize);
-    
-    // Create segments
-    const firstSegment = text.substring(0, Math.floor(limit / 3));
-    const matchSegment = text.substring(matchStart, matchEnd);
-    
-    return (
-      <>
-        {highlightSearchMatch(firstSegment, searchTerm, filterType)}
-        <span className="text-gray-500 mx-1 font-bold">...</span>
-        {highlightSearchMatch(matchSegment, searchTerm, filterType)}
-        {matchEnd < text.length ? '...' : ''}
-      </>
-    );
-  };
-
   // Determine badge type based on the badge class
   const getBadgeType = (badgeClass?: string): 'success' | 'danger' | 'warning' | 'primary' | 'default' => {
     if (!badgeClass) return 'default';
@@ -234,14 +116,11 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   };
   
   // Map the visible columns to DataTable column format
-  const columns: Column<CommentWithAnalysis>[] = [
+  const columns: Column<Comment>[] = [
     // Add the rest of the columns
     ...getVisibleFields().map(field => {
     // Get the correct key for nested fields when sorting
-    const sortKey = field.key === 'stance' || field.key === 'keyQuote' || 
-                    field.key === 'themes' || field.key === 'rationale'
-                    ? `analysis.${field.key}`
-                    : field.key;
+    const sortKey = field.key;
                     
     return {
       key: sortKey,
@@ -253,16 +132,9 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
                 field.key === 'themes' ? 'w-1/8' :
                 field.key === 'title' ? 'w-1/8' :
                 undefined,
-      render: (item: CommentWithAnalysis) => {
-        let value: unknown;
-        
-        // Get the appropriate value based on the field key
-        if (field.key === 'stance' || field.key === 'keyQuote' || 
-            field.key === 'themes' || field.key === 'rationale') {
-          value = item.analysis?.[field.key as keyof typeof item.analysis] || '';
-        } else {
-          value = item[field.key as keyof typeof item] || '';
-        }
+      render: (item: Comment) => {
+        // Get the value directly from the item
+        const value = item[field.key as keyof typeof item] || '';
         
         // Special case for the title field - make it a clickable link
         if (field.key === 'title') {
@@ -336,7 +208,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
                   key={i}
                   type="primary" 
                   label={label}
-                  highlight={searchQuery && typeof searchQuery === 'string' ? searchQuery : ''}
+                  highlight={searchQuery}
                   filterType={field.key}
                 />
               ))}
@@ -365,33 +237,23 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
             <Badge 
               type={badgeType}
               label={String(value)}
-              highlight={searchQuery && typeof searchQuery === 'string' ? searchQuery : ''}
+              highlight={searchQuery}
               filterType={field.key}
             />
           );
         }
         
-        if (field.charLimit && typeof value === 'string' && value.length > field.charLimit) {
-          // Use smart truncation for comment field
-          if (field.key === 'comment' && searchQuery && typeof searchQuery === 'string') {
-            return (
-              <span title={value} className="cursor-help">
-                {createSmartTruncatedText(value, field.charLimit, searchQuery, field.key)}
-              </span>
-            );
-          }
-          
-          const truncated = value.substring(0, field.charLimit) + '...';
+        // Use TextHighlighter for field types with char limit or search highlighting
+        if (typeof value === 'string') {
           return (
-            <span title={value} className="cursor-help">
-              {searchQuery && typeof searchQuery === 'string' ? highlightSearchMatch(truncated, searchQuery, field.key) : truncated}
-            </span>
+            <TextHighlighter 
+              text={value}
+              searchTerm={searchQuery}
+              highlightType={field.key}
+              charLimit={field.charLimit}
+              smartTruncation={field.key === 'comment'} // Use smart truncation only for comments
+            />
           );
-        }
-        
-        // Apply highlighting for text fields if we have a search query
-        if (typeof value === 'string' && searchQuery && typeof searchQuery === 'string') {
-          return highlightSearchMatch(value, searchQuery, field.key);
         }
         
         // Convert value to string for rendering if it's not a React element

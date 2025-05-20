@@ -1,10 +1,8 @@
-'use client';
-
-import { CommentWithAnalysis } from '@/lib/db/schema';
+import { Comment } from '@/lib/db/schema';
 import Badge from './ui/Badge';
 
 interface CommentDetailProps {
-  comment: CommentWithAnalysis;
+  comment: Comment;
 }
 
 export default function CommentDetail({ comment }: CommentDetailProps) {
@@ -22,11 +20,11 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
         <h1 className="text-2xl font-bold mb-4 text-gray-800">
           {comment.title || 'Untitled Comment'}
         </h1>
-        {comment.analysis?.stance && (
+        {comment.stance && (
           <div className="mb-4">
             <Badge 
-              type={getBadgeType(comment.analysis.stance)}
-              label={comment.analysis.stance}
+              type={getBadgeType(comment.stance)}
+              label={comment.stance}
             />
           </div>
         )}
@@ -41,43 +39,41 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
       </div>
 
       {/* Analysis Section */}
-      {comment.analysis && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Analysis</h2>
-          
-          {/* Key Quote */}
-          {comment.analysis.keyQuote && (
-            <div className="mb-6">
-              <h3 className="text-md font-medium mb-2 text-gray-600">Key Quote</h3>
-              <div className="italic bg-blue-50 p-4 rounded-md border-l-4 border-blue-300 text-gray-700">
-                &ldquo;{comment.analysis.keyQuote}&rdquo;
-              </div>
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Analysis</h2>
+        
+        {/* Key Quote */}
+        {comment.keyQuote && (
+          <div className="mb-6">
+            <h3 className="text-md font-medium mb-2 text-gray-600">Key Quote</h3>
+            <div className="italic bg-blue-50 p-4 rounded-md border-l-4 border-blue-300 text-gray-700">
+              &ldquo;{comment.keyQuote}&rdquo;
             </div>
-          )}
-          
-          {/* Themes */}
-          {comment.analysis.themes && (
-            <div className="mb-6">
-              <h3 className="text-md font-medium mb-2 text-gray-600">Themes</h3>
-              <div className="flex flex-wrap gap-2">
-                {comment.analysis.themes.split(',').map((theme, index) => (
-                  <Badge key={index} type="primary" label={theme.trim()} />
-                ))}
-              </div>
+          </div>
+        )}
+        
+        {/* Themes */}
+        {comment.themes && (
+          <div className="mb-6">
+            <h3 className="text-md font-medium mb-2 text-gray-600">Themes</h3>
+            <div className="flex flex-wrap gap-2">
+              {comment.themes.split(',').map((theme, index) => (
+                <Badge key={index} type="primary" label={theme.trim()} />
+              ))}
             </div>
-          )}
-          
-          {/* Rationale */}
-          {comment.analysis.rationale && (
-            <div className="mb-6">
-              <h3 className="text-md font-medium mb-2 text-gray-600">Rationale</h3>
-              <div className="text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200">
-                {comment.analysis.rationale}
-              </div>
+          </div>
+        )}
+        
+        {/* Rationale */}
+        {comment.rationale && (
+          <div className="mb-6">
+            <h3 className="text-md font-medium mb-2 text-gray-600">Rationale</h3>
+            <div className="text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200">
+              {comment.rationale}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
       {/* Metadata Section */}
       <div>
