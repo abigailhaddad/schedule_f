@@ -1,138 +1,129 @@
-# Regulatory Comments Fetcher and Analyzer
+# Schedule F Comments Analysis
 
-This project provides tools to fetch and analyze public comments on regulatory proposals from regulations.gov.
+A tool for analyzing public comments on the proposed "Schedule F" rule.
 
-## Components
+## Project Structure
 
-- **fetch_comments.py**: Fetches comments from regulations.gov API
-- **analyze_comments.py**: Analyzes comments using LiteLLM (with OpenAI models)
-- **verify_quotes.py**: Verifies if extracted quotes are present in original comments
-- **pipeline.py**: Coordinates the fetching and analysis process
+```
+schedule_f/
+  ├── backend/             # Backend Python code
+  │   ├── fetch/           # Code for fetching comments from regulations.gov
+  │   ├── analysis/        # Code for analyzing comments with LLMs
+  │   ├── utils/           # Shared utilities
+  │   └── pipeline.py      # Full data pipeline
+  ├── data/                # Data storage
+  │   ├── raw/             # Raw data from regulations.gov
+  │   ├── processed/       # Processed analysis results
+  │   └── results/         # Pipeline results (timestamped directories)
+  ├── frontend/            # Next.js frontend for viewing comments
+  ├── scripts/             # Various utility scripts
+  └── README.md            # This file
+```
 
 ## Setup
 
-1. Create a virtual environment:
-   ```
-   python -m venv myenv
-   source myenv/bin/activate  # On Windows: myenv\Scripts\activate
-   ```
+### Install Requirements
 
-2. Install requirements:
-   ```
-   pip install -r requirements.txt
-   ```
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
 
-3. Set up API keys:
-   - Create a `.env` file in the project root
-   - Add your API keys:
-     ```
-     REGS_API_KEY=your_regulations_gov_api_key
-     OPENAI_API_KEY=your_openai_api_key
-     ```
+# Install frontend dependencies
+cd frontend
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root with:
+
+```
+# For fetching comments
+REGS_API_KEY=your_regulations_gov_api_key
+
+# For analyzing comments
+OPENAI_API_KEY=your_openai_api_key
+```
 
 ## Usage
 
+### Fetching Comments
+
+```bash
+# Fetch all comments
+python -m backend.fetch.fetch_comments
+
+# Fetch with a limit (useful for testing)
+python -m backend.fetch.fetch_comments --limit 10
+```
+
+### Analyzing Comments
+
+```bash
+# Analyze the most recent fetched comments
+python -m backend.analysis.analyze_comments
+
+# Analyze with a specific model
+python -m backend.analysis.analyze_comments --model gpt-4o
+```
+
 ### Full Pipeline
 
-To run the complete pipeline (fetch comments and analyze them):
+```bash
+# Run the complete pipeline (fetch, analyze, index)
+python -m backend.pipeline
 
-```
-python pipeline.py
-```
-
-This will:
-1. Create a timestamped directory in the `results` folder
-2. Fetch comments and save them as `raw_data.json`
-3. Analyze the comments and save results as `data.json`
-
-### Fetch Only
-
-To only fetch comments:
-
-```
-python pipeline.py --fetch-only
+# Skip certain steps
+python -m backend.pipeline --skip_fetch --resume
 ```
 
-This creates a new timestamped directory with `raw_data.json`.
+### Verify Quotes
 
-### Analyze Only
-
-To analyze the most recently fetched comments:
-
-```
-python pipeline.py --analyze-only
+```bash
+# Verify that extracted quotes appear in the original comments
+python -m backend.analysis.verify_quotes
 ```
 
-This finds the most recent timestamped directory containing `raw_data.json` and adds `data.json` to it.
+### Frontend Development
 
-### Running Components Independently
-
-You can also run the individual scripts directly:
-
-- **fetch_comments.py**: Creates a timestamped directory in `results` and saves `raw_data.json`
-  ```
-  python fetch_comments.py [--document_id ID] [--limit N] [--api_key KEY] [--no-attachments]
-  ```
-
-- **analyze_comments.py**: Finds most recent `raw_data.json` and saves analysis as `data.json` in the same directory
-  ```
-  python analyze_comments.py [--input FILE] [--top_n N] [--model MODEL] [--api_key KEY]
-  ```
-
-- **verify_quotes.py**: Verifies if quotes in the analysis are present in the original comments
-  ```
-  python verify_quotes.py [--results_dir DIR]
-  ```
-
-- **copy_latest_data.sh**: Copies the most recent data.json to the root directory
-  ```
-  ./copy_latest_data.sh
-  ```
-
-## Command-Line Options
-
-### Pipeline Options
-
-```
-python pipeline.py --help
+```bash
+# Start development server
+cd frontend
+npm run dev
 ```
 
-Options include:
-- `--fetch-only`: Only fetch comments
-- `--analyze-only`: Only analyze most recent comments
-- `--base-dir`: Base directory for results (default: 'results')
-- `--document-id`: Document ID to fetch comments for
-- `--limit`: Limit number of comments to fetch
-- `--no-attachments`: Skip downloading and processing attachments
-- `--top-n`: Analyze only the top N comments
-- `--model`: Model to use for analysis
-- `--regs-api-key`: API key for regulations.gov
-- `--openai-api-key`: API key for OpenAI
+## Common Tasks
 
-## Results
+### Copy Latest Data to Frontend
 
-Results are organized in timestamped directories within the `results` folder:
+To quickly view the latest data in the frontend:
 
-```
-results/
-  results_20250519_123045/
-    raw_data.json  # Raw fetched comments
-    data.json      # Analysis results
+```bash
+./scripts/copy_latest_data.sh
 ```
 
-Each directory contains:
-- `raw_data.json`: Raw comments fetched from regulations.gov
-- `data.json`: Analysis of the comments as a flat list of objects with properties:
-  - id, title, category, agencyId, comment, original_comment, has_attachments, link, stance, key_quote, rationale, themes
-  - The themes field is a comma-separated string of detected themes
-  - The comment field includes both the original comment and any text extracted from attachments
-  - The original_comment field contains just the comment without attachment text
-  - The has_attachments field indicates if the comment had attached documents
-  - The link field is a human-readable URL to the comment on regulations.gov
-- `attachments/`: Directory containing downloaded attachments and extracted text
-- `summary.json`: Aggregate statistics about the analysis results (for reference only)
-- `quote_verification.txt`: Human-readable report on quote verification results
-- `quote_verification.json`: Machine-readable data about verified quotes
+### Building Search Index
+
+If you need to rebuild the search index separately:
+
+```bash
+./scripts/build_search_index.sh path/to/data.json
+```
+
+## Architecture
+
+This project has three main components:
+
+1. **Data Fetching**: Python scripts to fetch comments from regulations.gov API
+2. **Analysis**: Python scripts using LLMs to analyze comments 
+3. **Frontend**: Next.js application to view and search comments
+
+The data flows through the pipeline as follows:
+
+1. Fetch comments → `raw_data.json`
+2. Analyze comments → `data.json`
+3. Build search index → `search-index.json`
+4. View in frontend
 
 ## License
 
