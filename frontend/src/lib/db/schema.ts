@@ -25,8 +25,13 @@ export const analyses = pgTable('analyses', {
   createdAt: timestamp('created_at').defaultNow()
 });
 
-// Type inference
+// Type inference but without the circular references
 export type Comment = typeof comments.$inferSelect;
 export type NewComment = typeof comments.$inferInsert;
 export type Analysis = typeof analyses.$inferSelect;
 export type NewAnalysis = typeof analyses.$inferInsert;
+
+// Type for joined data (flattened to avoid circular references)
+export type CommentWithAnalysis = Comment & {
+  analysis: Analysis | null;
+};

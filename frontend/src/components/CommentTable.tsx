@@ -2,17 +2,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Comment, Analysis } from '@/lib/db/schema';
+import { CommentWithAnalysis } from '@/lib/db/schema';
 import { Field, datasetConfig } from '@/lib/config';
 import  MiniSearch  from 'minisearch'
 
-type CommentWithAnalysis = Comment & {
-  analysis: Analysis | null;
-};
-
 interface CommentTableProps {
   data: CommentWithAnalysis[];
-  filters: Record<string, any>;
+  filters: Record<string, unknown>;
 }
 
 export default function CommentTable({ data, filters }: CommentTableProps) {
@@ -99,7 +95,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     // Add data rows
     filteredData.forEach(item => {
       const line = visibleFields.map(field => {
-        let value: any;
+        let value: string;
         
         // Get the appropriate value based on the field key
         if (field.key === 'stance' && item.analysis) {
@@ -139,7 +135,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   
   // Render a cell with appropriate formatting
   const renderCell = (item: CommentWithAnalysis, field: Field) => {
-    let value: any;
+    let value: string;
     
     // Get the appropriate value based on the field key
     if (field.key === 'stance' && item.analysis) {
@@ -151,7 +147,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     } else if (field.key === 'rationale' && item.analysis) {
       value = item.analysis.rationale ?? '';
     } else {
-      value = item[field.key as keyof typeof item];
+      value = String(item[field.key as keyof typeof item] || '');
     }
     
     if (value === null || value === undefined) {

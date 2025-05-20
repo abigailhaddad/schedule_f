@@ -1,12 +1,9 @@
 // components/StatisticsCard.tsx
 'use client';
 
-import { Comment, Analysis } from '@/lib/db/schema';
+import { CommentWithAnalysis } from '@/lib/db/schema';
 import { datasetConfig } from '@/lib/config';
 
-type CommentWithAnalysis = Comment & {
-  analysis: Analysis | null;
-};
 
 interface StatisticsCardProps {
   data: CommentWithAnalysis[];
