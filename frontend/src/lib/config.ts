@@ -80,14 +80,14 @@ export const datasetConfig = {
       { 
         key: 'id',           
         title: 'Comment ID',           
-        visible: true,
+        visible: false,
         filter: 'text'
       },
       {
         key: 'hasAttachments',
         title: 'Has Attachments',
         filter: 'select',
-        visible: true,
+        visible: false,
         badges: {
           'true': 'bg-success',
           'false': 'bg-danger'

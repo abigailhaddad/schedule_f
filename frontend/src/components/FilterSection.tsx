@@ -34,20 +34,19 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
           // Try parsing as JSON for arrays
           const parsedValue = JSON.parse(filterParam);
           initialFilters[filterKey] = parsedValue;
-        } catch (e) {
+        } catch {
           // If not valid JSON, use as string
           initialFilters[filterKey] = filterParam;
         }
       }
     });
     
-    // Only update if we have filters
-    if (Object.keys(initialFilters).length > 0) {
+    // Only update if filters actually changed
+    if (JSON.stringify(initialFilters) !== JSON.stringify(filters)) {
       setFilters(initialFilters);
-      // Notify parent
       onFilterChange(initialFilters);
     }
-  }, []); // Only run once on mount
+  }, [searchParams, onFilterChange]);
   
   // Map field keys to their full path for nested fields
   const getFilterKey = (key: string) => {
@@ -60,38 +59,23 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   
   // Function to update filters and URL
   const updateFilters = (newFilters: Record<string, unknown>) => {
-    // Update local state
     setFilters(newFilters);
-    
-    // Notify parent component
     onFilterChange(newFilters);
-    
-    // Update URL
     const params = new URLSearchParams(searchParams.toString());
-    
-    // First, remove all existing filter parameters
     Array.from(params.keys())
       .filter(key => key.startsWith('filter_'))
       .forEach(key => params.delete(key));
-    
-    // Add new filters to URL
     Object.entries(newFilters).forEach(([key, value]) => {
-      // Skip empty filters
       if (value === null || value === undefined || 
          (Array.isArray(value) && value.length === 0) || 
          value === '') {
         return;
       }
-      
-      // Convert value to string
       const stringValue = typeof value === 'object' 
         ? JSON.stringify(value) 
         : String(value);
-      
       params.set(`filter_${key}`, stringValue);
     });
-    
-    // Update URL without refreshing page
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
   
@@ -122,7 +106,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const openFilterModal = (field: Field) => {
     setActiveField(field);
     // Get the filter key for this field
-    const filterKey = getFilterKey(field.key);
+    getFilterKey(field.key);
     // Set showFilterModal after activeField is set to ensure proper modal rendering
     setShowFilterModal(true);
   };

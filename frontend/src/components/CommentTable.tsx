@@ -31,7 +31,6 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
       : undefined;
   
   const { 
-    filteredData, 
     sortedData,
     searchQuery, 
     setSearchQuery,
@@ -63,7 +62,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     if (queryParam) {
       setSearchQuery(queryParam);
     }
-  }, []); // Only run once on mount
+  }, [searchParams, setSearchQuery]);
   
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +111,15 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showColumnsMenu]);
+  
+  // Handle row click to navigate to detail page
+  const handleRowClick = (comment: CommentWithAnalysis) => {
+    // Create the return URL with current filters, sorting, and search
+    const currentParams = new URLSearchParams(searchParams.toString());
+    
+    // Navigate to the detail page with the current URL as the return URL
+    router.push(`/comment/${comment.id}?returnUrl=${encodeURIComponent(`${pathname}?${currentParams.toString()}`)}`);
+  };
   
   // Highlight search match in text
   const highlightSearchMatch = (text: string, searchTerm: string, filterType?: string) => {
@@ -226,7 +234,9 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   };
   
   // Map the visible columns to DataTable column format
-  const columns: Column<CommentWithAnalysis>[] = getVisibleFields().map(field => {
+  const columns: Column<CommentWithAnalysis>[] = [
+    // Add the rest of the columns
+    ...getVisibleFields().map(field => {
     // Get the correct key for nested fields when sorting
     const sortKey = field.key === 'stance' || field.key === 'keyQuote' || 
                     field.key === 'themes' || field.key === 'rationale'
@@ -238,10 +248,10 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
       title: field.title,
       sortable: true,
       // Set width for different columns
-      className: field.key === 'comment' ? 'w-2/5 max-w-2xl' : 
-                field.key === 'keyQuote' || field.key === 'rationale' ? 'w-1/5' :
-                field.key === 'themes' ? 'w-1/6' :
-                field.key === 'title' ? 'w-1/6' :
+      className: field.key === 'comment' ? 'w-1/2 max-w-3xl' : 
+                field.key === 'keyQuote' || field.key === 'rationale' ? 'w-1/6' :
+                field.key === 'themes' ? 'w-1/8' :
+                field.key === 'title' ? 'w-1/8' :
                 undefined,
       render: (item: CommentWithAnalysis) => {
         let value: unknown;
@@ -252,6 +262,43 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
           value = item.analysis?.[field.key as keyof typeof item.analysis] || '';
         } else {
           value = item[field.key as keyof typeof item] || '';
+        }
+        
+        // Special case for the title field - make it a clickable link
+        if (field.key === 'title') {
+          return (
+            <div className="flex items-center">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent row click
+                  handleRowClick(item);
+                }}
+                className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left cursor-pointer flex items-center"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-4 w-4 mr-1 text-blue-500" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" 
+                  />
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" 
+                  />
+                </svg>
+                <span className="underline">{String(value) || 'Untitled Comment'}</span>
+              </button>
+            </div>
+          );
         }
         
         if (value === null || value === undefined || value === '') {
@@ -351,7 +398,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
         return typeof value === 'object' ? JSON.stringify(value) : String(value);
       }
     };
-  });
+  })];
 
   // Create the table header with search and export functionality
   const tableHeader = (
@@ -422,6 +469,8 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
         pageSize={pageSize}
         className="bg-white rounded-lg shadow-md border border-gray-200"
         headerContent={tableHeader}
+        onRowClick={handleRowClick}
+        rowClassName={() => "cursor-pointer hover:bg-blue-50"}
       />
     </div>
   );

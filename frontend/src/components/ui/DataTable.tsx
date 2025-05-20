@@ -57,7 +57,7 @@ export default function DataTable<T extends { id: string | number }>({
       setSorting(initialSorting);
       console.log('DataTable: Sorting updated from props:', initialSorting);
     }
-  }, [initialSorting]);
+  }, [initialSorting, sorting]);
 
   // Handle sort column click
   const handleSort = (column: string) => {
