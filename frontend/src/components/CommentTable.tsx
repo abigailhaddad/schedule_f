@@ -5,13 +5,134 @@ import { useState, useEffect, useRef } from 'react';
 import { CommentWithAnalysis } from '@/lib/db/schema';
 import { Field, datasetConfig } from '@/lib/config';
 import { useDataTable } from '@/lib/hooks/useDataTable';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 interface CommentTableProps {
   data: CommentWithAnalysis[];
   filters: Record<string, unknown>;
 }
 
+// Pagination controls component
+interface PaginationControlsProps {
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  filteredData: CommentWithAnalysis[];
+  paginatedData: CommentWithAnalysis[];
+  canPreviousPage: boolean;
+  canNextPage: boolean;
+  setPageSize: (size: number) => void;
+  goToPage: (page: number) => void;
+  previousPage: () => void;
+  nextPage: () => void;
+  getPageNumbers: () => (number | string)[];
+  position?: 'top' | 'bottom'; // Add position prop
+}
+
+const PaginationControls = ({
+  currentPage,
+  totalPages,
+  pageSize,
+  filteredData,
+  paginatedData,
+  canPreviousPage,
+  canNextPage,
+  setPageSize,
+  goToPage,
+  previousPage,
+  nextPage,
+  getPageNumbers,
+  position = 'bottom' // Default to bottom
+}: PaginationControlsProps) => {
+  // Adjust border classes based on position
+  const containerClasses = 
+    position === 'top'
+    ? "flex flex-col sm:flex-row justify-between items-center px-6 py-3 bg-gray-50 border-b border-gray-200"
+    : "flex flex-col sm:flex-row justify-between items-center px-6 py-3 bg-gray-50 border-t border-gray-200";
+    
+  return (
+    <div className={containerClasses}>
+      <div className="flex items-center text-sm text-gray-500 mb-3 sm:mb-0">
+        Showing <span className="font-medium mx-1 text-gray-700">{paginatedData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</span> 
+          to <span className="font-medium mx-1 text-gray-700">{Math.min(currentPage * pageSize, filteredData.length)}</span> 
+          of <span className="font-medium mx-1 text-gray-700">{filteredData.length}</span> entries
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        <div className="flex sm:items-center">
+          <div className="mr-4 flex items-center">
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {[10, 25, 50, 100].map(size => (
+                <option key={size} value={size}>
+                  {size} rows
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="flex">
+            <button
+              onClick={() => goToPage(1)}
+              disabled={!canPreviousPage}
+              className={`px-2 py-1 text-sm rounded-l-md border border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+            >
+              «
+            </button>
+            <button
+              onClick={previousPage}
+              disabled={!canPreviousPage}
+              className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+            >
+              ‹
+            </button>
+            
+            {getPageNumbers().map((page, i) => (
+              typeof page === 'number' ? (
+                <button
+                  key={i}
+                  onClick={() => goToPage(page)}
+                  className={`px-3 py-1 text-sm border-t border-b border-gray-300 
+                    ${currentPage === page ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  {page}
+                </button>
+              ) : (
+                <span key={i} className="px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500">
+                  {page}
+                </span>
+              )
+            ))}
+            
+            <button
+              onClick={nextPage}
+              disabled={!canNextPage}
+              className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+            >
+              ›
+            </button>
+            <button
+              onClick={() => goToPage(totalPages)}
+              disabled={!canNextPage}
+              className={`px-2 py-1 text-sm rounded-r-md border border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+            >
+              »
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function CommentTable({ data, filters }: CommentTableProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
   const { 
     filteredData, 
     paginatedData,
@@ -42,6 +163,33 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
   });
   
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
+  
+  // Set initial search query from URL if present
+  useEffect(() => {
+    const queryParam = searchParams.get('query');
+    if (queryParam) {
+      setSearchQuery(queryParam);
+    }
+  }, [searchParams, setSearchQuery]);
+  
+  // Update URL when search query changes
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = e.target.value;
+    
+    // Update URL
+    const params = new URLSearchParams(searchParams.toString());
+    if (newQuery) {
+      params.set('query', newQuery);
+    } else {
+      params.delete('query');
+    }
+    
+    // Set search query (this will conditionally reset page based on isInitialMount)
+    setSearchQuery(newQuery);
+    
+    // Update URL
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
   
   // Toggle column visibility
   const toggleColumnVisibility = (key: string) => {
@@ -211,6 +359,22 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
     return pageNumbers;
   };
   
+  // Create common pagination props object
+  const paginationProps = {
+    currentPage,
+    totalPages,
+    pageSize,
+    filteredData,
+    paginatedData,
+    canPreviousPage,
+    canNextPage,
+    setPageSize,
+    goToPage,
+    previousPage,
+    nextPage,
+    getPageNumbers
+  };
+  
   return (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
       <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600">
@@ -232,7 +396,7 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
                 className="bg-white bg-opacity-20 placeholder-white placeholder-opacity-70 text-white border border-transparent rounded py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 focus:border-transparent"
                 placeholder="Search comments..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
               />
             </div>
             
@@ -279,6 +443,10 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
           </div>
         </div>
       </div>
+      
+      {/* Top pagination controls */}
+      <PaginationControls {...paginationProps} position="top" />
+      
       <div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -333,81 +501,8 @@ export default function CommentTable({ data, filters }: CommentTableProps) {
           </table>
         </div>
         
-        {/* Pagination Controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-center px-6 py-3 bg-gray-50 border-t border-gray-200">
-          <div className="flex items-center text-sm text-gray-500 mb-3 sm:mb-0">
-            Showing <span className="font-medium mx-1 text-gray-700">{paginatedData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</span> 
-             to <span className="font-medium mx-1 text-gray-700">{Math.min(currentPage * pageSize, filteredData.length)}</span> 
-             of <span className="font-medium mx-1 text-gray-700">{filteredData.length}</span> entries
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <div className="flex sm:items-center">
-              <div className="mr-4 flex items-center">
-                <select
-                  value={pageSize}
-                  onChange={(e) => setPageSize(Number(e.target.value))}
-                  className="rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {[10, 25, 50, 100].map(size => (
-                    <option key={size} value={size}>
-                      {size} rows
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="flex">
-                <button
-                  onClick={() => goToPage(1)}
-                  disabled={!canPreviousPage}
-                  className={`px-2 py-1 text-sm rounded-l-md border border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
-                >
-                  «
-                </button>
-                <button
-                  onClick={previousPage}
-                  disabled={!canPreviousPage}
-                  className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
-                >
-                  ‹
-                </button>
-                
-                {getPageNumbers().map((page, i) => (
-                  typeof page === 'number' ? (
-                    <button
-                      key={i}
-                      onClick={() => goToPage(page)}
-                      className={`px-3 py-1 text-sm border-t border-b border-gray-300 
-                        ${currentPage === page ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
-                    >
-                      {page}
-                    </button>
-                  ) : (
-                    <span key={i} className="px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500">
-                      {page}
-                    </span>
-                  )
-                ))}
-                
-                <button
-                  onClick={nextPage}
-                  disabled={!canNextPage}
-                  className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
-                >
-                  ›
-                </button>
-                <button
-                  onClick={() => goToPage(totalPages)}
-                  disabled={!canNextPage}
-                  className={`px-2 py-1 text-sm rounded-r-md border border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
-                >
-                  »
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Bottom pagination controls */}
+        <PaginationControls {...paginationProps} position="bottom" />
       </div>
     </div>
   );
