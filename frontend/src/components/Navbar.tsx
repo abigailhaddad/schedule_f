@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { datasetConfig } from '@/lib/config';
+import Image from 'next/image';
 
 export default function Navbar() {
   const { title, subtitle } = datasetConfig;
@@ -30,7 +31,15 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           {/* Logo & Title */}
           <div className="flex items-center space-x-2">
-            <span className={`text-2xl transition-transform duration-300 ${scrolled ? 'scale-90' : 'scale-100'}`}>📊</span>
+            <div className={`transition-transform duration-300 ${scrolled ? 'scale-90' : 'scale-100'}`}>
+              <Image 
+                src="/favicon.svg" 
+                alt="Schedule F Logo" 
+                width={28} 
+                height={28} 
+                className="w-7 h-7"
+              />
+            </div>
             <Link href="/" className={`navbar-brand-text font-bold hover:text-white/80 transition-all duration-300 ${scrolled ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'}`}>
               {title}
             </Link>
