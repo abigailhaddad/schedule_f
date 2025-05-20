@@ -14,22 +14,29 @@ mkdir -p results
 # Create the frontend directory if it doesn't exist
 mkdir -p frontend
 
-# Find the most recent results directory
-LATEST_DIR=$(find ./results -maxdepth 1 -type d -name "results_*" | sort -r | head -n 1)
+# Find all results directories sorted by most recent first
+ALL_DIRS=$(find ./results -maxdepth 1 -type d -name "results_*" | sort -r)
 
-if [ -z "$LATEST_DIR" ]; then
+if [ -z "$ALL_DIRS" ]; then
   echo "Error: No results directories found."
   exit 1
 fi
 
-# Check if data.json exists in the latest directory
-if [ ! -f "$LATEST_DIR/data.json" ]; then
-  echo "Error: data.json not found in $LATEST_DIR."
+# Iterate through directories until we find one with data.json
+DATA_FOUND=false
+for DIR in $ALL_DIRS; do
+  if [ -f "$DIR/data.json" ]; then
+    echo "Found data.json in $DIR"
+    cp "$DIR/data.json" "./frontend/data.json"
+    echo "Successfully copied data.json from $DIR to the frontend directory."
+    echo "Timestamp: $(date)"
+    DATA_FOUND=true
+    break
+  fi
+done
+
+# Check if we found a data.json file
+if [ "$DATA_FOUND" = false ]; then
+  echo "Error: No data.json file found in any results directory."
   exit 1
 fi
-
-# Copy the file to the frontend directory
-cp "$LATEST_DIR/data.json" "./frontend/data.json"
-
-echo "Successfully copied latest data.json from $LATEST_DIR to the frontend directory."
-echo "Timestamp: $(date)"

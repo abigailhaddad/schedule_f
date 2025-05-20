@@ -163,51 +163,43 @@ def get_comment_ids(object_id, api_key, limit=None, page_size=250, start_page=1)
 
     print(f"✅ Retrieved {len(comment_ids)} comment IDs.")
     return comment_ids
-
-
-def download_attachment(url, output_path, api_key):
-    """Download an attachment file from the given URL."""
-    try:
-        # Make sure the directory exists
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        
-        # Download the file
-        response = requests.get(url, headers=get_headers(api_key), stream=True)
-        response.raise_for_status()
-        
-        with open(output_path, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        
-        return output_path
-    except Exception as e:
-        print(f"Error downloading attachment: {e}")
-        return None
-
-def extract_text_from_pdf(pdf_path):
-    """Extract text from a PDF file using PyPDF2."""
-    try:
-        import PyPDF2
-        
-        text = ""
-        with open(pdf_path, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
-            for page_num in range(len(reader.pages)):
-                text += reader.pages[page_num].extract_text() + "\n"
-        
-        return text
-    except ImportError:
-        print("PyPDF2 not installed. Install it using: pip install PyPDF2")
-        return "[PDF TEXT EXTRACTION FAILED - PyPDF2 not installed]"
-    except Exception as e:
-        print(f"Error extracting text from PDF {pdf_path}: {e}")
-        return f"[PDF TEXT EXTRACTION FAILED: {str(e)}]"
-
-def get_comment_detail(comment_id, api_key, download_attachments=True, attachments_dir=None):
-    """Fetch full detail for a single comment, including attachments."""
+def get_comment_detail(comment_id, api_key, download_attachments=True, attachments_dir=None, max_retries=10):
+    """Fetch full detail for a single comment, including attachments with robust retry mechanism."""
     url = f"https://api.regulations.gov/v4/comments/{comment_id}?include=attachments"
-    response = requests.get(url, headers=get_headers(api_key))
-    response.raise_for_status()
+    
+    # Implement exponential backoff for retries
+    retries = 0
+    while True:
+        try:
+            response = requests.get(url, headers=get_headers(api_key))
+            
+            # Handle rate limiting (429)
+            if response.status_code == 429:
+                wait_time = min(300, 30 * (2 ** retries))  # Exponential backoff with max 5 min wait
+                print(f"⚠️  Got 429 Too Many Requests when fetching comment {comment_id}. "
+                      f"Retrying in {wait_time}s (attempt {retries + 1}/{max_retries})...")
+                time.sleep(wait_time)
+                retries += 1
+                if retries >= max_retries:
+                    print(f"⚠️  Maximum retries ({max_retries}) reached for comment {comment_id}. "
+                          f"Taking a longer break (10 minutes) before trying again...")
+                    time.sleep(600)  # 10 minute break
+                    retries = 0  # Reset retry counter after long break
+                continue
+            
+            # Handle other HTTP errors
+            response.raise_for_status()
+            break
+            
+        except requests.exceptions.RequestException as e:
+            # Handle connection errors, timeouts, etc.
+            wait_time = min(120, 15 * (2 ** retries))
+            print(f"⚠️  Connection error when fetching comment {comment_id}: {e}. "
+                  f"Retrying in {wait_time}s (attempt {retries + 1}/{max_retries})...")
+            time.sleep(wait_time)
+            retries += 1
+            if retries >= max_retries:
+                raise Exception(f"Failed to fetch comment {comment_id} after {max_retries} retries: {e}")
     
     data = response.json()
     comment_data = data["data"]
@@ -287,9 +279,53 @@ def get_comment_detail(comment_id, api_key, download_attachments=True, attachmen
     
     return comment_data
 
+
+def download_attachment(url, output_path, api_key, max_retries=5):
+    """Download an attachment file from the given URL with retry logic."""
+    retries = 0
+    
+    while True:
+        try:
+            # Make sure the directory exists
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            
+            # Download the file with streaming to handle large files
+            response = requests.get(url, headers=get_headers(api_key), stream=True)
+            
+            # Handle rate limiting
+            if response.status_code == 429:
+                wait_time = min(300, 30 * (2 ** retries))
+                print(f"⚠️  Got 429 when downloading attachment. Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+                retries += 1
+                if retries >= max_retries:
+                    print(f"⚠️  Maximum retries reached for attachment download. Taking a longer break...")
+                    time.sleep(600)  # 10 minute break
+                    retries = 0
+                continue
+            
+            response.raise_for_status()
+            
+            # Save the file
+            with open(output_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            
+            return output_path
+            
+        except Exception as e:
+            wait_time = min(120, 15 * (2 ** retries))
+            print(f"Error downloading attachment: {e}. Retrying in {wait_time}s...")
+            time.sleep(wait_time)
+            retries += 1
+            if retries >= max_retries:
+                print(f"Failed to download attachment after {max_retries} retries: {e}")
+                return None
+            
+
 def get_all_comment_details(comment_ids, api_key, download_attachments=True, attachments_base_dir=None, 
-                          checkpoint_file=None, resume=False):
-    """Retrieve full comment detail for a list of comment IDs with checkpoint support."""
+                          checkpoint_file=None, resume=False, batch_size=10, adaptive_delay=True):
+    """Retrieve full comment detail for a list of comment IDs with checkpoint support and adaptive rate limiting."""
     comments = []
     already_processed = set()
     total = len(comment_ids)
@@ -321,6 +357,12 @@ def get_all_comment_details(comment_ids, api_key, download_attachments=True, att
     # Create progress bar
     pbar = tqdm(total=len(comment_ids_to_process), desc="Fetching comment details")
     
+    # Adaptive delay variables
+    base_delay = 0.5  # Start with a modest delay
+    recent_errors = 0  # Track recent 429 errors
+    delay_multiplier = 1.0  # Will increase as we get rate-limited
+    
+    # Process comments
     for i, comment_id in enumerate(comment_ids_to_process, 1):
         try:
             # Set up an attachments directory for this comment
@@ -328,7 +370,7 @@ def get_all_comment_details(comment_ids, api_key, download_attachments=True, att
                 attachments_dir = os.path.join(attachments_base_dir, comment_id)
             else:
                 attachments_dir = None
-                
+            
             # Get the comment details with attachments
             comment = get_comment_detail(
                 comment_id, 
@@ -340,24 +382,59 @@ def get_all_comment_details(comment_ids, api_key, download_attachments=True, att
             already_processed.add(comment_id)
             pbar.update(1)
             
-            # Save checkpoint every 10 comments
-            if checkpoint_file and i % 10 == 0:
+            # If adaptive_delay is enabled, decrease the delay multiplier slightly on success
+            if adaptive_delay and recent_errors > 0:
+                recent_errors = max(0, recent_errors - 0.2)  # Gradually decrease error count
+                delay_multiplier = max(1.0, delay_multiplier * 0.95)  # Gradually decrease delay
+            
+            # Save checkpoint after each batch of comments
+            if checkpoint_file and i % batch_size == 0:
                 with open(checkpoint_file, 'w', encoding='utf-8') as f:
                     json.dump({
                         'comments': comments,
-                        'processed_ids': list(already_processed)
+                        'processed_ids': list(already_processed),
+                        'adaptive_delay': {
+                            'base_delay': base_delay,
+                            'recent_errors': recent_errors,
+                            'delay_multiplier': delay_multiplier
+                        }
                     }, f)
                 pbar.write(f"Checkpoint saved after processing {i} comments")
                 
         except Exception as e:
             pbar.write(f"Failed to retrieve {comment_id}: {e}")
+            
+            # Detect rate limit errors and adjust delay
+            if "429" in str(e):
+                recent_errors += 2
+                delay_multiplier = min(10.0, delay_multiplier * 1.5)  # Increase delay multiplier up to a maximum
+                pbar.write(f"Rate limit detected. Increasing delay multiplier to {delay_multiplier:.2f}")
+            
+            # Save what we have in case of failure
+            if checkpoint_file:
+                with open(checkpoint_file, 'w', encoding='utf-8') as f:
+                    json.dump({
+                        'comments': comments,
+                        'processed_ids': list(already_processed),
+                        'adaptive_delay': {
+                            'base_delay': base_delay,
+                            'recent_errors': recent_errors,
+                            'delay_multiplier': delay_multiplier
+                        }
+                    }, f)
+                pbar.write(f"Emergency checkpoint saved after error")
         
-        # Add a retry mechanism for rate limiting
+        # Calculate the current delay based on adaptive parameters
+        current_delay = base_delay * delay_multiplier
+        
+        # Add a dynamic delay between requests
         if i % 50 == 0:
-            pbar.write(f"Taking a short break after {i} requests...")
-            time.sleep(2)  # Take a longer break every 50 requests
+            # Take an extra long break every 50 requests
+            extra_delay = 5 * current_delay
+            pbar.write(f"Taking a longer break ({extra_delay:.2f}s) after {i} requests...")
+            time.sleep(extra_delay)
         else:
-            time.sleep(0.3)  # Slightly longer delay between individual requests
+            time.sleep(current_delay)
     
     pbar.close()
     
@@ -371,6 +448,26 @@ def get_all_comment_details(comment_ids, api_key, download_attachments=True, att
         print(f"Final checkpoint saved with {len(comments)} comments")
     
     return comments
+
+def extract_text_from_pdf(pdf_path):
+    """Extract text from a PDF file using PyPDF2."""
+    try:
+        import PyPDF2
+        
+        text = ""
+        with open(pdf_path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
+            for page_num in range(len(reader.pages)):
+                text += reader.pages[page_num].extract_text() + "\n"
+        
+        return text
+    except ImportError:
+        print("PyPDF2 not installed. Install it using: pip install PyPDF2")
+        return "[PDF TEXT EXTRACTION FAILED - PyPDF2 not installed]"
+    except Exception as e:
+        print(f"Error extracting text from PDF {pdf_path}: {e}")
+        return f"[PDF TEXT EXTRACTION FAILED: {str(e)}]"
+
 
 def save_json(data, filename):
     """Save data to a JSON file."""
