@@ -1,85 +1,39 @@
 // components/FilterSection.tsx
+// This component handles data filtering functionality and UI for the comments dataset
+// It renders filter options, displays active filters, and manages filter state
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import FilterModal from './FilterModal';
+import { useDataContext } from '@/contexts/DataContext';
 
-interface FilterSectionProps {
-  onFilterChange: (filters: Record<string, unknown>) => void;
-}
-
-export default function FilterSection({ onFilterChange }: FilterSectionProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+// FilterSection no longer needs props as it gets state from context
+export default function FilterSection() {
+  // Get filters and setFilters from the context
+  const { filters, setFilters } = useDataContext();
   
-  const [filters, setFilters] = useState<Record<string, unknown>>({});
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [activeField, setActiveField] = useState<Field | null>(null);
   
-  // Load filters from URL on mount
-  useEffect(() => {
-    const initialFilters: Record<string, unknown> = {};
-    const filterableFields = datasetConfig.fields.filter(field => field.filter);
-    
-    // Process URL parameters
-    filterableFields.forEach(field => {
-      const filterKey = getFilterKey(field.key);
-      const filterParam = searchParams.get(`filter_${filterKey}`);
-      
-      if (filterParam) {
-        try {
-          // Try parsing as JSON for arrays
-          const parsedValue = JSON.parse(filterParam);
-          initialFilters[filterKey] = parsedValue;
-        } catch {
-          // If not valid JSON, use as string
-          initialFilters[filterKey] = filterParam;
-        }
-      }
-    });
-    
-    // Only update if filters actually changed
-    if (JSON.stringify(initialFilters) !== JSON.stringify(filters)) {
-      setFilters(initialFilters);
-      onFilterChange(initialFilters);
-    }
-  }, [searchParams, onFilterChange]);
-  
   // Map field keys to their full path for nested fields
+  // This is needed because some fields in the schema might be nested objects
   const getFilterKey = (key: string) => {
     // Map analysis fields to their proper nested path
+    // In schema.ts, stance, keyQuote, themes, and rationale are direct fields on the comments table
+    // But in the frontend data structure, they might be nested under an "analysis" object
+    // Example: "stance" field becomes "analysis.stance" in the filter
     if (['stance', 'keyQuote', 'themes', 'rationale'].includes(key)) {
       return `analysis.${key}`;
     }
     return key;
   };
   
-  // Function to update filters and URL
-  const updateFilters = (newFilters: Record<string, unknown>) => {
-    setFilters(newFilters);
-    onFilterChange(newFilters);
-    const params = new URLSearchParams(searchParams.toString());
-    Array.from(params.keys())
-      .filter(key => key.startsWith('filter_'))
-      .forEach(key => params.delete(key));
-    Object.entries(newFilters).forEach(([key, value]) => {
-      if (value === null || value === undefined || 
-         (Array.isArray(value) && value.length === 0) || 
-         value === '') {
-        return;
-      }
-      const stringValue = typeof value === 'object' 
-        ? JSON.stringify(value) 
-        : String(value);
-      params.set(`filter_${key}`, stringValue);
-    });
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  };
-  
   // Handle filter change
+  // Example: When selecting "For" in the stance filter:
+  // 1. key="stance", value="For"
+  // 2. filterKey becomes "analysis.stance"
+  // 3. newFilters becomes { "analysis.stance": "For" }
   const handleFilterChange = (key: string, value: unknown) => {
     const newFilters = { ...filters };
     
@@ -87,26 +41,29 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     const filterKey = getFilterKey(key);
     
     // If value is empty, remove the filter
+    // Example: When clearing the "category" filter, delete newFilters["category"]
     if (!value || (Array.isArray(value) && value.length === 0)) {
       delete newFilters[filterKey];
     } else {
       newFilters[filterKey] = value;
     }
     
-    // Update filters and URL
-    updateFilters(newFilters);
+    // Update filters in the context
+    setFilters(newFilters);
   };
   
   // Clear all filters
+  // This removes all active filters and updates the URL to remove filter parameters
   const clearAllFilters = () => {
-    updateFilters({});
+    setFilters({});
   };
   
   // Open filter modal
+  // For example, when clicking the "Stance" filter button:
+  // 1. activeField is set to the stance field configuration
+  // 2. Modal opens showing options: "For", "Against", "Neutral/Unclear" (from stanceEnum in schema.ts)
   const openFilterModal = (field: Field) => {
     setActiveField(field);
-    // Get the filter key for this field
-    getFilterKey(field.key);
     // Set showFilterModal after activeField is set to ensure proper modal rendering
     setShowFilterModal(true);
   };
@@ -121,6 +78,8 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   const hasActiveFilters = Object.keys(filters).length > 0;
   
   // Helper to render filter tags for active filters
+  // Example: When filters = { "analysis.stance": "For", "category": "Agency Reform" }
+  // This renders two tags: "Stance: For" and "Category: Agency Reform"
   const renderFilterTags = () => {
     if (!hasActiveFilters) {
       return (
@@ -133,6 +92,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     
     return Object.entries(filters).map(([key, value]) => {
       // Find matching field, checking both direct and nested keys
+      // For "analysis.stance", this would find the "stance" field in the config
       const field = datasetConfig.fields.find(f => {
         const mappedKey = getFilterKey(f.key);
         return mappedKey === key || f.key === key;
@@ -141,6 +101,8 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       if (!field) return null;
       
       // Handle different filter types
+      // For array values like themes: ["Transparency", "Accountability"]
+      // This creates multiple filter tags, one for each array value
       if (Array.isArray(value)) {
         return (value as unknown[]).map((v, i) => (
           <div 
@@ -160,6 +122,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
         ));
       } else {
         // Handle non-array values
+        // For stance: "For", this creates a single filter tag "Stance: For"
         return (
           <div 
             key={key}
@@ -181,6 +144,11 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   };
   
   // Render available filters as buttons
+  // Based on schema.ts and config, this might render buttons for:
+  // - Stance (with options: For, Against, Neutral/Unclear)
+  // - Category (with options from available categories in the data)
+  // - Agency (filtered by agencyId)
+  // - Themes (allowing multiple selection from available themes)
   const renderFilterButtons = () => {
     const filterableFields = datasetConfig.fields.filter(field => field.filter);
     
@@ -234,6 +202,10 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       </div>
       
       {/* Filter Modal - only render when showFilterModal is true */}
+      {/* For example, when filtering by stance: */}
+      {/* Modal shows radio buttons with options: For, Against, Neutral/Unclear */}
+      {/* When filtering by themes: */}
+      {/* Modal shows checkboxes with common themes found in comments */}
       {activeField && (
         <FilterModal 
           field={activeField}

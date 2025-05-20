@@ -57,12 +57,12 @@ const main = async () => {
   for (const item of jsonData) {
     // Validate the stance value is a valid enum value if present
     const stance = item.stance 
-      ? stanceEnum.enumValues.includes(item.stance as any) 
+      ? stanceEnum.enumValues.includes(item.stance as typeof stanceEnum.enumValues[number]) 
         ? item.stance as typeof stanceEnum.enumValues[number]
         : null
       : null;
 
-    if (item.stance && !stanceEnum.enumValues.includes(item.stance as any)) {
+    if (item.stance && !stanceEnum.enumValues.includes(item.stance as typeof stanceEnum.enumValues[number])) {
       console.warn(`Invalid stance value: "${item.stance}" for comment ID: ${item.id}. Setting to null.`);
     }
 

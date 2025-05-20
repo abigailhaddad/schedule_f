@@ -1,5 +1,3 @@
-'use client';
-
 import { Comment } from '@/lib/db/schema';
 import Badge from './ui/Badge';
 

@@ -1,5 +1,5 @@
 // lib/db/schema.ts
-import { pgTable, serial, text, timestamp, varchar, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, varchar, boolean, pgEnum } from 'drizzle-orm/pg-core';
 
 export const stanceEnum = pgEnum('stance', ['For', 'Against', 'Neutral/Unclear']);
 
