@@ -182,3 +182,75 @@ export async function processComments(documentId: string) {
     return { success: false, error: 'Failed to process comments' }
   }
 }
+
+// Fetch a single comment by ID
+export async function getCommentById(id: string): Promise<{ success: boolean, data?: CommentWithAnalysis, error?: string }> {
+  try {
+    // Explicitly connect to database before running queries
+    const connection = await connectDb();
+    if (!connection.success) {
+      throw new Error("Failed to connect to database: " + (connection.error ? String(connection.error) : "Unknown error"));
+    }
+    
+    const results = await db
+      .select({
+        // Select all fields from comments
+        id: comments.id,
+        title: comments.title,
+        category: comments.category,
+        agencyId: comments.agencyId,
+        comment: comments.comment,
+        originalComment: comments.originalComment,
+        hasAttachments: comments.hasAttachments,
+        link: comments.link,
+        createdAt: comments.createdAt,
+        // Select all fields from analyses, they will be null if no match
+        analysisId: analyses.id,
+        analysisCommentId: analyses.commentId,
+        analysisStance: analyses.stance,
+        analysisKeyQuote: analyses.keyQuote,
+        analysisRationale: analyses.rationale,
+        analysisThemes: analyses.themes,
+        analysisCreatedAt: analyses.createdAt,
+      })
+      .from(comments)
+      .leftJoin(analyses, eq(comments.id, analyses.commentId))
+      .where(eq(comments.id, id));
+
+    if (results.length === 0) {
+      return { success: false, error: 'Comment not found' };
+    }
+
+    const r = results[0];
+    const commentWithAnalysis: CommentWithAnalysis = {
+      // Comment fields
+      id: r.id!,
+      title: r.title,
+      category: r.category,
+      agencyId: r.agencyId,
+      comment: r.comment,
+      originalComment: r.originalComment,
+      hasAttachments: r.hasAttachments ?? false,
+      link: r.link,
+      createdAt: r.createdAt,
+      // Nested analysis object
+      analysis: r.analysisId
+        ? {
+            id: r.analysisId!,
+            commentId: r.analysisCommentId!,
+            stance: r.analysisStance as typeof stanceEnum.enumValues[number] | null,
+            keyQuote: r.analysisKeyQuote,
+            rationale: r.analysisRationale,
+            themes: r.analysisThemes,
+            createdAt: r.analysisCreatedAt,
+          }
+        : null,
+    };
+    
+    return { success: true, data: commentWithAnalysis };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error("Error fetching comment by ID:", errorMessage);
+    return { success: false, error: `Failed to fetch comment: ${errorMessage || 'Unknown database error'}` };
+  }
+}

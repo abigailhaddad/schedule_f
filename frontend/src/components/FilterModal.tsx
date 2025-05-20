@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Field } from '@/lib/config';
 import Modal from './ui/Modal';
 import Button from './ui/Button';
@@ -15,7 +15,7 @@ interface FilterModalProps {
 
 export default function FilterModal({ field, currentValue, onApply, onClose, isOpen }: FilterModalProps) {
   // Initialize value based on field type and current value
-  const initialValue = (): string | string[] => {
+  const initialValue = useCallback((): string | string[] => {
     // For select filters, ensure we're working with arrays
     if (field.filter === 'select' || field.filter === 'multi-label') {
       // Handle both string and array values from URL params
@@ -43,7 +43,7 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
     
     // For other filters, use the value as is or empty string
     return typeof currentValue === 'string' ? currentValue : '';
-  };
+  }, [field.filter, currentValue]);
 
   const [value, setValue] = useState<string | string[]>(initialValue());
   
@@ -63,7 +63,7 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
     if (field.filter === 'text') {
       setTextValues(Array.isArray(currentValue) ? currentValue : []);
     }
-  }, [currentValue, field.filter]);
+  }, [currentValue, field.filter, initialValue]);
   
   // Add text value function for text filter
   const addTextValue = () => {

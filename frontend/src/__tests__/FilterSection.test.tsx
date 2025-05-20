@@ -1,7 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import FilterSection from '@/components/FilterSection';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { datasetConfig } from '@/lib/config';
 
 // Mock the Next.js navigation hooks
 jest.mock('next/navigation', () => ({
@@ -104,5 +103,54 @@ describe('FilterSection', () => {
     
     // Check that URL parameters for filters were removed
     expect(mockReplace).toHaveBeenCalled();
+  });
+
+  test('clear all clears all filters and updates the url', async () => {
+    mockGet.mockImplementation((param) => {
+      if (param === 'filter_analysis.stance') return '"For"';
+      if (param === 'filter_analysis.themes') return '"Theme1"';
+      return null;
+    });
+    render(<FilterSection onFilterChange={mockOnFilterChange} />);
+    // Should show Clear All button
+    expect(screen.getByText('Clear All')).toBeInTheDocument();
+    // Click Clear All
+    fireEvent.click(screen.getByText('Clear All'));
+    // Should call onFilterChange with {}
+    expect(mockOnFilterChange).toHaveBeenCalledWith({});
+    // Should update the URL
+    expect(mockReplace).toHaveBeenCalled();
+  });
+
+  test('removing one filter successfully updates the url', async () => {
+    mockGet.mockImplementation((param) => {
+      if (param === 'filter_analysis.stance') return '"For"';
+      if (param === 'filter_analysis.themes') return '"Theme1"';
+      return null;
+    });
+    render(<FilterSection onFilterChange={mockOnFilterChange} />);
+    // Should show both filters
+    expect(screen.getAllByRole('button', { name: 'Remove filter' }).length).toBeGreaterThan(1);
+    // Click the first remove (×) button
+    fireEvent.click(screen.getAllByRole('button', { name: 'Remove filter' })[0]);
+    // Should call onFilterChange with only one filter left
+    expect(mockOnFilterChange).toHaveBeenCalledWith(expect.objectContaining({}));
+    // Should update the URL
+    expect(mockReplace).toHaveBeenCalled();
+  });
+
+  test('does not call onFilterChange again if filters do not change', async () => {
+    mockGet.mockImplementation((param) => {
+      if (param === 'filter_analysis.stance') return '"For"';
+      return null;
+    });
+    const { rerender } = render(<FilterSection onFilterChange={mockOnFilterChange} />);
+    // Should call once on mount
+    expect(mockOnFilterChange).toHaveBeenCalledTimes(1);
+
+    // Simulate rerender with same searchParams (no change)
+    rerender(<FilterSection onFilterChange={mockOnFilterChange} />);
+    // Should still only be called once
+    expect(mockOnFilterChange).toHaveBeenCalledTimes(1);
   });
 }); 
