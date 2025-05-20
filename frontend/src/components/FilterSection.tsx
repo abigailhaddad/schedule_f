@@ -1,8 +1,9 @@
 // components/FilterSection.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import FilterModal from './FilterModal';
 
 interface FilterSectionProps {
@@ -10,32 +11,123 @@ interface FilterSectionProps {
 }
 
 export default function FilterSection({ onFilterChange }: FilterSectionProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
   const [filters, setFilters] = useState<Record<string, unknown>>({});
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [activeField, setActiveField] = useState<Field | null>(null);
   
+  // Load filters from URL on mount
+  useEffect(() => {
+    const initialFilters: Record<string, unknown> = {};
+    const filterableFields = datasetConfig.fields.filter(field => field.filter);
+    
+    // Process URL parameters
+    filterableFields.forEach(field => {
+      const filterKey = getFilterKey(field.key);
+      const filterParam = searchParams.get(`filter_${filterKey}`);
+      
+      if (filterParam) {
+        try {
+          // Try parsing as JSON for arrays
+          const parsedValue = JSON.parse(filterParam);
+          initialFilters[filterKey] = parsedValue;
+        } catch (e) {
+          // If not valid JSON, use as string
+          initialFilters[filterKey] = filterParam;
+        }
+      }
+    });
+    
+    // Only update if we have filters
+    if (Object.keys(initialFilters).length > 0) {
+      setFilters(initialFilters);
+      // Notify parent
+      onFilterChange(initialFilters);
+    }
+  }, []); // Only run once on mount
+  
+  // Map field keys to their full path for nested fields
+  const getFilterKey = (key: string) => {
+    // Map analysis fields to their proper nested path
+    if (['stance', 'keyQuote', 'themes', 'rationale'].includes(key)) {
+      return `analysis.${key}`;
+    }
+    return key;
+  };
+  
+  // Function to update filters and URL
+  const updateFilters = (newFilters: Record<string, unknown>) => {
+    // Update local state
+    setFilters(newFilters);
+    
+    // Notify parent component
+    onFilterChange(newFilters);
+    
+    // Update URL
+    const params = new URLSearchParams(searchParams.toString());
+    
+    // First, remove all existing filter parameters
+    Array.from(params.keys())
+      .filter(key => key.startsWith('filter_'))
+      .forEach(key => params.delete(key));
+    
+    // Add new filters to URL
+    Object.entries(newFilters).forEach(([key, value]) => {
+      // Skip empty filters
+      if (value === null || value === undefined || 
+         (Array.isArray(value) && value.length === 0) || 
+         value === '') {
+        return;
+      }
+      
+      // Convert value to string
+      const stringValue = typeof value === 'object' 
+        ? JSON.stringify(value) 
+        : String(value);
+      
+      params.set(`filter_${key}`, stringValue);
+    });
+    
+    // Update URL without refreshing page
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+  
+  // Handle filter change
   const handleFilterChange = (key: string, value: unknown) => {
-    const newFilters = { ...filters, [key]: value };
+    const newFilters = { ...filters };
+    
+    // Use the appropriate filter key (mapping to nested fields if needed)
+    const filterKey = getFilterKey(key);
     
     // If value is empty, remove the filter
     if (!value || (Array.isArray(value) && value.length === 0)) {
-      delete newFilters[key];
+      delete newFilters[filterKey];
+    } else {
+      newFilters[filterKey] = value;
     }
     
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+    // Update filters and URL
+    updateFilters(newFilters);
   };
   
+  // Clear all filters
   const clearAllFilters = () => {
-    setFilters({});
-    onFilterChange({});
+    updateFilters({});
   };
   
+  // Open filter modal
   const openFilterModal = (field: Field) => {
     setActiveField(field);
+    // Get the filter key for this field
+    const filterKey = getFilterKey(field.key);
+    // Set showFilterModal after activeField is set to ensure proper modal rendering
     setShowFilterModal(true);
   };
   
+  // Close filter modal
   const closeFilterModal = () => {
     setShowFilterModal(false);
     setActiveField(null);
@@ -56,7 +148,11 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     }
     
     return Object.entries(filters).map(([key, value]) => {
-      const field = datasetConfig.fields.find(f => f.key === key);
+      // Find matching field, checking both direct and nested keys
+      const field = datasetConfig.fields.find(f => {
+        const mappedKey = getFilterKey(f.key);
+        return mappedKey === key || f.key === key;
+      });
       
       if (!field) return null;
       
@@ -78,9 +174,25 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             </button>
           </div>
         ));
+      } else {
+        // Handle non-array values
+        return (
+          <div 
+            key={key}
+            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+          >
+            <span className="mr-1 font-medium">{field.title}:</span> 
+            <span>{String(value)}</span>
+            <button 
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              onClick={() => handleFilterChange(key, null)}
+              aria-label="Remove filter"
+            >
+              ×
+            </button>
+          </div>
+        );
       }
-      
-      return null;
     });
   };
   
@@ -141,7 +253,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       {activeField && (
         <FilterModal 
           field={activeField}
-          currentValue={filters[activeField.key] || null}
+          currentValue={filters[getFilterKey(activeField.key)] || null}
           onClose={closeFilterModal}
           onApply={(value) => {
             handleFilterChange(activeField.key, value);

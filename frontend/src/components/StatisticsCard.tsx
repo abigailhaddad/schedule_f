@@ -8,6 +8,15 @@ interface StatisticsCardProps {
   data: CommentWithAnalysis[];
 }
 
+// Define a type for the statistics
+interface Stat {
+  key: string;
+  label: string;
+  type: string;
+  match?: string;
+  value?: number;
+}
+
 export default function StatisticsCard({ data }: StatisticsCardProps) {
   // Calculate statistics based on our data and config
   const calculateStats = () => {
@@ -42,7 +51,7 @@ export default function StatisticsCard({ data }: StatisticsCardProps) {
   const stats = calculateStats();
   
   // Function to get color based on stat key
-  const getStatColors = (stat: any) => {
+  const getStatColors = (stat: Stat) => {
     if (stat.match === 'For') return { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' };
     if (stat.match === 'Against') return { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' };
     if (stat.match === 'Neutral/Unclear') return { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' };
@@ -70,7 +79,7 @@ export default function StatisticsCard({ data }: StatisticsCardProps) {
               >
                 <p className={`text-sm uppercase font-semibold mb-1 ${colors.text}`}>{stat.label}</p>
                 <h3 className={`text-3xl font-bold mb-1 ${colors.text}`}>
-                  {stat.value.toLocaleString()}
+                  {stat.value?.toLocaleString() || '0'}
                 </h3>
                 {stat.match && (
                   <div className="mt-2 flex items-center">
