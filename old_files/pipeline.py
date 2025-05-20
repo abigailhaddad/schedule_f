@@ -149,6 +149,9 @@ def main():
                         help='Limit number of comments to fetch')
     parser.add_argument('--no-attachments', action='store_true',
                         help='Do not download and extract text from attachments')
+    parser.add_argument('--start-page', type=int, default=1,
+                    help='Start page number for fetching comments (default: 1)')
+
     
     # Analysis parameters
     parser.add_argument('--top-n', type=int, default=None, 
@@ -168,12 +171,14 @@ def main():
     
     # Extract parameters
     fetch_params = {
-        'document_id': args.document_id,
-        'limit': args.limit,
-        'api_key': args.regs_api_key,
-        'download_attachments': not args.no_attachments,
-        'resume': args.resume
-    }
+    'document_id': args.document_id,
+    'limit': args.limit,
+    'api_key': args.regs_api_key,
+    'download_attachments': not args.no_attachments,
+    'resume': args.resume,
+    'start_page': args.start_page,
+}
+
     
     analyze_params = {
         'top_n': args.top_n,
