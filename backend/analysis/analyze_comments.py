@@ -130,189 +130,154 @@ Analyze objectively and avoid inserting personal opinions or biases."""
         except Exception as e:
             print(f"Error analyzing comment{identifier}: {str(e)}")
             raise
+# --- Add these new functions to analyze_comments.py ---
 
-def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-mini", api_key=None, resume=False):
-    """
-    Analyze comments from JSON file and save structured results with robust error handling.
-    
-    Args:
-        input_file: Path to the JSON file containing comments to analyze
-        output_file: Path to save analyzed results (default: generates timestamped file)
-        top_n: Optional limit on number of comments to process
-        model: Model to use for analysis
-        api_key: API key to use for LiteLLM calls (if not in environment)
-        resume: Whether to resume from a previous checkpoint if available
-    
-    Returns:
-        Path to the final results file
-    """
-    # Set API key in environment if provided
-    if api_key:
-        os.environ["OPENAI_API_KEY"] = api_key
-    
-    # Load the input JSON file
-    print(f"Loading comments from {input_file}...")
-    with open(input_file, 'r', encoding='utf-8') as f:
-        comments_data = json.load(f)
-    
-    print(f"Found {len(comments_data)} comments in the file")
-    
-    # Limit the number of comments if specified
-    if top_n and top_n < len(comments_data):
-        print(f"Limiting analysis to first {top_n} comments as requested")
-        comments_data = comments_data[:top_n]
-    
-    # Determine where to save the results
-    if output_file is None:
-        # Check if input file is in a results directory
-        input_dir = os.path.dirname(input_file)
-        if os.path.basename(input_dir).startswith("results_") and os.path.basename(input_file) == "raw_data.json":
-            # If called by pipeline or standalone on raw_data.json, save to the same directory
-            output_file = os.path.join(input_dir, "data.json")
+def extract_comment_text(comment_data):
+    """Extract text and metadata from a comment."""
+    if isinstance(comment_data, dict) and 'id' in comment_data:
+        comment_id = comment_data['id']
+        
+        # Check if comment text is directly accessible or in an attributes property
+        if 'attributes' in comment_data and isinstance(comment_data['attributes'], dict):
+            comment_text = strip_html_tags(comment_data['attributes'].get('comment', ''))
+            title = comment_data['attributes'].get('title', '')
+            category = comment_data['attributes'].get('category', '')
+            
+            # Look for attachment texts
+            attachment_texts = comment_data['attributes'].get('attachment_texts', [])
+            
+            # Add attachment text if available
+            if attachment_texts:
+                for attachment in attachment_texts:
+                    attachment_text = strip_html_tags(attachment.get('text', ''))
+                    if attachment_text:
+                        comment_text += f"\n\n[ATTACHMENT: {attachment.get('title', 'Untitled')}]\n"
+                        comment_text += attachment_text
         else:
-            # Default behavior: create a timestamped file in analyzed_comments directory
-            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            output_dir = os.path.join(project_root, 'data', 'processed')
-            os.makedirs(output_dir, exist_ok=True)
-            timestamp = time.strftime("%Y%m%d_%H%M%S")
-            output_file = os.path.join(output_dir, f"comment_analysis_{timestamp}.json")
+            comment_text = strip_html_tags(comment_data.get('comment', ''))
+            title = comment_data.get('title', '')
+            category = comment_data.get('category', '')
+            attachment_texts = []
+        
+        return {
+            'id': comment_id,
+            'text': comment_text,
+            'title': title,
+            'category': category,
+            'has_attachments': bool(attachment_texts)
+        }
+    return None
+
+def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
+    """Process a single comment and return its analysis result."""
+    # Extract comment data
+    extracted = extract_comment_text(comment_data)
+    if not extracted:
+        return None
     
-    output_dir = os.path.dirname(output_file)
-    os.makedirs(output_dir, exist_ok=True)
+    comment_id = extracted['id']
+    comment_text = extracted['text']
+    title = extracted['title']
+    category = extracted['category']
     
-    # Setup checkpoint file
-    checkpoint_file = os.path.join(output_dir, "analyze_checkpoint.json")
+    # Skip if already processed (check in temp directory)
+    result_file = os.path.join(temp_dir, f"{comment_id}.json")
+    if os.path.exists(result_file):
+        # Load existing result
+        with open(result_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
     
-    # Create a temp directory for intermediate results
-    timestamp = time.strftime("%Y%m%d_%H%M%S")
-    temp_dir = os.path.join(output_dir, f"temp_{timestamp}")
-    os.makedirs(temp_dir, exist_ok=True)
-    print(f"Saving intermediate results to {temp_dir}")
+    # Analyze the comment
+    retry_delay = 5  # seconds
     
-    # Initialize analyzer
-    analyzer = CommentAnalyzer(model=model)
-    
-    # Process comments
-    results = {}
-    error_count = 0
-    already_processed = set()
-    
-    # Check if we should resume from checkpoint
-    if resume and os.path.exists(checkpoint_file):
+    for attempt in range(max_retries):
         try:
-            print(f"Resuming from checkpoint: {checkpoint_file}")
-            with open(checkpoint_file, 'r', encoding='utf-8') as f:
-                checkpoint_data = json.load(f)
-                results = checkpoint_data.get('results', {})
-                already_processed = set(checkpoint_data.get('processed_ids', []))
-                error_count = checkpoint_data.get('error_count', 0)
-                print(f"Loaded {len(results)} results from checkpoint")
-                print(f"Skipping {len(already_processed)} already processed comment IDs")
-        except Exception as e:
-            print(f"Error loading checkpoint, starting from beginning: {e}")
-            results = {}
-            already_processed = set()
-            error_count = 0
-    
-    # Filter comments to process
-    comments_to_process = [c for c in comments_data if c.get('id') not in already_processed]
-    print(f"Processing {len(comments_to_process)} of {len(comments_data)} comments")
-    
-    with tqdm(total=len(comments_to_process), desc="Analyzing comments") as pbar:
-        for comment_data in comments_to_process:
-            # Handle possible different formats in raw_data.json
-            if isinstance(comment_data, dict) and 'id' in comment_data:
-                comment_id = comment_data['id']
+            analysis = analyzer.analyze(comment_text, comment_id)
+            
+            # Add metadata
+            result = {
+                "id": comment_id,
+                "title": title,
+                "category": category,
+                "analysis": analysis
+            }
+            
+            # Save individual result to temp directory
+            with open(result_file, 'w', encoding='utf-8') as f:
+                json.dump(result, f, indent=2)
+            
+            return result
                 
-                # Check if comment text is directly accessible or in an attributes property
-                if 'attributes' in comment_data and isinstance(comment_data['attributes'], dict):
-                    comment_text = strip_html_tags(comment_data['attributes'].get('comment', ''))
-                    title = comment_data['attributes'].get('title', '')
-                    category = comment_data['attributes'].get('category', '')
-                else:
-                    comment_text = strip_html_tags(comment_data.get('comment', ''))
-                    title = comment_data.get('title', '')
-                    category = comment_data.get('category', '')
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"Error analyzing {comment_id} (attempt {attempt+1}/{max_retries}): {e}")
+                print(f"Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+                retry_delay *= 2  # Exponential backoff
             else:
-                # Skip invalid comment data
-                pbar.update(1)
-                continue
-            
-            # Skip if already processed (check in temp directory)
-            result_file = os.path.join(temp_dir, f"{comment_id}.json")
-            if os.path.exists(result_file):
-                # Load existing result
-                with open(result_file, 'r', encoding='utf-8') as f:
-                    result = json.load(f)
-                results[comment_id] = result
-                pbar.update(1)
-                continue
-            
-            # Analyze the comment
-            max_retries = 3
-            retry_delay = 10  # seconds
-            
-            for attempt in range(max_retries):
-                try:
-                    analysis = analyzer.analyze(comment_text, comment_id)
-                    
-                    # Add metadata (use the title and category we extracted above)
-                    result = {
-                        "id": comment_id,
-                        "title": title,
-                        "category": category,
-                        "analysis": analysis
+                print(f"Failed to analyze {comment_id} after {max_retries} attempts: {e}")
+                # Add a placeholder result with error information
+                error_result = {
+                    "id": comment_id,
+                    "title": title,
+                    "category": category,
+                    "analysis": {
+                        "status": "error",
+                        "error": str(e)
                     }
-                    
-                    # Save individual result to temp directory
-                    with open(result_file, 'w', encoding='utf-8') as f:
-                        json.dump(result, f, indent=2)
-                    
-                    # Add to results
-                    results[comment_id] = result
-                    break  # Success, exit retry loop
-                    
-                except Exception as e:
-                    if attempt < max_retries - 1:
-                        print(f"Error analyzing {comment_id} (attempt {attempt+1}/{max_retries}): {e}")
-                        print(f"Retrying in {retry_delay} seconds...")
-                        time.sleep(retry_delay)
-                        retry_delay *= 2  # Exponential backoff
-                    else:
-                        print(f"Failed to analyze {comment_id} after {max_retries} attempts: {e}")
-                        error_count += 1
-                        # Add a placeholder result with error information
-                        results[comment_id] = {
-                            "id": comment_id,
-                            "title": title,
-                            "category": category,
-                            "analysis": {
-                                "status": "error",
-                                "error": str(e)
-                            }
-                        }
-                        # Still save the error result
-                        with open(result_file, 'w', encoding='utf-8') as f:
-                            json.dump(results[comment_id], f, indent=2)
-            
-            pbar.update(1)
-            
-            # Save checkpoint every 5 comments
-            if len(results) % 5 == 0:
-                # Update checkpoint with current progress
-                checkpoint_data = {
-                    'results': results,
-                    'processed_ids': list(already_processed),
-                    'error_count': error_count
                 }
-                with open(checkpoint_file, 'w', encoding='utf-8') as f:
-                    json.dump(checkpoint_data, f)
-                pbar.write(f"✅ Checkpoint saved after processing {len(results)} comments")
-            
-            # Optional: Add a small delay between API calls to avoid rate limits
-            time.sleep(0.5)
+                # Still save the error result
+                with open(result_file, 'w', encoding='utf-8') as f:
+                    json.dump(error_result, f, indent=2)
+                return error_result
+
+def process_comments_batch(comments_batch, analyzer, temp_dir):
+    """Process a batch of comments in parallel."""
+    import concurrent.futures
     
-    # Generate a summary of the results
+    results = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_to_comment = {
+            executor.submit(process_single_comment, comment, analyzer, temp_dir): comment
+            for comment in comments_batch
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_comment):
+            result = future.result()
+            if result:
+                results.append(result)
+    
+    return results
+
+def save_checkpoint(results, processed_ids, error_count, checkpoint_file):
+    """Save progress to a checkpoint file."""
+    checkpoint_data = {
+        'results': results,
+        'processed_ids': list(processed_ids),
+        'error_count': error_count
+    }
+    with open(checkpoint_file, 'w', encoding='utf-8') as f:
+        json.dump(checkpoint_data, f)
+    print(f"✅ Checkpoint saved with {len(results)} processed comments")
+
+def load_checkpoint(checkpoint_file):
+    """Load progress from a checkpoint file."""
+    try:
+        print(f"Resuming from checkpoint: {checkpoint_file}")
+        with open(checkpoint_file, 'r', encoding='utf-8') as f:
+            checkpoint_data = json.load(f)
+            results = checkpoint_data.get('results', {})
+            already_processed = set(checkpoint_data.get('processed_ids', []))
+            error_count = checkpoint_data.get('error_count', 0)
+            print(f"Loaded {len(results)} results from checkpoint")
+            print(f"Skipping {len(already_processed)} already processed comment IDs")
+            return results, already_processed, error_count
+    except Exception as e:
+        print(f"Error loading checkpoint, starting from beginning: {e}")
+        return {}, set(), 0
+
+def generate_summary(results, comments_data):
+    """Generate summary statistics from analysis results."""
     successful_analyses = sum(1 for v in results.values() if "status" not in v.get("analysis", {}))
     
     # Initialize counters with zero values to handle empty cases
@@ -345,13 +310,16 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
     summary = {
         "total_comments": len(comments_data),
         "successfully_analyzed": successful_analyses,
-        "error_count": error_count,
+        "error_count": len(results) - successful_analyses,
         "completion_rate": round(successful_analyses / len(comments_data) * 100, 1) if len(comments_data) > 0 else 0,
         "stance_distribution": stance_distribution,
         "theme_occurrences": theme_occurrences
     }
     
-    # Build a lookup dictionary for original comment text and links
+    return summary
+
+def build_comment_lookup(comments_data):
+    """Build a lookup of original comment text and metadata."""
     original_comments = {}
     for comment_data in comments_data:
         if isinstance(comment_data, dict) and 'id' in comment_data:
@@ -389,7 +357,10 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
                     'has_attachments': bool(attachment_texts)
                 }
     
-    # Convert to flat format - a list of dictionaries
+    return original_comments
+
+def format_results_for_output(results, original_comments):
+    """Format results into a flat structure for output."""
     flat_results = []
     
     for comment_id, result in results.items():
@@ -437,25 +408,11 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
                 
             flat_results.append(flat_item)
     
-    # Generate output filename if not provided
-    if not output_file:
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        output_dir = os.path.join(project_root, 'data', 'processed')
-        timestamp = time.strftime("%Y%m%d_%H%M%S")
-        output_file = os.path.join(output_dir, f"comment_analysis_{timestamp}.json")
-    
-    # Save the flat results
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(flat_results, f, indent=2)
-    
-    # Create a separate summary file for reference
-    summary_file = os.path.join(os.path.dirname(output_file), "summary.json")
-    with open(summary_file, 'w', encoding='utf-8') as f:
-        json.dump(summary, f, indent=2)
-    
-    print(f"\nAnalysis complete! Results saved to: {output_file}")
-    print(f"Summary stats saved to: {summary_file}")
-    print("\n===== Summary =====")
+    return flat_results
+
+def print_summary(summary):
+    """Print a human-readable summary of analysis results."""
+    print(f"\n===== Summary =====")
     print(f"Total comments: {summary['total_comments']}")
     print(f"Successfully analyzed: {summary['successfully_analyzed']} ({summary['completion_rate']}%)")
     print(f"Errors: {summary['error_count']}")
@@ -469,17 +426,133 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
     for theme, count in summary['theme_occurrences'].items():
         percentage = round(count / summary['successfully_analyzed'] * 100, 1) if summary['successfully_analyzed'] > 0 else 0
         print(f"  {theme}: {count} ({percentage}%)")
+
+
+def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-mini", 
+                  api_key=None, resume=False, batch_size=10, no_delay=True):
+    """
+    Analyze comments from JSON file and save structured results with parallel processing.
     
-    print("\nTop quotes by stance:")
-    for stance in [Stance.FOR.value, Stance.AGAINST.value, Stance.NEUTRAL.value]:
-        stance_comments = [r for r in results.values() 
-                         if "status" not in r.get("analysis", {}) 
-                         and r.get("analysis", {}).get("stance") == stance]
-        if stance_comments:
-            print(f"\n{stance} (sample quote):")
-            # Get a representative quote
-            sample = stance_comments[min(2, len(stance_comments)-1)]  # Skip the first entry to get more variety
-            print(f"  \"{sample['analysis']['key_quote']}\"")
+    Args:
+        input_file: Path to the JSON file containing comments to analyze
+        output_file: Path to save analyzed results (default: generates timestamped file)
+        top_n: Optional limit on number of comments to process
+        model: Model to use for analysis
+        api_key: API key to use for LiteLLM calls (if not in environment)
+        resume: Whether to resume from a previous checkpoint if available
+        batch_size: Number of comments to process in parallel (default: 10)
+        no_delay: If True, removes artificial delays between API calls (default: True)
+    
+    Returns:
+        Path to the final results file
+    """
+    # Set API key in environment if provided
+    if api_key:
+        os.environ["OPENAI_API_KEY"] = api_key
+    
+    # Load the input JSON file
+    print(f"Loading comments from {input_file}...")
+    with open(input_file, 'r', encoding='utf-8') as f:
+        comments_data = json.load(f)
+    
+    print(f"Found {len(comments_data)} comments in the file")
+    
+    # Limit the number of comments if specified
+    if top_n and top_n < len(comments_data):
+        print(f"Limiting analysis to first {top_n} comments as requested")
+        comments_data = comments_data[:top_n]
+    
+    # Determine where to save the results
+    if output_file is None:
+        # Check if input file is in a results directory
+        input_dir = os.path.dirname(input_file)
+        if os.path.basename(input_dir).startswith("results_") and os.path.basename(input_file) == "raw_data.json":
+            # If called by pipeline or standalone on raw_data.json, save to the same directory
+            output_file = os.path.join(input_dir, "data.json")
+        else:
+            # Default behavior: create a timestamped file in analyzed_comments directory
+            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            output_dir = os.path.join(project_root, 'results', 'processed')
+            os.makedirs(output_dir, exist_ok=True)
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            output_file = os.path.join(output_dir, f"comment_analysis_{timestamp}.json")
+    
+    output_dir = os.path.dirname(output_file)
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Setup checkpoint file
+    checkpoint_file = os.path.join(output_dir, "analyze_checkpoint.json")
+    
+    # Create a temp directory for intermediate results
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    temp_dir = os.path.join(output_dir, f"temp_{timestamp}")
+    os.makedirs(temp_dir, exist_ok=True)
+    print(f"Saving intermediate results to {temp_dir}")
+    
+    # Initialize analyzer
+    analyzer = CommentAnalyzer(model=model)
+    
+    # Initialize or load from checkpoint
+    if resume and os.path.exists(checkpoint_file):
+        results, already_processed, error_count = load_checkpoint(checkpoint_file)
+    else:
+        results = {}
+        already_processed = set()
+        error_count = 0
+    
+    # Filter comments to process
+    comments_to_process = [c for c in comments_data if c.get('id') not in already_processed]
+    print(f"Processing {len(comments_to_process)} of {len(comments_data)} comments")
+    
+    # Process in batches with progress bar
+    with tqdm(total=len(comments_to_process), desc="Analyzing comments") as pbar:
+        for i in range(0, len(comments_to_process), batch_size):
+            # Get current batch
+            batch = comments_to_process[i:i+batch_size]
+            
+            # Process batch in parallel
+            batch_results = process_comments_batch(batch, analyzer, temp_dir)
+            
+            # Update results dictionary and progress tracking
+            for result in batch_results:
+                if result:
+                    results[result['id']] = result
+                    already_processed.add(result['id'])
+                    if "status" in result.get("analysis", {}) and result["analysis"]["status"] == "error":
+                        error_count += 1
+            
+            pbar.update(len(batch))
+            
+            # Save checkpoint after each batch
+            save_checkpoint(results, already_processed, error_count, checkpoint_file)
+            
+            # Optional delay between batches
+            if not no_delay:
+                time.sleep(0.5)
+    
+    # Build lookup of original comment text and metadata
+    original_comments = build_comment_lookup(comments_data)
+    
+    # Generate summary statistics
+    summary = generate_summary(results, comments_data)
+    
+    # Format results for output
+    flat_results = format_results_for_output(results, original_comments)
+    
+    # Save the flat results
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(flat_results, f, indent=2)
+    
+    # Create a separate summary file for reference
+    summary_file = os.path.join(os.path.dirname(output_file), "summary.json")
+    with open(summary_file, 'w', encoding='utf-8') as f:
+        json.dump(summary, f, indent=2)
+    
+    print(f"\nAnalysis complete! Results saved to: {output_file}")
+    print(f"Summary stats saved to: {summary_file}")
+    
+    # Print summary to console
+    print_summary(summary)
     
     # Clean up the checkpoint file when analysis is successfully completed
     try:
@@ -506,6 +579,10 @@ def main():
                         help='API key to use for LiteLLM calls (if not in environment)')
     parser.add_argument('--resume', action='store_true',
                         help='Resume from checkpoint if available')
+    parser.add_argument('--batch_size', type=int, default=10,
+                        help='Number of comments to process in parallel (default: 10)')
+    parser.add_argument('--no_delay', action='store_true', default=True,
+                        help='Remove artificial delays between API calls (default: True)')
     args = parser.parse_args()
     
     # Auto-detect most recent raw_data.json if no input file specified
@@ -513,7 +590,7 @@ def main():
     if input_file is None:
         # Find most recent results directory
         project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        results_base = os.path.join(project_root, "data", "results")
+        results_base = os.path.join(project_root, "results")
         if os.path.exists(results_base):
             # Find the most recent results directory with raw_data.json
             result_dirs = glob.glob(os.path.join(results_base, "results_*"))
@@ -527,10 +604,18 @@ def main():
                         print(f"Auto-detected most recent raw_data.json: {input_file}")
                         break
         
-        # Fallback to comments.json if no results directory found
+        # Fallback to checking for comments.csv in the root directory
         if input_file is None:
-            input_file = os.path.join(project_root, 'data', 'raw', 'comments.json')
-            print(f"No results directory found, using default: {input_file}")
+            csv_file = os.path.join(project_root, 'comments.csv')
+            if os.path.exists(csv_file):
+                print(f"No results directory found, but found comments.csv in root directory.")
+                print(f"Please run the pipeline with --csv_file parameter or use run_pipeline_safe.sh")
+                input_file = None
+            else:
+                # Last resort - check for comments.json
+                input_file = os.path.join(project_root, 'comments.json')
+                if not os.path.exists(input_file):
+                    input_file = None
     
     # Check if input file exists
     if not os.path.exists(input_file):
@@ -541,6 +626,8 @@ def main():
     print(f"Starting analysis of '{input_file}' using model '{args.model}'")
     if args.top_n:
         print(f"Processing only the first {args.top_n} comments")
+    if args.batch_size > 1:
+        print(f"Using parallel processing with batch size of {args.batch_size}")
     
     analyze_comments(
         input_file=input_file,
@@ -548,26 +635,7 @@ def main():
         top_n=args.top_n,
         model=args.model,
         api_key=args.api_key,
-        resume=args.resume
+        resume=args.resume,
+        batch_size=args.batch_size,
+        no_delay=args.no_delay
     )
-
-if __name__ == "__main__":
-    try:
-        # Check for API key
-        if "OPENAI_API_KEY" not in os.environ:
-            # Try loading from .env file first
-            if os.path.exists('.env'):
-                load_dotenv()
-            
-            # If still not available, prompt user
-            if "OPENAI_API_KEY" not in os.environ:
-                print("Warning: OPENAI_API_KEY not found in environment variables or .env file.")
-                print("You will be prompted to enter it as a parameter or create a .env file.")
-        
-        main()
-    except KeyboardInterrupt:
-        print("\nAnalysis interrupted by user. Partial results may have been saved.")
-    except Exception as e:
-        print(f"\nError during analysis: {str(e)}")
-        import traceback
-        traceback.print_exc() 
