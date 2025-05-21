@@ -41,7 +41,6 @@ export default function ServerStatisticsCard() {
         <h5 className="text-lg font-bold text-white flex items-center">
           <span className="mr-2">📊</span>
           Statistics Overview
-          {loading && <span className="ml-2 text-xs opacity-80">(updating...)</span>}
         </h5>
       </div>
       <div className="p-6" id="statistics">
@@ -51,7 +50,7 @@ export default function ServerStatisticsCard() {
             return (
               <div 
                 key={stat.key} 
-                className={`p-4 rounded-lg border shadow-sm ${colors.bg} ${colors.border} ${loading ? 'opacity-75' : ''}`}
+                className={`p-4 rounded-lg border shadow-sm ${colors.bg} ${colors.border}`}
               >
                 <p className={`text-sm uppercase font-semibold mb-1 ${colors.text}`}>{stat.label}</p>
                 <h3 className={`text-3xl font-bold mb-1 ${colors.text}`}>
