@@ -52,6 +52,9 @@ def analyze_attachment_extraction(results_dir):
                     total_attachments += 1
 
     # Track text extraction success
+    files_with_minimal_text = []  # List to store files with failed or minimal text extraction
+    MIN_TEXT_LENGTH = 50  # Threshold for minimal text (less than 50 characters)
+    
     for item in data:
         if 'attributes' in item and 'attachment_texts' in item['attributes']:
             for att in item['attributes'].get('attachment_texts', []):
@@ -59,12 +62,21 @@ def analyze_attachment_extraction(results_dir):
                     path = att['file_path']
                     ext = path.split('.')[-1].lower() if '.' in path else 'unknown'
                     text = att.get('text', '')
-                    has_text = text and len(text.strip()) > 20  # More than 20 chars is considered successful
+                    text_length = len(text.strip()) if text else 0
+                    has_text = text and text_length > 20  # More than 20 chars is considered successful
                     
                     extracted_by_type[ext]['total'] += 1
                     if has_text:
                         extracted_by_type[ext]['with_text'] += 1
-                        extracted_by_type[ext]['text_length'] += len(text)
+                        extracted_by_type[ext]['text_length'] += text_length
+                    
+                    # Check if text extraction failed or was minimal
+                    if text_length < MIN_TEXT_LENGTH:
+                        files_with_minimal_text.append({
+                            'path': path,
+                            'length': text_length,
+                            'ext': ext
+                        })
     
     # Print results
     print("\n=== ATTACHMENT FILE TYPES FOUND ===")
@@ -79,9 +91,18 @@ def analyze_attachment_extraction(results_dir):
             avg_length = int(stats['text_length'] / stats['with_text']) if stats['with_text'] > 0 else 0
             print(f"{ext}: {stats['with_text']}/{stats['total']} ({success_rate:.1f}%) - Avg length: {avg_length} chars")
     
+    # Print files with failed or minimal text extraction
+    print(f"\n=== FILES WITH FAILED OR MINIMAL TEXT EXTRACTION (< {MIN_TEXT_LENGTH} chars) ===")
+    print(f"Total files with minimal or no text: {len(files_with_minimal_text)}")
+    
+    # Sort by file extension and then by text length
+    for file_info in sorted(files_with_minimal_text, key=lambda x: (x['ext'], x['length'])):
+        print(f"{file_info['ext']}: {file_info['path']} ({file_info['length']} chars)")
+    
     return {
         'file_types': dict(file_types),
-        'extraction_stats': {k: dict(v) for k, v in extracted_by_type.items()}
+        'extraction_stats': {k: dict(v) for k, v in extracted_by_type.items()},
+        'files_with_minimal_text': files_with_minimal_text
     }
 
 
