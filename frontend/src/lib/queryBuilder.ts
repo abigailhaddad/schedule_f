@@ -1,7 +1,8 @@
 'use server';
 
-import { SQL, sql } from 'drizzle-orm';
+import { and, or, SQL, sql } from 'drizzle-orm';
 import { comments, stanceEnum } from './db/schema';
+import { db } from './db';
 
 export type FilterMode = 'exact' | 'includes' | 'at_least';
 export type SortDirection = 'asc' | 'desc';
@@ -26,425 +27,322 @@ export interface QueryOptions {
 }
 
 /**
- * Builds a SQL query for the comments table based on provided filters and options
+ * Gets the corresponding column from the comments table
  */
-export async function buildCommentsQuery(options: QueryOptions): Promise<{
-  query: SQL;
-  countQuery: SQL;
-  params: Record<string, unknown>;
-}> {
-  const params: Record<string, unknown> = {};
-  const whereClause = sql.empty();
-  let whereConditionsCount = 0;
+function getColumn(key: string) {
+  if (key in comments) {
+    return comments[key as keyof typeof comments];
+  }
+  return null;
+}
 
-  // Process filters
-  if (options.filters) {
-    Object.entries(options.filters).forEach(([key, value]) => {
-      if (value === undefined || value === null || value === '') {
-        return;
-      }
+/**
+ * Builds filter conditions for the query
+ */
+function buildFilterConditions(filters?: Record<string, unknown>): SQL[] {
+  const conditions: SQL[] = [];
+  
+  if (!filters) return conditions;
+  
+  // Process each filter
+  for (const [key, value] of Object.entries(filters)) {
+    if (value === undefined || value === null || value === '') {
+      continue;
+    }
 
-      // Get the column from the comments table
-      const column = comments[key as keyof typeof comments];
-      if (!column) return;
+    // Get the column from the comments table
+    const column = getColumn(key);
+    if (!column) continue;
 
-      // Handle different filter types
-      if (value && typeof value === 'object' && 'values' in value && Array.isArray(value.values)) {
-        // Handle filter objects with values and mode
-        const filterValue = value as FilterValue;
-        
-        if (filterValue.values.length === 0) return;
-        
-        if (key === 'stance') {
-          // Special handling for stance enum in complex filters
-          if (filterValue.mode === 'at_least') {
-            // For "must include all" mode - requires all conditions to be true
-            const conditions = filterValue.values.map((stanceValue) => {
-              if (stanceValue === 'For') {
-                return sql`${column} = ${stanceEnum.enumValues[0]}`;
-              } else if (stanceValue === 'Against') {
-                return sql`${column} = ${stanceEnum.enumValues[1]}`;
-              } else if (stanceValue === 'Neutral/Unclear') {
-                return sql`${column} = ${stanceEnum.enumValues[2]}`;
-              }
-              return sql`1=0`; // Default to false condition for unknown values
-            });
-            
-            if (conditions.length > 0) {
-              const andCondition = sql.join(conditions, sql` AND `);
-              
-              if (whereConditionsCount > 0) {
-                whereClause.append(sql` AND (`);
-                whereClause.append(andCondition);
-                whereClause.append(sql`)`);
-              } else {
-                whereClause.append(sql` WHERE (`);
-                whereClause.append(andCondition);
-                whereClause.append(sql`)`);
-                whereConditionsCount++;
-              }
+    // Handle different filter types
+    if (value && typeof value === 'object' && 'values' in value && Array.isArray(value.values)) {
+      // Filter objects with values and mode
+      const filterValue = value as FilterValue;
+      
+      if (filterValue.values.length === 0) continue;
+      
+      if (key === 'stance') {
+        // Special handling for stance enum
+        if (filterValue.mode === 'at_least') {
+          // Add each condition individually for "must include all" mode
+          filterValue.values.forEach(stanceValue => {
+            if (stanceValue === 'For') {
+              conditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
+            } else if (stanceValue === 'Against') {
+              conditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
+            } else if (stanceValue === 'Neutral/Unclear') {
+              conditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
             }
-          } 
-          else if (filterValue.mode === 'exact') {
-            if (filterValue.values.length === 1) {
-              const stanceValue = filterValue.values[0];
-              if (stanceValue === 'For') {
-                if (whereConditionsCount > 0) {
-                  whereClause.append(sql` AND ${column} = ${stanceEnum.enumValues[0]}`);
-                } else {
-                  whereClause.append(sql` WHERE ${column} = ${stanceEnum.enumValues[0]}`);
-                  whereConditionsCount++;
-                }
-              } else if (stanceValue === 'Against') {
-                if (whereConditionsCount > 0) {
-                  whereClause.append(sql` AND ${column} = ${stanceEnum.enumValues[1]}`);
-                } else {
-                  whereClause.append(sql` WHERE ${column} = ${stanceEnum.enumValues[1]}`);
-                  whereConditionsCount++;
-                }
-              } else if (stanceValue === 'Neutral/Unclear') {
-                if (whereConditionsCount > 0) {
-                  whereClause.append(sql` AND ${column} = ${stanceEnum.enumValues[2]}`);
-                } else {
-                  whereClause.append(sql` WHERE ${column} = ${stanceEnum.enumValues[2]}`);
-                  whereConditionsCount++;
-                }
-              }
-            }
-          } 
-          else {
-            // For includes mode (default) - any match is sufficient
-            const stanceConditions = filterValue.values.map((stanceValue) => {
-              if (stanceValue === 'For') {
-                return sql`${column} = ${stanceEnum.enumValues[0]}`;
-              } else if (stanceValue === 'Against') {
-                return sql`${column} = ${stanceEnum.enumValues[1]}`;
-              } else if (stanceValue === 'Neutral/Unclear') {
-                return sql`${column} = ${stanceEnum.enumValues[2]}`;
-              }
-              return sql`1=0`; // Default to false condition for unknown values
-            });
-            
-            if (stanceConditions.length > 0) {
-              const orCondition = sql.join(stanceConditions, sql` OR `);
-              
-              if (whereConditionsCount > 0) {
-                whereClause.append(sql` AND (`);
-                whereClause.append(orCondition);
-                whereClause.append(sql`)`);
-              } else {
-                whereClause.append(sql` WHERE (`);
-                whereClause.append(orCondition);
-                whereClause.append(sql`)`);
-                whereConditionsCount++;
-              }
-            }
-          }
-        } 
-        else if (filterValue.mode === 'at_least') {
-          // For "must include all" mode - requires all conditions to be true
-          const conditions = filterValue.values.map((val, index) => {
-            const paramName = `${key}_${index}`;
-            params[paramName] = `%${val}%`;
-            return sql`${column} LIKE ${sql.param(paramName)}`;
           });
-          
-          if (conditions.length > 0) {
-            const andCondition = sql.join(conditions, sql` AND `);
-            
-            if (whereConditionsCount > 0) {
-              whereClause.append(sql` AND (`);
-              whereClause.append(andCondition);
-              whereClause.append(sql`)`);
-            } else {
-              whereClause.append(sql` WHERE (`);
-              whereClause.append(andCondition);
-              whereClause.append(sql`)`);
-              whereConditionsCount++;
-            }
-          }
         } 
-        else if (filterValue.mode === 'exact') {
-          // For exact match mode
-          const exactValue = filterValue.values.join(',');
-          params[key] = exactValue;
-          
-          if (whereConditionsCount > 0) {
-            whereClause.append(sql` AND ${column} = ${sql.param(key)}`);
-          } else {
-            whereClause.append(sql` WHERE ${column} = ${sql.param(key)}`);
-            whereConditionsCount++;
+        else if (filterValue.mode === 'exact' && filterValue.values.length === 1) {
+          const stanceValue = filterValue.values[0];
+          if (stanceValue === 'For') {
+            conditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
+          } else if (stanceValue === 'Against') {
+            conditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
+          } else if (stanceValue === 'Neutral/Unclear') {
+            conditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
           }
         } 
         else {
-          // For includes mode (default) - any match is sufficient
-          const orConditions = filterValue.values.map((val, index) => {
-            const paramName = `${key}_${index}`;
-            params[paramName] = `%${val}%`;
-            return sql`${column} LIKE ${sql.param(paramName)}`;
-          });
+          // "includes" mode - any match is sufficient
+          const stanceConditions: SQL[] = [];
           
-          if (orConditions.length > 0) {
-            const orCondition = sql.join(orConditions, sql` OR `);
-            
-            if (whereConditionsCount > 0) {
-              whereClause.append(sql` AND (`);
-              whereClause.append(orCondition);
-              whereClause.append(sql`)`);
-            } else {
-              whereClause.append(sql` WHERE (`);
-              whereClause.append(orCondition);
-              whereClause.append(sql`)`);
-              whereConditionsCount++;
-            }
-          }
-        }
-      }
-      else if (Array.isArray(value)) {
-        // Handle array filters
-        if (value.length === 0) return;
-        
-        if (key === 'themes') {
-          // For themes field (which is a comma-separated string in the database)
-          const orConditions = value.map((theme, index) => {
-            const paramName = `${key}_${index}`;
-            params[paramName] = `%${theme}%`;
-            return sql`${column} LIKE ${sql.param(paramName)}`;
-          });
-          
-          if (orConditions.length > 0) {
-            const orCondition = sql.join(orConditions, sql` OR `);
-            
-            if (whereConditionsCount > 0) {
-              whereClause.append(sql` AND (`);
-              whereClause.append(orCondition);
-              whereClause.append(sql`)`);
-            } else {
-              whereClause.append(sql` WHERE (`);
-              whereClause.append(orCondition);
-              whereClause.append(sql`)`);
-              whereConditionsCount++;
-            }
-          }
-        } else if (key === 'stance') {
-          // Special handling for stance enum in array
-          const stanceConditions = value.map((stanceValue) => {
+          filterValue.values.forEach(stanceValue => {
             if (stanceValue === 'For') {
-              return sql`${column} = ${stanceEnum.enumValues[0]}`;
+              stanceConditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
             } else if (stanceValue === 'Against') {
-              return sql`${column} = ${stanceEnum.enumValues[1]}`;
+              stanceConditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
             } else if (stanceValue === 'Neutral/Unclear') {
-              return sql`${column} = ${stanceEnum.enumValues[2]}`;
+              stanceConditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
             }
-            return sql`1=0`; // Default to false condition for unknown values
           });
           
           if (stanceConditions.length > 0) {
-            const orCondition = sql.join(stanceConditions, sql` OR `);
-            
-            if (whereConditionsCount > 0) {
-              whereClause.append(sql` AND (`);
-              whereClause.append(orCondition);
-              whereClause.append(sql`)`);
-            } else {
-              whereClause.append(sql` WHERE (`);
-              whereClause.append(orCondition);
-              whereClause.append(sql`)`);
-              whereConditionsCount++;
-            }
-          }
-        } else {
-          // For regular array filters, use IN clause with string parameters
-          const placeholders = value.map((_, index) => {
-            const paramName = `${key}_${index}`;
-            params[paramName] = value[index];
-            return sql`${sql.param(paramName)}`;
-          });
-          
-          if (placeholders.length > 0) {
-            const inListSql = sql.join(placeholders, sql`, `);
-            
-            if (whereConditionsCount > 0) {
-              whereClause.append(sql` AND ${column} IN (`);
-              whereClause.append(inListSql);
-              whereClause.append(sql`)`);
-            } else {
-              whereClause.append(sql` WHERE ${column} IN (`);
-              whereClause.append(inListSql);
-              whereClause.append(sql`)`);
-              whereConditionsCount++;
-            }
+            conditions.push(sql`(${or(...stanceConditions)})`);
           }
         }
-      }
+      } 
+      else if (filterValue.mode === 'at_least') {
+        // For "must include all" mode - add each condition
+        filterValue.values.forEach(val => {
+          conditions.push(sql`${column} ILIKE ${`%${val}%`}`);
+        });
+      } 
+      else if (filterValue.mode === 'exact') {
+        // For exact match mode
+        const exactValue = filterValue.values.join(',');
+        conditions.push(sql`${column} = ${exactValue}`);
+      } 
       else {
-        // Simple equality filter
+        // For "includes" mode - any match is sufficient
+        const likeConditions: SQL[] = [];
         
-        // Special handling for stance enum
-        if (key === 'stance') {
-          if (whereConditionsCount > 0) {
-            if (value === 'For') {
-              whereClause.append(sql` AND ${column} = ${stanceEnum.enumValues[0]}`);
-            } else if (value === 'Against') {
-              whereClause.append(sql` AND ${column} = ${stanceEnum.enumValues[1]}`);
-            } else if (value === 'Neutral/Unclear') {
-              whereClause.append(sql` AND ${column} = ${stanceEnum.enumValues[2]}`);
-            }
-          } else {
-            if (value === 'For') {
-              whereClause.append(sql` WHERE ${column} = ${stanceEnum.enumValues[0]}`);
-            } else if (value === 'Against') {
-              whereClause.append(sql` WHERE ${column} = ${stanceEnum.enumValues[1]}`);
-            } else if (value === 'Neutral/Unclear') {
-              whereClause.append(sql` WHERE ${column} = ${stanceEnum.enumValues[2]}`);
-            }
-            whereConditionsCount++;
-          }
-        } else {
-          // Regular fields
-          params[key] = value;
-          
-          if (whereConditionsCount > 0) {
-            whereClause.append(sql` AND ${column} = ${sql.param(key)}`);
-          } else {
-            whereClause.append(sql` WHERE ${column} = ${sql.param(key)}`);
-            whereConditionsCount++;
-          }
-        }
-      }
-    });
-  }
-
-  // Process search
-  if (options.search && options.search.trim() !== '') {
-    const searchValue = options.search.toLowerCase().trim();
-    params.search = `%${searchValue}%`;
-    
-    // If specific search fields are provided, only search in those
-    if (options.searchFields && options.searchFields.length > 0) {
-      const searchConditions = options.searchFields
-        .map(field => {
-          const column = comments[field as keyof typeof comments];
-          if (!column) return null;
-          return sql`${column} ILIKE ${sql.param('search')}`;
-        })
-        .filter(Boolean);
-      
-      if (searchConditions.length > 0) {
-        const orCondition = sql.join(searchConditions as SQL[], sql` OR `);
+        filterValue.values.forEach(val => {
+          likeConditions.push(sql`${column} ILIKE ${`%${val}%`}`);
+        });
         
-        if (whereConditionsCount > 0) {
-          whereClause.append(sql` AND (`);
-          whereClause.append(orCondition);
-          whereClause.append(sql`)`);
-        } else {
-          whereClause.append(sql` WHERE (`);
-          whereClause.append(orCondition);
-          whereClause.append(sql`)`);
-          whereConditionsCount++;
-        }
-      }
-    } else {
-      // If no specific fields, search in all text columns
-      const textColumns = ['comment', 'title', 'keyQuote', 'themes', 'rationale', 'category'] as const;
-      const searchConditions = textColumns
-        .map(field => sql`${comments[field]} ILIKE ${sql.param('search')}`)
-        .filter(Boolean);
-      
-      if (searchConditions.length > 0) {
-        const orCondition = sql.join(searchConditions, sql` OR `);
-        
-        if (whereConditionsCount > 0) {
-          whereClause.append(sql` AND (`);
-          whereClause.append(orCondition);
-          whereClause.append(sql`)`);
-        } else {
-          whereClause.append(sql` WHERE (`);
-          whereClause.append(orCondition);
-          whereClause.append(sql`)`);
-          whereConditionsCount++;
+        if (likeConditions.length > 0) {
+          conditions.push(sql`(${or(...likeConditions)})`);
         }
       }
     }
+    else if (Array.isArray(value)) {
+      // Handle array filters
+      if (value.length === 0) continue;
+      
+      if (key === 'themes') {
+        // For themes field (comma-separated string in database)
+        const likeConditions: SQL[] = [];
+        
+        value.forEach(theme => {
+          likeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+        });
+        
+        if (likeConditions.length > 0) {
+          conditions.push(sql`(${or(...likeConditions)})`);
+        }
+      } else if (key === 'stance') {
+        // Special handling for stance enum in array
+        const stanceValues = value
+          .map(stanceValue => {
+            if (stanceValue === 'For') return stanceEnum.enumValues[0];
+            if (stanceValue === 'Against') return stanceEnum.enumValues[1];
+            if (stanceValue === 'Neutral/Unclear') return stanceEnum.enumValues[2];
+            return null;
+          })
+          .filter(Boolean);
+        
+        if (stanceValues.length > 0) {
+          conditions.push(sql`${column} IN (${stanceValues})`);
+        }
+      } else {
+        // For regular array filters, use IN clause
+        conditions.push(sql`${column} IN (${value})`);
+      }
+    }
+    else {
+      // Simple equality filter
+      if (key === 'stance') {
+        if (value === 'For') {
+          conditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
+        } else if (value === 'Against') {
+          conditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
+        } else if (value === 'Neutral/Unclear') {
+          conditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
+        }
+      } else {
+        // Regular fields
+        conditions.push(sql`${column} = ${value}`);
+      }
+    }
   }
+  
+  return conditions;
+}
 
-  // Build the base queries
-  const query = sql`SELECT * FROM ${comments}`;
-  const countQuery = sql`SELECT COUNT(*) FROM ${comments}`;
+/**
+ * Builds search conditions for the query
+ */
+function buildSearchConditions(search?: string, searchFields?: string[]): SQL[] {
+  if (!search || search.trim() === '') {
+    return [];
+  }
+  
+  const searchValue = search.toLowerCase().trim();
+  
+  // If specific search fields are provided, only search in those
+  if (searchFields && searchFields.length > 0) {
+    const searchConditions: SQL[] = [];
+    
+    searchFields.forEach(field => {
+      const column = getColumn(field);
+      if (column) {
+        searchConditions.push(sql`${column} ILIKE ${`%${searchValue}%`}`);
+      }
+    });
+    
+    if (searchConditions.length > 0) {
+      return [sql`(${or(...searchConditions)})`];
+    }
+  } else {
+    // If no specific fields, search in all text columns
+    const textColumns = ['comment', 'title', 'keyQuote', 'themes', 'rationale', 'category'] as const;
+    const searchConditions: SQL[] = [];
+    
+    textColumns.forEach(field => {
+      const column = getColumn(field);
+      if (column) {
+        searchConditions.push(sql`${column} ILIKE ${`%${searchValue}%`}`);
+      }
+    });
+    
+    if (searchConditions.length > 0) {
+      return [sql`(${or(...searchConditions)})`];
+    }
+  }
+  
+  return [];
+}
+
+/**
+ * Builds a query for the comments table based on provided filters and options
+ */
+export async function buildCommentsQuery(options: QueryOptions) {
+  // Build filter conditions
+  const filterConditions = buildFilterConditions(options.filters);
+  
+  // Build search conditions
+  const searchConditions = buildSearchConditions(options.search, options.searchFields);
+  
+  // Combine all conditions
+  const allConditions = [...filterConditions, ...searchConditions];
+  
+  // Create base query
+  const baseQuery = db.select().from(comments);
+  
+  // Create dynamic query for adding conditions
+  const query = baseQuery.$dynamic();
   
   // Add where clause if there are conditions
-  if (whereConditionsCount > 0) {
-    query.append(whereClause);
-    countQuery.append(whereClause);
+  if (allConditions.length > 0) {
+    query.where(and(...allConditions));
   }
   
-  // Build sorting
+  // Add sorting
   if (options.sort) {
     const { column, direction } = options.sort;
-    const sortColumn = comments[column as keyof typeof comments];
+    const sortColumn = getColumn(column);
     
     if (sortColumn) {
       if (direction === 'asc') {
-        query.append(sql` ORDER BY ${sortColumn} ASC`);
+        query.orderBy(sql`${sortColumn} asc`);
       } else {
-        query.append(sql` ORDER BY ${sortColumn} DESC`);
+        query.orderBy(sql`${sortColumn} desc`);
       }
     }
   } else {
     // Default sorting
-    query.append(sql` ORDER BY ${comments.createdAt} DESC`);
+    query.orderBy(sql`${comments.createdAt} desc`);
   }
   
   // Add pagination
   if (options.page !== undefined && options.pageSize !== undefined) {
     const offset = (options.page - 1) * options.pageSize;
-    
-    // Use direct integer values instead of named parameters
-    query.append(sql` LIMIT ${options.pageSize} OFFSET ${offset}`);
+    query.limit(options.pageSize).offset(offset);
   }
-
-  return { query, countQuery, params };
+  
+  // Create count query
+  const countBaseQuery = db.select({ count: sql`count(*)` }).from(comments);
+  const countQuery = countBaseQuery.$dynamic();
+  
+  // Add where clause to count query if there are conditions
+  if (allConditions.length > 0) {
+    countQuery.where(and(...allConditions));
+  }
+  
+  // Log queries for debugging
+  console.log(query.toSQL());
+  console.log(countQuery.toSQL());
+  
+  return { query, countQuery };
 }
 
 /**
- * Builds SQL queries for statistics based on filters
+ * Builds queries for statistics based on filters
  */
-export async function buildStatsQueries(options: QueryOptions): Promise<{
-  totalQuery: SQL;
-  forQuery: SQL;
-  againstQuery: SQL;
-  neutralQuery: SQL;
-  params: Record<string, unknown>;
-}> {
-  // Build a base query first to get the WHERE conditions
-  const baseQueryResult = await buildCommentsQuery({ ...options, page: undefined, pageSize: undefined });
-  const params = baseQueryResult.params;
+export async function buildStatsQueries(options: QueryOptions) {
+  // Build filter conditions
+  const filterConditions = buildFilterConditions(options.filters);
   
-  // Base query for total count (already has WHERE clause if needed)
-  const totalQuery = baseQueryResult.countQuery;
+  // Build search conditions
+  const searchConditions = buildSearchConditions(options.search, options.searchFields);
   
-  // Create stance-specific queries by adding to the WHERE clause
-  let forQuery, againstQuery, neutralQuery;
+  // Combine all conditions
+  const allConditions = [...filterConditions, ...searchConditions];
   
-  // Create new queries for each stance using the enum values
-  const baseWhere = baseQueryResult.countQuery.toString().replace('SELECT COUNT(*) FROM comments', '');
+  // Create base count query
+  const totalBaseQuery = db.select({ count: sql`count(*)` }).from(comments);
+  const totalQuery = totalBaseQuery.$dynamic();
   
-  // Create separate queries instead of trying to modify the original SQL
-  if (baseWhere.includes('WHERE')) {
-    forQuery = sql`SELECT COUNT(*) FROM ${comments} WHERE ${comments.stance} = ${stanceEnum.enumValues[0]}${sql.raw(baseWhere.replace('WHERE', 'AND'))}`;
-    againstQuery = sql`SELECT COUNT(*) FROM ${comments} WHERE ${comments.stance} = ${stanceEnum.enumValues[1]}${sql.raw(baseWhere.replace('WHERE', 'AND'))}`;
-    neutralQuery = sql`SELECT COUNT(*) FROM ${comments} WHERE ${comments.stance} = ${stanceEnum.enumValues[2]}${sql.raw(baseWhere.replace('WHERE', 'AND'))}`;
+  // Add conditions to total query
+  if (allConditions.length > 0) {
+    totalQuery.where(and(...allConditions));
+  }
+  
+  // Get stance column
+  const stanceColumn = comments.stance;
+  
+  // Create stance queries
+  const forBaseQuery = db.select({ count: sql`count(*)` }).from(comments);
+  const againstBaseQuery = db.select({ count: sql`count(*)` }).from(comments);
+  const neutralBaseQuery = db.select({ count: sql`count(*)` }).from(comments);
+  
+  const forQuery = forBaseQuery.$dynamic();
+  const againstQuery = againstBaseQuery.$dynamic();
+  const neutralQuery = neutralBaseQuery.$dynamic();
+  
+  // Define stance conditions
+  const forCondition = sql`${stanceColumn} = ${stanceEnum.enumValues[0]}`;
+  const againstCondition = sql`${stanceColumn} = ${stanceEnum.enumValues[1]}`;
+  const neutralCondition = sql`${stanceColumn} = ${stanceEnum.enumValues[2]}`;
+  
+  // Add conditions based on whether allConditions exist
+  if (allConditions.length > 0) {
+    forQuery.where(and(...[...allConditions, forCondition]));
+    againstQuery.where(and(...[...allConditions, againstCondition]));
+    neutralQuery.where(and(...[...allConditions, neutralCondition]));
   } else {
-    forQuery = sql`SELECT COUNT(*) FROM ${comments} WHERE ${comments.stance} = ${stanceEnum.enumValues[0]}`;
-    againstQuery = sql`SELECT COUNT(*) FROM ${comments} WHERE ${comments.stance} = ${stanceEnum.enumValues[1]}`;
-    neutralQuery = sql`SELECT COUNT(*) FROM ${comments} WHERE ${comments.stance} = ${stanceEnum.enumValues[2]}`;
+    forQuery.where(forCondition);
+    againstQuery.where(againstCondition);
+    neutralQuery.where(neutralCondition);
   }
   
   return {
     totalQuery,
     forQuery,
     againstQuery,
-    neutralQuery,
-    params
+    neutralQuery
   };
 }
