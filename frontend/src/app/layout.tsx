@@ -1,10 +1,7 @@
 // app/layout.tsx
 import './globals.css'
-import { Inter } from 'next/font/google'
 import { datasetConfig } from '@/lib/config'
 import { Metadata } from 'next'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: datasetConfig.title,
@@ -27,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="bg-light">
+    <html lang="en">
+      <body className="bg-light font-sans">
         {children}
       </body>
     </html>

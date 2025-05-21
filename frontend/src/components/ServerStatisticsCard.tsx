@@ -2,9 +2,20 @@
 'use client';
 
 import { useServerDataContext } from '@/contexts/ServerDataContext';
+import { useState, useEffect } from 'react';
 
 export default function ServerStatisticsCard() {
   const { stats, loading } = useServerDataContext();
+  
+  // Create a state to hold the displayed values
+  const [displayedStats, setDisplayedStats] = useState(stats);
+  
+  // Update displayed stats when new stats arrive and loading is complete
+  useEffect(() => {
+    if (!loading) {
+      setDisplayedStats(stats);
+    }
+  }, [stats, loading]);
   
   // Function to get color based on stat type
   const getStatColors = (key: string) => {
@@ -18,10 +29,10 @@ export default function ServerStatisticsCard() {
   
   // Create statistics data with labels and values
   const statisticsData = [
-    { key: 'total', label: 'Total Comments', value: stats.total },
-    { key: 'for', label: 'For', value: stats.for, match: 'For' },
-    { key: 'against', label: 'Against', value: stats.against, match: 'Against' },
-    { key: 'neutral', label: 'Neutral/Unclear', value: stats.neutral, match: 'Neutral/Unclear' }
+    { key: 'total', label: 'Total Comments', value: displayedStats.total },
+    { key: 'for', label: 'For', value: displayedStats.for, match: 'For' },
+    { key: 'against', label: 'Against', value: displayedStats.against, match: 'Against' },
+    { key: 'neutral', label: 'Neutral/Unclear', value: displayedStats.neutral, match: 'Neutral/Unclear' }
   ];
   
   return (
@@ -30,6 +41,7 @@ export default function ServerStatisticsCard() {
         <h5 className="text-lg font-bold text-white flex items-center">
           <span className="mr-2">📊</span>
           Statistics Overview
+          {loading && <span className="ml-2 text-xs opacity-80">(updating...)</span>}
         </h5>
       </div>
       <div className="p-6" id="statistics">
@@ -39,11 +51,11 @@ export default function ServerStatisticsCard() {
             return (
               <div 
                 key={stat.key} 
-                className={`p-4 rounded-lg border shadow-sm ${colors.bg} ${colors.border}`}
+                className={`p-4 rounded-lg border shadow-sm ${colors.bg} ${colors.border} ${loading ? 'opacity-75' : ''}`}
               >
                 <p className={`text-sm uppercase font-semibold mb-1 ${colors.text}`}>{stat.label}</p>
                 <h3 className={`text-3xl font-bold mb-1 ${colors.text}`}>
-                  {loading ? '...' : stat.value.toLocaleString()}
+                  {displayedStats ? stat.value.toLocaleString() : '0'}
                 </h3>
                 {stat.match && (
                   <div className="mt-2 flex items-center">
