@@ -99,6 +99,7 @@ export default function TablePagination({
         Showing <span className="font-medium mx-1 text-gray-700">{visibleItems > 0 ? (currentPage - 1) * pageSize + 1 : 0}</span> 
           to <span className="font-medium mx-1 text-gray-700">{Math.min(currentPage * pageSize, totalItems)}</span> 
           of <span className="font-medium mx-1 text-gray-700">{totalItems}</span> entries
+          <span className="ml-2 text-gray-600">(Page {currentPage} of {totalPages})</span>
       </div>
       
       <div className="flex items-center space-x-2">

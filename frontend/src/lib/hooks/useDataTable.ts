@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { SortingState } from '@/components/ui/DataTable';
+import { SortingState } from '@/components/ServerCommentTable/DataTable';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 interface UseDataTableOptions<T> {

@@ -5,18 +5,25 @@ import {
   useContext,
   useState,
   useEffect,
-  useMemo,
   ReactNode,
 } from "react";
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { SortingState } from "@/components/ServerCommentTable/DataTable";
-import {  FilterPredicates } from "@/lib/filters/FilterBuilder";
-import { createFilterFromObject } from "@/lib/filters/filterFactory";
+import { getPaginatedComments, getCommentStatistics, parseUrlToQueryOptions } from "@/lib/actions/comments";
 
-interface DataContextProps {
-  // Raw data
+interface ServerDataContextProps {
+  // Data
   data: Comment[];
+  totalItems: number;
+  
+  // Statistics
+  stats: {
+    total: number;
+    for: number;
+    against: number;
+    neutral: number;
+  };
 
   // State
   loading: boolean;
@@ -41,66 +48,47 @@ interface DataContextProps {
   currentPage: number;
   setCurrentPage: (page: number) => void;
   totalPages: number;
-  totalItems: number;
   goToPage: (page: number) => void;
   nextPage: () => void;
   previousPage: () => void;
   canNextPage: boolean;
   canPreviousPage: boolean;
 
-  // Processed data
-  filteredData: Comment[];
-  sortedData: Comment[];
-  paginatedData: Comment[];
-
   // Additional utilities
+  refreshData: () => Promise<void>;
   exportCSV: () => void;
 }
 
-interface DataContextProviderProps {
+interface ServerDataContextProviderProps {
   children: ReactNode;
-  data: Comment[];
-  initialLoading?: boolean;
-  initialError?: string | null;
-  searchFields?: string[];
   initialPageSize?: number;
 }
 
-const DataContext = createContext<DataContextProps | undefined>(undefined);
+const ServerDataContext = createContext<ServerDataContextProps | undefined>(undefined);
 
 /**
- * Centralized data provider that manages:
- * - Filtering
- * - Sorting
- * - Pagination
- * - URL parameter syncing
- * - Data processing
+ * Provider that fetches data from the server based on URL parameters
+ * and provides it to the application
  */
-export function DataContextProvider({
+export function ServerDataContextProvider({
   children,
-  data,
-  initialLoading = false,
-  initialError = null,
-  searchFields = [],
   initialPageSize = 10,
-}: DataContextProviderProps) {
+}: ServerDataContextProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  // Initialize state from URL params
+  // Extract URL parameters
   const urlSort = searchParams.get("sort");
-  const urlSortDirection = searchParams.get("sortDirection") as
-    | "asc"
-    | "desc"
-    | null;
+  const urlSortDirection = searchParams.get("sortDirection") as "asc" | "desc" | null;
   const urlSearch = searchParams.get("search") || "";
+  const urlPage = searchParams.get("page") ? parseInt(searchParams.get("page")!, 10) : 1;
+  const urlPageSize = searchParams.get("pageSize") ? parseInt(searchParams.get("pageSize")!, 10) : initialPageSize;
 
   // Extract filter params from URL
   const getInitialFilters = (): Record<string, unknown> => {
     const initialFilters: Record<string, unknown> = {};
 
-    // Get all parameters that start with filter_
     for (const [key, value] of Array.from(searchParams.entries())) {
       if (key.startsWith("filter_")) {
         const filterKey = key.replace("filter_", "");
@@ -119,22 +107,74 @@ export function DataContextProvider({
   };
 
   // Core state
-  const [loading] = useState(initialLoading);
-  const [error] = useState(initialError);
+  const [data, setData] = useState<Comment[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [stats, setStats] = useState({
+    total: 0,
+    for: 0,
+    against: 0,
+    neutral: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // UI state
   const [searchQuery, setSearchQuery] = useState(urlSearch);
-  const [filters, setFilters] = useState<Record<string, unknown>>(
-    getInitialFilters()
-  );
+  const [filters, setFilters] = useState<Record<string, unknown>>(getInitialFilters());
   const [sorting, setSorting] = useState<SortingState | undefined>(
     urlSort && urlSortDirection
       ? { column: urlSort, direction: urlSortDirection }
       : undefined
   );
-  const [pageSize, setPageSize] = useState(initialPageSize);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(urlPageSize);
+  const [currentPage, setCurrentPage] = useState(urlPage);
   const [isInitialMount, setIsInitialMount] = useState(true);
+
+  // Fetch data based on current parameters
+  const fetchData = async () => {
+    setLoading(true);
+    
+    try {
+      // Create a simple object from search params, to avoid issues with URLSearchParams
+      const paramsObj: Record<string, string> = {};
+      searchParams.forEach((value, key) => {
+        paramsObj[key] = value;
+      });
+      
+      const options = await parseUrlToQueryOptions(paramsObj);
+      
+      // Fetch data and stats in parallel
+      const [dataResponse, statsResponse] = await Promise.all([
+        getPaginatedComments(options),
+        getCommentStatistics(options)
+      ]);
+
+      if (dataResponse.success && dataResponse.data) {
+        setData(dataResponse.data);
+        setTotalItems(dataResponse.total || 0);
+        setError(null);
+      } else {
+        setError(dataResponse.error || "Failed to fetch comments");
+        console.error("Error fetching comments:", dataResponse.error);
+      }
+
+      if (statsResponse.success && statsResponse.stats) {
+        setStats(statsResponse.stats);
+      } else {
+        console.error("Error fetching stats:", statsResponse.error);
+      }
+    } catch (err) {
+      console.error("Exception in fetchData:", err);
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Refresh data function that can be called by consumers
+  const refreshData = async () => {
+    await fetchData();
+  };
 
   // Update URL when filters, sorting or search changes
   useEffect(() => {
@@ -162,6 +202,10 @@ export function DataContextProvider({
       params.delete("search");
     }
 
+    // Update pagination parameters
+    params.set("page", currentPage.toString());
+    params.set("pageSize", pageSize.toString());
+
     // Update filter parameters
     // First, remove all existing filter parameters
     Array.from(params.keys())
@@ -188,11 +232,19 @@ export function DataContextProvider({
     searchQuery,
     sorting,
     filters,
+    currentPage,
+    pageSize,
     router,
     pathname,
     searchParams,
     isInitialMount,
   ]);
+
+  // Fetch data when URL parameters change
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Reset page when filters or search changes
   useEffect(() => {
@@ -201,62 +253,8 @@ export function DataContextProvider({
     }
   }, [searchQuery, filters, isInitialMount]);
 
-  // Direct access to object properties by key
-  const getValue = (obj: Record<string, unknown>, key: string): unknown => {
-    return obj[key];
-  };
-
-  // Filter data based on filters and search query using FilterBuilder
-  const filteredData = useMemo(() => {
-    // Create a filter builder for the active filters
-    const filterBuilder = createFilterFromObject(filters);
-    
-    // Add search filter if there's a search query
-    if (searchQuery) {
-      const searchFilter = FilterPredicates.containsAny<Comment>(
-        searchFields.length > 0 ? searchFields : Object.keys(data[0] || {}),
-        searchQuery
-      );
-      filterBuilder.addFilter('search', searchFilter);
-    }
-    
-    // Build and apply the filter
-    const filterFunction = filterBuilder.build();
-    return filterFunction(data);
-  }, [data, filters, searchQuery, searchFields]);
-
-  // Sort data if sorting is specified
-  const sortedData = useMemo(() => {
-    if (!sorting) return filteredData;
-
-    return [...filteredData].sort((a, b) => {
-      const aValue = getValue(a, sorting.column);
-      const bValue = getValue(b, sorting.column);
-
-      if (aValue === bValue) return 0;
-
-      if (aValue === null || aValue === undefined) return 1;
-      if (bValue === null || bValue === undefined) return -1;
-
-      const modifier = sorting.direction === "asc" ? 1 : -1;
-
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        return aValue.localeCompare(bValue) * modifier;
-      }
-
-      return (aValue < bValue ? -1 : 1) * modifier;
-    });
-  }, [filteredData, sorting]);
-
-  // Paginate data
-  const totalItems = sortedData.length;
+  // Calculate total pages based on total items
   const totalPages = Math.ceil(totalItems / pageSize);
-
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    return sortedData.slice(start, end);
-  }, [sortedData, currentPage, pageSize]);
 
   // Pagination controls
   const goToPage = (page: number) => {
@@ -295,11 +293,13 @@ export function DataContextProvider({
 
   // Export the currently-filtered table to CSV
   const exportCSV = () => {
-    // ── 1. Collect headers (all scalar fields seen in the filtered data) ──
+    if (data.length === 0) return;
+
+    // Get all unique keys from the data
     const headerSet = new Set<string>();
 
-    filteredData.forEach((item) => {
-      const record = item as Record<string, unknown>; // ← cast once
+    data.forEach((item) => {
+      const record = item as Record<string, unknown>;
       Object.keys(record).forEach((key) => {
         const value = record[key];
         if (typeof value !== "object" || value === null) {
@@ -309,12 +309,12 @@ export function DataContextProvider({
     });
 
     const headers = Array.from(headerSet);
-    if (headers.length === 0) return; // nothing to export
+    if (headers.length === 0) return;
 
-    // ── 2. Build CSV text ──
+    // Build CSV text
     let csv = headers.map((h) => `"${h}"`).join(",") + "\n";
 
-    filteredData.forEach((item) => {
+    data.forEach((item) => {
       const record = item as Record<string, unknown>;
       const row = headers.map((header) => {
         const value = record[header];
@@ -330,7 +330,7 @@ export function DataContextProvider({
       csv += row.join(",") + "\n";
     });
 
-    // ── 3. Trigger a browser download ──
+    // Trigger a browser download
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
@@ -346,9 +346,13 @@ export function DataContextProvider({
   };
 
   // Prepare context value
-  const contextValue: DataContextProps = {
-    // Raw data
+  const contextValue: ServerDataContextProps = {
+    // Data
     data,
+    totalItems,
+    
+    // Statistics
+    stats,
 
     // State
     loading,
@@ -373,31 +377,30 @@ export function DataContextProvider({
     currentPage,
     setCurrentPage,
     totalPages,
-    totalItems,
     goToPage,
     nextPage,
     previousPage,
     canNextPage,
     canPreviousPage,
 
-    // Processed data
-    filteredData,
-    sortedData,
-    paginatedData,
-
     // Additional utilities
+    refreshData,
     exportCSV,
   };
 
   return (
-    <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>
+    <ServerDataContext.Provider value={contextValue}>
+      {children}
+    </ServerDataContext.Provider>
   );
 }
 
-export function useDataContext() {
-  const context = useContext(DataContext);
+export function useServerDataContext() {
+  const context = useContext(ServerDataContext);
   if (context === undefined) {
-    throw new Error("useDataContext must be used within a DataContextProvider");
+    throw new Error(
+      "useServerDataContext must be used within a ServerDataContextProvider"
+    );
   }
   return context;
 }
