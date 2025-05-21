@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, ReactNode, useEffect } from 'react';
-import Card from './Card';
-import TablePagination from './TablePagination';
+import Card from '../ui/Card';
+import { PaginationControls } from './components';
 
 export interface Column<T> {
   key: string;
@@ -29,6 +29,22 @@ export interface DataTableProps<T> {
   onRowClick?: (item: T) => void;
   rowClassName?: (item: T) => string;
   headerContent?: ReactNode;
+  footerContent?: ReactNode;
+  loading?: boolean;
+  paginationProps?: {
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    setPageSize: (size: number) => void;
+    totalItems: number;
+    visibleItems: number;
+    canPreviousPage: boolean;
+    canNextPage: boolean;
+    goToPage: (page: number) => void;
+    previousPage: () => void;
+    nextPage: () => void;
+    loading: boolean;
+  };
 }
 
 export default function DataTable<T extends { id: string | number }>({
@@ -36,18 +52,16 @@ export default function DataTable<T extends { id: string | number }>({
   columns,
   initialSorting,
   onSort,
-  pageSize: initialPageSize = 10,
   className = '',
   noResultsMessage = 'No matching records found',
   emptyIcon,
   onRowClick,
   rowClassName,
-  headerContent
+  headerContent,
+  footerContent,
+  loading = false,
+  paginationProps
 }: DataTableProps<T>) {
-  // Pagination state
-  const [pageSize, setPageSize] = useState(initialPageSize);
-  const [currentPage, setCurrentPage] = useState(1);
-  
   // Sorting state
   const [sorting, setSorting] = useState<SortingState | undefined>(initialSorting);
 
@@ -55,21 +69,16 @@ export default function DataTable<T extends { id: string | number }>({
   useEffect(() => {
     if (JSON.stringify(sorting) !== JSON.stringify(initialSorting)) {
       setSorting(initialSorting);
-      console.log('DataTable: Sorting updated from props:', initialSorting);
     }
   }, [initialSorting, sorting]);
 
   // Handle sort column click
-  const handleSort = (column: string) => {
-    console.log('DataTable: Column clicked:', column);
-    
+  const handleSort = (column: string) => {    
     if (onSort) {
       // If external sort handler provided, use it
-      console.log('DataTable: Using external sort handler');
       onSort(column);
     } else {
       // Otherwise use internal sorting
-      console.log('DataTable: Using internal sorting');
       setSorting(prev => {
         const newSorting = prev?.column === column
           ? {
@@ -81,12 +90,8 @@ export default function DataTable<T extends { id: string | number }>({
               direction: 'asc'
             } as SortingState;
             
-        console.log('DataTable: New sorting state:', newSorting);
         return newSorting;
       });
-      
-      // Reset to first page when sorting changes
-      setCurrentPage(1);
     }
   };
 
@@ -116,32 +121,6 @@ export default function DataTable<T extends { id: string | number }>({
     });
   }, [data, sorting, onSort]);
 
-  // Pagination calculations
-  const totalItems = sortedData.length;
-  const totalPages = Math.ceil(totalItems / pageSize);
-  
-  const paginatedData = React.useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    return sortedData.slice(start, end);
-  }, [sortedData, currentPage, pageSize]);
-
-  // Pagination controls
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-  };
-  
-  const nextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
-  };
-  
-  const previousPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
-  };
-  
-  const canNextPage = currentPage < totalPages;
-  const canPreviousPage = currentPage > 1;
-
   // Get column classes including sorting
   const getColumnClasses = (column: Column<T>) => {
     if (!column.sortable) {
@@ -157,36 +136,22 @@ export default function DataTable<T extends { id: string | number }>({
     return `${baseClasses} text-gray-700 hover:text-blue-500 hover:bg-blue-50`;
   };
 
-  // Create pagination props
-  const paginationProps = {
-    currentPage,
-    totalPages,
-    pageSize,
-    totalItems,
-    visibleItems: paginatedData.length,
-    canPreviousPage,
-    canNextPage,
-    setPageSize: (size: number) => {
-      setPageSize(size);
-      setCurrentPage(1);
-    },
-    goToPage,
-    previousPage,
-    nextPage
-  };
-
   return (
-    <Card className={`overflow-hidden ${className}`}>
+    <Card className={`overflow-hidden ${className} relative`}>
       {headerContent && (
         <Card.Header className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
           {headerContent}
         </Card.Header>
       )}
-      
-      {/* Top pagination controls */}
-      <TablePagination {...paginationProps} position="top" />
-      
+      {paginationProps && (
+        <PaginationControls {...paginationProps}/>
+      )}
       <div className="overflow-x-auto">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )}
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -226,7 +191,7 @@ export default function DataTable<T extends { id: string | number }>({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {paginatedData.length === 0 ? (
+            {sortedData.length === 0 ? (
               <tr>
                 <td 
                   colSpan={columns.length} 
@@ -244,7 +209,7 @@ export default function DataTable<T extends { id: string | number }>({
                 </td>
               </tr>
             ) : (
-              paginatedData.map(item => (
+              sortedData.map(item => (
                 <tr 
                   key={item.id} 
                   className={`hover:bg-blue-50 transition-colors ${onRowClick ? 'cursor-pointer' : ''} ${rowClassName?.(item) || ''}`}
@@ -265,8 +230,9 @@ export default function DataTable<T extends { id: string | number }>({
         </table>
       </div>
       
-      {/* Bottom pagination controls */}
-      <TablePagination {...paginationProps} position="bottom" />
+      {footerContent && (
+        <div>{footerContent}</div>
+      )}
     </Card>
   );
 } 
