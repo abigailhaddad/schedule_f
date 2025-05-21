@@ -2,6 +2,7 @@
 import './globals.css'
 import { datasetConfig } from '@/lib/config'
 import { Metadata } from 'next'
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: datasetConfig.title,
@@ -25,8 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <title>Schedule F Analysis</title>
       <body className="bg-light font-sans">
         {children}
+        <Analytics />
       </body>
     </html>
   )
