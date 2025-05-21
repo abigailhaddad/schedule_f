@@ -1,5 +1,6 @@
 // app/page.tsx
-import CommentDataProvider from "@/components/CommentDataProvider";
+import { Suspense } from 'react';
+import ServerCommentDataProvider from "@/components/ServerCommentDataProvider";
 import Navbar from "@/components/Navbar";
 
 export default function Home() {
@@ -8,7 +9,9 @@ export default function Home() {
       <Navbar />
       <div className="pt-20 pb-12">
         <div className="container mx-auto px-4 md:px-6">
-          <CommentDataProvider />
+          <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+            <ServerCommentDataProvider />
+          </Suspense>
         </div>
       </div>
     </main>

@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { SortingState } from "@/components/ui/DataTable";
+import { SortingState } from "@/components/ServerCommentTable/DataTable";
 import {  FilterPredicates } from "@/lib/filters/FilterBuilder";
 import { createFilterFromObject } from "@/lib/filters/filterFactory";
 

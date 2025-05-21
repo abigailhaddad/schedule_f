@@ -4,6 +4,16 @@ import React from 'react';
 
 export type BadgeType = 'success' | 'danger' | 'warning' | 'primary' | 'default';
 
+// Helper function to determine badge type from a class string
+export function getBadgeTypeFromClass(badgeClass?: string): BadgeType {
+  if (!badgeClass) return 'default';
+  if (badgeClass.includes('success')) return 'success';
+  if (badgeClass.includes('danger')) return 'danger';
+  if (badgeClass.includes('warning')) return 'warning';
+  if (badgeClass.includes('primary')) return 'primary';
+  return 'default';
+}
+
 interface BadgeProps {
   type?: BadgeType;
   label: string;
