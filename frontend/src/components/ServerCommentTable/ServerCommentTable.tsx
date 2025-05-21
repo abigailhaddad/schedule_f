@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Comment } from '@/lib/db/schema';
 import { datasetConfig } from '@/lib/config';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -17,6 +17,23 @@ import {
   TableHeader,
   TableFooter
 } from './components';
+
+// Debounce function
+const useDebounce = <T,>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 export default function ServerCommentTable() {
   const router = useRouter();
@@ -43,6 +60,17 @@ export default function ServerCommentTable() {
     canPreviousPage,
     totalItems
   } = useServerDataContext();
+
+  // State for the immediate search input value
+  const [searchInputValue, setSearchInputValue] = useState(searchQuery);
+  
+  // Debounced search value that will be passed to context
+  const debouncedSearchValue = useDebounce(searchInputValue, 500);
+  
+  // Update the context search query when the debounced value changes
+  useEffect(() => {
+    setSearchQuery(debouncedSearchValue);
+  }, [debouncedSearchValue, setSearchQuery]);
   
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(() => {
     // Initialize visible columns from config
@@ -55,9 +83,9 @@ export default function ServerCommentTable() {
   
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   
-  // Handle search input change
+  // Handle search input change - only updates the local state
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    setSearchInputValue(e.target.value);
   };
   
   // Toggle column visibility
@@ -198,7 +226,7 @@ export default function ServerCommentTable() {
         className="bg-white rounded-lg shadow-md border border-gray-200"
         headerContent={
           <TableHeader
-            searchQuery={searchQuery}
+            searchQuery={searchInputValue}
             onSearchChange={handleSearchChange}
             showColumnsMenu={showColumnsMenu}
             setShowColumnsMenu={setShowColumnsMenu}

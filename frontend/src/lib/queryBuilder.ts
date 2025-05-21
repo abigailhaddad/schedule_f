@@ -104,6 +104,36 @@ function buildFilterConditions(filters?: Record<string, unknown>): SQL[] {
           }
         }
       } 
+      else if (key === 'themes') {
+        // Special handling for themes with different modes
+        const themeValues = filterValue.values;
+        
+        if (themeValues.length === 0) continue;
+        
+        if (filterValue.mode === 'at_least') {
+          // "Must Include At Least" - ALL themes must be present (AND)
+          themeValues.forEach(theme => {
+            conditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+          });
+        } 
+        else if (filterValue.mode === 'exact') {
+          // "Exact Match" - exact string match
+          const exactThemes = themeValues.join(',');
+          conditions.push(sql`${column} = ${exactThemes}`);
+        } 
+        else {
+          // "Must Include Any" (includes mode) - ANY theme must be present (OR)
+          const themeConditions: SQL[] = [];
+          
+          themeValues.forEach(theme => {
+            themeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+          });
+          
+          if (themeConditions.length > 0) {
+            conditions.push(sql`(${or(...themeConditions)})`);
+          }
+        }
+      }
       else if (filterValue.mode === 'at_least') {
         // For "must include all" mode - add each condition
         filterValue.values.forEach(val => {
@@ -134,14 +164,17 @@ function buildFilterConditions(filters?: Record<string, unknown>): SQL[] {
       
       if (key === 'themes') {
         // For themes field (comma-separated string in database)
-        const likeConditions: SQL[] = [];
+        // Default to OR (any match) behavior
+        const themeConditions: SQL[] = [];
         
         value.forEach(theme => {
-          likeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+          if (typeof theme === 'string') {
+            themeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+          }
         });
         
-        if (likeConditions.length > 0) {
-          conditions.push(sql`(${or(...likeConditions)})`);
+        if (themeConditions.length > 0) {
+          conditions.push(sql`(${or(...themeConditions)})`);
         }
       } else if (key === 'stance') {
         // Special handling for stance enum in array
@@ -156,6 +189,17 @@ function buildFilterConditions(filters?: Record<string, unknown>): SQL[] {
         
         if (stanceValues.length > 0) {
           conditions.push(sql`${column} IN (${stanceValues})`);
+        }
+      } else if (key === 'comment' || key === 'title' || key === 'keyQuote' || key === 'category' || key === 'rationale') {
+        // For text fields, use ILIKE with OR for partial matches
+        const textConditions: SQL[] = [];
+        
+        value.forEach(textValue => {
+          textConditions.push(sql`${column} ILIKE ${`%${textValue}%`}`);
+        });
+        
+        if (textConditions.length > 0) {
+          conditions.push(sql`(${or(...textConditions)})`);
         }
       } else {
         // For regular array filters, use IN clause
@@ -174,7 +218,13 @@ function buildFilterConditions(filters?: Record<string, unknown>): SQL[] {
         }
       } else {
         // Regular fields
-        conditions.push(sql`${column} = ${value}`);
+        if (key === 'comment' || key === 'title' || key === 'keyQuote' || key === 'category' || key === 'rationale') {
+          // Use ILIKE for text fields to search for partial matches
+          conditions.push(sql`${column} ILIKE ${`%${value}%`}`);
+        } else {
+          // Use exact match for non-text fields
+          conditions.push(sql`${column} = ${value}`);
+        }
       }
     }
   }
