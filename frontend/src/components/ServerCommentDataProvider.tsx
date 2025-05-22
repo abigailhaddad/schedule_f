@@ -3,10 +3,27 @@
 
 import { ServerDataState } from './states';
 import { ServerDataContextProvider } from '@/contexts/ServerDataContext';
+import { Comment } from '@/lib/db/schema';
 
-export default function ServerCommentDataProvider() {
+interface InitialData {
+  comments?: Comment[];
+  total?: number;
+  stats?: {
+    total: number;
+    for: number;
+    against: number;
+    neutral: number;
+  };
+  error?: string | null;
+}
+
+interface ServerCommentDataProviderProps {
+  initialData?: InitialData;
+}
+
+export default function ServerCommentDataProvider({ initialData }: ServerCommentDataProviderProps) {
   return (
-    <ServerDataContextProvider>
+    <ServerDataContextProvider initialData={initialData}>
       <ServerDataState />
     </ServerDataContextProvider>
   );

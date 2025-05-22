@@ -1,9 +1,12 @@
 'use server';
 
-import { db, connectDb } from '@/lib/db';
+import { db } from '@/lib/db';
 import { Comment } from '@/lib/db/schema';
 import { QueryOptions, buildCommentsQuery, buildStatsQueries } from '../queryBuilder';
-import { getCachedData } from '../cache';
+import { getCachedData } from '../cache/cache';
+import { unstable_cache } from 'next/cache';
+import { comments } from '@/lib/db/schema';
+import { asc, inArray } from 'drizzle-orm';
 
 // Response types
 export interface CommentsPaginatedResponse {
@@ -136,10 +139,10 @@ export async function getPaginatedComments(
     cacheKey,
     async () => {
       try {
-        const connection = await connectDb();
-        if (!connection.success) {
-          throw new Error("Failed to connect to database");
-        }
+        // const connection = await connectDb(); // Removed
+        // if (!connection.success) { // Removed
+        //   throw new Error("Failed to connect to database"); // Removed
+        // } // Removed
 
         // Build queries for data and count
         const queryResult = await buildCommentsQuery(options);
@@ -186,10 +189,10 @@ export async function getCommentStatistics(
     cacheKey,
     async () => {
       try {
-        const connection = await connectDb();
-        if (!connection.success) {
-          throw new Error("Failed to connect to database");
-        }
+        // const connection = await connectDb(); // Removed
+        // if (!connection.success) { // Removed
+        //   throw new Error("Failed to connect to database"); // Removed
+        // } // Removed
 
         // Build all stats queries
         const queryResults = await buildStatsQueries(options);
@@ -241,10 +244,10 @@ export async function getCommentById(
     cacheKey,
     async () => {
       try {
-        const connection = await connectDb();
-        if (!connection.success) {
-          throw new Error("Failed to connect to database");
-        }
+        // const connection = await connectDb(); // Removed
+        // if (!connection.success) { // Removed
+        //   throw new Error("Failed to connect to database"); // Removed
+        // } // Removed
 
         const queryResult = await buildCommentsQuery({
           filters: { id }
@@ -271,4 +274,85 @@ export async function getCommentById(
       }
     }
   );
+}
+
+
+/**
+ * Get all comment IDs for static generation
+ * @param limit - Maximum number of IDs to return
+ */
+export const getAllCommentIds = unstable_cache(
+  async (limit = 100): Promise<string[]> => {
+    try {
+      // const connection = await connectDb(); // Removed
+      // if (!connection.success) { // Removed
+      //   throw new Error("Failed to connect to database"); // Removed
+      // } // Removed
+
+      // Get most recent comment IDs
+      const query = db
+        .select({ id: comments.id })
+        .from(comments)
+        .orderBy(asc(comments.createdAt))
+        .limit(limit);
+
+      const result = await db.execute(query);
+      return result.rows.map((row: Record<string, unknown>) => (row as { id: string }).id);
+    } catch (error) {
+      console.error("Error fetching comment IDs:", error);
+      return [];
+    }
+  },
+  ['comment-ids'],
+  {
+    revalidate: 86400, // 24 hours
+    tags: ['comments']
+  }
+);
+
+/**
+ * Optimized batch comment fetching for better performance
+ */
+export const getCommentsByIds = unstable_cache(
+  async (ids: string[]): Promise<Comment[]> => {
+    if (ids.length === 0) return [];
+
+    try {
+      // const connection = await connectDb(); // Removed
+      // if (!connection.success) { // Removed
+      //   throw new Error("Failed to connect to database"); // Removed
+      // } // Removed
+
+      const query = db
+        .select()
+        .from(comments)
+        .where(inArray(comments.id, ids));
+
+      const result = await db.execute(query);
+      return result.rows as Comment[];
+    } catch (error) {
+      console.error("Error fetching comments by IDs:", error);
+      return [];
+    }
+  },
+  ['comments-batch'],
+  {
+    revalidate: 86400,
+    tags: ['comments']
+  }
+);
+
+/**
+ * Revalidate cache for specific paths
+ */
+export async function revalidateComments() {
+  const { revalidateTag, revalidatePath } = await import('next/cache');
+  
+  // Revalidate all comment-related caches
+  revalidateTag('comments');
+  revalidateTag('statistics');
+  
+  // Revalidate specific paths
+  revalidatePath('/');
+  revalidatePath('/comment/[id]', 'page');
 }

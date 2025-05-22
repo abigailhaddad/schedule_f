@@ -6,11 +6,32 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useCallback,
+  useRef,
+  useMemo,
 } from "react";
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { SortingState } from "@/components/ServerCommentTable/DataTable";
-import { getPaginatedComments, getCommentStatistics, parseUrlToQueryOptions } from "@/lib/actions/comments";
+import {
+  getPaginatedComments,
+  getCommentStatistics,
+  parseUrlToQueryOptions,
+  CommentsPaginatedResponse,
+  CommentsStatisticsResponse,
+} from "@/lib/actions/comments";
+
+interface InitialData {
+  comments?: Comment[];
+  total?: number;
+  stats?: {
+    total: number;
+    for: number;
+    against: number;
+    neutral: number;
+  };
+  error?: string | null;
+}
 
 interface ServerDataContextProps {
   // Data
@@ -61,22 +82,40 @@ interface ServerDataContextProps {
 
 interface ServerDataContextProviderProps {
   children: ReactNode;
+  initialData?: InitialData;
   initialPageSize?: number;
 }
 
 const ServerDataContext = createContext<ServerDataContextProps | undefined>(undefined);
 
-/**
- * Provider that fetches data from the server based on URL parameters
- * and provides it to the application
- */
+// Define a type for the cached data
+interface CachedData {
+  data: Comment[];
+  total: number;
+  stats: {
+    total: number;
+    for: number;
+    against: number;
+    neutral: number;
+  };
+}
+
+// Client-side cache for fetched data
+const clientCache = new Map<string, { data: CachedData; timestamp: number }>();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes client-side cache
+
 export function ServerDataContextProvider({
   children,
-  initialPageSize = 10,
+  initialData,
+  initialPageSize = 25, // Increased default page size
 }: ServerDataContextProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
+  // Track if this is the first mount
+  const isFirstMount = useRef(true);
+  const lastFetchKey = useRef<string>("");
 
   // Extract URL parameters
   const urlSort = searchParams.get("sort");
@@ -93,11 +132,9 @@ export function ServerDataContextProvider({
       if (key.startsWith("filter_")) {
         const filterKey = key.replace("filter_", "");
 
-        // Try to parse JSON values (for arrays, etc)
         try {
           initialFilters[filterKey] = JSON.parse(value);
         } catch {
-          // If not valid JSON, use as string
           initialFilters[filterKey] = value;
         }
       }
@@ -106,17 +143,17 @@ export function ServerDataContextProvider({
     return initialFilters;
   };
 
-  // Core state
-  const [data, setData] = useState<Comment[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
-  const [stats, setStats] = useState({
+  // Core state - initialize with initial data if provided
+  const [data, setData] = useState<Comment[]>(initialData?.comments || []);
+  const [totalItems, setTotalItems] = useState(initialData?.total || 0);
+  const [stats, setStats] = useState(initialData?.stats || {
     total: 0,
     for: 0,
     against: 0,
     neutral: 0
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(initialData?.error || null);
 
   // UI state
   const [searchQuery, setSearchQuery] = useState(urlSearch);
@@ -124,18 +161,58 @@ export function ServerDataContextProvider({
   const [sorting, setSorting] = useState<SortingState | undefined>(
     urlSort && urlSortDirection
       ? { column: urlSort, direction: urlSortDirection }
-      : undefined
+      : { column: 'createdAt', direction: 'desc' }
   );
   const [pageSize, setPageSize] = useState(urlPageSize);
   const [currentPage, setCurrentPage] = useState(urlPage);
   const [isInitialMount, setIsInitialMount] = useState(true);
 
-  // Fetch data based on current parameters
-  const fetchData = async () => {
+  // Create a cache key for the current query
+  const createCacheKey = useCallback(() => {
+    const params = {
+      filters,
+      search: searchQuery,
+      sort: sorting,
+      page: currentPage,
+      pageSize
+    };
+    return JSON.stringify(params);
+  }, [filters, searchQuery, sorting, currentPage, pageSize]);
+
+  // Check if we have valid cached data
+  const getCachedData = useCallback((key: string) => {
+    const cached = clientCache.get(key);
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      return cached.data;
+    }
+    return null;
+  }, []);
+
+  // Fetch data with client-side caching
+  const fetchData = useCallback(async (force = false) => {
+    const cacheKey = createCacheKey();
+    
+    // Skip if we're fetching the same data
+    if (!force && lastFetchKey.current === cacheKey) {
+      return;
+    }
+
+    // Check client-side cache first
+    if (!force) {
+      const cached = getCachedData(cacheKey);
+      if (cached) {
+        setData(cached.data);
+        setTotalItems(cached.total);
+        setStats(cached.stats);
+        setError(null);
+        lastFetchKey.current = cacheKey;
+        return;
+      }
+    }
+
     setLoading(true);
     
     try {
-      // Create a simple object from search params, to avoid issues with URLSearchParams
       const paramsObj: Record<string, string> = {};
       searchParams.forEach((value, key) => {
         paramsObj[key] = value;
@@ -143,25 +220,45 @@ export function ServerDataContextProvider({
       
       const options = await parseUrlToQueryOptions(paramsObj);
       
-      // Fetch data and stats in parallel
-      const [dataResponse, statsResponse] = await Promise.all([
-        getPaginatedComments(options),
-        getCommentStatistics(options)
-      ]);
+      // Only fetch stats if filters have changed (not pagination)
+      const shouldFetchStats = force || 
+        JSON.stringify(options.filters) !== JSON.stringify(lastFetchKey.current);
 
-      if (dataResponse.success && dataResponse.data) {
-        setData(dataResponse.data);
-        setTotalItems(dataResponse.total || 0);
-        setError(null);
-      } else {
-        setError(dataResponse.error || "Failed to fetch comments");
-        console.error("Error fetching comments:", dataResponse.error);
+      const promises: Promise<CommentsPaginatedResponse | CommentsStatisticsResponse>[] = 
+        [getPaginatedComments(options)];
+      
+      if (shouldFetchStats) {
+        promises.push(getCommentStatistics(options));
       }
 
-      if (statsResponse.success && statsResponse.stats) {
-        setStats(statsResponse.stats);
+      const results = await Promise.all(promises);
+      const dataResponse = results[0] as CommentsPaginatedResponse;
+      const statsResponse = results.length > 1 ? results[1] as CommentsStatisticsResponse : undefined;
+
+      if (dataResponse.success && dataResponse.data) {
+        const responseData = {
+          data: dataResponse.data,
+          total: dataResponse.total || 0,
+          stats: statsResponse?.success && statsResponse.stats ? statsResponse.stats : stats,
+        };
+
+        // Update state
+        setData(responseData.data);
+        setTotalItems(responseData.total);
+        if (statsResponse?.success && statsResponse.stats) {
+          setStats(statsResponse.stats);
+        }
+        setError(null);
+
+        // Cache the response
+        clientCache.set(cacheKey, {
+          data: responseData,
+          timestamp: Date.now()
+        });
+
+        lastFetchKey.current = cacheKey;
       } else {
-        console.error("Error fetching stats:", statsResponse.error);
+        setError(dataResponse.error || "Failed to fetch comments");
       }
     } catch (err) {
       console.error("Exception in fetchData:", err);
@@ -169,24 +266,23 @@ export function ServerDataContextProvider({
     } finally {
       setLoading(false);
     }
-  };
+  }, [createCacheKey, getCachedData, searchParams, stats]);
 
-  // Refresh data function that can be called by consumers
-  const refreshData = async () => {
-    await fetchData();
-  };
+  // Refresh data function
+  const refreshData = useCallback(async () => {
+    await fetchData(true); // Force refresh
+  }, [fetchData]);
 
-  // Update URL when filters, sorting or search changes
+  // Only update URL when filters, sorting, search, or pagination changes
   useEffect(() => {
     if (isInitialMount) {
       setIsInitialMount(false);
       return;
     }
 
-    // Create a new URLSearchParams object
     const params = new URLSearchParams(searchParams.toString());
 
-    // Update sorting parameters
+    // Update all parameters
     if (sorting) {
       params.set("sort", sorting.column);
       params.set("sortDirection", sorting.direction);
@@ -195,24 +291,20 @@ export function ServerDataContextProvider({
       params.delete("sortDirection");
     }
 
-    // Update search parameter
     if (searchQuery) {
       params.set("search", searchQuery);
     } else {
       params.delete("search");
     }
 
-    // Update pagination parameters
     params.set("page", currentPage.toString());
     params.set("pageSize", pageSize.toString());
 
     // Update filter parameters
-    // First, remove all existing filter parameters
     Array.from(params.keys())
       .filter((key) => key.startsWith("filter_"))
       .forEach((key) => params.delete(key));
 
-    // Then add the current filters
     Object.entries(filters).forEach(([key, value]) => {
       if (
         value !== undefined &&
@@ -226,7 +318,6 @@ export function ServerDataContextProvider({
       }
     });
 
-    // Update URL without refreshing page
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }, [
     searchQuery,
@@ -240,11 +331,17 @@ export function ServerDataContextProvider({
     isInitialMount,
   ]);
 
-  // Fetch data when URL parameters change
+  // Fetch data only when URL parameters change and we don't have cached data
   useEffect(() => {
+    // Skip the first mount if we have initial data
+    if (isFirstMount.current && initialData?.comments) {
+      isFirstMount.current = false;
+      return;
+    }
+    
+    isFirstMount.current = false;
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, fetchData, initialData]);
 
   // Reset page when filters or search changes
   useEffect(() => {
@@ -253,27 +350,27 @@ export function ServerDataContextProvider({
     }
   }, [searchQuery, filters, isInitialMount]);
 
-  // Calculate total pages based on total items
-  const totalPages = Math.ceil(totalItems / pageSize);
+  // Calculate total pages
+  const totalPages = useMemo(() => Math.ceil(totalItems / pageSize), [totalItems, pageSize]);
 
   // Pagination controls
-  const goToPage = (page: number) => {
+  const goToPage = useCallback((page: number) => {
     setCurrentPage(page);
-  };
+  }, []);
 
-  const nextPage = () => {
+  const nextPage = useCallback(() => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  };
+  }, [totalPages]);
 
-  const previousPage = () => {
+  const previousPage = useCallback(() => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
-  };
+  }, []);
 
   const canNextPage = currentPage < totalPages;
   const canPreviousPage = currentPage > 1;
 
   // Handle sorting
-  const handleSort = (column: string) => {
+  const handleSort = useCallback((column: string) => {
     setSorting((prev) => {
       if (prev?.column === column) {
         return {
@@ -287,15 +384,13 @@ export function ServerDataContextProvider({
       };
     });
 
-    // Reset to first page when sorting changes
     setCurrentPage(1);
-  };
+  }, []);
 
-  // Export the currently-filtered table to CSV
-  const exportCSV = () => {
+  // Export CSV
+  const exportCSV = useCallback(() => {
     if (data.length === 0) return;
 
-    // Get all unique keys from the data
     const headerSet = new Set<string>();
 
     data.forEach((item) => {
@@ -311,7 +406,6 @@ export function ServerDataContextProvider({
     const headers = Array.from(headerSet);
     if (headers.length === 0) return;
 
-    // Build CSV text
     let csv = headers.map((h) => `"${h}"`).join(",") + "\n";
 
     data.forEach((item) => {
@@ -321,7 +415,6 @@ export function ServerDataContextProvider({
 
         if (value == null) return "";
         if (typeof value === "string") {
-          // escape double quotes inside cell text
           return `"${value.replace(/"/g, '""')}"`;
         }
         return String(value);
@@ -330,7 +423,6 @@ export function ServerDataContextProvider({
       csv += row.join(",") + "\n";
     });
 
-    // Trigger a browser download
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
@@ -343,35 +435,22 @@ export function ServerDataContextProvider({
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  };
+  }, [data]);
 
   // Prepare context value
   const contextValue: ServerDataContextProps = {
-    // Data
     data,
     totalItems,
-    
-    // Statistics
     stats,
-
-    // State
     loading,
     error,
-
-    // Filter state
     filters,
     setFilters,
-
-    // Search state
     searchQuery,
     setSearchQuery,
-
-    // Sorting state
     sorting,
     setSorting,
     handleSort,
-
-    // Pagination state
     pageSize,
     setPageSize,
     currentPage,
@@ -382,8 +461,6 @@ export function ServerDataContextProvider({
     previousPage,
     canNextPage,
     canPreviousPage,
-
-    // Additional utilities
     refreshData,
     exportCSV,
   };

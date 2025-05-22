@@ -3,7 +3,7 @@
 export * from './comments';
 
 // Re-export existing functions from the old actions.ts
-import { cache } from '../cache';
+import { cache } from '../cache/cache';
 import { db } from '../db';
 import { comments } from '../db/schema';
 import { sql } from 'drizzle-orm';
