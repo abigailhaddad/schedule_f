@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <title>"Schedule F" Analysis</title>
+      <title>&quot;Schedule F&quot; Analysis</title>
       <body className="bg-light font-sans">
         {children}
         <Analytics />

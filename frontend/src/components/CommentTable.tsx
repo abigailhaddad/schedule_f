@@ -332,7 +332,7 @@ export default function CommentTable() {
                     onClick={() => toggleColumnVisibility(field.key)}
                     onKeyDown={(e) => handleColumnKeyDown(e, field.key)}
                     tabIndex={0}
-                    role="menuitem"
+                    role="menuitemcheckbox"
                     aria-checked={visibleColumns[field.key]}
                   >
                     <input
