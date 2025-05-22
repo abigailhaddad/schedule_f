@@ -15,10 +15,12 @@ import os
 import time
 import datetime
 import argparse
-from typing import List, Dict, Any, Optional
+import concurrent.futures
+from typing import List, Dict, Any, Optional, Tuple
 from dotenv import load_dotenv
 from litellm import completion
 from collections import defaultdict
+from tqdm import tqdm
 
 # Ensure we can use backend utilities
 import sys
@@ -90,7 +92,7 @@ Note: Some comments include text from attached documents. Please consider ALL te
 
 Analyze objectively and avoid inserting personal opinions or biases."""
     
-    def analyze_comment(self, comment_text: str, model: str, prompt_variation: Dict[str, str]) -> Dict:
+    def analyze_comment(self, comment_text: str, model: str, prompt_variation: Dict[str, str], max_retries: int = 3) -> Dict:
         """
         Analyze a single comment using the specified model and prompt variation.
         
@@ -98,45 +100,143 @@ Analyze objectively and avoid inserting personal opinions or biases."""
             comment_text: The text of the comment to analyze
             model: The OpenAI model to use
             prompt_variation: Dictionary with the prompt variation details
+            max_retries: Maximum number of retry attempts
             
         Returns:
             The analysis result
         """
         system_prompt = self.generate_system_prompt(prompt_variation['instruction'])
+        retry_delay = 2  # seconds
+        
+        for attempt in range(max_retries):
+            try:
+                response = completion(
+                    temperature=0.0,
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": f"Analyze the following public comment:\n\n{comment_text}"}
+                    ],
+                    response_format=CommentAnalysisResult
+                )
+                
+                # Process the response based on its format
+                if hasattr(response.choices[0].message, 'content') and response.choices[0].message.content:
+                    if isinstance(response.choices[0].message.content, str):
+                        result = json.loads(response.choices[0].message.content)
+                    else:
+                        result = response.choices[0].message.content
+                elif hasattr(response.choices[0].message, 'model_dump'):
+                    result = response.choices[0].message.model_dump()
+                else:
+                    raise ValueError("Unexpected response format")
+                    
+                return result
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                else:
+                    return {"error": str(e)}
+        
+        return {"error": "Max retries exceeded"}
+    
+    def process_test_item(self, test_config: Tuple[Dict, str, Dict, int]) -> Dict:
+        """
+        Process a single test configuration (comment + model + prompt variation).
+        This function is designed to be used in parallel processing.
+        
+        Args:
+            test_config: Tuple containing (comment, model, prompt_variation, comment_index)
+            
+        Returns:
+            Test result dictionary
+        """
+        comment, model, variation, i = test_config
+        comment_id = comment.get('id', f'comment_{i}')
+        expected_stance = comment.get('stance', '')
+        variation_name = variation['name']
         
         try:
-            response = completion(
-                temperature=0.0,
+            # Analyze comment
+            analysis = self.analyze_comment(
+                comment_text=comment.get('comment', ''),
                 model=model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"Analyze the following public comment:\n\n{comment_text}"}
-                ],
-                response_format=CommentAnalysisResult
+                prompt_variation=variation
             )
             
-            # Process the response based on its format
-            if hasattr(response.choices[0].message, 'content') and response.choices[0].message.content:
-                if isinstance(response.choices[0].message.content, str):
-                    result = json.loads(response.choices[0].message.content)
-                else:
-                    result = response.choices[0].message.content
-            elif hasattr(response.choices[0].message, 'model_dump'):
-                result = response.choices[0].message.model_dump()
-            else:
-                raise ValueError("Unexpected response format")
+            # Check if we got an error
+            if "error" in analysis:
+                return {
+                    "comment_id": comment_id,
+                    "model": model,
+                    "prompt_variation": variation_name,
+                    "expected_stance": expected_stance,
+                    "error": analysis["error"],
+                    "status": "error"
+                }
                 
-            return result
+            # Get the predicted stance
+            predicted_stance = analysis.get('stance', '')
+            
+            # Check if correct
+            is_correct = predicted_stance == expected_stance
+            
+            # Record this result
+            return {
+                "comment_id": comment_id,
+                "model": model,
+                "prompt_variation": variation_name,
+                "expected_stance": expected_stance,
+                "predicted_stance": predicted_stance,
+                "is_correct": is_correct,
+                "rationale": analysis.get('rationale', ''),
+                "themes": analysis.get('themes', []),
+                "key_quote": analysis.get('key_quote', ''),
+                "status": "success"
+            }
+                
         except Exception as e:
-            print(f"Error analyzing comment: {str(e)}")
-            return {"error": str(e)}
+            return {
+                "comment_id": comment_id,
+                "model": model,
+                "prompt_variation": variation_name,
+                "expected_stance": expected_stance,
+                "error": str(e),
+                "status": "error"
+            }
     
-    def run_tests(self, max_comments: Optional[int] = None) -> List[Dict]:
+    def process_batch(self, batch_configs: List[Tuple[Dict, str, Dict, int]]) -> List[Dict]:
         """
-        Run all tests for each prompt variation and model combination.
+        Process a batch of test configurations in parallel.
+        
+        Args:
+            batch_configs: List of test configurations
+            
+        Returns:
+            List of test results
+        """
+        results = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_to_config = {
+                executor.submit(self.process_test_item, config): config
+                for config in batch_configs
+            }
+            
+            for future in concurrent.futures.as_completed(future_to_config):
+                result = future.result()
+                if result:
+                    results.append(result)
+        
+        return results
+    
+    def run_tests(self, max_comments: Optional[int] = None, batch_size: int = 5) -> List[Dict]:
+        """
+        Run all tests for each prompt variation and model combination using parallel processing.
         
         Args:
             max_comments: Optional maximum number of comments to test
+            batch_size: Number of comments to process in parallel
             
         Returns:
             List of test results
@@ -145,116 +245,144 @@ Analyze objectively and avoid inserting personal opinions or biases."""
         results_file = os.path.join(self.output_dir, f"classification_test_results_{timestamp}.json")
         log_file = os.path.join(self.output_dir, f"classification_test_log_{timestamp}.txt")
         
+        # Create a temp directory for intermediate results
+        temp_dir = os.path.join(self.output_dir, f"temp_{timestamp}")
+        os.makedirs(temp_dir, exist_ok=True)
+        
+        # Setup checkpoint file
+        checkpoint_file = os.path.join(temp_dir, "test_checkpoint.json")
+        
         test_data = self.test_data
         if max_comments:
             test_data = test_data[:max_comments]
         
+        # Generate all possible test configurations
+        all_test_configs = []
+        for model in self.models:
+            for variation in self.prompt_variations:
+                for i, comment in enumerate(test_data):
+                    all_test_configs.append((comment, model, variation, i))
+        
+        total_tests = len(all_test_configs)
         all_results = []
+        processed_configs = set()
+        
+        # Check for existing checkpoint
+        if os.path.exists(checkpoint_file):
+            try:
+                with open(checkpoint_file, 'r', encoding='utf-8') as f:
+                    checkpoint_data = json.load(f)
+                    all_results = checkpoint_data.get('results', [])
+                    processed_configs = set(tuple(x) for x in checkpoint_data.get('processed_configs', []))
+                    print(f"Resuming from checkpoint with {len(all_results)} results")
+            except Exception as e:
+                print(f"Error loading checkpoint, starting from beginning: {e}")
+        
+        # Filter out already processed configs
+        configs_to_process = []
+        for config in all_test_configs:
+            comment, model, variation, i = config
+            config_key = (comment.get('id', f'comment_{i}'), model, variation['name'])
+            if config_key not in processed_configs:
+                configs_to_process.append(config)
         
         # Open log file for writing
         with open(log_file, 'w', encoding='utf-8') as log:
             log.write(f"Classification Test Run: {timestamp}\n")
             log.write(f"Models: {', '.join(self.models)}\n")
             log.write(f"Test data: {self.test_data_path} ({len(test_data)} comments)\n")
+            log.write(f"Total test configurations: {total_tests}\n")
+            log.write(f"Parallel batch size: {batch_size}\n")
             log.write("=" * 80 + "\n\n")
             
-            for model in self.models:
-                log.write(f"Model: {model}\n")
-                log.write("-" * 80 + "\n")
+            # Process in batches with progress bar
+            remaining_configs = len(configs_to_process)
+            print(f"Processing {remaining_configs} of {total_tests} test configurations")
+            
+            with tqdm(total=remaining_configs, desc="Running tests") as pbar:
+                for i in range(0, remaining_configs, batch_size):
+                    # Get current batch
+                    batch = configs_to_process[i:i+batch_size]
+                    
+                    # Process batch in parallel
+                    batch_results = self.process_batch(batch)
+                    
+                    # Update results and processed tracking
+                    for result in batch_results:
+                        all_results.append(result)
+                        processed_configs.add((
+                            result['comment_id'], 
+                            result['model'], 
+                            result['prompt_variation']
+                        ))
+                    
+                    # Save checkpoint
+                    checkpoint_data = {
+                        'results': all_results,
+                        'processed_configs': list(processed_configs)
+                    }
+                    with open(checkpoint_file, 'w', encoding='utf-8') as f:
+                        json.dump(checkpoint_data, f)
+                    
+                    pbar.update(len(batch))
+            
+            # Generate and log summary statistics by model and prompt variation
+            log.write("\n===== RESULTS SUMMARY =====\n\n")
+            
+            # Group results by model and prompt variation
+            grouped_results = defaultdict(list)
+            for result in all_results:
+                config_key = (result['model'], result['prompt_variation'])
+                grouped_results[config_key].append(result)
+            
+            # Calculate and log statistics for each configuration
+            for (model, variation_name), results in grouped_results.items():
+                log.write(f"Model: {model}, Prompt Variation: {variation_name}\n")
+                log.write("-" * 60 + "\n")
                 
-                for variation in self.prompt_variations:
-                    variation_name = variation['name']
-                    log.write(f"Prompt variation: {variation_name}\n")
-                    log.write(f"Description: {variation['description']}\n\n")
-                    
-                    # Track metrics for this configuration
-                    total = len(test_data)
-                    correct = 0
-                    errors = 0
-                    confusion_matrix = defaultdict(int)
-                    
-                    # Track all results for this configuration
-                    config_results = []
-                    
-                    for i, comment in enumerate(test_data):
-                        comment_id = comment.get('id', f'comment_{i}')
-                        expected_stance = comment.get('stance', '')
-                        
-                        # Log progress
-                        print(f"Testing {model} + {variation_name}: {i+1}/{total} ({comment_id})")
-                        
-                        # Analyze comment
-                        try:
-                            analysis = self.analyze_comment(
-                                comment_text=comment.get('comment', ''),
-                                model=model,
-                                prompt_variation=variation
-                            )
-                            
-                            # Check if we got an error
-                            if "error" in analysis:
-                                log.write(f"Error analyzing {comment_id}: {analysis['error']}\n")
-                                errors += 1
-                                continue
-                                
-                            # Get the predicted stance
-                            predicted_stance = analysis.get('stance', '')
-                            
-                            # Check if correct
-                            is_correct = predicted_stance == expected_stance
-                            if is_correct:
-                                correct += 1
-                            
-                            # Update confusion matrix
-                            confusion_key = f"{expected_stance}→{predicted_stance}"
-                            confusion_matrix[confusion_key] += 1
-                            
-                            # Record this result
-                            result = {
-                                "comment_id": comment_id,
-                                "model": model,
-                                "prompt_variation": variation_name,
-                                "expected_stance": expected_stance,
-                                "predicted_stance": predicted_stance,
-                                "is_correct": is_correct,
-                                "rationale": analysis.get('rationale', '')
-                            }
-                            config_results.append(result)
-                            all_results.append(result)
-                            
-                            # Add a short delay to avoid rate limiting
-                            time.sleep(0.1)
-                            
-                        except Exception as e:
-                            log.write(f"Error processing {comment_id}: {str(e)}\n")
-                            errors += 1
-                    
-                    # Calculate accuracy
-                    accuracy = correct / total if total > 0 else 0
-                    
-                    # Log results for this configuration
-                    log.write(f"Results for {model} + {variation_name}:\n")
-                    log.write(f"  Total comments: {total}\n")
-                    log.write(f"  Correct classifications: {correct}\n")
-                    log.write(f"  Errors/failures: {errors}\n")
-                    log.write(f"  Accuracy: {accuracy:.2%}\n\n")
-                    
-                    # Log confusion matrix
-                    log.write("Confusion Matrix:\n")
-                    for key, count in confusion_matrix.items():
-                        log.write(f"  {key}: {count}\n")
-                    
-                    # Log some example errors (up to 5)
-                    incorrect_results = [r for r in config_results if not r.get('is_correct', False)]
-                    if incorrect_results:
-                        log.write("\nSample incorrect classifications:\n")
-                        for i, result in enumerate(incorrect_results[:5]):
-                            log.write(f"  {i+1}. Comment {result['comment_id']}:\n")
-                            log.write(f"     Expected: {result['expected_stance']}\n")
-                            log.write(f"     Predicted: {result['predicted_stance']}\n")
-                            log.write(f"     Rationale: {result['rationale']}\n\n")
-                    
-                    log.write("=" * 80 + "\n\n")
+                # Calculate metrics
+                total = len(results)
+                success_count = sum(1 for r in results if r.get('status') == 'success')
+                error_count = total - success_count
+                
+                successful_results = [r for r in results if r.get('status') == 'success']
+                correct_count = sum(1 for r in successful_results if r.get('is_correct', False))
+                
+                accuracy = correct_count / success_count if success_count > 0 else 0
+                success_rate = success_count / total if total > 0 else 0
+                
+                # Build confusion matrix
+                confusion_matrix = defaultdict(int)
+                for result in successful_results:
+                    expected = result.get('expected_stance', '')
+                    predicted = result.get('predicted_stance', '')
+                    confusion_key = f"{expected}→{predicted}"
+                    confusion_matrix[confusion_key] += 1
+                
+                # Log metrics
+                log.write(f"Total tests: {total}\n")
+                log.write(f"Successful API calls: {success_count} ({success_rate:.2%})\n")
+                log.write(f"API errors: {error_count}\n")
+                log.write(f"Correct classifications: {correct_count}\n")
+                log.write(f"Accuracy: {accuracy:.2%}\n\n")
+                
+                # Log confusion matrix
+                log.write("Confusion Matrix:\n")
+                for key, count in sorted(confusion_matrix.items()):
+                    percentage = count / success_count * 100 if success_count > 0 else 0
+                    log.write(f"  {key}: {count} ({percentage:.1f}%)\n")
+                
+                # Log some example errors (up to 5)
+                incorrect_results = [r for r in successful_results if not r.get('is_correct', False)]
+                if incorrect_results:
+                    log.write("\nSample incorrect classifications:\n")
+                    for i, result in enumerate(incorrect_results[:5]):
+                        log.write(f"  {i+1}. Comment {result['comment_id']}:\n")
+                        log.write(f"     Expected: {result['expected_stance']}\n")
+                        log.write(f"     Predicted: {result['predicted_stance']}\n")
+                        log.write(f"     Rationale: {result['rationale']}\n\n")
+                
+                log.write("=" * 80 + "\n\n")
         
         # Save full results to JSON
         with open(results_file, 'w', encoding='utf-8') as f:
@@ -262,6 +390,13 @@ Analyze objectively and avoid inserting personal opinions or biases."""
         
         print(f"Testing complete. Results saved to {results_file}")
         print(f"Log file: {log_file}")
+        
+        # Clean up checkpoint file
+        try:
+            if os.path.exists(checkpoint_file):
+                os.remove(checkpoint_file)
+        except Exception as e:
+            print(f"Error removing checkpoint file: {e}")
         
         return all_results
         
@@ -296,6 +431,12 @@ def main():
         default=None,
         help="Maximum number of comments to test (default: all)"
     )
+    parser.add_argument(
+        "--batch_size", 
+        type=int, 
+        default=5,
+        help="Number of comments to process in parallel (default: 5)"
+    )
     
     args = parser.parse_args()
     
@@ -307,7 +448,7 @@ def main():
         output_dir=args.output_dir
     )
     
-    tester.run_tests(max_comments=args.max_comments)
+    tester.run_tests(max_comments=args.max_comments, batch_size=args.batch_size)
 
 if __name__ == "__main__":
     main()
