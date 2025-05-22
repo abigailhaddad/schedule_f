@@ -3,11 +3,13 @@
 interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
   color?: 'blue' | 'gray' | 'white';
+  label?: string;
 }
 
 export default function LoadingSpinner({ 
   size = 'medium', 
-  color = 'blue' 
+  color = 'blue',
+  label = 'Loading' 
 }: LoadingSpinnerProps) {
   // Determine size classes
   let sizeClasses = '';
@@ -38,12 +40,18 @@ export default function LoadingSpinner({
   }
   
   return (
-    <div className="flex justify-center items-center">
+    <div 
+      className="flex justify-center items-center"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
       <svg 
         className={`animate-spin ${sizeClasses} ${colorClasses}`} 
         xmlns="http://www.w3.org/2000/svg" 
         fill="none" 
         viewBox="0 0 24 24"
+        aria-hidden="true"
       >
         <circle 
           className="opacity-25" 
@@ -59,6 +67,7 @@ export default function LoadingSpinner({
           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
         ></path>
       </svg>
+      <span className="sr-only">{label}</span>
     </div>
   );
 } 

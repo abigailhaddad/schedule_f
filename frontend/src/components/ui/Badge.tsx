@@ -20,6 +20,7 @@ interface BadgeProps {
   className?: string;
   highlight?: string;
   filterType?: string;
+  id?: string;
 }
 
 export default function Badge({ 
@@ -27,7 +28,8 @@ export default function Badge({
   label, 
   className = '', 
   highlight = '',
-  filterType
+  filterType,
+  id
 }: BadgeProps) {
   // Get badge color class based on type
   const getBadgeColorClass = (type: BadgeType): string => {
@@ -67,6 +69,22 @@ export default function Badge({
     }
   };
 
+  // Get semantic meaning of badge for accessibility
+  const getBadgeRole = (type: BadgeType): string => {
+    switch (type) {
+      case 'success':
+        return 'Success status';
+      case 'danger':
+        return 'Error status';
+      case 'warning':
+        return 'Warning status';
+      case 'primary':
+        return 'Information';
+      default:
+        return 'Status';
+    }
+  };
+
   // Highlight search match in text if highlight string is provided
   const highlightSearchMatch = (text: string, searchTerm: string) => {
     if (!searchTerm || !text) return text;
@@ -88,7 +106,11 @@ export default function Badge({
       <>
         {parts.map((part, i) => 
           regex.test(part) ? (
-            <span key={i} className={`${highlightClass} font-medium px-1 rounded`}>
+            <span 
+              key={i} 
+              className={`${highlightClass} font-medium px-1 rounded`}
+              aria-highlighted="true"
+            >
               {part}
             </span>
           ) : (
@@ -100,7 +122,12 @@ export default function Badge({
   };
 
   return (
-    <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${getBadgeColorClass(type)} ${className}`}>
+    <span 
+      className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${getBadgeColorClass(type)} ${className}`}
+      role="status"
+      aria-label={`${getBadgeRole(type)}: ${label}`}
+      id={id}
+    >
       {highlight ? highlightSearchMatch(label, highlight) : label}
     </span>
   );

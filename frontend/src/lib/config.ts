@@ -1,6 +1,7 @@
 // lib/config.ts
 export const datasetConfig = {
-    title: 'Public Comments on Schedule F Regulation',
+    title: 'Public Comments on "Schedule F" Regulation',
+    description: 'Comments about the proposed Schedule Policy/Career Regulation - Improving Performance, Accountability and Responsiveness in the Civil Service',
     subtitle: 'See my git repo', 
     datasetName: 'Comments',
     keyField: 'id',
