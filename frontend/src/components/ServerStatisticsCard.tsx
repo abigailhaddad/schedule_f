@@ -9,13 +9,20 @@ export default function ServerStatisticsCard() {
   
   // Create a state to hold the displayed values
   const [displayedStats, setDisplayedStats] = useState(stats);
+  // State to track if it's the very first load sequence
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   
   // Update displayed stats when new stats arrive and loading is complete
   useEffect(() => {
     if (!loading) {
       setDisplayedStats(stats);
+      // Once data is loaded (or attempted to load and loading is false),
+      // it's no longer the "initial load" for placeholder purposes.
+      if (isInitialLoad) {
+        setIsInitialLoad(false);
+      }
     }
-  }, [stats, loading]);
+  }, [stats, loading, isInitialLoad]);
   
   // Function to get color based on stat type
   const getStatColors = (key: string) => {
@@ -34,6 +41,36 @@ export default function ServerStatisticsCard() {
     { key: 'against', label: 'Against', value: displayedStats.against, match: 'Against' },
     { key: 'neutral', label: 'Neutral/Unclear', value: displayedStats.neutral, match: 'Neutral/Unclear' }
   ];
+
+  // Placeholder component for individual stat
+  const StatPlaceholder = () => (
+    <div className="p-4 rounded-lg border shadow-sm bg-gray-100 animate-pulse">
+      <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+      <div className="h-8 bg-gray-300 rounded w-1/2 mb-1"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/4 mt-2"></div>
+    </div>
+  );
+
+  // If it's the initial load sequence and data is currently loading from context
+  if (isInitialLoad && loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
+          <h5 className="text-lg font-bold text-white flex items-center">
+            <span className="mr-2">📊</span>
+            Statistics Overview
+          </h5>
+        </div>
+        <div className="p-6" id="statistics">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, index) => (
+              <StatPlaceholder key={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
@@ -60,7 +97,7 @@ export default function ServerStatisticsCard() {
                   )}
                 </p>
                 <h3 className={`text-3xl font-bold mb-1 ${colors.text}`}>
-                  {displayedStats ? stat.value.toLocaleString() : '0'}
+                  {(typeof stat.value === 'number' ? stat.value.toLocaleString() : '0')}
                 </h3>
                 {stat.match && (
                   <div className="mt-2 flex items-center">

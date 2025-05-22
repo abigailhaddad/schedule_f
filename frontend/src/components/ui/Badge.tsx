@@ -109,7 +109,7 @@ export default function Badge({
             <span 
               key={i} 
               className={`${highlightClass} font-medium px-1 rounded`}
-              aria-highlighted="true"
+              data-highlighted="true"
             >
               {part}
             </span>
