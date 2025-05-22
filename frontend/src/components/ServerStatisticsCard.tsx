@@ -52,14 +52,24 @@ export default function ServerStatisticsCard() {
                 key={stat.key} 
                 className={`p-4 rounded-lg border shadow-sm ${colors.bg} ${colors.border}`}
               >
-                <p className={`text-sm uppercase font-semibold mb-1 ${colors.text}`}>{stat.label}</p>
+                <p className={`text-sm uppercase font-semibold mb-1 ${colors.text} ${stat.key === 'neutral' ? 'break-words text-xs' : ''}`}>
+                  {stat.key === 'neutral' ? (
+                    <>NEUTRAL/<wbr />UNCLEAR</>
+                  ) : (
+                    stat.label
+                  )}
+                </p>
                 <h3 className={`text-3xl font-bold mb-1 ${colors.text}`}>
                   {displayedStats ? stat.value.toLocaleString() : '0'}
                 </h3>
                 {stat.match && (
                   <div className="mt-2 flex items-center">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
-                      {stat.match}
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border} ${stat.key === 'neutral' ? 'break-words' : ''}`}>
+                      {stat.key === 'neutral' ? (
+                        <>Neutral/<wbr />Unclear</>
+                      ) : (
+                        stat.match
+                      )}
                     </span>
                   </div>
                 )}

@@ -94,21 +94,26 @@ export default function TablePagination({
   };
 
   return (
-    <div className={containerClasses}>
+    <nav aria-label="Table pagination" className={containerClasses}>
       <div className="flex items-center text-sm text-gray-500 mb-3 sm:mb-0">
-        Showing <span className="font-medium mx-1 text-gray-700">{visibleItems > 0 ? (currentPage - 1) * pageSize + 1 : 0}</span> 
+        <span>
+          Showing <span className="font-medium mx-1 text-gray-700">{visibleItems > 0 ? (currentPage - 1) * pageSize + 1 : 0}</span> 
           to <span className="font-medium mx-1 text-gray-700">{Math.min(currentPage * pageSize, totalItems)}</span> 
           of <span className="font-medium mx-1 text-gray-700">{totalItems}</span> entries
           <span className="ml-2 text-gray-600">(Page {currentPage} of {totalPages})</span>
+        </span>
       </div>
       
       <div className="flex items-center space-x-2">
         <div className="flex sm:items-center">
           <div className="mr-4 flex items-center">
+            <label htmlFor="table-page-size" className="sr-only">Items per page</label>
             <select
+              id="table-page-size"
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
               className="rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Items per page"
             >
               {pageSizeOptions.map(size => (
                 <option key={size} value={size}>
@@ -118,11 +123,13 @@ export default function TablePagination({
             </select>
           </div>
           
-          <div className="flex">
+          <div className="flex" role="navigation" aria-label="Pagination">
             <button
               onClick={() => goToPage(1)}
               disabled={!canPreviousPage}
               className={`px-2 py-1 text-sm rounded-l-md border border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              aria-label="Go to first page"
+              aria-disabled={!canPreviousPage}
             >
               «
             </button>
@@ -130,6 +137,8 @@ export default function TablePagination({
               onClick={previousPage}
               disabled={!canPreviousPage}
               className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              aria-label="Go to previous page"
+              aria-disabled={!canPreviousPage}
             >
               ‹
             </button>
@@ -141,11 +150,17 @@ export default function TablePagination({
                   onClick={() => goToPage(page)}
                   className={`px-3 py-1 text-sm border-t border-b border-gray-300 
                     ${currentPage === page ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
+                  aria-label={`Page ${page}`}
+                  aria-current={currentPage === page ? 'page' : undefined}
                 >
                   {page}
                 </button>
               ) : (
-                <span key={i} className="px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500">
+                <span 
+                  key={i} 
+                  className="px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500"
+                  aria-hidden="true"
+                >
                   {page}
                 </span>
               )
@@ -155,6 +170,8 @@ export default function TablePagination({
               onClick={nextPage}
               disabled={!canNextPage}
               className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              aria-label="Go to next page"
+              aria-disabled={!canNextPage}
             >
               ›
             </button>
@@ -162,12 +179,14 @@ export default function TablePagination({
               onClick={() => goToPage(totalPages)}
               disabled={!canNextPage}
               className={`px-2 py-1 text-sm rounded-r-md border border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              aria-label="Go to last page"
+              aria-disabled={!canNextPage}
             >
               »
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 } 
