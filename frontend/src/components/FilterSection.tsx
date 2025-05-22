@@ -63,6 +63,22 @@ export default function FilterSection() {
     setActiveField(null);
   };
   
+  // Handle keyboard events for filter buttons
+  const handleKeyDown = (e: React.KeyboardEvent, field: Field) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openFilterModal(field);
+    }
+  };
+
+  // Handle keyboard events for remove filter buttons
+  const handleRemoveKeyDown = (e: React.KeyboardEvent, callback: () => void) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      callback();
+    }
+  };
+  
   // Check if we have any active filters
   const hasActiveFilters = Object.keys(filters).length > 0;
   
@@ -72,9 +88,13 @@ export default function FilterSection() {
   const renderFilterTags = () => {
     if (!hasActiveFilters) {
       return (
-        <div className="text-center py-4 bg-blue-50 rounded-lg border border-blue-100">
-          <div className="text-blue-600 font-medium mb-1">No filters applied</div>
-          <div className="text-blue-500 text-sm">Use the filter buttons below to refine your data view</div>
+        <div 
+          className="text-center py-4 bg-blue-100 rounded-lg border border-blue-200"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="text-blue-900 font-medium mb-1">No filters applied</div>
+          <div className="text-blue-800 text-sm">Use the filter buttons below to refine your data view</div>
         </div>
       );
     }
@@ -100,11 +120,12 @@ export default function FilterSection() {
           <div 
             key={`${key}-${i}`}
             className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            role="listitem"
           >
             <span className="mr-1 font-medium">{field.title} {i === 0 ? modeText : ''}:</span> 
             <span>{String(v)}</span>
             <button 
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-80"
               onClick={() => {
                 // Create new values array without this value
                 const newValues = (filterValue.values as unknown[]).filter(item => item !== v);
@@ -119,9 +140,20 @@ export default function FilterSection() {
                   });
                 }
               }}
-              aria-label="Remove filter"
+              onKeyDown={(e) => handleRemoveKeyDown(e, () => {
+                const newValues = (filterValue.values as unknown[]).filter(item => item !== v);
+                if (newValues.length === 0) {
+                  handleFilterChange(key, null);
+                } else {
+                  handleFilterChange(key, {
+                    values: newValues,
+                    mode: filterValue.mode
+                  });
+                }
+              })}
+              aria-label={`Remove ${field.title} filter: ${String(v)}`}
             >
-              ×
+              <span aria-hidden="true">×</span>
             </button>
           </div>
         ));
@@ -133,15 +165,19 @@ export default function FilterSection() {
           <div 
             key={`${key}-${i}`}
             className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            role="listitem"
           >
             <span className="mr-1 font-medium">{field.title}:</span> 
             <span>{String(v)}</span>
             <button 
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-80"
               onClick={() => handleFilterChange(key, (value as unknown[]).filter(item => item !== v))}
-              aria-label="Remove filter"
+              onKeyDown={(e) => handleRemoveKeyDown(e, () => 
+                handleFilterChange(key, (value as unknown[]).filter(item => item !== v))
+              )}
+              aria-label={`Remove ${field.title} filter: ${String(v)}`}
             >
-              ×
+              <span aria-hidden="true">×</span>
             </button>
           </div>
         ));
@@ -152,15 +188,17 @@ export default function FilterSection() {
           <div 
             key={key}
             className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            role="listitem"
           >
             <span className="mr-1 font-medium">{field.title}:</span> 
             <span>{String(value)}</span>
             <button 
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-80"
               onClick={() => handleFilterChange(key, null)}
-              aria-label="Remove filter"
+              onKeyDown={(e) => handleRemoveKeyDown(e, () => handleFilterChange(key, null))}
+              aria-label={`Remove ${field.title} filter: ${String(value)}`}
             >
-              ×
+              <span aria-hidden="true">×</span>
             </button>
           </div>
         );
@@ -178,15 +216,18 @@ export default function FilterSection() {
     const filterableFields = datasetConfig.fields.filter(field => field.filter);
     
     return (
-      <div className="flex flex-wrap gap-2 mt-4">
+      <div className="flex flex-wrap gap-2 mt-4" role="group" aria-label="Filter options">
         {filterableFields.map(field => (
           <button 
             key={field.key}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors 
+            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
               ${filters[field.key] 
                 ? 'bg-blue-500 text-white hover:bg-blue-600' 
                 : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'}`}
             onClick={() => openFilterModal(field)}
+            onKeyDown={(e) => handleKeyDown(e, field)}
+            aria-pressed={Boolean(filters[field.key])}
+            aria-label={`Filter by ${field.title}`}
           >
             {field.title}
           </button>
@@ -196,32 +237,38 @@ export default function FilterSection() {
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+    <section 
+      className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden"
+      aria-labelledby="filter-heading"
+    >
       <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-indigo-500 to-indigo-600 flex justify-between items-center">
-        <h5 className="text-lg font-bold text-white flex items-center">
-          <span className="mr-2">{hasActiveFilters ? '🔍' : '⚙️'}</span>
+        <h2 id="filter-heading" className="text-lg font-bold text-white flex items-center">
+          <span className="mr-2" aria-hidden="true">{hasActiveFilters ? '🔍' : '⚙️'}</span>
           {hasActiveFilters ? 'Active Filters' : 'Filters'}
-        </h5>
+        </h2>
         {hasActiveFilters && (
           <button 
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-3 py-1 rounded transition-colors"
+            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-3 py-1 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-80"
             onClick={clearAllFilters}
+            aria-label="Clear all filters"
           >
             Clear All
           </button>
         )}
       </div>
       <div className="p-4">
-        <div className={`flex flex-wrap mb-4 ${
-          hasActiveFilters ? '' : 'hidden'
-        }`}>
+        <div 
+          className={`flex flex-wrap mb-4 ${hasActiveFilters ? '' : 'hidden'}`}
+          role="list"
+          aria-label="Active filters"
+        >
           {renderFilterTags()}
         </div>
         
         {!hasActiveFilters && renderFilterTags()}
         
         <div className="mt-4 pt-4 border-t border-gray-200">
-          <h6 className="font-medium text-gray-700 mb-2">Filter Options</h6>
+          <h3 className="font-medium text-gray-700 mb-2" id="filter-options-heading">Filter Options</h3>
           {renderFilterButtons()}
         </div>
       </div>
@@ -243,6 +290,6 @@ export default function FilterSection() {
           isOpen={showFilterModal}
         />
       )}
-    </div>
+    </section>
   );
 }

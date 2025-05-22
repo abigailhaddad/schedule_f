@@ -16,6 +16,8 @@ export interface TablePaginationProps {
   nextPage: () => void;
   position?: 'top' | 'bottom';
   pageSizeOptions?: number[];
+  id?: string;
+  instanceId: string;
 }
 
 export default function TablePagination({
@@ -31,29 +33,30 @@ export default function TablePagination({
   previousPage,
   nextPage,
   position = 'bottom',
-  pageSizeOptions = [10, 25, 50, 100]
+  pageSizeOptions = [10, 25, 50, 100],
+  id = 'table-pagination',
+  instanceId
 }: TablePaginationProps) {
-  // Adjust border classes based on position
+  // Create unique IDs using the provided instanceId
+  const uniqueId = `${id}-${position}-${instanceId}`;
+  const pageSizeId = `${uniqueId}-page-size`;
+  
   const containerClasses = 
     position === 'top'
     ? "flex flex-col sm:flex-row justify-between items-center px-6 py-3 bg-gray-50 border-b border-gray-200"
     : "flex flex-col sm:flex-row justify-between items-center px-6 py-3 bg-gray-50 border-t border-gray-200";
     
-  // Calculate page numbers to show in pagination
   const getPageNumbers = () => {
     const pageNumbers: (number | string)[] = [];
-    const maxPageButtons = 5; // Maximum number of page buttons to show
+    const maxPageButtons = 5;
     
     if (totalPages <= maxPageButtons) {
-      // Show all pages if total pages is less than max buttons
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Always include first page
       pageNumbers.push(1);
       
-      // Calculate range of page numbers to display
       const leftSide = Math.floor(maxPageButtons / 2);
       const rightSide = maxPageButtons - leftSide - 1;
       
@@ -61,11 +64,9 @@ export default function TablePagination({
         pageNumbers.push('...');
       }
       
-      // Calculate start and end of page numbers
       let start = Math.max(2, currentPage - leftSide);
       let end = Math.min(totalPages - 1, currentPage + rightSide);
       
-      // Adjust if close to either end
       if (currentPage - leftSide < 2) {
         end = Math.min(totalPages - 1, maxPageButtons - 1);
       }
@@ -74,17 +75,14 @@ export default function TablePagination({
         start = Math.max(2, totalPages - maxPageButtons + 1);
       }
       
-      // Add middle page numbers
       for (let i = start; i <= end; i++) {
         pageNumbers.push(i);
       }
       
-      // Add ellipsis if needed
       if (end < totalPages - 1) {
         pageNumbers.push('...');
       }
       
-      // Always include last page if not already included
       if (end < totalPages) {
         pageNumbers.push(totalPages);
       }
@@ -107,13 +105,12 @@ export default function TablePagination({
       <div className="flex items-center space-x-2">
         <div className="flex sm:items-center">
           <div className="mr-4 flex items-center">
-            <label htmlFor="table-page-size" className="sr-only">Items per page</label>
+            <label htmlFor={pageSizeId} className="sr-only">Items per page</label>
             <select
-              id="table-page-size"
+              id={pageSizeId}
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
               className="rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label="Items per page"
             >
               {pageSizeOptions.map(size => (
                 <option key={size} value={size}>
@@ -127,7 +124,7 @@ export default function TablePagination({
             <button
               onClick={() => goToPage(1)}
               disabled={!canPreviousPage}
-              className={`px-2 py-1 text-sm rounded-l-md border border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              className={`px-4 py-2 text-sm rounded-l-md border border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
               aria-label="Go to first page"
               aria-disabled={!canPreviousPage}
             >
@@ -136,7 +133,7 @@ export default function TablePagination({
             <button
               onClick={previousPage}
               disabled={!canPreviousPage}
-              className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              className={`px-4 py-2 text-sm border-t border-b border-gray-300 ${canPreviousPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
               aria-label="Go to previous page"
               aria-disabled={!canPreviousPage}
             >
@@ -148,7 +145,7 @@ export default function TablePagination({
                 <button
                   key={i}
                   onClick={() => goToPage(page)}
-                  className={`px-3 py-1 text-sm border-t border-b border-gray-300 
+                  className={`min-w-[36px] h-[36px] px-3 py-1 text-sm border-t border-b border-gray-300 
                     ${currentPage === page ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
                   aria-label={`Page ${page}`}
                   aria-current={currentPage === page ? 'page' : undefined}
@@ -158,7 +155,7 @@ export default function TablePagination({
               ) : (
                 <span 
                   key={i} 
-                  className="px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500"
+                  className="min-w-[36px] h-[36px] px-2 py-1 text-sm border-t border-b border-gray-300 text-gray-500 flex items-center justify-center"
                   aria-hidden="true"
                 >
                   {page}
@@ -169,7 +166,7 @@ export default function TablePagination({
             <button
               onClick={nextPage}
               disabled={!canNextPage}
-              className={`px-2 py-1 text-sm border-t border-b border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              className={`px-4 py-2 text-sm border-t border-b border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
               aria-label="Go to next page"
               aria-disabled={!canNextPage}
             >
@@ -178,7 +175,7 @@ export default function TablePagination({
             <button
               onClick={() => goToPage(totalPages)}
               disabled={!canNextPage}
-              className={`px-2 py-1 text-sm rounded-r-md border border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
+              className={`px-4 py-2 text-sm rounded-r-md border border-gray-300 ${canNextPage ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-400 cursor-not-allowed bg-gray-50'}`}
               aria-label="Go to last page"
               aria-disabled={!canNextPage}
             >

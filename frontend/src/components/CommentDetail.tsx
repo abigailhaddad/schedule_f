@@ -15,9 +15,12 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">
+    <article 
+      className="bg-white rounded-lg shadow-md p-6"
+      aria-labelledby="comment-title"
+    >
+      <header className="mb-8">
+        <h1 id="comment-title" className="text-2xl font-bold mb-4 text-gray-800">
           {comment.title || 'Untitled Comment'}
         </h1>
         {comment.stance && (
@@ -25,40 +28,66 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
             <Badge 
               type={getBadgeType(comment.stance)}
               label={comment.stance}
+              id="comment-stance"
+              aria-label={`Stance: ${comment.stance}`}
             />
           </div>
         )}
-      </div>
+      </header>
 
       {/* Original Comment */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-2 text-gray-700 border-b pb-2">Original Comment</h2>
-        <div className="whitespace-pre-wrap text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200">
+      <section 
+        className="mb-8"
+        aria-labelledby="original-comment-heading"
+      >
+        <h2 id="original-comment-heading" className="text-lg font-semibold mb-2 text-gray-700 border-b pb-2">Original Comment</h2>
+        <div 
+          className="whitespace-pre-wrap text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200"
+          aria-label="Original comment text"
+        >
           {comment.originalComment || comment.comment || 'No comment text available'}
         </div>
-      </div>
+      </section>
 
       {/* Analysis Section */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Analysis</h2>
+      <section 
+        className="mb-8"
+        aria-labelledby="analysis-heading"
+      >
+        <h2 id="analysis-heading" className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Analysis</h2>
         
         {/* Key Quote */}
         {comment.keyQuote && (
-          <div className="mb-6">
-            <h3 className="text-md font-medium mb-2 text-gray-600">Key Quote</h3>
-            <div className="italic bg-blue-50 p-4 rounded-md border-l-4 border-blue-300 text-gray-700">
+          <div 
+            className="mb-6"
+            aria-labelledby="key-quote-heading"
+          >
+            <h3 id="key-quote-heading" className="text-md font-medium mb-2 text-gray-600">Key Quote</h3>
+            <blockquote className="italic bg-blue-50 p-4 rounded-md border-l-4 border-blue-300 text-gray-700">
               &ldquo;{comment.keyQuote}&rdquo;
-            </div>
+            </blockquote>
           </div>
         )}
         
         {/* Themes */}
         {comment.themes && (
-          <div className="mb-6">
-            <h3 className="text-md font-medium mb-2 text-gray-600">Themes</h3>
-            <div className="flex flex-wrap gap-2">
+          <div 
+            className="mb-6"
+            aria-labelledby="themes-heading"
+          >
+            <h3 id="themes-heading" className="text-md font-medium mb-2 text-gray-600">Themes</h3>
+            <div 
+              className="flex flex-wrap gap-2"
+              role="list"
+              aria-label="Comment themes"
+            >
               {comment.themes.split(',').map((theme, index) => (
-                <Badge key={index} type="primary" label={theme.trim()} />
+                <Badge 
+                  key={index} 
+                  type="primary" 
+                  label={theme.trim()} 
+                  id={`theme-${index}`}
+                />
               ))}
             </div>
           </div>
@@ -66,60 +95,73 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
         
         {/* Rationale */}
         {comment.rationale && (
-          <div className="mb-6">
-            <h3 className="text-md font-medium mb-2 text-gray-600">Rationale</h3>
-            <div className="text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200">
+          <div 
+            className="mb-6"
+            aria-labelledby="rationale-heading"
+          >
+            <h3 id="rationale-heading" className="text-md font-medium mb-2 text-gray-600">Rationale</h3>
+            <div 
+              className="text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200"
+              aria-label="Comment rationale"
+            >
               {comment.rationale}
             </div>
           </div>
         )}
-      </div>
+      </section>
 
       {/* Metadata Section */}
-      <div>
-        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Metadata</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+      <section 
+        aria-labelledby="metadata-heading"
+      >
+        <h2 id="metadata-heading" className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Metadata</h2>
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
           {comment.id && (
             <div>
-              <span className="text-sm font-medium text-gray-500">ID:</span>
-              <div className="text-gray-700">{comment.id}</div>
+              <dt className="text-sm font-medium text-gray-500">ID:</dt>
+              <dd className="text-gray-700">{comment.id}</dd>
             </div>
           )}
           {comment.category && (
             <div>
-              <span className="text-sm font-medium text-gray-500">Category:</span>
-              <div className="text-gray-700">{comment.category}</div>
+              <dt className="text-sm font-medium text-gray-500">Category:</dt>
+              <dd className="text-gray-700">{comment.category}</dd>
             </div>
           )}
           {comment.agencyId && (
             <div>
-              <span className="text-sm font-medium text-gray-500">Agency ID:</span>
-              <div className="text-gray-700">{comment.agencyId}</div>
+              <dt className="text-sm font-medium text-gray-500">Agency ID:</dt>
+              <dd className="text-gray-700">{comment.agencyId}</dd>
             </div>
           )}
           {comment.createdAt && (
             <div>
-              <span className="text-sm font-medium text-gray-500">Created Date:</span>
-              <div className="text-gray-700">{new Date(comment.createdAt).toLocaleDateString()}</div>
+              <dt className="text-sm font-medium text-gray-500">Created Date:</dt>
+              <dd className="text-gray-700">
+                <time dateTime={new Date(comment.createdAt).toISOString()}>
+                  {new Date(comment.createdAt).toLocaleDateString()}
+                </time>
+              </dd>
             </div>
           )}
           {comment.link && (
             <div>
-              <span className="text-sm font-medium text-gray-500">External Link:</span>
-              <div>
+              <dt className="text-sm font-medium text-gray-500">External Link:</dt>
+              <dd>
                 <a 
                   href={comment.link} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center"
+                  className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  aria-label="View original comment on external site (opens in new tab)"
                 >
-                  <span className="mr-1">🔗</span>View Original
+                  <span className="mr-1" aria-hidden="true">🔗</span>View Original
                 </a>
-              </div>
+              </dd>
             </div>
           )}
-        </div>
-      </div>
-    </div>
+        </dl>
+      </section>
+    </article>
   );
 } 
