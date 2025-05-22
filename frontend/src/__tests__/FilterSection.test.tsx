@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import FilterSection from '@/components/FilterSection';
+import FilterSection from '@/components/_backup/FilterSection';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 // Mock the Next.js navigation hooks
