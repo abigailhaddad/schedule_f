@@ -1,7 +1,7 @@
 // components/CommentTable.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Comment } from '@/lib/db/schema';
 import { datasetConfig } from '@/lib/config';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -17,6 +17,7 @@ export default function CommentTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const columnsMenuRef = useRef<HTMLDivElement>(null);
   
   // Get data and state from context
   const {
@@ -75,6 +76,14 @@ export default function CommentTable() {
       [key]: !prev[key]
     }));
   };
+
+  // Handle keyboard events for column visibility items
+  const handleColumnKeyDown = (e: React.KeyboardEvent, key: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleColumnVisibility(key);
+    }
+  };
   
   // Get visible fields based on current visibility state
   const getVisibleFields = () => {
@@ -85,14 +94,25 @@ export default function CommentTable() {
   useEffect(() => {
     // Close dropdown when clicking outside
     const handleClickOutside = (e: MouseEvent) => {
-      if (showColumnsMenu && !(e.target as Element).closest('.columns-dropdown')) {
+      if (showColumnsMenu && columnsMenuRef.current && !columnsMenuRef.current.contains(e.target as Node)) {
         setShowColumnsMenu(false);
       }
     };
     
     document.addEventListener('mousedown', handleClickOutside);
+    
+    // Close dropdown when pressing Escape
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showColumnsMenu) {
+        setShowColumnsMenu(false);
+      }
+    };
+    
+    document.addEventListener('keydown', handleEscape);
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [showColumnsMenu]);
   
@@ -145,7 +165,8 @@ export default function CommentTable() {
                   e.stopPropagation(); // Prevent row click
                   handleRowClick(item);
                 }}
-                className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left cursor-pointer flex items-center"
+                className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left cursor-pointer flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
+                aria-label={`View details for ${String(value) || 'Untitled Comment'}`}
               >
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
@@ -153,6 +174,7 @@ export default function CommentTable() {
                   fill="none" 
                   viewBox="0 0 24 24" 
                   stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path 
                     strokeLinecap="round" 
@@ -174,7 +196,7 @@ export default function CommentTable() {
         }
         
         if (value === null || value === undefined || value === '') {
-          return <span className="text-gray-400 italic">—</span>;
+          return <span className="text-gray-400 italic" aria-label="No value">—</span>;
         }
         
         // Handle boolean values
@@ -186,6 +208,7 @@ export default function CommentTable() {
               <Badge 
                 type={badgeType}
                 label={value ? 'Yes' : 'No'}
+                id={`badge-${field.key}-${item.id}`}
               />
             );
           }
@@ -194,6 +217,7 @@ export default function CommentTable() {
             <Badge 
               type={value ? 'success' : 'default'}
               label={value ? 'Yes' : 'No'}
+              id={`badge-${field.key}-${item.id}`}
             />
           );
         }
@@ -202,7 +226,7 @@ export default function CommentTable() {
         if (field.format === 'multi-label' && typeof value === 'string') {
           const labels = value.split(',').map(label => label.trim()).filter(Boolean);
           return (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1" role="list" aria-label={`${field.title} tags`}>
               {labels.map((label, i) => (
                 <Badge 
                   key={i}
@@ -210,6 +234,7 @@ export default function CommentTable() {
                   label={label}
                   highlight={searchQuery}
                   filterType={field.key}
+                  id={`badge-${field.key}-${item.id}-${i}`}
                 />
               ))}
             </div>
@@ -222,9 +247,10 @@ export default function CommentTable() {
               href={value} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-blue-600 hover:text-blue-800 flex items-center hover:underline"
+              className="text-blue-600 hover:text-blue-800 flex items-center hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              aria-label={`Open external link for ${field.title} (opens in new tab)`}
             >
-              <span className="mr-1">🔗</span>View
+              <span className="mr-1" aria-hidden="true">🔗</span>View
             </a>
           );
         }
@@ -239,6 +265,7 @@ export default function CommentTable() {
               label={String(value)}
               highlight={searchQuery}
               filterType={field.key}
+              id={`badge-${field.key}-${item.id}`}
             />
           );
         }
@@ -265,34 +292,48 @@ export default function CommentTable() {
   // Create the table header with search and export functionality
   const tableHeader = (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4">
-      <h5 className="text-lg font-bold text-white flex items-center">
-        <span className="mr-2">📋</span>
+      <h2 className="text-lg font-bold text-white flex items-center" id="comment-table-heading">
+        <span className="mr-2" aria-hidden="true">📋</span>
         Comment Data
-      </h5>
+      </h2>
       <div className="flex flex-wrap items-center gap-2">
         {/* Search input */}
         <SearchInput
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search comments..."
+          id="comment-search"
+          ariaLabel="Search comments"
         />
         
         {/* Column visibility dropdown */}
-        <div className="relative inline-block columns-dropdown">
+        <div className="relative inline-block" ref={columnsMenuRef}>
           <button 
             className="flex items-center px-3 py-2 text-sm font-medium bg-white bg-opacity-20 rounded hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 text-white transition-colors"
             onClick={() => setShowColumnsMenu(!showColumnsMenu)}
+            aria-haspopup="true"
+            aria-expanded={showColumnsMenu}
+            aria-controls="columns-menu"
           >
-            <span className="mr-1">👁️</span>Columns
+            <span className="mr-1" aria-hidden="true">👁️</span>Columns
           </button>
           {showColumnsMenu && (
-            <div className="absolute right-0 z-50 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200">
+            <div 
+              id="columns-menu"
+              className="absolute right-0 z-50 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200"
+              role="menu"
+              aria-labelledby="columns-button"
+            >
               <div className="py-1 max-h-64 overflow-y-auto">
                 {datasetConfig.fields.map(field => (
                   <div 
                     key={field.key} 
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
                     onClick={() => toggleColumnVisibility(field.key)}
+                    onKeyDown={(e) => handleColumnKeyDown(e, field.key)}
+                    tabIndex={0}
+                    role="menuitem"
+                    aria-checked={visibleColumns[field.key]}
                   >
                     <input
                       type="checkbox"
@@ -300,8 +341,13 @@ export default function CommentTable() {
                       className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       checked={visibleColumns[field.key]}
                       onChange={() => {}}
+                      aria-labelledby={`col-label-${field.key}`}
                     />
-                    <label htmlFor={`col-${field.key}`} className="text-sm text-gray-700 cursor-pointer">
+                    <label 
+                      id={`col-label-${field.key}`}
+                      htmlFor={`col-${field.key}`} 
+                      className="text-sm text-gray-700 cursor-pointer"
+                    >
                       {field.title}
                     </label>
                   </div>
@@ -314,15 +360,18 @@ export default function CommentTable() {
         <button 
           className="flex items-center px-3 py-2 text-sm font-medium bg-white bg-opacity-20 rounded hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 text-white transition-colors"
           onClick={exportCSV}
+          aria-label="Export data to CSV file"
         >
-          <span className="mr-1">📥</span>Export CSV
+          <span className="mr-1" aria-hidden="true">📥</span>Export CSV
         </button>
       </div>
     </div>
   );
 
   return (
-    <div>
+    <section 
+      aria-labelledby="comment-table-heading"
+    >
       <DataTable
         data={sortedData}
         columns={columns}
@@ -334,6 +383,6 @@ export default function CommentTable() {
         onRowClick={handleRowClick}
         rowClassName={() => "cursor-pointer hover:bg-blue-50"}
       />
-    </div>
+    </section>
   );
 }

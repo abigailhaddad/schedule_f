@@ -50,40 +50,61 @@ export default function StatisticsCard({ data }: StatisticsCardProps) {
   
   const stats = calculateStats();
   
-  // Function to get color based on stat key
+  // Function to get color based on stat key with improved contrast
   const getStatColors = (stat: Stat) => {
-    if (stat.match === 'For') return { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' };
-    if (stat.match === 'Against') return { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' };
-    if (stat.match === 'Neutral/Unclear') return { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' };
+    if (stat.match === 'For') return { bg: 'bg-green-100', text: 'text-green-900', border: 'border-green-300' };
+    if (stat.match === 'Against') return { bg: 'bg-red-100', text: 'text-red-900', border: 'border-red-300' };
+    if (stat.match === 'Neutral/Unclear') return { bg: 'bg-gray-100', text: 'text-gray-900', border: 'border-gray-300' };
     
     // Default for total
-    return { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' };
+    return { bg: 'bg-blue-100', text: 'text-blue-900', border: 'border-blue-300' };
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+    <section 
+      className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden"
+      aria-labelledby="statistics-heading"
+    >
       <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
-        <h5 className="text-lg font-bold text-white flex items-center">
-          <span className="mr-2">📊</span>
+        <h2 id="statistics-heading" className="text-lg font-bold text-white flex items-center">
+          <span className="mr-2" aria-hidden="true">📊</span>
           Statistics Overview
-        </h5>
+        </h2>
       </div>
-      <div className="p-6" id="statistics">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="p-6">
+        <div 
+          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+          role="list"
+          aria-label="Comment statistics"
+        >
           {stats.map((stat, index) => {
             const colors = getStatColors(stat);
             return (
               <div 
                 key={index} 
                 className={`p-4 rounded-lg border shadow-sm ${colors.bg} ${colors.border}`}
+                role="listitem"
               >
-                <p className={`text-sm uppercase font-semibold mb-1 ${colors.text}`}>{stat.label}</p>
-                <h3 className={`text-3xl font-bold mb-1 ${colors.text}`}>
+                <p 
+                  className={`text-sm uppercase font-semibold mb-1 ${colors.text}`} 
+                  id={`stat-label-${stat.key}`}
+                >
+                  {stat.label}
+                </p>
+                <h3 
+                  className={`text-3xl font-bold mb-1 ${colors.text}`}
+                  aria-labelledby={`stat-label-${stat.key}`}
+                >
                   {stat.value?.toLocaleString() || '0'}
+                  <span className="sr-only"> comments</span>
                 </h3>
                 {stat.match && (
                   <div className="mt-2 flex items-center">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
+                    <span 
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}
+                      role="note"
+                      aria-label={`Comments with stance: ${stat.match}`}
+                    >
                       {stat.match}
                     </span>
                   </div>
@@ -93,6 +114,6 @@ export default function StatisticsCard({ data }: StatisticsCardProps) {
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

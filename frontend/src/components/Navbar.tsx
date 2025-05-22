@@ -38,7 +38,7 @@ export default function Navbar() {
       {/* Desktop Beta Badge - diagonal in top-right corner */}
       <div className="absolute right-0 top-0 z-50 overflow-hidden w-28 h-28 pointer-events-none hidden sm:block">
         <div className="absolute top-8 right-[-35px] rotate-45 w-[170px] text-center">
-          <div className="bg-yellow-500 text-primary font-bold py-1 text-xs shadow-md">
+          <div className="bg-yellow-700 text-white font-bold py-1 text-xs shadow-md">
             BETA
           </div>
         </div>
@@ -46,7 +46,7 @@ export default function Navbar() {
       
       {/* Mobile Beta Badge - simple horizontal badge */}
       <div className="absolute left-3 top-2 z-50 pointer-events-none sm:hidden">
-        <div className="bg-yellow-500 text-primary font-bold text-xs py-0.5 px-2 rounded shadow-sm">
+        <div className="bg-yellow-700 text-white font-bold text-xs py-0.5 px-2 rounded shadow-sm">
           BETA
         </div>
       </div>
@@ -192,6 +192,7 @@ export default function Navbar() {
                   className="flex items-center py-2 px-3 rounded-md hover:bg-white/10 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                   aria-label="GitHub repository (opens in new tab)"
+                  tabIndex={isMenuOpen ? 0 : -1}
                 >
                   <svg
                     className="w-5 h-5 mr-2"
