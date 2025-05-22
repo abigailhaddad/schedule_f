@@ -29,7 +29,7 @@ export default async function CommentPage({ params, searchParams }: PageProps) {
   return (
     <main className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="pt-20 pb-12">
+      <div className="pt-28 pb-12">
         <div className="container mx-auto px-4 md:px-6">
           <BackButton returnUrl={lastUrl} />
           <CommentDetail comment={result.data} />
