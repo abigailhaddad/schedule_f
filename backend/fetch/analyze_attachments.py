@@ -15,8 +15,13 @@ import argparse
 import shutil
 import re
 import string
+import time
 from collections import defaultdict
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 
 def is_coherent_english_text(text: str) -> bool:
@@ -118,14 +123,121 @@ def sanitize_filename(filename):
     return filename
 
 
-def copy_problematic_files(results_dir, files_with_minimal_text, attachment_texts_map):
+import os
+import base64
+import requests
+import shutil
+import time
+
+
+def extract_text_with_api_key(image_path):
+    api_key = os.environ.get("GOOGLE_VISION_API_KEY")
+    if not api_key:
+        raise ValueError("GOOGLE_VISION_API_KEY not set")
+
+    endpoint_url = f"https://vision.googleapis.com/v1/images:annotate?key={api_key}"
+
+    with open(image_path, "rb") as image_file:
+        content = base64.b64encode(image_file.read()).decode("utf-8")
+
+    request_body = {
+        "requests": [{
+            "image": {
+                "content": content
+            },
+            "features": [{
+                "type": "TEXT_DETECTION"
+            }]
+        }]
+    }
+
+    response = requests.post(endpoint_url, json=request_body)
+    response.raise_for_status()
+
+    result = response.json()
+    try:
+        return result["responses"][0]["textAnnotations"][0]["description"]
+    except (KeyError, IndexError):
+        return ""
+
+
+def save_extracted_text_and_file(file_path, extracted_text, dest_dir):
+    os.makedirs(dest_dir, exist_ok=True)
+    base_filename = os.path.basename(file_path)
+    name, ext = os.path.splitext(base_filename)
+
+    dest_file_path = os.path.join(dest_dir, base_filename)
+    counter = 1
+    while os.path.exists(dest_file_path):
+        dest_file_path = os.path.join(dest_dir, f"{name}_{counter}{ext}")
+        counter += 1
+
+    shutil.copy2(file_path, dest_file_path)
+
+    # Save text file
+    text_file_path = dest_file_path + ".api_extracted.txt"
+    with open(text_file_path, 'w', encoding='utf-8') as f:
+        f.write(f"Original file: {file_path}\n")
+        f.write(f"API: Google Vision (API Key)\n")
+        f.write(f"Text length: {len(extracted_text)} characters\n")
+        f.write("=" * 50 + "\n")
+        f.write("EXTRACTED TEXT:\n")
+        f.write("=" * 50 + "\n")
+        f.write(extracted_text if extracted_text else "(no text detected)")
+
+    return dest_file_path
+
+
+def process_files_with_google_vision_api(files_list, results_dir):
     """
-    Copy files with no text or minimal text to organized folders.
+    Process files using Google Vision API (via API key + REST call).
+    """
+    api_checked_dir = os.path.join(results_dir, "text_extraction_analysis", "api_checked")
+    os.makedirs(api_checked_dir, exist_ok=True)
+
+    print(f"\n=== PROCESSING {len(files_list)} FILES WITH GOOGLE VISION API (API KEY) ===")
+
+    results = {}
+    processed_count = 0
+    failed_count = 0
+
+    for file_path in files_list:
+        try:
+            print(f"Processing: {os.path.basename(file_path)}")
+
+            extracted_text = extract_text_with_api_key(file_path)
+            results[file_path] = extracted_text
+
+            save_extracted_text_and_file(file_path, extracted_text, api_checked_dir)
+
+            processed_count += 1
+            print(f"  → Extracted {len(extracted_text)} characters")
+
+        except Exception as e:
+            print(f"  → Failed: {str(e)}")
+            results[file_path] = f"[API_ERROR: {str(e)}]"
+            failed_count += 1
+
+        time.sleep(0.5)  # Be nice to the API
+
+    print(f"\nAPI Processing complete:")
+    print(f"  Successfully processed: {processed_count}")
+    print(f"  Failed: {failed_count}")
+    print(f"  Results saved to: {api_checked_dir}")
+
+    return results
+
+
+
+def copy_problematic_files(results_dir, files_with_minimal_text, attachment_texts_map, use_api=True):
+    """
+    Copy files with no text or minimal text to organized folders, and optionally process with API.
     
     Args:
         results_dir: Path to the results directory
         files_with_minimal_text: List of files with extraction issues
         attachment_texts_map: Mapping of file paths to extracted text
+        use_api: Whether to use Google Vision API for OCR processing
     """
     # Create analysis folder in the results directory
     analysis_dir = os.path.join(results_dir, "text_extraction_analysis")
@@ -142,6 +254,7 @@ def copy_problematic_files(results_dir, files_with_minimal_text, attachment_text
     copied_no_text = 0
     copied_small_text = 0
     failed_copies = []
+    api_processing_files = []
     
     for file_info in files_with_minimal_text:
         original_path = file_info['path']
@@ -170,6 +283,10 @@ def copy_problematic_files(results_dir, files_with_minimal_text, attachment_text
                 
                 shutil.copy2(original_path, dest_path)
                 copied_no_text += 1
+                
+                # Add to API processing list if it's an image or PDF
+                if ext.lower() in ['pdf', 'jpg', 'jpeg', 'png', 'bmp', 'tiff', 'tif', 'gif']:
+                    api_processing_files.append(original_path)
                 
             else:
                 # Small amount of text - copy to small_text folder with text info
@@ -210,6 +327,10 @@ def copy_problematic_files(results_dir, files_with_minimal_text, attachment_text
                 
                 copied_small_text += 1
                 
+                # Add to API processing list if it's an image or PDF
+                if ext.lower() in ['pdf', 'jpg', 'jpeg', 'png', 'bmp', 'tiff', 'tif', 'gif']:
+                    api_processing_files.append(original_path)
+                
         except Exception as e:
             failed_copies.append(f"Failed to copy {original_path}: {str(e)}")
     
@@ -222,6 +343,12 @@ def copy_problematic_files(results_dir, files_with_minimal_text, attachment_text
         for failure in failed_copies:
             print(f"  {failure}")
     
+    # Process files with Google Vision API if requested
+    api_results = {}
+    if use_api and api_processing_files:
+        print(f"\nFound {len(api_processing_files)} files suitable for Google Vision API processing")
+        api_results = process_files_with_google_vision_api(api_processing_files, results_dir)
+    
     # Create summary file
     summary_path = os.path.join(analysis_dir, "analysis_summary.txt")
     with open(summary_path, 'w', encoding='utf-8') as f:
@@ -231,17 +358,25 @@ def copy_problematic_files(results_dir, files_with_minimal_text, attachment_text
         f.write(f"Results directory: {results_dir}\n\n")
         f.write(f"Files with no text extraction: {copied_no_text}\n")
         f.write(f"Files with minimal text extraction: {copied_small_text}\n")
-        f.write(f"Total problematic files: {len(files_with_minimal_text)}\n\n")
+        f.write(f"Total problematic files: {len(files_with_minimal_text)}\n")
+        f.write(f"Files processed with Google Vision API: {len(api_processing_files) if use_api else 0}\n\n")
         
         if failed_copies:
             f.write("FAILED COPIES:\n")
             for failure in failed_copies:
                 f.write(f"  {failure}\n")
+        
+        if api_results:
+            f.write("\nGOOGLE VISION API PROCESSING RESULTS:\n")
+            successful_api = sum(1 for result in api_results.values() if not result.startswith("[API_ERROR"))
+            f.write(f"Successfully processed: {successful_api}/{len(api_results)}\n")
     
     print(f"\nAnalysis summary saved to: {summary_path}")
+    
+    return api_results
 
 
-def analyze_attachment_extraction(results_dir):
+def analyze_attachment_extraction(results_dir, use_api=True):
     """
     Analyze attachment text extraction for a given results directory.
     
@@ -342,9 +477,10 @@ def analyze_attachment_extraction(results_dir):
     for file_info in sorted(files_with_minimal_text, key=lambda x: (x['ext'], x['length'])):
         print(f"{file_info['ext']}: {file_info['path']} ({file_info['length']} chars)")
     
-    # Copy problematic files to organized folders
+    # Copy problematic files to organized folders and process with Google Vision API
     if files_with_minimal_text:
-        copy_problematic_files(results_dir, files_with_minimal_text, attachment_texts_map)
+        copy_problematic_files(results_dir, files_with_minimal_text, attachment_texts_map, 
+                             use_api=use_api)
     
     return {
         'file_types': dict(file_types),
@@ -353,11 +489,66 @@ def analyze_attachment_extraction(results_dir):
     }
 
 
+
+import os
+import base64
+import requests
+import json
+
+
+def extract_text_with_api_key(image_path):
+    api_key = os.environ.get("GOOGLE_VISION_API_KEY")
+    if not api_key:
+        raise ValueError("GOOGLE_VISION_API_KEY not set")
+
+    endpoint_url = f"https://vision.googleapis.com/v1/images:annotate?key={api_key}"
+
+    # Detect file type and use appropriate Vision feature
+    is_pdf = image_path.lower().endswith(".pdf")
+    feature_type = "DOCUMENT_TEXT_DETECTION" if is_pdf else "TEXT_DETECTION"
+
+    with open(image_path, "rb") as file:
+        content = base64.b64encode(file.read()).decode("utf-8")
+
+    request_body = {
+        "requests": [{
+            "image": {
+                "content": content
+            },
+            "features": [{
+                "type": feature_type
+            }]
+        }]
+    }
+
+    response = requests.post(endpoint_url, json=request_body)
+    response.raise_for_status()
+
+    result = response.json()
+    response_data = result.get("responses", [{}])[0]
+
+    # Try extracting text
+    text = ""
+    try:
+        text = response_data["textAnnotations"][0]["description"]
+    except (KeyError, IndexError):
+        pass
+
+    # Debug: print full response if no text extracted
+    if not text:
+        print(f"  → No text detected in {os.path.basename(image_path)}. Raw response:")
+        print(json.dumps(response_data, indent=2))
+
+    return text
+
+
 def main():
     """Parse arguments and run the script."""
     parser = argparse.ArgumentParser(description='Analyze attachment text extraction')
     parser.add_argument('--results_dir', type=str, default=None,
                       help='Path to the results directory (default: auto-detect latest)')
+    parser.add_argument('--no-api', action='store_true',
+                      help='Skip Google Vision API processing of problematic files')
     
     args = parser.parse_args()
     
@@ -377,7 +568,7 @@ def main():
         results_dir = args.results_dir
     
     # Run the analysis
-    analyze_attachment_extraction(results_dir)
+    analyze_attachment_extraction(results_dir, use_api=not args.no_api)
     
     return 0
 

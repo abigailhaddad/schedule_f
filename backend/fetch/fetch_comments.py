@@ -38,8 +38,6 @@ from dotenv import load_dotenv
 from tqdm import tqdm
 from datetime import datetime
 from typing import Optional, List, Dict, Any, Tuple
-import re
-import string
 
 # Import from backend packages
 from utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
@@ -442,6 +440,92 @@ def extract_pdf_with_ocr(file_path: str) -> str:
     except Exception as e:
         print(f"PDF OCR failed: {e}")
         return ""
+    
+
+
+def is_coherent_english_text(text: str) -> bool:
+    """
+    Check if extracted text looks like coherent English, focusing on detecting OCR gibberish.
+    Allows short coherent text like "yeah, no" but rejects garbled OCR output.
+    
+    Args:
+        text: The extracted text to check
+    
+    Returns:
+        True if text appears to be coherent English, False if it's gibberish
+    """
+    if not text or len(text.strip()) < 2:
+        return False
+    
+    text = text.strip()
+    
+    # Quick pass for very short text - just check it's not mostly symbols
+    if len(text) <= 20:
+        alpha_chars = sum(1 for c in text if c.isalpha())
+        if alpha_chars < 2:  # At least 2 letters
+            return False
+        weird_chars = sum(1 for c in text if c in '@#$%^&*~`|\\{}[]<>')
+        if weird_chars > 2:  # Too many weird symbols
+            return False
+        return True
+    
+    # For longer text, do more comprehensive checks
+    words = text.split()
+    if len(words) == 0:
+        return False
+    
+    # Check 1: Ratio of alphabetic characters should be reasonable
+    alpha_chars = sum(1 for c in text if c.isalpha())
+    total_chars = len(text)
+    alpha_ratio = alpha_chars / total_chars if total_chars > 0 else 0
+    
+    if alpha_ratio < 0.5:  # Less than 50% alphabetic characters
+        return False
+    
+    # Check 2: Average word length should be reasonable (1-20 characters)
+    clean_words = [word.strip(string.punctuation) for word in words if word.strip(string.punctuation)]
+    if not clean_words:
+        return False
+        
+    avg_word_length = sum(len(word) for word in clean_words) / len(clean_words)
+    if avg_word_length < 1 or avg_word_length > 20:
+        return False
+    
+    # Check 3: Not too many single-character "words" (common in OCR failures)
+    single_char_words = sum(1 for word in clean_words if len(word) == 1)
+    if len(clean_words) > 5 and single_char_words / len(clean_words) > 0.4:  # More than 40% single chars
+        return False
+    
+    # Check 4: Shouldn't have excessive weird characters
+    weird_chars = sum(1 for c in text if c in '@#$%^&*~`|\\{}[]<>')
+    if weird_chars > len(text) * 0.15:  # More than 15% weird characters
+        return False
+    
+    # Check 5: For longer text, should have some common English words
+    if len(words) >= 10:
+        common_words = {'the', 'and', 'to', 'of', 'a', 'in', 'is', 'it', 'you', 'that', 'he', 'was', 'for', 'on', 'are', 'as', 'with', 'his', 'they', 'i', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when', 'your', 'can', 'said', 'there', 'each', 'which', 'she', 'do', 'how', 'their', 'if', 'will', 'up', 'other', 'about', 'out', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make', 'like', 'into', 'him', 'has', 'two', 'more', 'very', 'know', 'just', 'first', 'get', 'over', 'think', 'also', 'back', 'after', 'use', 'work', 'life', 'only', 'new', 'way', 'may', 'say', 'no', 'yes', 'good', 'bad', 'well', 'see', 'come', 'go', 'take', 'give'}
+        
+        # Convert to lowercase and remove punctuation for comparison
+        clean_words_lower = [word.lower().strip(string.punctuation) for word in words]
+        common_word_count = sum(1 for word in clean_words_lower if word in common_words)
+        common_word_ratio = common_word_count / len(words)
+        
+        if common_word_ratio < 0.05:  # Less than 5% common words in longer text
+            return False
+    
+    # Check 6: Shouldn't be mostly repeated characters or patterns
+    repeated_char_pattern = re.findall(r'(.)\1{4,}', text)  # 5+ same chars in a row
+    if len(repeated_char_pattern) > 3:
+        return False
+    
+    # Check 7: Detect common OCR garbage patterns
+    # Too many isolated letters with spaces
+    isolated_letters = re.findall(r'\b[a-zA-Z]\b', text)
+    if len(words) > 5 and len(isolated_letters) > len(words) * 0.3:
+        return False
+    
+    return True
+
 
 def extract_text_from_image_ocr(file_path: str) -> str:
     """Extract text from image files using OCR."""
@@ -712,14 +796,19 @@ def get_comment_detail(comment_id: str, api_key: str, download_attachments: bool
                     print(f"Extracting text from {os.path.basename(downloaded_path)}")
                     try:
                         raw_text = extract_text_from_file(downloaded_path)
-                        attachment_text = validate_extracted_text(raw_text, downloaded_path)
-                        attachment_texts.append({
+                        text_ok = is_coherent_english_text(raw_text) if raw_text else False
+
+                        if raw_text and text_ok:
+                            attachment_texts.append({
                             "id": attachment_id,
                             "title": attachment_title,
-                            "text": attachment_text,
+                            "text": raw_text,
                             "file_path": downloaded_path,
                             "mime_type": mime_type
-                        })
+                                })
+                        else:
+                            print(f"Skipping incoherent or empty text for attachment: {attachment_title}")
+
                     except Exception as e:
                         print(f"Error extracting text from {filename}: {e}")
                         attachment_texts.append({
@@ -1078,104 +1167,6 @@ def fetch_comments(document_id: str, output_dir: Optional[str] = None, limit: Op
     
     return result_path
 
-def is_coherent_english_text(text: str) -> bool:
-    """
-    Check if extracted text looks like coherent English, focusing on detecting OCR gibberish.
-    Allows short coherent text like "yeah, no" but rejects garbled OCR output.
-    
-    Args:
-        text: The extracted text to check
-    
-    Returns:
-        True if text appears to be coherent English, False if it's gibberish
-    """
-    if not text or len(text.strip()) < 2:
-        return False
-    
-    text = text.strip()
-    
-    # Quick pass for very short text - just check it's not mostly symbols
-    if len(text) <= 20:
-        alpha_chars = sum(1 for c in text if c.isalpha())
-        if alpha_chars < 2:  # At least 2 letters
-            return False
-        weird_chars = sum(1 for c in text if c in '@#$%^&*~`|\\{}[]<>')
-        if weird_chars > 2:  # Too many weird symbols
-            return False
-        return True
-    
-    # For longer text, do more comprehensive checks
-    words = text.split()
-    if len(words) == 0:
-        return False
-    
-    # Check 1: Ratio of alphabetic characters should be reasonable
-    alpha_chars = sum(1 for c in text if c.isalpha())
-    total_chars = len(text)
-    alpha_ratio = alpha_chars / total_chars if total_chars > 0 else 0
-    
-    if alpha_ratio < 0.5:  # Less than 50% alphabetic characters
-        return False
-    
-    # Check 2: Average word length should be reasonable (1-20 characters)
-    clean_words = [word.strip(string.punctuation) for word in words if word.strip(string.punctuation)]
-    if not clean_words:
-        return False
-        
-    avg_word_length = sum(len(word) for word in clean_words) / len(clean_words)
-    if avg_word_length < 1 or avg_word_length > 20:
-        return False
-    
-    # Check 3: Not too many single-character "words" (common in OCR failures)
-    single_char_words = sum(1 for word in clean_words if len(word) == 1)
-    if len(clean_words) > 5 and single_char_words / len(clean_words) > 0.4:  # More than 40% single chars
-        return False
-    
-    # Check 4: Shouldn't have excessive weird characters
-    weird_chars = sum(1 for c in text if c in '@#$%^&*~`|\\{}[]<>')
-    if weird_chars > len(text) * 0.15:  # More than 15% weird characters
-        return False
-    
-    # Check 5: For longer text, should have some common English words
-    if len(words) >= 10:
-        common_words = {'the', 'and', 'to', 'of', 'a', 'in', 'is', 'it', 'you', 'that', 'he', 'was', 'for', 'on', 'are', 'as', 'with', 'his', 'they', 'i', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when', 'your', 'can', 'said', 'there', 'each', 'which', 'she', 'do', 'how', 'their', 'if', 'will', 'up', 'other', 'about', 'out', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make', 'like', 'into', 'him', 'has', 'two', 'more', 'very', 'know', 'just', 'first', 'get', 'over', 'think', 'also', 'back', 'after', 'use', 'work', 'life', 'only', 'new', 'way', 'may', 'say', 'no', 'yes', 'good', 'bad', 'well', 'see', 'come', 'go', 'take', 'give'}
-        
-        # Convert to lowercase and remove punctuation for comparison
-        clean_words_lower = [word.lower().strip(string.punctuation) for word in words]
-        common_word_count = sum(1 for word in clean_words_lower if word in common_words)
-        common_word_ratio = common_word_count / len(words)
-        
-        if common_word_ratio < 0.05:  # Less than 5% common words in longer text
-            return False
-    
-    # Check 6: Shouldn't be mostly repeated characters or patterns
-    repeated_char_pattern = re.findall(r'(.)\1{4,}', text)  # 5+ same chars in a row
-    if len(repeated_char_pattern) > 3:
-        return False
-    
-    # Check 7: Detect common OCR garbage patterns
-    # Too many isolated letters with spaces
-    isolated_letters = re.findall(r'\b[a-zA-Z]\b', text)
-    if len(words) > 5 and len(isolated_letters) > len(words) * 0.3:
-        return False
-    
-    return True
-
-
-    
-def validate_extracted_text(text: str, file_path: str) -> str:
-    """
-    Validate that extracted text looks like coherent English.
-    Returns empty string if text appears to be OCR gibberish.
-    """
-    if not text:
-        return ""
-    
-    if not is_coherent_english_text(text):
-        print(f"Extracted text appears incoherent for {file_path}, treating as extraction failure")
-        return ""
-    
-    return text
 
 def read_comments_from_csv(csv_file_path: str, output_dir: str, limit: Optional[int] = None):
     """
