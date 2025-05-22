@@ -13,12 +13,19 @@ interface TableFooterProps {
   previousPage: () => void;
   nextPage: () => void;
   loading?: boolean;
+  instanceId?: string;
 }
 
 export default function TableFooter(props: TableFooterProps) {
+  const footerId = `footer-${Math.floor(Date.now() / 1000)}`; // Use a timestamp-based ID that's stable during render
+  
   return (
     <div className="p-4 border-t border-gray-200">
-      <PaginationControls {...props} position="bottom" />
+      <PaginationControls 
+        {...props} 
+        position="bottom" 
+        instanceId={props.instanceId || footerId}
+      />
     </div>
   );
 } 

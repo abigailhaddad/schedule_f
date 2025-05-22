@@ -215,6 +215,10 @@ export default function ServerCommentTable() {
     loading
   };
 
+  // Create unique instance IDs for pagination
+  const topPaginationId = "top-pagination";
+  const bottomPaginationId = "bottom-pagination";
+
   return (
     <div>
       <DataTable
@@ -235,8 +239,8 @@ export default function ServerCommentTable() {
             exportCSV={exportCSV}
           />
         }
-        paginationProps={ paginationProps}
-        footerContent={<TableFooter {...paginationProps} />}
+        paginationProps={{ ...paginationProps, instanceId: topPaginationId }}
+        footerContent={<TableFooter {...paginationProps} instanceId={bottomPaginationId} />}
         onRowClick={handleRowClick}
         rowClassName={() => "cursor-pointer hover:bg-blue-50"}
         loading={loading}

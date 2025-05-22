@@ -14,6 +14,7 @@ interface PaginationControlsProps {
   nextPage: () => void;
   loading?: boolean;
   position?: 'top' | 'bottom';
+  instanceId: string;
 }
 
 export default function PaginationControls({
@@ -28,7 +29,8 @@ export default function PaginationControls({
   goToPage,
   previousPage,
   nextPage,
-  position = 'bottom'
+  position = 'bottom',
+  instanceId
 }: PaginationControlsProps) {
   return (
     // <div className="flex flex-wrap gap-4 items-center justify-end w-full flex-1">
@@ -46,6 +48,7 @@ export default function PaginationControls({
         previousPage={previousPage}
         nextPage={nextPage}
         position={position}
+        instanceId={instanceId}
       />
     // </div>
   );

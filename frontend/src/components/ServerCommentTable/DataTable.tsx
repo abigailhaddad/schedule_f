@@ -44,6 +44,7 @@ export interface DataTableProps<T> {
     previousPage: () => void;
     nextPage: () => void;
     loading: boolean;
+    instanceId?: string;
   };
 }
 
@@ -62,6 +63,13 @@ export default function DataTable<T extends { id: string | number }>({
   loading = false,
   paginationProps
 }: DataTableProps<T>) {
+  // Generate a stable, unique ID based on component properties
+  const tableId = React.useMemo(() => {
+    // Using the first few IDs from data as a stable identifier
+    const idPrefix = data.slice(0, 3).map(item => item.id).join('-');
+    return `table-${idPrefix}`;
+  }, [data]);
+
   // Sorting state
   const [sorting, setSorting] = useState<SortingState | undefined>(initialSorting);
 
@@ -144,7 +152,10 @@ export default function DataTable<T extends { id: string | number }>({
         </Card.Header>
       )}
       {paginationProps && (
-        <PaginationControls {...paginationProps}/>
+        <PaginationControls 
+          {...paginationProps} 
+          instanceId={paginationProps.instanceId || tableId} 
+        />
       )}
       <div className="overflow-x-auto">
         {loading && (
