@@ -5,11 +5,14 @@ import React from 'react';
 interface CardProps {
   children: React.ReactNode;
   className?: string;
+  role?: string;
+  ariaLabel?: string;
 }
 
 interface CardHeaderProps {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }
 
 interface CardBodyProps {
@@ -23,19 +26,26 @@ interface CardFooterProps {
   className?: string;
 }
 
-function Card({ children, className = '' }: CardProps) {
+function Card({ children, className = '', role, ariaLabel }: CardProps) {
   return (
-    <div className={`card shadow-md mb-6 ${className}`}>
+    <section 
+      className={`card shadow-md mb-6 ${className}`}
+      role={role}
+      aria-label={ariaLabel}
+    >
       {children}
-    </div>
+    </section>
   );
 }
 
-function CardHeader({ children, className = '' }: CardHeaderProps) {
+function CardHeader({ children, className = '', id }: CardHeaderProps) {
   return (
-    <div className={`card-header ${className}`}>
+    <header 
+      className={`card-header ${className}`}
+      id={id}
+    >
       {children}
-    </div>
+    </header>
   );
 }
 
@@ -49,9 +59,9 @@ function CardBody({ children, className = '', noPadding = false }: CardBodyProps
 
 function CardFooter({ children, className = '' }: CardFooterProps) {
   return (
-    <div className={`card-footer ${className}`}>
+    <footer className={`card-footer ${className}`}>
       {children}
-    </div>
+    </footer>
   );
 }
 

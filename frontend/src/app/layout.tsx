@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: datasetConfig.title,
-  description: 'Regulatory Comments Analysis',
+  description: 'Public Comments on "Schedule F" Regulation',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32' },
@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <title>Schedule F Analysis</title>
+      <title>"Schedule F" Analysis</title>
       <body className="bg-light font-sans">
         {children}
         <Analytics />

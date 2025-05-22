@@ -15,6 +15,7 @@ interface ButtonProps {
   className?: string;
   title?: string;
   style?: React.CSSProperties;
+  ariaLabel?: string;
 }
 
 export default function Button({
@@ -26,7 +27,8 @@ export default function Button({
   children,
   className = '',
   title,
-  style
+  style,
+  ariaLabel
 }: ButtonProps) {
   // Get variant classes based on standard names
   const getVariantClasses = () => {
@@ -69,8 +71,10 @@ export default function Button({
       className={buttonClasses}
       onClick={onClick}
       disabled={disabled}
+      aria-disabled={disabled}
       title={title}
       style={style}
+      aria-label={ariaLabel}
     >
       {children}
     </button>
