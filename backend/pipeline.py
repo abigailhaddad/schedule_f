@@ -197,8 +197,8 @@ def main():
                       help='Directory to save all results (default: data/results/results_TIMESTAMP)')
     
     # Analysis options
-    parser.add_argument('--model', type=str, default='gpt-4o-mini',
-                      help='Model to use for analysis (default: gpt-4o-mini)')
+    parser.add_argument('--model', type=str, default='gpt-4.1-mini',
+                      help='Model to use for analysis (default: gpt-4.1-mini)')
     parser.add_argument('--api_key', type=str, default=None,
                       help='OpenAI API key (optional, will use environment variable if not provided)')
     
