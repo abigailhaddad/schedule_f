@@ -25,6 +25,35 @@ from fetch.fetch_comments import fetch_comments, read_comments_from_csv, downloa
 from analysis.analyze_comments import analyze_comments
 from utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
 
+def apply_chunking(comments_data, start_from=None, end_at=None, chunk_size=None):
+    """Apply chunking logic to comments data."""
+    print(f"=== CHUNKING INFO ===")
+    print(f"Original data length: {len(comments_data)}")
+    print(f"start_from: {start_from}")
+    print(f"end_at: {end_at}")
+    print(f"chunk_size: {chunk_size}")
+    
+    original_length = len(comments_data)
+    
+    if chunk_size is not None:
+        # Chunk mode: process exactly chunk_size comments starting from start_from
+        start_idx = start_from if start_from is not None else 0
+        end_idx = start_idx + chunk_size
+        print(f"CHUNK MODE: Processing comments {start_idx} to {end_idx-1} (chunk_size={chunk_size})")
+        comments_data = comments_data[start_idx:end_idx]
+        
+    elif start_from is not None or end_at is not None:
+        # Range mode: process from start_from to end_at
+        start_idx = start_from if start_from is not None else 0
+        end_idx = end_at if end_at is not None else len(comments_data)
+        print(f"RANGE MODE: Processing comments {start_idx} to {end_idx-1}")
+        comments_data = comments_data[start_idx:end_idx]
+    
+    print(f"After chunking: {len(comments_data)} comments to process")
+    print(f"=== END CHUNKING INFO ===")
+    
+    return comments_data
+
 def run_pipeline(document_id: str = "OPM-2025-0004-0001", 
                 limit: Optional[int] = None, 
                 skip_fetch: bool = False,
@@ -34,8 +63,11 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
                 input_file: Optional[str] = None,
                 csv_file: Optional[str] = None,
                 output_dir: Optional[str] = None,
-                model: str = "gpt-4o-mini",
-                api_key: Optional[str] = None):
+                model: str = "gpt-4.1-mini",
+                api_key: Optional[str] = None,
+                start_from: Optional[int] = None,
+                end_at: Optional[int] = None,
+                chunk_size: Optional[int] = None):
     """
     Run the complete comment processing pipeline.
     
@@ -48,6 +80,12 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         resume: Resume from last checkpoint if available
         input_file: Input file with comments (used if skip_fetch=True)
         csv_file: CSV file with comments (used instead of API calls)
+        output_dir: Directory to save results
+        model: AI model to use for analysis
+        api_key: API key for AI analysis
+        start_from: Start processing from this comment index
+        end_at: End processing at this comment index
+        chunk_size: Process exactly this many comments starting from start_from
         output_dir: Directory to save all results (default: data/results/results_TIMESTAMP)
         model: Model to use for analysis
         api_key: OpenAI API key (optional, will use environment variable if not provided)
@@ -105,25 +143,36 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
             if not os.path.exists(raw_data_file):
                 raise FileNotFoundError(f"No raw_data.json found in {output_dir} and no input file provided")
     
-    # Step 1.5: Download attachments
-    if not skip_attachments:
-        print("\n=== Step 1.5: Downloading attachments ===")
-        # Load the raw data file
-        with open(raw_data_file, 'r') as f:
-            comments_data = json.load(f)
+    # Load the raw data file for potential chunking
+    with open(raw_data_file, 'r') as f:
+        comments_data = json.load(f)
+    
+    # Apply chunking if specified (this affects both attachments and analysis)
+    if start_from is not None or end_at is not None or chunk_size is not None:
+        print(f"\n=== Applying chunking to {len(comments_data)} comments ===")
+        comments_data = apply_chunking(comments_data, start_from, end_at, chunk_size)
         
-        # Download all attachments
+        # Save the chunked data back to raw_data_file
+        with open(raw_data_file, 'w') as f:
+            json.dump(comments_data, f, indent=2)
+        print(f"Saved chunked data ({len(comments_data)} comments) to {raw_data_file}")
+    
+    # Step 1.5: Download attachments (only for chunked data)
+    if not skip_attachments:
+        print(f"\n=== Step 1.5: Downloading attachments for {len(comments_data)} comments ===")
+        
+        # Download attachments for the (potentially chunked) comments
         updated_comments = download_all_attachments(comments_data, output_dir)
         
         # Save the updated comments with local paths to attachments
         with open(raw_data_file, 'w') as f:
             json.dump(updated_comments, f, indent=2)
     else:
-        print("\n=== Step 1.5: Skipping attachment download as requested ===")
+        print(f"\n=== Step 1.5: Skipping attachment download as requested ===")
     
-    # Step 2: Analyze comments
+    # Step 2: Analyze comments (chunking already applied in raw_data_file)
     if not skip_analyze:
-        print("\n=== Step 2: Analyzing comments ===")
+        print(f"\n=== Step 2: Analyzing {len(comments_data)} comments ===")
         analyze_comments(
             input_file=raw_data_file,
             output_file=analyzed_data_file,
@@ -131,6 +180,7 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
             resume=resume,
             batch_size=10,  # Process 10 comments in parallel
             no_delay=True   # Remove artificial delays
+            # Note: chunking already applied to raw_data_file, so no need to pass chunk params
         )
     else:
         print("\n=== Step 2: Skipping analysis as requested ===")
@@ -169,10 +219,18 @@ def main():
                       help='Directory to save all results (default: data/results/results_TIMESTAMP)')
     
     # Analysis options
-    parser.add_argument('--model', type=str, default='gpt-4.1-mini',
-                      help='Model to use for analysis (default: gpt-4.1-mini)')
+    parser.add_argument('--model', type=str, default='gpt-4o-mini',
+                      help='Model to use for analysis (default: gpt-4o-mini)')
     parser.add_argument('--api_key', type=str, default=None,
                       help='OpenAI API key (optional, will use environment variable if not provided)')
+    
+    # Chunk processing options
+    parser.add_argument('--start_from', type=int, default=None,
+                      help='Start processing from this comment index (useful for debugging)')
+    parser.add_argument('--end_at', type=int, default=None,
+                      help='End processing at this comment index (useful for debugging)')
+    parser.add_argument('--chunk_size', type=int, default=None,
+                      help='Process exactly this many comments starting from start_from')
     
     args = parser.parse_args()
     
@@ -202,7 +260,10 @@ def main():
             csv_file=args.csv_file,
             output_dir=args.output_dir,
             model=args.model,
-            api_key=args.api_key
+            api_key=args.api_key,
+            start_from=args.start_from,
+            end_at=args.end_at,
+            chunk_size=args.chunk_size
         )
     except Exception as e:
         print(f"Error during pipeline execution: {e}")
