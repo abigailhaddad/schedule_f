@@ -9,12 +9,12 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push",
-    "prisma:studio": "prisma studio",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
     "db:seed": "tsx src/lib/db/seed.ts",
-    "warm-cache": "tsx scripts/warm-cache.ts",
-    "build:prod": "next build && npm run warm-cache",
+    "build:prod": "next build",
     "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts"
   },
   "dependencies": {
