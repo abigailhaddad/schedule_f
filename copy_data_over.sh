@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script finds the most recent data.json file from the results directory
-# and copies it to the frontend folder as data.json
+# and copies it to the data folder as data.json
 
 # Get the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -11,8 +11,8 @@ cd "$SCRIPT_DIR"
 # Create the results directory if it doesn't exist
 mkdir -p results
 
-# Create the frontend directory if it doesn't exist
-mkdir -p frontend
+# Create the data directory if it doesn't exist
+mkdir -p data
 
 # Find all results directories sorted by most recent first
 ALL_DIRS=$(find ./results -maxdepth 1 -type d -name "results_*" | sort -r)
@@ -27,8 +27,8 @@ DATA_FOUND=false
 for DIR in $ALL_DIRS; do
   if [ -f "$DIR/data.json" ]; then
     echo "Found data.json in $DIR"
-    cp "$DIR/data.json" "./frontend/data.json"
-    echo "Successfully copied data.json from $DIR to the frontend directory."
+    cp "$DIR/data.json" "./data/data.json"
+    echo "Successfully copied data.json from $DIR to the data directory."
     echo "Timestamp: $(date)"
     DATA_FOUND=true
     break
