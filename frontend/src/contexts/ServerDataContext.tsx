@@ -100,9 +100,43 @@ interface CachedData {
   };
 }
 
-// Client-side cache for fetched data
+// Client-side cache with improved TTL
 const clientCache = new Map<string, { data: CachedData; timestamp: number }>();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes client-side cache
+
+// Check browser storage for persistent client cache
+const getBrowserCache = (key: string): CachedData | null => {
+  if (typeof window === 'undefined') return null;
+  
+  try {
+    const cached = sessionStorage.getItem(`comments-cache-${key}`);
+    if (!cached) return null;
+    
+    const { data, timestamp } = JSON.parse(cached);
+    // Check if cache is still valid (5 minutes)
+    if (Date.now() - timestamp > CACHE_DURATION) return null;
+    
+    return data;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+// Save to browser storage for persistent client cache
+const setBrowserCache = (key: string, data: CachedData): void => {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    sessionStorage.setItem(`comments-cache-${key}`, JSON.stringify({
+      data,
+      timestamp: Date.now()
+    }));
+  } catch (e) {
+    console.error(e);
+    // Ignore storage errors
+  }
+};
 
 export function ServerDataContextProvider({
   children,
@@ -188,7 +222,7 @@ export function ServerDataContextProvider({
     return null;
   }, []);
 
-  // Fetch data with client-side caching
+  // Optimized fetch data function with better caching
   const fetchData = useCallback(async (force = false) => {
     const cacheKey = createCacheKey();
     
@@ -197,13 +231,25 @@ export function ServerDataContextProvider({
       return;
     }
 
-    // Check client-side cache first
+    // Check client-side cache first (memory and browser storage)
     if (!force) {
-      const cached = getCachedData(cacheKey);
-      if (cached) {
-        setData(cached.data);
-        setTotalItems(cached.total);
-        setStats(cached.stats);
+      // First check in-memory cache
+      const memoryCache = getCachedData(cacheKey);
+      if (memoryCache) {
+        setData(memoryCache.data);
+        setTotalItems(memoryCache.total);
+        setStats(memoryCache.stats);
+        setError(null);
+        lastFetchKey.current = cacheKey;
+        return;
+      }
+      
+      // Then check browser storage
+      const browserCache = getBrowserCache(cacheKey);
+      if (browserCache) {
+        setData(browserCache.data);
+        setTotalItems(browserCache.total);
+        setStats(browserCache.stats);
         setError(null);
         lastFetchKey.current = cacheKey;
         return;
@@ -222,7 +268,10 @@ export function ServerDataContextProvider({
       
       // Only fetch stats if filters have changed (not pagination)
       const shouldFetchStats = force || 
-        JSON.stringify(options.filters) !== JSON.stringify(lastFetchKey.current);
+        !lastFetchKey.current || 
+        JSON.stringify(options.filters) !== JSON.stringify(
+          JSON.parse(lastFetchKey.current).filters
+        );
 
       const promises: Promise<CommentsPaginatedResponse | CommentsStatisticsResponse>[] = 
         [getPaginatedComments(options)];
@@ -242,6 +291,15 @@ export function ServerDataContextProvider({
           stats: statsResponse?.success && statsResponse.stats ? statsResponse.stats : stats,
         };
 
+        // Cache the data
+        clientCache.set(cacheKey, { 
+          data: responseData, 
+          timestamp: Date.now() 
+        });
+        
+        // Also cache in browser storage
+        setBrowserCache(cacheKey, responseData);
+
         // Update state
         setData(responseData.data);
         setTotalItems(responseData.total);
@@ -249,12 +307,6 @@ export function ServerDataContextProvider({
           setStats(statsResponse.stats);
         }
         setError(null);
-
-        // Cache the response
-        clientCache.set(cacheKey, {
-          data: responseData,
-          timestamp: Date.now()
-        });
 
         lastFetchKey.current = cacheKey;
       } else {
@@ -266,7 +318,7 @@ export function ServerDataContextProvider({
     } finally {
       setLoading(false);
     }
-  }, [createCacheKey, getCachedData, searchParams, stats]);
+  }, [createCacheKey, searchParams, getCachedData, stats]);
 
   // Refresh data function
   const refreshData = useCallback(async () => {

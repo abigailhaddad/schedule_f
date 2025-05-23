@@ -1,5 +1,5 @@
 // app/comment/[id]/page.tsx
-import { getCommentById, getAllCommentIds } from '@/lib/actions/comments';
+import { getCommentById, getTopCommentIds } from '@/lib/actions/comments';
 import Navbar from '@/components/Navbar';
 import CommentDetail from '@/components/CommentDetail';
 import BackButton from '@/components/BackButton';
@@ -35,15 +35,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// Pre-generate static pages for all comments at build time
+// Pre-generate static pages for a limited number of comments at build time
 export async function generateStaticParams() {
-  // Only generate top 100 most recent comments at build time
-  // Others will be generated on-demand with ISR
-  const ids = await getAllCommentIds(100);
-  
-  return ids.map((id) => ({
-    id: id,
-  }));
+  try {
+    // Only generate top 20 most recent comments at build time to speed up build
+    // Others will be generated on-demand with ISR
+    const ids = await getTopCommentIds(10);
+    
+    return ids.map((id) => ({
+      id: id,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return []; // Return empty array to avoid build failures
+  }
 }
 
 export default async function CommentPage({ params, searchParams }: PageProps) {

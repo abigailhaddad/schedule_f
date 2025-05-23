@@ -210,5 +210,36 @@ export async function getCachedData<T>(
   fetcher: () => Promise<T>,
   ttl?: number
 ): Promise<T> {
-  return cache.getOrSet(key, fetcher, ttl);
+  console.log(`[DEBUG] getCachedData called with key: ${key.substring(0, 50)}${key.length > 50 ? '...' : ''}`);
+  const cacheStart = Date.now();
+  
+  // Check if we already have a valid cached value
+  const cachedValue = cache.get<T>(key);
+  
+  if (cachedValue !== undefined) {
+    console.log(`[DEBUG] Cache HIT for key: ${key.substring(0, 50)}${key.length > 50 ? '...' : ''} in ${Date.now() - cacheStart}ms`);
+    return cachedValue;
+  }
+  
+  // No cache hit, need to fetch
+  console.log(`[DEBUG] Cache MISS for key: ${key.substring(0, 50)}${key.length > 50 ? '...' : ''}`);
+  const fetchStart = Date.now();
+  
+  try {
+    // Fetch the value
+    const value = await fetcher();
+    console.log(`[DEBUG] Fetcher completed in ${Date.now() - fetchStart}ms`);
+    
+    // Cache the value
+    const cacheSetStart = Date.now();
+    cache.set(key, value, ttl);
+    console.log(`[DEBUG] Value cached in ${Date.now() - cacheSetStart}ms`);
+    
+    return value;
+  } catch (error) {
+    console.error(`[DEBUG] Error in fetcher for key ${key.substring(0, 50)}${key.length > 50 ? '...' : ''}:`, error);
+    throw error;
+  } finally {
+    console.log(`[DEBUG] getCachedData total time: ${Date.now() - cacheStart}ms`);
+  }
 }

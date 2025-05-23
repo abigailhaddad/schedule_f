@@ -132,41 +132,81 @@ function extractCountValue(result: { rows?: Array<Record<string, unknown>> }): n
 export async function getPaginatedComments(
   options: QueryOptions
 ): Promise<CommentsPaginatedResponse> {
-  // Create cache key based on options
   const cacheKey = `comments-${JSON.stringify(options)}`;
+  console.log(`[DEBUG] getPaginatedComments called with options: ${JSON.stringify(options)}`);
+  const startTime = Date.now();
+  const QUERY_TIMEOUT = 30000; // 30 seconds timeout for these queries
 
   return getCachedData(
     cacheKey,
     async () => {
       try {
-        // const connection = await connectDb(); // Removed
-        // if (!connection.success) { // Removed
-        //   throw new Error("Failed to connect to database"); // Removed
-        // } // Removed
-
-        // Build queries for data and count
+        console.log(`[DEBUG] Cache miss for getPaginatedComments, fetching from DB`);
+        
         const queryResult = await buildCommentsQuery(options);
+        console.log(`[DEBUG] Queries built in ${Date.now() - startTime}ms`);
 
-        // Execute count query first
-        const countResult = await db.execute(queryResult.countQuery);
-        const total = extractCountValue(countResult);
+        const timeoutPromise = (operationName: string) => 
+          new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error(`${operationName} query timed out after ${QUERY_TIMEOUT / 1000}s`)), QUERY_TIMEOUT);
+          });
 
-        // Execute data query
-        const result = await db.execute(queryResult.query);
-        const data = result.rows as Comment[];
+        let total = 0;
+        let data: Comment[] = [];
+        let success = false;
+        let error: string | undefined;
+
+        try {
+          console.log(`[DEBUG] Executing count query with ${QUERY_TIMEOUT / 1000}s timeout...`);
+          const countStart = Date.now();
+          const countResult = await Promise.race([
+            db.execute(queryResult.countQuery),
+            timeoutPromise('Count')
+          ]);
+          total = extractCountValue(countResult);
+          console.log(`[DEBUG] Count query executed in ${Date.now() - countStart}ms, total: ${total}`);
+
+          console.log(`[DEBUG] Executing data query with ${QUERY_TIMEOUT / 1000}s timeout...`);
+          const dataStart = Date.now();
+          const result = await Promise.race([
+            db.execute(queryResult.query),
+            timeoutPromise('Data')
+          ]);
+          data = result.rows as Comment[];
+          console.log(`[DEBUG] Data query executed in ${Date.now() - dataStart}ms, rows: ${data.length}`);
+          success = true;
+        } catch (e) {
+          if (e instanceof Error && e.message.includes('timed out')) {
+            console.warn(`[WARN] In getPaginatedComments: ${e.message}`);
+            error = `Failed to fetch comments: Query timed out. Op: ${e.message.includes("Count") ? "count" : "data"}`;
+          } else {
+            const errorMessage = e instanceof Error ? e.message : String(e);
+            console.error("[ERROR] Error executing query in getPaginatedComments:", errorMessage);
+            error = `Failed to fetch comments: ${errorMessage}`;
+          }
+          success = false;
+          // Ensure data and total are in their default empty/zero state
+          data = [];
+          total = 0;
+        }
 
         return {
-          success: true,
+          success,
           data,
           total,
+          error
         };
       } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error("Error fetching paginated comments:", errorMessage);
+        console.error("[ERROR] Error in getPaginatedComments (outer try-catch):", errorMessage);
         return { 
           success: false, 
-          error: `Failed to fetch comments: ${errorMessage}` 
+          error: `Failed to fetch comments: ${errorMessage}`,
+          data: [],
+          total: 0
         };
+      } finally {
+        console.log(`[DEBUG] getPaginatedComments total time: ${Date.now() - startTime}ms`);
       }
     }
   );
@@ -178,55 +218,83 @@ export async function getPaginatedComments(
 export async function getCommentStatistics(
   options: QueryOptions
 ): Promise<CommentsStatisticsResponse> {
-  // Create cache key based on options (without pagination)
   const filterOptions = { ...options };
   delete filterOptions.page;
   delete filterOptions.pageSize;
   
   const cacheKey = `stats-${JSON.stringify(filterOptions)}`;
+  console.log(`[DEBUG] getCommentStatistics called with options: ${JSON.stringify(options)}`);
+  const startTime = Date.now();
+  const QUERY_TIMEOUT = 30000; // 30 seconds timeout for stats queries
 
   return getCachedData(
     cacheKey,
     async () => {
       try {
-        // const connection = await connectDb(); // Removed
-        // if (!connection.success) { // Removed
-        //   throw new Error("Failed to connect to database"); // Removed
-        // } // Removed
-
-        // Build all stats queries
+        console.log(`[DEBUG] Cache miss for getCommentStatistics, fetching from DB`);
         const queryResults = await buildStatsQueries(options);
+        console.log(`[DEBUG] Stats queries built in ${Date.now() - startTime}ms`);
 
-        // Execute all queries
-        const [totalResult, forResult, againstResult, neutralResult] = await Promise.all([
-          db.execute(queryResults.totalQuery),
-          db.execute(queryResults.forQuery),
-          db.execute(queryResults.againstQuery),
-          db.execute(queryResults.neutralQuery)
-        ]);
+        const timeoutPromise = (operationName: string) => 
+          new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error(`Stats query (${operationName}) timed out after ${QUERY_TIMEOUT / 1000}s`)), QUERY_TIMEOUT);
+          });
 
-        // Parse results
-        const totalCount = extractCountValue(totalResult);
-        const forCount = extractCountValue(forResult);
-        const againstCount = extractCountValue(againstResult);
-        const neutralCount = extractCountValue(neutralResult);
+        let totalCount = 0, forCount = 0, againstCount = 0, neutralCount = 0;
+        let success = false;
+        let error: string | undefined;
+
+        try {
+          console.log(`[DEBUG] Executing stats queries with ${QUERY_TIMEOUT / 1000}s timeout...`);
+          const queriesStart = Date.now();
+
+          const [totalResult, forResult, againstResult, neutralResult] = await Promise.all([
+            Promise.race([db.execute(queryResults.totalQuery), timeoutPromise('total')]),
+            Promise.race([db.execute(queryResults.forQuery), timeoutPromise('for')]),
+            Promise.race([db.execute(queryResults.againstQuery), timeoutPromise('against')]),
+            Promise.race([db.execute(queryResults.neutralQuery), timeoutPromise('neutral')])
+          ]);
+          console.log(`[DEBUG] All stats queries completed or timed out in ${Date.now() - queriesStart}ms`);
+
+          totalCount = extractCountValue(totalResult);
+          forCount = extractCountValue(forResult);
+          againstCount = extractCountValue(againstResult);
+          neutralCount = extractCountValue(neutralResult);
+          success = true;
+
+        } catch (e) {
+          if (e instanceof Error && e.message.includes('timed out')) {
+            console.warn(`[WARN] In getCommentStatistics: ${e.message}`);
+            error = `Failed to fetch statistics: A stats query timed out.`;
+          } else {
+            const errorMessage = e instanceof Error ? e.message : String(e);
+            console.error("[ERROR] Error executing query in getCommentStatistics:", errorMessage);
+            error = `Failed to fetch statistics: ${errorMessage}`;
+          }
+          success = false;
+          // Default counts remain 0
+        }
 
         return {
-          success: true,
+          success,
           stats: {
             total: totalCount,
             for: forCount,
             against: againstCount,
             neutral: neutralCount
-          }
+          },
+          error
         };
       } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error("Error fetching comment statistics:", errorMessage);
+        console.error("[ERROR] Error in getCommentStatistics (outer try-catch):", errorMessage);
         return { 
           success: false, 
-          error: `Failed to fetch statistics: ${errorMessage}` 
+          error: `Failed to fetch statistics: ${errorMessage}`,
+          stats: { total: 0, for: 0, against: 0, neutral: 0 }
         };
+      } finally {
+        console.log(`[DEBUG] getCommentStatistics total time: ${Date.now() - startTime}ms`);
       }
     }
   );
@@ -355,4 +423,88 @@ export async function revalidateComments() {
   // Revalidate specific paths
   revalidatePath('/');
   revalidatePath('/comment/[id]', 'page');
+}
+
+/**
+ * Get top comment IDs for static generation
+ * @param limit - Maximum number of IDs to return
+ */
+export async function getTopCommentIds(limit = 100): Promise<string[]> {
+  console.log(`[DEBUG] getTopCommentIds called with limit: ${limit}`);
+  const startTime = Date.now();
+  const QUERY_TIMEOUT = 30000; // 30 seconds timeout for this specific query
+
+  try {
+    console.log(`[DEBUG] Building query for getTopCommentIds`);
+    const query = db
+      .select({ id: comments.id })
+      .from(comments)
+      .orderBy(asc(comments.createdAt))
+      .limit(limit);
+
+    console.log(`[DEBUG] Executing query for getTopCommentIds with a ${QUERY_TIMEOUT / 1000}s timeout.`);
+    const queryStart = Date.now();
+
+    const resultPromise = db.execute(query);
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error(`getTopCommentIds query timed out after ${QUERY_TIMEOUT / 1000}s`)), QUERY_TIMEOUT);
+    });
+
+    let result;
+    try {
+      result = await Promise.race([resultPromise, timeoutPromise]);
+    } catch (e) {
+      if (e instanceof Error && e.message.includes('timed out')) {
+        console.warn(`[WARN] ${e.message}`);
+        return []; // Return empty on timeout
+      } 
+      throw e; // Re-throw other errors
+    }
+    
+    console.log(`[DEBUG Query executed with results: ${JSON.stringify(result)}`);
+
+    const rows = result.rows.map((row: Record<string, unknown>) => (row as { id: string }).id);
+    console.log(`[DEBUG] Query processed in ${Date.now() - queryStart}ms, got ${rows.length} rows`);
+    
+    return rows;
+  } catch (error) {
+    console.error("[ERROR] Error fetching top comment IDs:", error);
+    return []; // Return empty array on other errors as well to prevent build hangs
+  } finally {
+    console.log(`[DEBUG] getTopCommentIds total time: ${Date.now() - startTime}ms`);
+  }
+}
+
+/**
+ * Warm the cache with common queries during build
+ */
+export async function warmCache() {
+  console.log('[DEBUG] Starting cache warming...');
+  const startTime = Date.now();
+  
+  // Only warm essential queries to avoid build timeouts
+  try {
+    // Rather than doing all in parallel, which could overload the DB,
+    // do them sequentially
+    console.log('[DEBUG] Warming main page data...');
+    const mainDataStart = Date.now();
+    await getPaginatedComments({ 
+      page: 1, 
+      pageSize: 20, 
+      filters: {},
+      sort: { column: 'createdAt', direction: 'desc' }
+    });
+    console.log(`[DEBUG] Main page data warmed in ${Date.now() - mainDataStart}ms`);
+    
+    console.log('[DEBUG] Warming statistics...');
+    const statsStart = Date.now();
+    await getCommentStatistics({ filters: {} });
+    console.log(`[DEBUG] Statistics warmed in ${Date.now() - statsStart}ms`);
+    
+    // Skip warming filtered views for now - too slow
+    
+    console.log(`[DEBUG] Cache warming completed in ${Date.now() - startTime}ms`);
+  } catch (error) {
+    console.error('Error warming cache:', error);
+  }
 }

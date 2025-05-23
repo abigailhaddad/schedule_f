@@ -10,42 +10,54 @@ export const metadata: Metadata = {
   description: 'Public Comments on "Schedule F" Regulation',
 };
 
-// Revalidate every 24 hours (86400 seconds)
-export const revalidate = 86400;
+// Force static generation with daily revalidation
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 hours
 
-// Generate static params for common filter combinations
-export async function generateStaticParams() {
-  // Pre-generate pages for common filter combinations
-  return [
-    { params: {} }, // Default page
-    { params: { filter_stance: 'For' } },
-    { params: { filter_stance: 'Against' } },
-    { params: { filter_stance: 'Neutral/Unclear' } },
-  ];
-}
+// Skip static params generation to make build faster
+// We'll generate pages on-demand instead
 
-// Fetch initial data on the server
+// Fetch minimal initial data on the server
 async function getInitialData() {
-  const [commentsResponse, statsResponse] = await Promise.all([
-    getPaginatedComments({
-      page: 1,
-      pageSize: 25, // Larger initial page size
-      sort: { column: 'createdAt', direction: 'desc' }
-    }),
-    getCommentStatistics({})
-  ]);
+  // Reduced page size for faster initial load
+  const pageSize = 10;
 
-  return {
-    comments: commentsResponse.success ? commentsResponse.data : [],
-    total: commentsResponse.success ? commentsResponse.total : 0,
-    stats: statsResponse.success ? statsResponse.stats : {
+  try {
+    // Get comments and stats separately to avoid timing out
+    const commentsResponse = await getPaginatedComments({
+      page: 1,
+      pageSize,
+      sort: { column: 'createdAt', direction: 'desc' }
+    });
+    
+    const statsResponse = await getCommentStatistics({});
+    
+    return {
+      comments: commentsResponse.success ? commentsResponse.data : [],
+      total: commentsResponse.success ? commentsResponse.total : 0,
+      stats: statsResponse.success ? statsResponse.stats : {
+        total: 0,
+        for: 0,
+        against: 0,
+        neutral: 0
+      },
+      error: !commentsResponse.success ? commentsResponse.error : null
+    };
+  } catch (error) {
+    console.error('Error fetching initial data:', error);
+    // Return empty data on error to avoid build failures
+    return {
+      comments: [],
       total: 0,
-      for: 0,
-      against: 0,
-      neutral: 0
-    },
-    error: !commentsResponse.success ? commentsResponse.error : null
-  };
+      stats: {
+        total: 0,
+        for: 0,
+        against: 0,
+        neutral: 0
+      },
+      error: 'Failed to fetch initial data'
+    };
+  }
 }
 
 export default async function Home() {

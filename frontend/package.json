@@ -12,7 +12,10 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
-    "db:seed": "tsx src/lib/db/seed.ts"
+    "db:seed": "tsx src/lib/db/seed.ts",
+    "warm-cache": "tsx scripts/warm-cache.ts",
+    "build:prod": "next build && npm run warm-cache",
+    "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",

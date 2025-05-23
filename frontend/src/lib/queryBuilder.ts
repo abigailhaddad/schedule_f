@@ -1,8 +1,11 @@
 'use server';
 
 import { and, or, SQL, sql } from 'drizzle-orm';
+// import type { PgSelect } from 'drizzle-orm/pg-core'; // Temporarily removed to avoid unused-vars error
 import { comments, stanceEnum } from './db/schema';
 import { db } from './db';
+
+const DEBUG = process.env.DEBUG_QUERIES === 'true';
 
 export type FilterMode = 'exact' | 'includes' | 'at_least';
 export type SortDirection = 'asc' | 'desc';
@@ -277,9 +280,19 @@ function buildSearchConditions(search?: string, searchFields?: string[]): SQL[] 
 }
 
 /**
- * Builds a query for the comments table based on provided filters and options
+ * Builds the SQL query for fetching comments based on the provided options
  */
-export async function buildCommentsQuery(options: QueryOptions) {
+export async function buildCommentsQuery(options: QueryOptions): Promise<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  query: any; // Temporarily using any to bypass Drizzle typing issues for debugging build stalls
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  countQuery: any; // Temporarily using any
+}> {
+  const startTime = DEBUG ? Date.now() : 0;
+  if (DEBUG) {
+    console.log(`[DEBUG] Building query with options: ${JSON.stringify(options)}`);
+  }
+  
   // Build filter conditions
   const filterConditions = buildFilterConditions(options.filters);
   
@@ -336,6 +349,14 @@ export async function buildCommentsQuery(options: QueryOptions) {
   console.log(query.toSQL());
   console.log(countQuery.toSQL());
   
+  // Log before returning
+  if (DEBUG) {
+    console.log(`[DEBUG] Query built in ${Date.now() - startTime}ms`);
+    // console.log(`[DEBUG] Data query SQL: ${query.toSQL().sql}`);
+    // console.log(`[DEBUG] Count query SQL: ${countQuery.toSQL().sql}`);
+  }
+  
+  // Return queries
   return { query, countQuery };
 }
 
