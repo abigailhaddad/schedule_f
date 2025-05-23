@@ -1,0 +1,573 @@
+SEMANTIC CLUSTERING REPORT
+================================================================================
+
+Generated: 2025-05-23 18:29:42
+
+CLUSTER 7
+----------------------------------------
+Size: 116 comments
+Keywords: schedule, federal, civil, service, employees, government, political, based, merit, system
+Dominant Stance: Against (99.1% purity)
+Stance Distribution:
+  Against: 115 (99.1%)
+  For: 1 (0.9%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0356
+   Stance: For
+   Title: Comment from Leonard  Kahl
+   Key Quote: "Schedule F seems a reasonable way of going, and if not, change it back in time."
+   LLM Rationale: The comment explicitly supports the implementation of Schedule F, arguing that it is necessary for accountability and oversight of federal employees. The author expresses a belief that the current civil service system is outdated and abused, which aligns with the rule's goals.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0356
+   Full Text: This is very interesting. Every comment I browsed, maybe 20+, was against this regulation. And every comment except one, played the anti Trump, DOGE and Musk cards. This, alone, makes me think that Schedule F implementation is necessary. Something’s amiss here. If, as a Federal Government employee, you are immune to criticism, performance review, essentially any sort of oversight regarding your job, then of course you will be against Schedule F. What is wrong with justification of your salary an...
+----------------------------------------
+
+================================================================================
+
+CLUSTER 11
+----------------------------------------
+Size: 112 comments
+Keywords: federal, employees, civil, service, rule, government, policy, political, protections, career
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 112 (100.0%)
+
+================================================================================
+
+CLUSTER 4
+----------------------------------------
+Size: 111 comments
+Keywords: rule, civil, service, policy, career, federal, employees, proposed, protections, political
+Dominant Stance: Against (98.2% purity)
+Stance Distribution:
+  Against: 109 (98.2%)
+  Neutral/Unclear: 2 (1.8%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0134
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "This means that policy positions should only be at the senior executive service level or equivalent."
+   LLM Rationale: The comment primarily provides a legal interpretation of Title 5 3132 regarding the Senior Executive Service and does not express a clear stance for or against the proposed rule. It focuses on the definitions and responsibilities associated with policy positions without addressing the implications of the proposed rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0134
+   Full Text: Title 5 3132 states that:
+
+ Senior Executive Service position' means any position in an agency which is in
+GS-16, 17, or 18 of the General Schedule or in level IV or V of the Executive
+Schedule
+or an equivalent position, which is not required to be filled by an appointment by the
+President by and with the advice and consent of the Senate, and in which an
+employee--
+,
+"(A) directs the work of an organizational unit;
+"(B) is held accountable for the success of one or more specific programs or proj...
+----------------------------------------
+
+2. Comment ID: OPM-2025-0004-0540
+   Stance: Neutral/Unclear
+   Title: Comment from Silence Dogood
+   Key Quote: "Obtaining precise answers to these questions is essential to assess whether Schedule F’s reclassification framework aligns with statutory mandates, protects employee rights, and maintains government effectiveness."
+   LLM Rationale: The comment does not express a clear stance for or against the proposed rule but instead requests detailed information to evaluate its implications. It focuses on seeking clarity on various aspects of the rule rather than advocating for or opposing it.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0540
+   Full Text: Preamble
+As an engaged citizen with direct experience in rule-making, I have no predisposed stance on the Schedule F proposal. To evaluate its legality, scope, and practical effects, I respectfully request detailed information on the rule’s design, implementation, and oversight. The following questions are intended to elicit clear, specific explanations that will inform a thorough legal analysis.
+
+Clarifying Questions
+1.	Scope of “Policy-Influencing”:
+How exactly is “policy-influencing” defined,...
+----------------------------------------
+
+================================================================================
+
+CLUSTER 0
+----------------------------------------
+Size: 106 comments
+Keywords: schedule, federal, civil, service, merit, political, based, system, employees, career
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 106 (100.0%)
+
+================================================================================
+
+CLUSTER 12
+----------------------------------------
+Size: 88 comments
+Keywords: civil, rule, federal, employees, government, political, service, people, administration, servants
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 88 (100.0%)
+
+================================================================================
+
+CLUSTER 5
+----------------------------------------
+Size: 85 comments
+Keywords: science, scientific, political, research, appointees, policy, nih, funding, change, grant
+Dominant Stance: Against (98.8% purity)
+Stance Distribution:
+  Against: 84 (98.8%)
+  Neutral/Unclear: 1 (1.2%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0854
+   Stance: Neutral/Unclear
+   Title: Comment from David Weinshenker
+   Key Quote: "Grants proposing research on diseases that affect public health should be evaluated by non-partisan, non-political individuals with appropriate scientific background and training."
+   LLM Rationale: The comment discusses the evaluation of research grants without directly addressing the proposed rule regarding Schedule F or civil service protections. It does not reveal a clear stance on the rule itself.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0854
+   Full Text: Grants proposing research on diseases that affect public health should be evaluated by non-partisan, non-political individuals with appropriate scientific background and training.
+----------------------------------------
+
+================================================================================
+
+CLUSTER 3
+----------------------------------------
+Size: 69 comments
+Keywords: civil, service, political, government, people, employees, servants, administration, positions, system
+Dominant Stance: Against (98.6% purity)
+Stance Distribution:
+  Against: 68 (98.6%)
+  Neutral/Unclear: 1 (1.4%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0091
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "You can improve employee performance and resolve all your issues if this administration would extract itself from this government and go away- let the previous administration come back!"
+   LLM Rationale: The comment expresses dissatisfaction with the current administration but does not explicitly address the proposed rule or its implications for civil service protections. It lacks clear support or opposition to the rule, making it neutral.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0091
+   Full Text: You can improve employee performance and resolve all your issues if this administration would extract itself from this government and go away- let the previous administration come back!  You folks do not know what you are doing.
+
+Get out of our civil servants lives.
+----------------------------------------
+
+================================================================================
+
+CLUSTER 8
+----------------------------------------
+Size: 62 comments
+Keywords: federal, workers, opm, government, civil, rule, office, personnel, management, docket
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 62 (100.0%)
+
+================================================================================
+
+CLUSTER 2
+----------------------------------------
+Size: 58 comments
+Keywords: scientific, political, science, civil, grant, federal, funding, policy, research, schedule
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 58 (100.0%)
+
+================================================================================
+
+CLUSTER 10
+----------------------------------------
+Size: 55 comments
+Keywords: rule, performance, employees, proposed, federal, opm, service, policy, employee, civil
+Dominant Stance: Against (81.8% purity)
+Stance Distribution:
+  Against: 45 (81.8%)
+  For: 2 (3.6%)
+  Neutral/Unclear: 8 (14.5%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0033
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "If I his is implemented it should be for new employees only and should not be retroactive for employee currently in those positions."
+   LLM Rationale: The comment does not explicitly support or oppose the proposed rule; it merely suggests a condition for implementation without addressing the broader implications or themes related to civil service protections or politicization.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0033
+   Full Text: If I his is implemented it should be for new employees only and should not be retroactive for employee currently in those positions.
+----------------------------------------
+
+2. Comment ID: OPM-2025-0004-0185
+   Stance: Neutral/Unclear
+   Title: Comment from Janice Watkins
+   Key Quote: "30 days does not provide a meaningful opportunity to comment, as required by 5 U.S.C. § 553(c), on this proposed rule."
+   LLM Rationale: The comment primarily requests an extension of the comment period and does not express a clear stance for or against the proposed rule. It focuses on procedural concerns rather than the substance of the rule itself.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0185
+   Full Text: 30 days does not provide a meaningful opportunity to comment, as required by 5 U.S.C. § 553(c), on this proposed rule. 30 days is generally only considered sufficient when the rulemaking is not significant. This would be a change to how the government operates, and as such is not insignificant. Furthermore, access to this rule will be unavailable from 5 pm today through the weekend, effectively reducing the comment period by days. 
+
+As such, and given the significance of this action, I request a...
+----------------------------------------
+
+3. Comment ID: OPM-2025-0004-0229
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "Please incentivize by providing better bonuses for managers instead of firing."
+   LLM Rationale: The comment does not explicitly support or oppose the proposed rule regarding Schedule F; instead, it suggests an alternative approach to management incentives without addressing the implications of the rule itself.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0229
+   Full Text: Please incentivize by providing better bonuses for managers instead of firing. Their bonuses in the government verse private sector or not comparable and don’t provide incentives to work harder.
+----------------------------------------
+
+4. Comment ID: OPM-2025-0004-0319
+   Stance: For
+   Title: Comment from M D
+   Key Quote: "This is fantastic. As a taxpayer I am strongly in favor of more accountability among government employees and a smaller government sector."
+   LLM Rationale: The comment explicitly supports the proposed rule by expressing a desire for more accountability among government employees and aligns with the efficiency goals of the rule. The mention of voting for Trump due to promises like this further indicates support for the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0319
+   Full Text: This is fantastic. As a taxpayer I am strongly in favor of more accountability among government employees and a smaller government sector. I voted for Trump because of promises like this!
+----------------------------------------
+
+5. Comment ID: OPM-2025-0004-0495
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "If you want to improve transparency and accountability, start from the top."
+   LLM Rationale: The comment expresses a general concern about transparency and accountability in the executive branch but does not specifically address the proposed rule or its implications for civil service protections, making it unclear in stance.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0495
+   Full Text: I believe there is a lack of transparency in the executive branch and doge. There needs to be accountability and oversight when cutting programs that significantly impact people. If you want to improve transparency and accountability, start from the top.
+----------------------------------------
+
+6. Comment ID: OPM-2025-0004-0659
+   Stance: For
+   Title: Comment from Anonymous
+   Key Quote: "The issue is how to more swiftly remove unacceptable performing employees, in non-policy making positions, because delay in removal causes a loss of morale of the part of their collegues."
+   LLM Rationale: The comment supports the need for a more efficient process to remove underperforming employees, indicating a belief that the proposed rule could improve accountability and responsiveness in federal employment.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0659
+   Full Text: As a retired Federal employee, I understand the need to improve perforance, accountability and responsiveness. I have seen management having to go through a long laborious process to remove an employee for unacceptable performance. In one case that I am aware, the employee appealed saying they had not been trained sufficiently, which was not true; the employee was not capable of performing at the GS level they were at. 
+
+The issue is how to more swiftly remove unacceptable performing employees, ...
+----------------------------------------
+
+7. Comment ID: OPM-2025-0004-0810
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "Will each job role have specific and measurable job objectives? Will they be objective? When will employees be given these new job requirements?"
+   LLM Rationale: The comment is requesting information about job roles and objectives without expressing a clear stance for or against the proposed rule. It does not address civil service themes directly.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0810
+   Full Text: Will each job role have specific and measurable job objectives? Will they be objective? When will employees be given these new job requirements?
+----------------------------------------
+
+8. Comment ID: OPM-2025-0004-0922
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "The proposal leans heavily on selected FEVS items and anecdotal media stories."
+   LLM Rationale: The comment primarily requests information and clarification regarding the empirical basis of the proposal, without expressing a clear stance for or against the rule. It focuses on methodological concerns rather than civil service themes.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0922
+   Full Text: To: Office of Personnel Management  
+Docket ID: OPM-2025-0004  
+RIN: 3206-AO80  
+
+Subject: Empirical Foundation for “Performance Crisis”
+
+The proposal leans heavily on selected FEVS items and anecdotal media stories.  
+
+• Please release the full regression models (including code, variables, robustness checks) that link chapter 43/75 procedures to observed under-performance, along with replication data in machine-readable form.  
+• What causal inference method did OPM employ to distinguish betwee...
+----------------------------------------
+
+9. Comment ID: OPM-2025-0004-0929
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "Please provide a sensitivity analysis showing net benefits if separation rates rise by 1 %, 5 %, and 10 % of the 45,000-employee cohort—incorporating onboarding, clearance re-investigation, and lost human-capital costs."
+   LLM Rationale: The comment primarily requests information and analysis regarding cost-benefit accounting without expressing a clear stance for or against the proposed rule. It focuses on specific data and analysis rather than civil service themes.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0929
+   Full Text: To: Office of Personnel Management  
+Docket ID: OPM-2025-0004  
+RIN: 3206-AO80  
+
+Subject: Cost-Benefit Accounting Under E.O. 12866
+
+The RIA counts MSPB litigation avoided as a benefit but assigns zero cost to involuntary turnover.  
+
+• Please provide a sensitivity analysis showing net benefits if separation rates rise by 1 %, 5 %, and 10 % of the 45,000-employee cohort—incorporating onboarding, clearance re-investigation, and lost human-capital costs.  
+• Why are whistleblower, EEO, and mixed-c...
+----------------------------------------
+
+10. Comment ID: OPM-2025-0004-0980
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "Please make it clear under what authority these changes will be made for existing employees versus changes made for new hires."
+   LLM Rationale: The comment primarily seeks clarification on the authority and implications of the proposed changes without expressing a clear stance for or against the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0980
+   Full Text: Please make it clear under what authority these changes will be made for existing employees versus changes made for new hires. This only seems possible for new hires (those hired after this policy goes into effect) but the memo does not make this at all clear. Also, please include reference to all previous OPM hiring policies that this affects or supplants.
+----------------------------------------
+
+================================================================================
+
+CLUSTER 1
+----------------------------------------
+Size: 51 comments
+Keywords: federal, oppose, employees, government, rule, change, political, civil, service, policy
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 51 (100.0%)
+
+================================================================================
+
+CLUSTER 6
+----------------------------------------
+Size: 32 comments
+Keywords: federal, government, employees, servants, administration, loyalty, public, civil, constitution, them
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 32 (100.0%)
+
+================================================================================
+
+CLUSTER 13
+----------------------------------------
+Size: 25 comments
+Keywords: opm, rule, policy, how, agencies, interests, executive, reliance, employees, statutory
+Dominant Stance: Neutral/Unclear (52.0% purity)
+Stance Distribution:
+  Against: 12 (48.0%)
+  Neutral/Unclear: 13 (52.0%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Neutral/Unclear'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0656
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "These deficiencies render the proposed rule legally vulnerable. I urge OPM to withdraw it and pursue any policy changes in a manner consistent with administrative law."
+   LLM Rationale: The comment opposes the proposed rule by highlighting significant legal deficiencies and concerns about due process and reliance interests, indicating a defense of the current merit-based system and civil service protections.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0656
+   Full Text: Re: Procedural Deficiencies in Rescinding the April 2024 Final Rule
+I am writing to highlight significant administrative law deficiencies in this NPRM's approach to rescinding the April 2024 final rule.
+I. Failure to Satisfy State Farm Requirements
+This NPRM violates principles established in Motor Vehicle Manufacturers v. State Farm. The NPRM claims the previous rule should be revoked because "Executive Order 14171 has changed the underlying legal authorities." Federal Register This misundersta...
+----------------------------------------
+
+2. Comment ID: OPM-2025-0004-0688
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "Only qualified, licensed, experts in these fields can be Peer Reviewers. Anything other is politically motivated and a Censoring tool."
+   LLM Rationale: The comment expresses concern about the qualifications of decision-makers and suggests that the proposed rule is politically motivated, indicating opposition to the potential politicization of civil service roles.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0688
+   Full Text: OPM are not qualified to make decisions. Only qualified, licensed, experts in these fields can be Peer Reviewers. Anything other is politically motivated and a Censoring tool.
+----------------------------------------
+
+3. Comment ID: OPM-2025-0004-0829
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "GAO-22-105504 concluded agencies already possess tools to discipline poor performers."
+   LLM Rationale: The comment questions the need for the proposed rule by highlighting existing mechanisms for disciplining poor performers, suggesting a preference for maintaining current merit-based systems and due process protections. This indicates opposition to the rule and concerns about its implications for civil service integrity.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0829
+   Full Text: Counter-evidence Omitted - “GAO-22-105504 concluded agencies already possess tools to discipline poor performers. Why did OPM exclude that contrary evidence (and its 40 pages of survey results) from the rule-making record, and how does that omission comport with Motor Vehicle Mfrs.?”
+----------------------------------------
+
+4. Comment ID: OPM-2025-0004-0842
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "Explain how your interpretation avoids a Due-Process taking of property interests recognized in Perry v. Sindermann."
+   LLM Rationale: The comment raises concerns about due process and the potential violation of employee rights, indicating opposition to the proposed rule's implications for existing tenure and protections.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0842
+   Full Text: Constitutional Avoidance Reversal - “Free Enterprise Fund’s dictum cited by OPM concerned the President’s latent authority, not the power to extinguish existing tenure. Explain how your interpretation avoids a Due-Process taking of property interests recognized in Perry v. Sindermann.”
+----------------------------------------
+
+5. Comment ID: OPM-2025-0004-0855
+   Stance: Against
+   Title: Comment from Ryan Tyndelson
+   Key Quote: "The proposed rule effectively creates a broad new functional exception for 'policy-influencing' roles within the competitive service, removing them from Chapter 75 protections."
+   LLM Rationale: The comment raises significant legal and procedural concerns about the proposed rule, emphasizing the importance of existing civil service protections and the potential for politicization, which aligns with opposition to the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0855
+   Full Text: This comment responds to Section E ("Reliance Interests") of the proposed rule and fundamental deficiencies in OPM's administrative process under the Administrative Procedure Act (APA) and potential overreach of OPM statutory authority.
+
+ * Failure to Provide Reasoned Explanation for Policy Reversal (APA § 706(2)(A)): OPM's current proposal represents a stark reversal of its previously stated position, which acknowledged the validity and importance of employee, public, Congressional, and regulat...
+----------------------------------------
+
+6. Comment ID: OPM-2025-0004-0909
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "The agency cites no precedent where § 3302 was used to strike *existing* procedural protections for an entire class of employees."
+   LLM Rationale: The comment questions the legality and precedent of removing existing employee rights, indicating a concern for due process and employee protections, which aligns with opposition to the proposed rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0909
+   Full Text: OPM concedes that § 3302 originates in the Pendleton Act but then claims it authorizes “any exception the President finds necessary,” including removal of incumbent employees’ Chapter 75 rights. The agency cites no precedent where § 3302 was used to strike *existing* procedural protections for an entire class of employees.
+
+Please identify a concrete historical example—post-CSRA—where § 3302 was lawfully invoked to eliminate adverse-action rights for incumbents, or else explain why this novel co...
+----------------------------------------
+
+7. Comment ID: OPM-2025-0004-0918
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "What is the precise legal source that extinguishes the *Loudermill* property expectation attaching to 5 U.S.C. §§ 4303 & 7513 procedures once an employee has completed probation?"
+   LLM Rationale: The comment raises significant legal concerns regarding due process and employee rights, questioning the legality of the proposed reclassification and its implications for existing protections. This indicates a clear opposition to the rule, as it emphasizes the importance of maintaining due process in civil service.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0918
+   Full Text: To: Office of Personnel Management  
+Docket ID: OPM-2025-0004  
+RIN: 3206-AO80  
+
+Subject: Due-Process Property Interests After Reclassification
+
+OPM now labels bulk reclassification into SP/C a “legislative” act that eliminates existing property interests.  
+
+• What is the precise legal source that extinguishes the *Loudermill* property expectation attaching to 5 U.S.C. §§ 4303 & 7513 procedures once an employee has completed probation?  
+• How does OPM reconcile this view with *Perry v. MSPB* ...
+----------------------------------------
+
+8. Comment ID: OPM-2025-0004-0931
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "Merit Principle 6 calls for separation **only after opportunity to improve**."
+   LLM Rationale: The comment raises concerns about the elimination of performance improvement plans (PIPs) and questions the consistency of the proposed rule with merit system principles, indicating opposition to the rule's implementation.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0931
+   Full Text: To: Office of Personnel Management  
+Docket ID: OPM-2025-0004  
+RIN: 3206-AO80  
+
+Subject: Consistency With Merit System Principle 6
+
+Merit Principle 6 calls for separation **only after opportunity to improve**.  
+
+• In what sense does an immediate at-will removal regime “promote the efficiency of the service” when a 30-day PIP already exists as a minimal safeguard?  
+• Has OPM obtained MSPB’s institutional view on whether eliminating PIPs for SP/C is consistent with §§ 2301(b)(6) & (8)?  If obt...
+----------------------------------------
+
+9. Comment ID: OPM-2025-0004-0932
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "How does OPM propose to maintain consistency in policy interpretation across states if each administration can replace technical staff interpreting guidance under Schedule F, effectively nullifying nationwide standards?"
+   LLM Rationale: The comment raises concerns about the potential for politicization of civil service roles, questioning how consistent policy interpretation can be maintained if staff can be replaced based on political considerations. This indicates opposition to the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0932
+   Full Text: How does OPM propose to maintain consistency in policy interpretation across states if each administration can replace technical staff interpreting guidance under Schedule F, effectively nullifying nationwide standards?
+----------------------------------------
+
+10. Comment ID: OPM-2025-0004-0937
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "Has OPM evaluated the fiduciary risk of entrusting implementation of billion-dollar Farm Bill programs to potentially unqualified political appointees under Schedule F, especially where decisions involve infrastructure safety or conservation compliance?"
+   LLM Rationale: The comment raises concerns about the potential risks of politicizing civil service roles, particularly regarding the qualifications of political appointees in critical areas like infrastructure safety and conservation, which indicates opposition to the proposed rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0937
+   Full Text: Has OPM evaluated the fiduciary risk of entrusting implementation of billion-dollar Farm Bill programs to potentially unqualified political appointees under Schedule F, especially where decisions involve infrastructure safety or conservation compliance?
+----------------------------------------
+
+11. Comment ID: OPM-2025-0004-0948
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "Since WGS 84 is explicitly a non-political program necessary for global navigation, OPM-2025-0004-0001 needs to be amended to provide an exemption for all workers who may meet the definitions of Schedule F as described in the document."
+   LLM Rationale: The comment expresses concerns about the potential politicization of a critical non-political program, emphasizing the need for protections for employees involved in this work, which aligns with opposition to the proposed rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0948
+   Full Text: As per NGA.STND.0036, the Department of Defense is required to maintain WGS 84, the best global geodetic reference system for the Earth available at this time for practical applications of mapping, charting, geopositioning, and navigation. Currently the Joint Chiefs of Staff for Intelligence (J2) are working to codify the importance of WGS 84 for global safety of navigation and national security in a letter to be published later this year.
+
+Since the construction and maintenance of WGS 84 is exp...
+----------------------------------------
+
+12. Comment ID: OPM-2025-0004-0990
+   Stance: Against
+   Title: Comment from Anonymous
+   Key Quote: "the new proposed act could cause future legal challenges, using the 1st, 5th, and 14th amendments, based upon OPM’s interpretation of the Administrative Procedure Act."
+   LLM Rationale: The comment raises concerns about potential legal challenges related to constitutional rights and due process violations, indicating opposition to the proposed rule. It emphasizes the risks of politicization and the undermining of employee protections, aligning with themes that oppose the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0990
+   Full Text: Bottom line: the new proposed act could cause future legal challenges, using the 1st, 5th, and 14th amendments, based upon OPM’s interpretation of the Administrative Procedure Act.  It may be wise to either reconsider / address, or at the very least, strength the OPM’s argument that the President should have unlimited and unrestricted control, (ie: without legal oversight), if future legal challenges wish to be prevented. 
+
+Please see the attached txt document for further details.
+----------------------------------------
+
+================================================================================
+
+CLUSTER 14
+----------------------------------------
+Size: 17 comments
+Keywords: president, was, trump, fail, his, political, country, federal, stop, government
+Dominant Stance: Against (58.8% purity)
+Stance Distribution:
+  Against: 10 (58.8%)
+  Neutral/Unclear: 7 (41.2%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0046
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "This regulatory recommendation will allow the proper communication requirements and procedures to be able to proceed with the missions pending."
+   LLM Rationale: The comment does not explicitly support or oppose the proposed rule and focuses on communication and collaboration without addressing civil service themes or the implications of the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0046
+   Full Text: OPM-2025-0004-0001  CBI
+RIN 3206-AO80   Federal Agency
+This regulatory recommendation will allow the proper communication requirements and procedures to be able to proceed with the missions pending.  There is so many facets to address and it’s time to collaborate on the existing and new projects that will benefit all taxpayers.
+----------------------------------------
+
+2. Comment ID: OPM-2025-0004-0348
+   Stance: Neutral/Unclear
+   Title: Comment from Lynn Crayne III
+   Key Quote: "Although he was elected, can we fire President Donald Trump?"
+   LLM Rationale: The comment expresses frustration with President Trump and his administration but does not address the proposed rule regarding Schedule F or civil service protections. It focuses on political grievances without connecting to the themes of civil service or employment protections.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0348
+   Full Text: Although he was elected, can we fire President Donald Trump?  He doesn't care about the average American except to get their vote or hold a rally to feed his narcism.  However, that's not what you want to hear, is it?  Ok.  Maybe start Secretary Hegseth because of his incompetency, but wait...the all-knowing Donald hand picked Petey, right?  Geeze, you guys must have a big circle jerk going on.
+----------------------------------------
+
+3. Comment ID: OPM-2025-0004-0534
+   Stance: Neutral/Unclear
+   Title: Comment from Dr. Dink
+   Key Quote: "Are you high?"
+   LLM Rationale: The comment does not provide any clear stance on the proposed rule and appears to be a rhetorical question without substantive content related to civil service or the proposed changes.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0534
+   Full Text: Are you high?
+----------------------------------------
+
+4. Comment ID: OPM-2025-0004-0542
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "This is not how a country is supposed to function"
+   LLM Rationale: The comment does not provide a clear stance on the proposed rule and lacks specific references to civil service themes, making it ambiguous.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0542
+   Full Text: This is not how a country is supposed to function
+----------------------------------------
+
+5. Comment ID: OPM-2025-0004-0711
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "Why don't the two out-of-touch billionaires, President Musk and the orange traitor, focus on the REAL minority that is ruining this country-the billionaires, instead of ruining ordinary American taxpayers' live?"
+   LLM Rationale: The comment expresses frustration with billionaires and political figures but does not address the proposed rule or civil service themes, making it unclear and unrelated to the topic at hand.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0711
+   Full Text: Why don't the two out-of-touch billionaires, President Musk and the orange traitor, focus on the REAL minority that is ruining this country-the billionaires, instead of ruining ordinary American taxpayers' live?
+----------------------------------------
+
+6. Comment ID: OPM-2025-0004-0777
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "Doge sucks"
+   LLM Rationale: The comment does not provide any relevant information or opinion regarding the proposed rule on Schedule F and instead expresses a vague personal sentiment unrelated to civil service themes.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0777
+   Full Text: Doge sucks
+----------------------------------------
+
+7. Comment ID: OPM-2025-0004-0775
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "The inevitability of idiocy that follows the election of Krasnov is reflected in this proposed bill."
+   LLM Rationale: The comment expresses a general political complaint about an individual but does not provide specific arguments related to the proposed rule or civil service themes, making it unclear and not directly opposing or supporting the rule.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0775
+   Full Text: The inevitability of idiocy that follows the election of Krasnov is reflected in this proposed bill. Don’t pass it or there will be trouble.
+----------------------------------------
+
+================================================================================
+
+CLUSTER 9
+----------------------------------------
+Size: 13 comments
+Keywords: attached, see, please, comment, document, letter, test, ignore, full, file
+Dominant Stance: Against (92.3% purity)
+Stance Distribution:
+  Against: 12 (92.3%)
+  Neutral/Unclear: 1 (7.7%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0173
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "This is s a test. Please ignore"
+   LLM Rationale: The comment does not express a clear stance on the proposed rule and is simply a test message, making it neutral and unrelated to the topic.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0173
+   Full Text: This is s a test. Please ignore
+----------------------------------------
+
+================================================================================
+
