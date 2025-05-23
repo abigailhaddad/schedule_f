@@ -13,6 +13,11 @@ data/
 analyzed_comments/
 comments.json
 *.json
+*.json
+!frontend/package.json
+!frontend/package-lock.json
+!frontend/tsconfig.json
+
 
 # OS specific
 .DS_Store
