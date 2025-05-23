@@ -192,6 +192,7 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
         return None
     
     comment_id = extracted['id']
+    print(comment_id)
     comment_text = extracted['text']
     title = extracted['title']
     category = extracted['category']
@@ -370,7 +371,8 @@ def build_comment_lookup(comments_data):
                     'original_comment': comment_text,  # Just the main comment
                     'link': link,
                     'agencyId': agency_id,
-                    'has_attachments': bool(attachment_texts)
+                    'has_attachments': bool(attachment_texts),
+                    'postedDate': attributes.get('postedDate', '')
                 }
     
     return original_comments
@@ -393,7 +395,8 @@ def format_results_for_output(results, original_comments):
                 "link": original_comments.get(comment_id, {}).get('link', ''),
                 "stance": result.get("analysis", {}).get("stance", ""),
                 "key_quote": result.get("analysis", {}).get("key_quote", ""),
-                "rationale": result.get("analysis", {}).get("rationale", "")
+                "rationale": result.get("analysis", {}).get("rationale", ""),
+                "postedDate": original_comments.get(comment_id, {}).get('postedDate', '')
             }
             
             # Convert themes to a comma-separated string
@@ -419,7 +422,9 @@ def format_results_for_output(results, original_comments):
                 "stance": "",
                 "key_quote": "",
                 "rationale": "",
-                "themes": ""
+                "themes": "",
+                "postedDate": original_comments.get(comment_id, {}).get('postedDate', '')
+
             }
                 
             flat_results.append(flat_item)
@@ -475,8 +480,8 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4.1-mi
     
     # Limit the number of comments if specified
     if top_n and top_n < len(comments_data):
-        print(f"Limiting analysis to first {top_n} comments as requested")
-        comments_data = comments_data[:top_n]
+        print(f"Limiting analysis to bottom {top_n} comments as requested")
+        comments_data = comments_data[-top_n:]
     
     # Determine where to save the results
     if output_file is None:
