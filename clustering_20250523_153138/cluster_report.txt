@@ -1,0 +1,168 @@
+SEMANTIC CLUSTERING REPORT
+================================================================================
+
+Generated: 2025-05-23 15:31:44
+
+CLUSTER 11
+----------------------------------------
+Size: 13 comments
+Keywords: employees, federal, rule, civil, opm, job, proposed, employee, office, management
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 13 (100.0%)
+
+================================================================================
+
+CLUSTER 2
+----------------------------------------
+Size: 11 comments
+Keywords: civil, service, federal, office, management, government, rule, people, personnel, docket
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 11 (100.0%)
+
+================================================================================
+
+CLUSTER 3
+----------------------------------------
+Size: 10 comments
+Keywords: federal, employees, rule, government, service, political, president, civil, administration, policy
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 10 (100.0%)
+
+================================================================================
+
+CLUSTER 4
+----------------------------------------
+Size: 10 comments
+Keywords: federal, workers, oppose, political, government, rule, reclassify, civil, office, management
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 10 (100.0%)
+
+================================================================================
+
+CLUSTER 1
+----------------------------------------
+Size: 9 comments
+Keywords: scientific, research, political, grant, science, review, nih, policy, civil, appointees
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 9 (100.0%)
+
+================================================================================
+
+CLUSTER 13
+----------------------------------------
+Size: 8 comments
+Keywords: federal, workers, opm, office, docket, government, management, personnel, reclassify, rin
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 8 (100.0%)
+
+================================================================================
+
+CLUSTER 7
+----------------------------------------
+Size: 7 comments
+Keywords: policy, service, civil, rule, performance, proposed, staff, administration, protections, positions
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 7 (100.0%)
+
+================================================================================
+
+CLUSTER 8
+----------------------------------------
+Size: 7 comments
+Keywords: government, workers, writing, federal, workforce, civil, american, president, country, oppose
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 7 (100.0%)
+
+================================================================================
+
+CLUSTER 9
+----------------------------------------
+Size: 6 comments
+Keywords: government, schedule, employees, federal, political, new, workers, workforce, administration, public
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 6 (100.0%)
+
+================================================================================
+
+CLUSTER 14
+----------------------------------------
+Size: 6 comments
+Keywords: civil, service, schedule, federal, employees, merit, protections, system, due, proposal
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 6 (100.0%)
+
+================================================================================
+
+CLUSTER 5
+----------------------------------------
+Size: 5 comments
+Keywords: government, civil, idea, career, service, lead, employees, servants, benefit, american
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 5 (100.0%)
+
+================================================================================
+
+CLUSTER 6
+----------------------------------------
+Size: 4 comments
+Keywords: civil, oppose, changes, service, employees, jobs, strongly, cfr, parts, docket
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 4 (100.0%)
+
+================================================================================
+
+CLUSTER 0
+----------------------------------------
+Size: 2 comments
+Keywords: days, jobs, those, review, why, need, change, rules, people, already
+Dominant Stance: Against (50.0% purity)
+Stance Distribution:
+  Against: 1 (50.0%)
+  Neutral/Unclear: 1 (50.0%)
+
+COMMENTS WITH DIFFERENT STANCE (vs dominant 'Against'):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Comment ID: OPM-2025-0004-0033
+   Stance: Neutral/Unclear
+   Title: Comment from Anonymous
+   Key Quote: "If I his is implemented it should be for new employees only and should not be retroactive for employee currently in those positions."
+   LLM Rationale: The comment does not explicitly support or oppose the rule; it only suggests a condition for implementation, making the stance unclear.
+   Link: https://www.regulations.gov/comment/OPM-2025-0004-0033
+   Full Text: If I his is implemented it should be for new employees only and should not be retroactive for employee currently in those positions.
+----------------------------------------
+
+================================================================================
+
+CLUSTER 10
+----------------------------------------
+Size: 1 comments
+Keywords: opm, cbi, rin, federal, agency, regulatory, recommendation, allow, proper, communication
+Dominant Stance: Neutral/Unclear (100.0% purity)
+Stance Distribution:
+  Neutral/Unclear: 1 (100.0%)
+
+================================================================================
+
+CLUSTER 12
+----------------------------------------
+Size: 1 comments
+Keywords: administration, improve, employee, performance, resolve, your, issues, extract, itself, government
+Dominant Stance: Against (100.0% purity)
+Stance Distribution:
+  Against: 1 (100.0%)
+
+================================================================================
+
