@@ -6,7 +6,6 @@ This script provides a unified pipeline that:
 1. Fetches comments from regulations.gov or reads from CSV
 2. Downloads attachments with robust retry logic
 3. Analyzes comments using LiteLLM
-4. Indexes comments for search in frontend
 
 Usage: python -m backend.pipeline --help
 """
@@ -30,7 +29,6 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
                 limit: Optional[int] = None, 
                 skip_fetch: bool = False,
                 skip_analyze: bool = False,
-                skip_index: bool = False,
                 skip_attachments: bool = False,
                 resume: bool = False,
                 input_file: Optional[str] = None,
@@ -46,7 +44,6 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         limit: Maximum number of comments to process (default: process all)
         skip_fetch: Skip fetching comments and use existing data
         skip_analyze: Skip analyzing comments
-        skip_index: Skip building the search index
         skip_attachments: Skip downloading attachments
         resume: Resume from last checkpoint if available
         input_file: Input file with comments (used if skip_fetch=True)
@@ -138,31 +135,8 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
     else:
         print("\n=== Step 2: Skipping analysis as requested ===")
 
-
-    # Step 3: Build search index - DISABLED
-    if not skip_index:
-        print("\n=== Step 3: Skipping index building (feature disabled) ===")
-    else:
-        print("\n=== Step 3: Skipping index building as requested ===")
-    
     print(f"\n=== Pipeline completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
     print(f"All results saved to: {output_dir}")
-    
-    # Copy the results to the frontend directory
-    try:
-        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        frontend_data_dir = os.path.join(project_root, "frontend")
-        
-        # Create frontend directory if it doesn't exist (no subdirectories)
-        if not os.path.exists(frontend_data_dir):
-            os.makedirs(frontend_data_dir, exist_ok=True)
-        
-        if os.path.exists(analyzed_data_file):
-            print(f"\nCopying data.json to frontend directory...")
-            shutil.copy2(analyzed_data_file, os.path.join(frontend_data_dir, "data.json"))
-            print(f"Copied to {os.path.join(frontend_data_dir, 'data.json')}")
-    except Exception as e:
-        print(f"Error copying results to frontend directory: {e}")
     
     return output_dir
 
@@ -181,8 +155,6 @@ def main():
                       help='Skip fetching comments and use existing data')
     parser.add_argument('--skip_analyze', action='store_true',
                       help='Skip analyzing comments')
-    parser.add_argument('--skip_index', action='store_true',
-                      help='Skip building the search index')
     parser.add_argument('--skip_attachments', action='store_true',
                       help='Skip downloading attachments')
     parser.add_argument('--resume', action='store_true',
@@ -224,7 +196,6 @@ def main():
             limit=args.limit,
             skip_fetch=args.skip_fetch,
             skip_analyze=args.skip_analyze,
-            skip_index=args.skip_index,
             skip_attachments=args.skip_attachments,
             resume=args.resume,
             input_file=args.input_file,
