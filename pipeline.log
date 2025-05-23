@@ -1,0 +1,45 @@
+Created results directory: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957
+
+=== Pipeline starting at 2025-05-23 11:49:57 ===
+Results will be saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957
+
+=== Step 1: Processing comments ===
+Using CSV file: comments.csv
+Reading comments from CSV file: comments.csv
+Saved 19879 comments to /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/raw_data.json
+
+=== Step 1.5: Downloading attachments ===
+
+=== Downloading attachments ===
+Found 494 attachments to download.
+Processing 1 attachments for comment OPM-2025-0004-0119
+Downloading attachment 1/1 for comment OPM-2025-0004-0119
+Downloading from https://downloads.regulations.gov/OPM-2025-0004-0119/attachment_1.pdf
+Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0119/attachment_1_1748015399.pdf
+Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0119/attachment_1_1748015399.pdf
+Extracting text from attachment_1.pdf.pdf
+PDF text extraction minimal, trying OCR for /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0119/attachment_1_1748015399.pdf
+Processing 1 attachments for comment OPM-2025-0004-0145
+Downloading attachment 1/1 for comment OPM-2025-0004-0145
+Downloading from https://downloads.regulations.gov/OPM-2025-0004-0145/attachment_1.png
+Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0145/attachment_1_1748015412.png
+Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0145/attachment_1_1748015412.png
+Extracting text from attachment_1.png.png
+Processing 1 attachments for comment OPM-2025-0004-0210
+Downloading attachment 1/1 for comment OPM-2025-0004-0210
+Downloading from https://downloads.regulations.gov/OPM-2025-0004-0210/attachment_1.pdf
+Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0210/attachment_1_1748015414.pdf
+Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0210/attachment_1_1748015414.pdf
+Extracting text from attachment_1.pdf.pdf
+Processing 1 attachments for comment OPM-2025-0004-0323
+Downloading attachment 1/1 for comment OPM-2025-0004-0323
+Downloading from https://downloads.regulations.gov/OPM-2025-0004-0323/attachment_1.png
+Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0323/attachment_1_1748015415.png
+Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0323/attachment_1_1748015415.png
+Extracting text from attachment_1.png.png
+Processing 1 attachments for comment OPM-2025-0004-0408
+Downloading attachment 1/1 for comment OPM-2025-0004-0408
+Downloading from https://downloads.regulations.gov/OPM-2025-0004-0408/attachment_1.pdf
+Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0408/attachment_1_1748015418.pdf
+Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0408/attachment_1_1748015418.pdf
+Extracting text from attachment_1.pdf.pdf

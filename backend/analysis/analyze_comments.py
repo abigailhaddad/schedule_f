@@ -75,28 +75,44 @@ class CommentAnalyzer:
             raise ValueError("OPENAI_API_KEY not found in environment variables or .env file")
     
     def get_system_prompt(self):
-        return f"""You are analyzing public comments submitted regarding a proposed rule to implement "Schedule F" (or "Schedule Policy/Career").
+        return """You are analyzing public comments submitted regarding a proposed rule to implement "Schedule F" (or "Schedule Policy/Career").
 
 This proposed rule would allow federal agencies to reclassify career civil servants in policy-influencing positions into a new employment category where they could be removed without the standard due process protections normally afforded to career federal employees.
 
-For each comment (including any attached documents), provide:
+1. Stance: Determine if the comment is "For" (supporting the rule), "Against" (opposing the rule), or "Neutral/Unclear" by examining both explicit statements and underlying intent.
 
-1. Stance: Determine if the comment is "{Stance.FOR.value}" (supporting the rule), "{Stance.AGAINST.value}" (opposing the rule), or "{Stance.NEUTRAL.value}. If it says to do something else instead, it's against it.".
+Classification guidelines with special attention to boundary cases:
+
+- "For": Comment explicitly supports the rule, defends its merits, or argues for implementation. Look for: praise of accountability, presidential authority, removing bureaucratic obstacles, or making it easier to remove poor performers.
+
+- "Against": Comment opposes the rule, including indirect opposition through thematic alignment. Critical indicators include:
+  * Questions about constitutionality or legal concerns, even without explicit opposition
+  * Support for current merit-based systems or civil service protections
+  * Concerns about politicization of civil service
+  * Emphasis on nonpartisan governance, constitutional loyalty, or professional integrity (these themes inherently oppose politicization)
+  * Anti-Trump or anti-administration sentiment
+  * Comments about job performance standards that emphasize merit/fairness over political considerations
+
+- "Neutral/Unclear": Reserve this classification ONLY for:
+  * Comments purely requesting information without revealing stance
+  * Comments discussing completely unrelated topics
+  * Vague political statements that don't connect to civil service themes
+  * Comments that are genuinely ambiguous after considering thematic context
+
+IMPORTANT DISTINCTIONS:
+- Comments supporting easier removal of poor performers are "For" if they align with the rule's efficiency goals
+- Comments emphasizing constitutional duty, integrity, or nonpartisan service are "Against" (they oppose politicization)
+- General political complaints without civil service context should remain "Neutral/Unclear"
+- When in doubt between "Against" and "Neutral/Unclear", consider if the comment's themes would logically oppose politicizing civil service
 
 2. Themes: Identify which of these themes are present (select all that apply):
-   - {Theme.MERIT.value} (mentions civil service protections, merit system, etc.)
-   - {Theme.DUE_PROCESS.value} (mentions worker protections, procedural rights, etc.)
-   - {Theme.POLITICIZATION.value} (mentions political interference, partisan influence, etc.)
-   - {Theme.SCIENTIFIC.value} (mentions concerns about scientific research, grant-making, etc.)
-   - {Theme.INSTITUTIONAL.value} (mentions expertise, continuity, experience, etc.)
-   
-Note: Some comments include text from attached documents. Please consider ALL text in your analysis, including text from attachments if present.
+   - Merit-based system concerns (mentions civil service protections, merit system, etc.)
+   - Due process/employee rights (mentions worker protections, procedural rights, etc.)
+   - Politicization concerns (mentions political interference, partisan influence, etc.)
+   - Scientific integrity (mentions concerns about scientific research, grant-making, etc.)
+   - Institutional knowledge loss (mentions expertise, continuity, experience, etc.)
 
-3. Key Quote: Select the most important quote (max 100 words) that best captures the essence of the comment. Important requirements:
-   - The quote must be exactly present in the original text - do not paraphrase or modify
-   - Copy the text exactly as it appears, maintaining the original punctuation
-   - Do not use any special characters, HTML entities (like &rsquo;), or Unicode symbols
-   - Use plain ASCII characters only (regular quotes, apostrophes, hyphens, etc.)
+3. Key Quote: Select the most important quote (max 100 words) that best captures the essence of the comment. The quote must be exactly present in the original text - do not paraphrase or modify.
 
 4. Rationale: Briefly explain (1-2 sentences) why you classified the stance as you did.
 
@@ -176,6 +192,7 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
         return None
     
     comment_id = extracted['id']
+    print(comment_id)
     comment_text = extracted['text']
     title = extracted['title']
     category = extracted['category']
@@ -354,7 +371,8 @@ def build_comment_lookup(comments_data):
                     'original_comment': comment_text,  # Just the main comment
                     'link': link,
                     'agencyId': agency_id,
-                    'has_attachments': bool(attachment_texts)
+                    'has_attachments': bool(attachment_texts),
+                    'postedDate': attributes.get('postedDate', '')
                 }
     
     return original_comments
@@ -377,7 +395,8 @@ def format_results_for_output(results, original_comments):
                 "link": original_comments.get(comment_id, {}).get('link', ''),
                 "stance": result.get("analysis", {}).get("stance", ""),
                 "key_quote": result.get("analysis", {}).get("key_quote", ""),
-                "rationale": result.get("analysis", {}).get("rationale", "")
+                "rationale": result.get("analysis", {}).get("rationale", ""),
+                "postedDate": original_comments.get(comment_id, {}).get('postedDate', '')
             }
             
             # Convert themes to a comma-separated string
@@ -403,7 +422,9 @@ def format_results_for_output(results, original_comments):
                 "stance": "",
                 "key_quote": "",
                 "rationale": "",
-                "themes": ""
+                "themes": "",
+                "postedDate": original_comments.get(comment_id, {}).get('postedDate', '')
+
             }
                 
             flat_results.append(flat_item)
@@ -428,7 +449,7 @@ def print_summary(summary):
         print(f"  {theme}: {count} ({percentage}%)")
 
 
-def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-mini", 
+def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4.1-mini", 
                   api_key=None, resume=False, batch_size=10, no_delay=True):
     """
     Analyze comments from JSON file and save structured results with parallel processing.
@@ -459,8 +480,8 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
     
     # Limit the number of comments if specified
     if top_n and top_n < len(comments_data):
-        print(f"Limiting analysis to first {top_n} comments as requested")
-        comments_data = comments_data[:top_n]
+        print(f"Limiting analysis to bottom {top_n} comments as requested")
+        comments_data = comments_data[-top_n:]
     
     # Determine where to save the results
     if output_file is None:
