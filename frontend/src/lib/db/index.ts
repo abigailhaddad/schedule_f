@@ -1,25 +1,26 @@
 // lib/db/index.ts
 // import 'server-only'; // This ensures this file can only be imported server-side
 
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import { Client } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Client } from 'pg';
 import * as schema from './schema';
 import { dbConfig } from './config';
 
-// Use the database URL from our config
-const DATABASE_URL = dbConfig.url;
-
-if (!DATABASE_URL) {
-  throw new Error('DATABASE_URL is not defined');
+// Use dbConfig.url directly
+if (!dbConfig.url) {
+  throw new Error('Database URL is not defined in dbConfig');
 }
 
 // Log database environment in development
 if (process.env.NODE_ENV === 'development') {
-  console.log(`Database: ${dbConfig.environment} environment`);
+  const envString = dbConfig.isProd ? 'PRODUCTION' : dbConfig.isDev ? 'DEVELOPMENT' : 'UNKNOWN';
+  console.log(`Database: ${envString} environment`);
 }
 
 // Create client instance but don't connect yet
-const client = new Client(DATABASE_URL);
+export const client = new Client({
+  connectionString: dbConfig.url, 
+});
 
 // Promise to track connection status
 let connectionPromise: Promise<{ success: boolean; error?: unknown }> | null = null;
