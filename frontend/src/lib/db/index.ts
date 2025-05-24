@@ -1,5 +1,5 @@
 // lib/db/index.ts
-import 'server-only'; // This ensures this file can only be imported server-side
+// import 'server-only'; // This ensures this file can only be imported server-side
 
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Client } from '@neondatabase/serverless';

@@ -13,7 +13,6 @@
     "db:use:dev": "tsx scripts/switch-db.ts dev",
     "db:use:prod": "tsx scripts/switch-db.ts prod",
     "db:status": "tsx scripts/db-status.ts",
-    
     "db:seed:dev": "DB_ENV=dev tsx src/lib/db/seed.ts",
     "db:seed:prod": "DB_ENV=prod tsx src/lib/db/seed.ts",
     "db:migrate:dev": "DB_ENV=dev drizzle-kit migrate",
@@ -36,6 +35,7 @@
     "postgres": "^3.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "server-only": "^0.0.1",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {

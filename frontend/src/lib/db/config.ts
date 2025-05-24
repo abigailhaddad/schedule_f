@@ -1,5 +1,5 @@
 // src/lib/db/config.ts
-import 'server-only'; // This ensures this file can only be imported server-side
+// import 'server-only'; // This ensures this file can only be imported server-side
 
 import { config } from 'dotenv';
 import path from 'path';
