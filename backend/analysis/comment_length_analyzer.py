@@ -82,85 +82,129 @@ def extract_comment_text(comment_data):
     
     return ""
 
-def analyze_lengths(comments_data):
-    """Analyze comment lengths and return statistics"""
-    lengths = []
-    word_counts = []
-    char_counts = []
-    empty_comments = 0
+def analyze_duplicates(all_comments, prefix_lengths=[25, 50, 100]):
+    """Analyze comment duplicates by first N characters"""
+    print(f"\n🔍 DUPLICATE ANALYSIS:")
+    print(f"=" * 50)
     
-    for comment in comments_data:
-        text = extract_comment_text(comment)
-        
-        if not text.strip():
-            empty_comments += 1
-            continue
-            
-        # Character count
-        char_count = len(text)
-        char_counts.append(char_count)
-        
-        # Word count (rough)
-        word_count = len(text.split())
-        word_counts.append(word_count)
-        
-        # Token estimate (rough approximation: ~4 chars per token)
-        token_estimate = char_count / 4
-        lengths.append(token_estimate)
+    duplicate_stats = {}
     
-    if not lengths:
-        return None
-    
-    # Calculate statistics
-    stats = {
-        'total_comments': len(comments_data),
-        'non_empty_comments': len(lengths),
-        'empty_comments': empty_comments,
-        'char_stats': {
-            'min': min(char_counts),
-            'max': max(char_counts),
-            'mean': np.mean(char_counts),
-            'median': np.median(char_counts),
-            'std': np.std(char_counts),
-            'percentiles': {
-                '25th': np.percentile(char_counts, 25),
-                '75th': np.percentile(char_counts, 75),
-                '90th': np.percentile(char_counts, 90),
-                '95th': np.percentile(char_counts, 95),
-                '99th': np.percentile(char_counts, 99)
-            }
-        },
-        'word_stats': {
-            'min': min(word_counts),
-            'max': max(word_counts),
-            'mean': np.mean(word_counts),
-            'median': np.median(word_counts),
-            'std': np.std(word_counts),
-            'percentiles': {
-                '25th': np.percentile(word_counts, 25),
-                '75th': np.percentile(word_counts, 75),
-                '90th': np.percentile(word_counts, 90),
-                '95th': np.percentile(word_counts, 95),
-                '99th': np.percentile(word_counts, 99)
-            }
-        },
-        'token_estimates': {
-            'min': min(lengths),
-            'max': max(lengths),
-            'mean': np.mean(lengths),
-            'median': np.median(lengths),
-            'std': np.std(lengths),
-            'percentiles': {
-                '25th': np.percentile(lengths, 25),
-                '75th': np.percentile(lengths, 75),
-                '90th': np.percentile(lengths, 90),
-                '95th': np.percentile(lengths, 95),
-                '99th': np.percentile(lengths, 99)
-            }
+    for n in prefix_lengths:
+        print(f"\nAnalyzing duplicates by first {n} characters...")
+        
+        # Get first n characters of each comment
+        prefixes = []
+        for comment in all_comments:
+            prefix = comment[:n] if len(comment) >= n else comment
+            prefixes.append(prefix)
+        
+        # Count occurrences of each prefix
+        prefix_counts = Counter(prefixes)
+        
+        # Find duplicates (prefixes that appear more than once)
+        duplicates = {prefix: count for prefix, count in prefix_counts.items() if count > 1}
+        
+        total_duplicate_comments = sum(duplicates.values())
+        unique_duplicate_prefixes = len(duplicates)
+        
+        duplicate_stats[n] = {
+            'total_comments': len(all_comments),
+            'unique_prefixes': len(prefix_counts),
+            'duplicate_prefixes': unique_duplicate_prefixes,
+            'total_duplicate_comments': total_duplicate_comments,
+            'duplicate_rate': total_duplicate_comments / len(all_comments) * 100,
+            'prefix_counts': prefix_counts,
+            'duplicates': duplicates
         }
-    }
+        
+        print(f"  Total comments: {len(all_comments):,}")
+        print(f"  Unique {n}-char prefixes: {len(prefix_counts):,}")
+        print(f"  Duplicate prefixes: {unique_duplicate_prefixes:,}")
+        print(f"  Comments with duplicate prefixes: {total_duplicate_comments:,} ({total_duplicate_comments/len(all_comments)*100:.1f}%)")
+        
+        # Show top duplicates
+        if duplicates:
+            top_duplicates = sorted(duplicates.items(), key=lambda x: x[1], reverse=True)[:5]
+            print(f"  Top duplicate prefixes:")
+            for i, (prefix, count) in enumerate(top_duplicates, 1):
+                preview = prefix[:40] + "..." if len(prefix) > 40 else prefix
+                print(f"    {i}. '{preview}' ({count} occurrences)")
     
-    return stats, char_counts, word_counts, lengths
+    return duplicate_stats
+
+def plot_duplicate_analysis(duplicate_stats, output_dir=None):
+    """Create visualizations for duplicate analysis"""
+    # Focus on 50-character duplicates for the main visualization
+    if 50 not in duplicate_stats or not duplicate_stats[50]['duplicates']:
+        print("No duplicates found for visualization")
+        return
+    
+    # Get top duplicates for 50-char prefixes
+    duplicates_50 = duplicate_stats[50]['duplicates']
+    top_duplicates = sorted(duplicates_50.items(), key=lambda x: x[1], reverse=True)[:15]  # Top 15
+    
+    if not top_duplicates:
+        print("No duplicates found for 50-character prefixes")
+        return
+    
+    # Prepare data for plotting
+    counts = [count for prefix, count in top_duplicates]
+    labels = []
+    
+    for prefix, count in top_duplicates:
+        # Get first 50 characters and clean up for display
+        display_prefix = prefix[:50]
+        # Replace newlines and multiple spaces
+        display_prefix = display_prefix.replace('\n', ' ').replace('\r', ' ')
+        display_prefix = ' '.join(display_prefix.split())  # Clean up whitespace
+        
+        # Truncate if still too long and add ellipsis
+        if len(display_prefix) > 47:
+            display_prefix = display_prefix[:47] + "..."
+        
+        labels.append(display_prefix)
+    
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(12, 8))
+    
+    # Create horizontal bar chart
+    bars = ax.barh(range(len(counts)), counts, color='steelblue', alpha=0.7)
+    
+    # Customize the plot
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(labels, fontsize=8)
+    ax.set_xlabel('Number of Comments with This Prefix')
+    ax.set_title('Top Duplicate Comment Prefixes (First 50 Characters)', fontsize=14, pad=20)
+    
+    # Add count labels on the bars
+    for i, (bar, count) in enumerate(zip(bars, counts)):
+        ax.text(bar.get_width() + 0.1, bar.get_y() + bar.get_height()/2, 
+                str(count), va='center', fontsize=9)
+    
+    # Invert y-axis so highest counts are at top
+    ax.invert_yaxis()
+    
+    # Add grid for easier reading
+    ax.grid(axis='x', alpha=0.3)
+    
+    # Adjust layout to prevent label cutoff
+    plt.tight_layout()
+    
+    # Add summary text
+    total_duplicates = sum(counts)
+    total_comments = duplicate_stats[50]['total_comments']
+    duplicate_rate = total_duplicates / total_comments * 100
+    
+    fig.text(0.02, 0.02, 
+             f"Total comments: {total_comments:,} | Comments with duplicate prefixes: {total_duplicates:,} ({duplicate_rate:.1f}%)",
+             fontsize=10, style='italic')
+    
+    if output_dir:
+        plot_path = os.path.join(output_dir, 'comment_duplicate_analysis.png')
+        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+        print(f"📊 Duplicate analysis plot saved to: {plot_path}")
+    
+    plt.show()
 
 def recommend_models(stats):
     """Recommend semantic models based on length statistics"""
@@ -343,10 +387,13 @@ def analyze_comment_lengths(input_file=None, show_plots=True, save_plots=True):
         print("❌ No valid comments found for analysis")
         return None
     
-    stats, char_counts, word_counts, token_estimates = result
+    stats, char_counts, word_counts, token_estimates, all_comments = result
     
     # Print statistics
     print_detailed_stats(stats)
+    
+    # Analyze duplicates
+    duplicate_stats = analyze_duplicates(all_comments)
     
     # Get model recommendations
     recommendations = recommend_models(stats)
@@ -355,12 +402,97 @@ def analyze_comment_lengths(input_file=None, show_plots=True, save_plots=True):
     if show_plots or save_plots:
         output_dir = os.path.dirname(input_file) if save_plots else None
         plot_distributions(char_counts, word_counts, token_estimates, output_dir)
+        plot_duplicate_analysis(duplicate_stats, output_dir)
     
     return {
         'stats': stats,
+        'duplicate_stats': duplicate_stats,
         'recommendations': recommendations,
         'input_file': input_file
     }
+
+def analyze_lengths(comments_data):
+    """Analyze comment lengths and return statistics"""
+    lengths = []
+    word_counts = []
+    char_counts = []
+    all_comments = []  # Store all comment texts
+    empty_comments = 0
+    
+    for comment in comments_data:
+        text = extract_comment_text(comment)
+        
+        if not text.strip():
+            empty_comments += 1
+            continue
+            
+        all_comments.append(text.strip())
+        
+        # Character count
+        char_count = len(text)
+        char_counts.append(char_count)
+        
+        # Word count (rough)
+        word_count = len(text.split())
+        word_counts.append(word_count)
+        
+        # Token estimate (rough approximation: ~4 chars per token)
+        token_estimate = char_count / 4
+        lengths.append(token_estimate)
+    
+    if not lengths:
+        return None
+    
+    # Calculate statistics
+    stats = {
+        'total_comments': len(comments_data),
+        'non_empty_comments': len(lengths),
+        'empty_comments': empty_comments,
+        'char_stats': {
+            'min': min(char_counts),
+            'max': max(char_counts),
+            'mean': np.mean(char_counts),
+            'median': np.median(char_counts),
+            'std': np.std(char_counts),
+            'percentiles': {
+                '25th': np.percentile(char_counts, 25),
+                '75th': np.percentile(char_counts, 75),
+                '90th': np.percentile(char_counts, 90),
+                '95th': np.percentile(char_counts, 95),
+                '99th': np.percentile(char_counts, 99)
+            }
+        },
+        'word_stats': {
+            'min': min(word_counts),
+            'max': max(word_counts),
+            'mean': np.mean(word_counts),
+            'median': np.median(word_counts),
+            'std': np.std(word_counts),
+            'percentiles': {
+                '25th': np.percentile(word_counts, 25),
+                '75th': np.percentile(word_counts, 75),
+                '90th': np.percentile(word_counts, 90),
+                '95th': np.percentile(word_counts, 95),
+                '99th': np.percentile(word_counts, 99)
+            }
+        },
+        'token_estimates': {
+            'min': min(lengths),
+            'max': max(lengths),
+            'mean': np.mean(lengths),
+            'median': np.median(lengths),
+            'std': np.std(lengths),
+            'percentiles': {
+                '25th': np.percentile(lengths, 25),
+                '75th': np.percentile(lengths, 75),
+                '90th': np.percentile(lengths, 90),
+                '95th': np.percentile(lengths, 95),
+                '99th': np.percentile(lengths, 99)
+            }
+        }
+    }
+    
+    return stats, char_counts, word_counts, lengths, all_comments
 
 def main():
     """Main function with CLI interface"""
