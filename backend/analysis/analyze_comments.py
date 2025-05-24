@@ -267,10 +267,10 @@ def extract_comment_text(comment_data, truncate_chars=None):
 
 def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None, processed_results=None, max_retries=3):
     """Process a single comment and return its analysis result."""
-    # Add comprehensive diagnostics for comment processing
-    logger.info(f"=== PROCESSING SINGLE COMMENT ===")
-    logger.info(f"Comment data type: {type(comment_data)}")
-    logger.info(f"Comment data keys: {list(comment_data.keys()) if isinstance(comment_data, dict) else 'N/A'}")
+    # Add comprehensive diagnostics for comment processing (debug level)
+    logger.debug(f"=== PROCESSING SINGLE COMMENT ===")
+    logger.debug(f"Comment data type: {type(comment_data)}")
+    logger.debug(f"Comment data keys: {list(comment_data.keys()) if isinstance(comment_data, dict) else 'N/A'}")
     
     # Extract comment data with enhanced error handling
     try:
@@ -281,17 +281,17 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
             return None
         
         comment_id = extracted['id']
-        logger.info(f"Processing comment {comment_id}")
+        logger.debug(f"Processing comment {comment_id}")
         full_text = extracted['text']  # Full original text
         analysis_text = extracted['truncated_text']  # Text to send to API (may be truncated)
         title = extracted['title']
         category = extracted['category']
         
         # Add safety checks
-        logger.info(f"Comment {comment_id} - full text length: {len(full_text)} chars")
+        logger.debug(f"Comment {comment_id} - full text length: {len(full_text)} chars")
         if analysis_text != full_text:
-            logger.info(f"Comment {comment_id} - analysis text length: {len(analysis_text)} chars (truncated)")
-        logger.info(f"Comment {comment_id} - title: {title[:100]}..." if len(title) > 100 else f"Comment {comment_id} - title: {title}")
+            logger.debug(f"Comment {comment_id} - analysis text length: {len(analysis_text)} chars (truncated)")
+        logger.debug(f"Comment {comment_id} - title: {title[:100]}..." if len(title) > 100 else f"Comment {comment_id} - title: {title}")
         
         # Check for duplicates and get occurrence number (using analysis text for consistency)
         occurrence_number = 1
@@ -307,11 +307,11 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
             # If this is not the first occurrence, check if we can reuse results
             if occurrence_number > 1:
                 first_id = duplicate_map[normalized_text]['first_id']
-                logger.info(f"Comment {comment_id} is duplicate #{occurrence_number} of {first_id}")
+                logger.debug(f"Comment {comment_id} is duplicate #{occurrence_number} of {first_id}")
                 
                 # Check if first occurrence has been processed
                 if processed_results and first_id in processed_results:
-                    logger.info(f"Reusing analysis from first occurrence {first_id}")
+                    logger.debug(f"Reusing analysis from first occurrence {first_id}")
                     # Copy the result from the first occurrence
                     original_result = processed_results[first_id]
                     if "status" not in original_result.get("analysis", {}):  # Only reuse successful analyses
@@ -329,12 +329,12 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
                         with open(result_file, 'w', encoding='utf-8') as f:
                             json.dump(result, f, indent=2)
                         
-                        logger.info(f"Successfully reused analysis for duplicate {comment_id}")
+                        logger.debug(f"Successfully reused analysis for duplicate {comment_id}")
                         return result
                 else:
-                    logger.info(f"First occurrence {first_id} not yet processed, will analyze normally")
+                    logger.debug(f"First occurrence {first_id} not yet processed, will analyze normally")
             else:
-                logger.info(f"Comment {comment_id} is the first occurrence of this text")
+                logger.debug(f"Comment {comment_id} is the first occurrence of this text")
         
     except Exception as e:
         logger.error(f"CRITICAL ERROR in extract_comment_text: {e}")
@@ -387,7 +387,7 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
     # Analyze the comment
     retry_delay = 5  # seconds
     
-    logger.info(f"Starting analysis for comment {comment_id} with {len(analysis_text)} chars")
+    logger.debug(f"Starting analysis for comment {comment_id} with {len(analysis_text)} chars")
     
     for attempt in range(max_retries):
         try:
@@ -406,7 +406,7 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
             with open(result_file, 'w', encoding='utf-8') as f:
                 json.dump(result, f, indent=2)
             
-            logger.info(f"Successfully analyzed {comment_id}")
+            logger.debug(f"Successfully analyzed {comment_id}")
             return result
                 
         except TimeoutException as e:
@@ -464,13 +464,13 @@ def process_comments_batch(comments_batch, analyzer, temp_dir, duplicate_map=Non
     
     if not use_parallel or len(comments_batch) == 1:
         # Process sequentially for small batches or when parallel is disabled
-        logger.info(f"Processing batch of {len(comments_batch)} comments sequentially")
+        logger.debug(f"Processing batch of {len(comments_batch)} comments sequentially")
         for comment in comments_batch:
             try:
                 result = process_single_comment(comment, analyzer, temp_dir, duplicate_map, processed_results)
                 if result:
                     results.append(result)
-                    logger.info(f"Successfully processed comment {result.get('id', 'unknown')}")
+                    logger.debug(f"Successfully processed comment {result.get('id', 'unknown')}")
                 else:
                     logger.warning(f"No result returned for comment")
             except Exception as e:
@@ -491,7 +491,7 @@ def process_comments_batch(comments_batch, analyzer, temp_dir, duplicate_map=Non
                 results.append(error_result)
     else:
         # Process in parallel using ThreadPoolExecutor
-        logger.info(f"Processing batch of {len(comments_batch)} comments in parallel")
+        logger.debug(f"Processing batch of {len(comments_batch)} comments in parallel")
         
         def safe_process_comment(comment):
             """Wrapper for safe parallel processing."""
@@ -529,7 +529,7 @@ def process_comments_batch(comments_batch, analyzer, temp_dir, duplicate_map=Non
                         result = future.result(timeout=60)  # 1 min timeout per task
                         if result:
                             results.append(result)
-                            logger.info(f"Successfully processed comment {result.get('id', 'unknown')} in parallel")
+                            logger.debug(f"Successfully processed comment {result.get('id', 'unknown')} in parallel")
                     except concurrent.futures.TimeoutError:
                         comment = future_to_comment[future]
                         comment_id = comment.get('id', 'unknown') if isinstance(comment, dict) else 'unknown'
@@ -578,7 +578,7 @@ def save_checkpoint(results, processed_ids, error_count, checkpoint_file):
     }
     with open(checkpoint_file, 'w', encoding='utf-8') as f:
         json.dump(checkpoint_data, f)
-    logger.info(f"✅ Checkpoint saved with {len(results)} processed comments")
+    logger.debug(f"✅ Checkpoint saved with {len(results)} processed comments")
 
 def load_checkpoint(checkpoint_file):
     """Load progress from a checkpoint file."""
@@ -675,6 +675,7 @@ def build_comment_lookup(comments_data):
                         'original_comment': comment_text,  # Just the main comment
                         'link': link,
                         'agencyId': agency_id,
+                        'category': attributes.get('category', ''),
                         'has_attachments': bool(attachment_texts),
                         'postedDate': attributes.get('postedDate', ''),
                         'receivedDate': attributes.get('receivedDate', '')
@@ -695,7 +696,7 @@ def format_results_for_output(results, original_comments):
                 flat_item = {
                     "id": comment_id,
                     "title": result.get("title", ""),
-                    "category": result.get("category", ""),
+                    "category": original_comments.get(comment_id, {}).get('category', ''),
                     "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
                     "comment": original_comments.get(comment_id, {}).get('comment', ''),
                     "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
@@ -723,7 +724,7 @@ def format_results_for_output(results, original_comments):
                 flat_item = {
                     "id": comment_id,
                     "title": result.get("title", ""),
-                    "category": result.get("category", ""),
+                    "category": original_comments.get(comment_id, {}).get('category', ''),
                     "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
                     "comment": original_comments.get(comment_id, {}).get('comment', ''),
                     "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
@@ -990,21 +991,21 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
             
             # Log batch info
             batch_ids = [c.get('id', 'unknown') for c in batch]
-            logger.info(f"Processing batch {i//batch_size + 1}: {batch_ids}")
+            logger.debug(f"Processing batch {i//batch_size + 1}: {batch_ids}")
             
             # Add diagnostics before processing
-            logger.info(f"Batch size: {len(batch)}")
+            logger.debug(f"Batch size: {len(batch)}")
             for idx, comment in enumerate(batch):
                 comment_id = comment.get('id', 'unknown')
-                logger.info(f"Batch item {idx}: {comment_id}, type: {type(comment)}")
+                logger.debug(f"Batch item {idx}: {comment_id}, type: {type(comment)}")
                 if isinstance(comment, dict):
-                    logger.info(f"  Keys: {list(comment.keys())[:10]}")  # First 10 keys
+                    logger.debug(f"  Keys: {list(comment.keys())[:10]}")  # First 10 keys
             
             # Process batch
             try:
-                logger.info(f"Starting batch processing (parallel={use_parallel})...")
+                logger.debug(f"Starting batch processing (parallel={use_parallel})...")
                 batch_results = process_comments_batch(batch, analyzer, temp_dir, duplicate_map, results, use_parallel)
-                logger.info(f"Batch processing completed with {len(batch_results)} results")
+                logger.debug(f"Batch processing completed with {len(batch_results)} results")
                 
                 # Update results dictionary and progress tracking
                 for result in batch_results:
