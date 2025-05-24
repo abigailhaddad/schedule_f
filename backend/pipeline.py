@@ -24,6 +24,7 @@ from pathlib import Path
 from fetch.fetch_comments import fetch_comments, read_comments_from_csv, download_all_attachments
 from analysis.analyze_comments import analyze_comments
 from utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
+import subprocess
 
 def apply_chunking(comments_data, start_from=None, end_at=None, chunk_size=None):
     """Apply chunking logic to comments data."""
@@ -138,6 +139,7 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
                 skip_fetch: bool = False,
                 skip_analyze: bool = False,
                 skip_attachments: bool = False,
+                skip_semantic: bool = False,
                 resume: bool = False,
                 input_file: Optional[str] = None,
                 csv_file: Optional[str] = None,
@@ -157,6 +159,7 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         skip_fetch: Skip fetching comments and use existing data
         skip_analyze: Skip analyzing comments
         skip_attachments: Skip downloading attachments
+        skip_semantic: Skip semantic clustering analysis
         resume: Resume from last checkpoint if available
         input_file: Input file with comments (used if skip_fetch=True)
         csv_file: CSV file with comments (used instead of API calls)
@@ -335,6 +338,51 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
                 os.remove(temp_checkpoint)
     else:
         print("\n=== Step 2: Skipping analysis as requested ===")
+    
+    # Step 3: Semantic clustering analysis
+    if not skip_semantic:
+        print(f"\n=== Step 3: Running semantic clustering analysis ===")
+        
+        # Check if we have analyzed data to cluster
+        if os.path.exists(analyzed_data_file):
+            try:
+                # Run semantic.py on the analyzed data
+                semantic_script = os.path.join(os.path.dirname(__file__), "analysis", "semantic.py")
+                
+                # Create command to run semantic analysis
+                cmd = [
+                    "python", semantic_script,
+                    "--input", analyzed_data_file,
+                    "--output_dir", output_dir
+                ]
+                
+                print(f"Running semantic clustering: {' '.join(cmd)}")
+                
+                # Run the semantic analysis
+                result = subprocess.run(cmd, capture_output=True, text=True, cwd=os.path.dirname(os.path.dirname(__file__)))
+                
+                if result.returncode == 0:
+                    print("✅ Semantic clustering completed successfully")
+                    if result.stdout:
+                        print("Semantic analysis output:")
+                        print(result.stdout)
+                else:
+                    print(f"❌ Semantic clustering failed with return code {result.returncode}")
+                    if result.stderr:
+                        print("Error output:")
+                        print(result.stderr)
+                    if result.stdout:
+                        print("Standard output:")
+                        print(result.stdout)
+                        
+            except Exception as e:
+                print(f"❌ Error running semantic clustering: {e}")
+                import traceback
+                traceback.print_exc()
+        else:
+            print("⚠️  No analyzed data found (data.json) - skipping semantic clustering")
+    else:
+        print("\n=== Step 3: Skipping semantic clustering as requested ===")
 
     print(f"\n=== Pipeline completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
     print(f"All results saved to: {output_dir}")
@@ -354,6 +402,25 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
             print(f"  📋 Existing results included analysis, attachments, and metadata")
     else:
         print(f"  🆕 Processed {len(comments_data)} comments from scratch")
+    
+    # Check if semantic analysis was completed
+    clustering_dir = None
+    for item in os.listdir(output_dir):
+        if item.startswith("clustering_") and os.path.isdir(os.path.join(output_dir, item)):
+            clustering_dir = item
+            break
+    
+    if clustering_dir and not skip_semantic:
+        print(f"  🧠 Semantic clustering completed: {clustering_dir}")
+        clustering_path = os.path.join(output_dir, clustering_dir)
+        if os.path.exists(os.path.join(clustering_path, "dendrogram.png")):
+            print(f"     - Dendrogram: {clustering_dir}/dendrogram.png")
+        if os.path.exists(os.path.join(clustering_path, "clusters_visualization.png")):
+            print(f"     - Clusters plot: {clustering_dir}/clusters_visualization.png")
+        if os.path.exists(os.path.join(clustering_path, "cluster_report.txt")):
+            print(f"     - Analysis report: {clustering_dir}/cluster_report.txt")
+    elif skip_semantic:
+        print(f"  🧠 Semantic clustering: Skipped")
     
     print(f"  📁 Final results directory: {output_dir}")
     
@@ -376,6 +443,8 @@ def main():
                       help='Skip analyzing comments')
     parser.add_argument('--skip_attachments', action='store_true',
                       help='Skip downloading attachments')
+    parser.add_argument('--skip_semantic', action='store_true',
+                      help='Skip semantic clustering analysis')
     parser.add_argument('--resume', action='store_true',
                       help='Resume from last checkpoint if available')
     
@@ -428,6 +497,7 @@ def main():
             skip_fetch=args.skip_fetch,
             skip_analyze=args.skip_analyze,
             skip_attachments=args.skip_attachments,
+            skip_semantic=args.skip_semantic,
             resume=args.resume,
             input_file=args.input_file,
             csv_file=args.csv_file,
