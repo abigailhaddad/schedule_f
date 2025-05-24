@@ -6,6 +6,9 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { sql } from 'drizzle-orm';
+// At the top of seed.ts, after imports
+import { dbConfig } from './index';
+
 
 // Define interface for the JSON data structure
 interface CommentDataItem {
@@ -21,12 +24,24 @@ interface CommentDataItem {
   key_quote?: string;
   rationale?: string;
   themes?: string;
+  postedDate?: string;
 }
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 
 const main = async () => {
+  // Show which database we're seeding
+  console.log(`\n🌱 Seeding ${dbConfig.environment.toUpperCase()} database`);
+  
+  if (dbConfig.isProd) {
+    console.warn('\n⚠️  WARNING: You are about to seed the PRODUCTION database!');
+    console.warn('This will modify production data. Press Ctrl+C to cancel.\n');
+    
+    // Give user 5 seconds to cancel
+    await new Promise(resolve => setTimeout(resolve, 5000));
+  }
+  
   if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL environment variable is not set.');
   }
@@ -36,7 +51,7 @@ const main = async () => {
 
   console.log('Connected to database.');
 
-  const dataPath = path.resolve(__dirname, '../../../../data/results/results_20250519_203826/data.json');
+  const dataPath = path.resolve(__dirname, '../../../../data/data.json');
   
   console.log(`Reading data from: ${dataPath}`);
 
@@ -80,6 +95,7 @@ const main = async () => {
       keyQuote: item.key_quote,
       rationale: item.rationale,
       themes: item.themes,
+      postedDate: item.postedDate ? new Date(item.postedDate) : null,
     };
     commentsToInsert.push(newComment);
   }
@@ -103,7 +119,8 @@ const main = async () => {
             stance: sql`excluded.stance`,
             keyQuote: sql`excluded.key_quote`,
             rationale: sql`excluded.rationale`,
-            themes: sql`excluded.themes`
+            themes: sql`excluded.themes`,
+            postedDate: sql`excluded.posted_date`
           } 
         });
         console.log(`Upserted chunk ${i / chunkSize + 1} of ${Math.ceil(commentsToInsert.length / chunkSize)} for comments`);

@@ -17,6 +17,7 @@ export const comments = pgTable('comments', {
   keyQuote: text('key_quote'),
   rationale: text('rationale'),
   themes: text('themes'),
+  postedDate: timestamp('posted_date'),
   createdAt: timestamp('created_at').defaultNow()
 });
 
