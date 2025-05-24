@@ -8,11 +8,13 @@ export default function DatabaseStatus() {
     return null;
   }
   
+  const environmentString = dbConfig.isProd ? 'PROD' : dbConfig.isDev ? 'DEV' : 'UNKNOWN';
+
   return (
     <div className={`fixed bottom-4 right-4 px-3 py-1 rounded text-white text-sm z-50 ${
       dbConfig.isProd ? 'bg-red-600' : 'bg-green-600'
     }`}>
-      DB: {dbConfig.environment.toUpperCase()}
+      DB: {environmentString}
     </div>
   );
 }

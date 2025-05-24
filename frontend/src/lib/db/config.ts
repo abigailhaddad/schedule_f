@@ -47,12 +47,11 @@ const getDatabaseUrl = (): string => {
 };
 
 // Export the configuration
-export const dbConfig = {
-  url: getDatabaseUrl(),
-  environment: getDbEnvironment(),
-  isDev: getDbEnvironment() === 'dev',
-  isProd: getDbEnvironment() === 'prod',
+const getDbConfig = () => {
+  const dbUrl = getDatabaseUrl();
+  const dbEnv = getDbEnvironment();
+  
+  return { url: dbUrl, isProd: dbEnv === 'prod', isDev: dbEnv === 'dev' };
 };
 
-// Also set DATABASE_URL for compatibility with existing code
-process.env.DATABASE_URL = dbConfig.url;
+export const dbConfig = getDbConfig();

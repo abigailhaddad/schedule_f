@@ -28,8 +28,8 @@ interface CommentDataItem {
   duplicate_of?: string;
 }
 
-// Load environment variables from .env file
-dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
+// Load environment variables from .env file in the current working directory (expected to be 'frontend')
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 // Determine environment directly
 const getDbEnvironment = (): 'dev' | 'prod' => {
@@ -44,6 +44,17 @@ const getDbEnvironment = (): 'dev' | 'prod' => {
 const currentDbEnv = getDbEnvironment();
 const isProdEnvironment = currentDbEnv === 'prod';
 
+const getSeedDatabaseUrl = (): string => {
+  const dbUrl = currentDbEnv === 'prod'
+    ? process.env.DATABASE_URL_PROD
+    : process.env.DATABASE_URL_DEV;
+
+  if (!dbUrl) {
+    throw new Error(`DATABASE_URL_${currentDbEnv.toUpperCase()} is not defined in environment variables for seeding.`);
+  }
+  return dbUrl;
+};
+
 const main = async () => {
   // Show which database we're seeding
   console.log(`\n🌱 Seeding ${currentDbEnv.toUpperCase()} database`);
@@ -56,11 +67,11 @@ const main = async () => {
     await new Promise(resolve => setTimeout(resolve, 5000));
   }
   
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL environment variable is not set.');
-  }
+  const databaseUrlForSeed = getSeedDatabaseUrl();
 
-  const client = postgres(process.env.DATABASE_URL, { max: 1 });
+  console.log(`\n🌱 Attempting to seed database using URL: ${databaseUrlForSeed}`);
+
+  const client = postgres(databaseUrlForSeed, { max: 1 });
   const db = drizzle(client, { schema });
 
   console.log('Connected to database.');
@@ -151,6 +162,15 @@ const main = async () => {
     console.log('Upserting comments completed.');
   } else {
     console.log('No comments found to seed.');
+  }
+
+  // Verify insertion by counting records
+  try {
+    const result = await db.select({ count: sql`count(*)` }).from(schema.comments);
+    const count = result[0]?.count || 0;
+    console.log(`Verification: Found ${count} records in the comments table after seeding.`);
+  } catch (error) {
+    console.error('Error verifying comment count:', error);
   }
 
   await client.end();
