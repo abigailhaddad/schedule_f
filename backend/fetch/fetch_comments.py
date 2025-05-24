@@ -40,7 +40,7 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any, Tuple
 
 # Import from backend packages
-from utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
+from backend.utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
 
 # Define utility functions
 def get_headers(api_key):
@@ -1223,6 +1223,8 @@ def read_comments_from_csv(csv_file_path: str, output_dir: str, limit: Optional[
                 "country": str(row.get('Country', '')) if not pd.isna(row.get('Country', '')) else '',
                 "comment": str(row.get('Comment', '')) if not pd.isna(row.get('Comment', '')) else '',
                 "documentType": str(row.get('Document Type', '')) if not pd.isna(row.get('Document Type', '')) else '',
+                "agencyId": str(row.get('Agency ID', '')) if not pd.isna(row.get('Agency ID', '')) else '',
+                "category": str(row.get('Category', '')) if not pd.isna(row.get('Category', '')) else '',
                 "attachmentCount": 0,  # Default to 0, will be updated if attachments are found
                 "attachments": []  # Will be populated with attachment info if available
             }
