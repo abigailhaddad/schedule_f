@@ -1211,6 +1211,7 @@ def read_comments_from_csv(csv_file_path: str, output_dir: str, limit: Optional[
                 "title": str(row.get('Title', '')) if not pd.isna(row.get('Title', '')) else '',
                 "commentOn": str(row.get('Comment on Document ID', '')) if not pd.isna(row.get('Comment on Document ID', '')) else '',
                 "postedDate": str(row.get('Posted Date', '')) if not pd.isna(row.get('Posted Date', '')) else '',
+                "receivedDate": str(row.get('Received Date', '')) if not pd.isna(row.get('Received Date', '')) else '',
                 "submitterName": f"{str(row.get('First Name', '')) if not pd.isna(row.get('First Name', '')) else ''} {str(row.get('Last Name', '')) if not pd.isna(row.get('Last Name', '')) else ''}".strip(),
                 "organization": str(row.get('Organization Name', '')) if not pd.isna(row.get('Organization Name', '')) else '',
                 "city": str(row.get('City', '')) if not pd.isna(row.get('City', '')) else '',
