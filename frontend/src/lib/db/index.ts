@@ -1,13 +1,21 @@
 // lib/db/index.ts
+import 'server-only'; // This ensures this file can only be imported server-side
+
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Client } from '@neondatabase/serverless';
 import * as schema from './schema';
+import { dbConfig } from './config';
 
-// Use server-side only environment variable
-const DATABASE_URL = process.env.DATABASE_URL;
+// Use the database URL from our config
+const DATABASE_URL = dbConfig.url;
 
 if (!DATABASE_URL) {
   throw new Error('DATABASE_URL is not defined');
+}
+
+// Log database environment in development
+if (process.env.NODE_ENV === 'development') {
+  console.log(`Database: ${dbConfig.environment} environment`);
 }
 
 // Create client instance but don't connect yet
@@ -49,6 +57,9 @@ export const connectDb = async () => {
 
   return connectionPromise;
 };
+
+// Export the config for use in other files
+export { dbConfig };
 
 // Export types
 export * from './schema';
