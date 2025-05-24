@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
   ReactNode,
 } from "react";
 import { Comment } from "@/lib/db/schema";
@@ -61,6 +62,7 @@ interface ServerDataContextProps {
 
 interface ServerDataContextProviderProps {
   children: ReactNode;
+  initialPage?: number;
   initialPageSize?: number;
 }
 
@@ -72,6 +74,7 @@ const ServerDataContext = createContext<ServerDataContextProps | undefined>(unde
  */
 export function ServerDataContextProvider({
   children,
+  initialPage = 1,
   initialPageSize = 10,
 }: ServerDataContextProviderProps) {
   const router = useRouter();
@@ -82,8 +85,10 @@ export function ServerDataContextProvider({
   const urlSort = searchParams.get("sort");
   const urlSortDirection = searchParams.get("sortDirection") as "asc" | "desc" | null;
   const urlSearch = searchParams.get("search") || "";
-  const urlPage = searchParams.get("page") ? parseInt(searchParams.get("page")!, 10) : 1;
-  const urlPageSize = searchParams.get("pageSize") ? parseInt(searchParams.get("pageSize")!, 10) : initialPageSize;
+  
+  // Use page and size from props (which come from route params)
+  const currentPage = initialPage;
+  const pageSize = initialPageSize;
 
   // Extract filter params from URL
   const getInitialFilters = (): Record<string, unknown> => {
@@ -126,9 +131,6 @@ export function ServerDataContextProvider({
       ? { column: urlSort, direction: urlSortDirection }
       : undefined
   );
-  const [pageSize, setPageSize] = useState(urlPageSize);
-  const [currentPage, setCurrentPage] = useState(urlPage);
-  const [isInitialMount, setIsInitialMount] = useState(true);
 
   // Fetch data based on current parameters
   const fetchData = async () => {
@@ -142,6 +144,10 @@ export function ServerDataContextProvider({
       });
       
       const options = await parseUrlToQueryOptions(paramsObj);
+      
+      // Override page and pageSize from state since they're no longer in search params
+      options.page = currentPage;
+      options.pageSize = pageSize;
       
       // Fetch data and stats in parallel
       const [dataResponse, statsResponse] = await Promise.all([
@@ -176,43 +182,33 @@ export function ServerDataContextProvider({
     await fetchData();
   };
 
+  // Use refs to track previous values
+  const prevSearchQuery = useRef(searchQuery);
+  const prevFilters = useRef(filters);
+
   // Update URL when filters, sorting or search changes
   useEffect(() => {
-    if (isInitialMount) {
-      setIsInitialMount(false);
-      return;
-    }
-
+    const searchChanged = prevSearchQuery.current !== searchQuery;
+    const filtersChanged = JSON.stringify(prevFilters.current) !== JSON.stringify(filters);
+    
+    // Determine if we need to navigate to page 1
+    const shouldNavigateToPage1 = (searchChanged || filtersChanged) && currentPage !== 1;
+    
     // Create a new URLSearchParams object
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
 
     // Update sorting parameters
     if (sorting) {
       params.set("sort", sorting.column);
       params.set("sortDirection", sorting.direction);
-    } else {
-      params.delete("sort");
-      params.delete("sortDirection");
     }
 
     // Update search parameter
     if (searchQuery) {
       params.set("search", searchQuery);
-    } else {
-      params.delete("search");
     }
 
-    // Update pagination parameters
-    params.set("page", currentPage.toString());
-    params.set("pageSize", pageSize.toString());
-
     // Update filter parameters
-    // First, remove all existing filter parameters
-    Array.from(params.keys())
-      .filter((key) => key.startsWith("filter_"))
-      .forEach((key) => params.delete(key));
-
-    // Then add the current filters
     Object.entries(filters).forEach(([key, value]) => {
       if (
         value !== undefined &&
@@ -226,47 +222,75 @@ export function ServerDataContextProvider({
       }
     });
 
+    // Build the correct path
+    const queryString = params.toString();
+    let fullPath: string;
+    
+    if (shouldNavigateToPage1) {
+      // Navigate to page 1 with the new filters/search
+      const newPath = `/page/1/size/${pageSize}`;
+      fullPath = queryString ? `${newPath}?${queryString}` : newPath;
+    } else {
+      // Keep current page and size
+      fullPath = queryString ? `${pathname}?${queryString}` : pathname;
+    }
+
     // Update URL without refreshing page
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    router.replace(fullPath, { scroll: false });
+    
+    // Update refs for next comparison
+    prevSearchQuery.current = searchQuery;
+    prevFilters.current = filters;
   }, [
     searchQuery,
     sorting,
     filters,
-    currentPage,
-    pageSize,
     router,
     pathname,
-    searchParams,
-    isInitialMount,
+    currentPage,
+    pageSize,
   ]);
 
   // Fetch data when URL parameters change
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
-  // Reset page when filters or search changes
-  useEffect(() => {
-    if (!isInitialMount) {
-      setCurrentPage(1);
-    }
-  }, [searchQuery, filters, isInitialMount]);
+  }, [searchParams, currentPage, pageSize]);
 
   // Calculate total pages based on total items
   const totalPages = Math.ceil(totalItems / pageSize);
 
-  // Pagination controls
+  // Pagination controls - navigate to new routes
   const goToPage = (page: number) => {
-    setCurrentPage(page);
+    const params = new URLSearchParams(searchParams.toString());
+    const queryString = params.toString();
+    const newPath = `/page/${page}/size/${pageSize}`;
+    const fullPath = queryString ? `${newPath}?${queryString}` : newPath;
+    router.push(fullPath, { scroll: false });
+  };
+
+  const setPageSize = (size: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const queryString = params.toString();
+    const newPath = `/page/1/size/${size}`;
+    const fullPath = queryString ? `${newPath}?${queryString}` : newPath;
+    router.push(fullPath, { scroll: false });
+  };
+
+  const setCurrentPage = (page: number) => {
+    goToPage(page);
   };
 
   const nextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    if (canNextPage) {
+      goToPage(currentPage + 1);
+    }
   };
 
   const previousPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
+    if (canPreviousPage) {
+      goToPage(currentPage - 1);
+    }
   };
 
   const canNextPage = currentPage < totalPages;
@@ -287,8 +311,10 @@ export function ServerDataContextProvider({
       };
     });
 
-    // Reset to first page when sorting changes
-    setCurrentPage(1);
+    // Navigate to page 1 when sorting changes
+    if (currentPage !== 1) {
+      goToPage(1);
+    }
   };
 
   // Export the currently-filtered table to CSV
@@ -314,6 +340,7 @@ export function ServerDataContextProvider({
     // Build CSV text
     let csv = headers.map((h) => `"${h}"`).join(",") + "\n";
 
+    
     data.forEach((item) => {
       const record = item as Record<string, unknown>;
       const row = headers.map((header) => {
