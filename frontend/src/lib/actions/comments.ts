@@ -5,6 +5,7 @@ import { Comment } from '@/lib/db/schema';
 import { QueryOptions, buildCommentsQuery, buildStatsQueries } from '../queryBuilder';
 import { getCachedData } from '../cache';
 import { unstable_cache } from 'next/cache';
+import { cacheConfig } from '../cache-config';
 
 // Response types
 export interface CommentsPaginatedResponse {
@@ -130,40 +131,50 @@ function extractCountValue(result: { rows?: Array<Record<string, unknown>> }): n
 export async function getPaginatedComments(
   options: QueryOptions
 ): Promise<CommentsPaginatedResponse> {
-  // Use Next.js unstable_cache for proper static generation caching
-  const getCachedComments = unstable_cache(
-    async () => {
-      try {
-        const connection = await connectDb();
-        if (!connection.success) {
-          throw new Error("Failed to connect to database");
-        }
-
-        // Build queries for data and count
-        const queryResult = await buildCommentsQuery(options);
-
-        // Execute count query first
-        const countResult = await db.execute(queryResult.countQuery);
-        const total = extractCountValue(countResult);
-
-        // Execute data query
-        const result = await db.execute(queryResult.query);
-        const data = result.rows as Comment[];
-
-        return {
-          success: true,
-          data,
-          total,
-        };
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error("Error fetching paginated comments:", errorMessage);
-        return { 
-          success: false, 
-          error: `Failed to fetch comments: ${errorMessage}` 
-        };
+  // Core function that fetches comments
+  const fetchComments = async () => {
+    try {
+      const connection = await connectDb();
+      if (!connection.success) {
+        throw new Error("Failed to connect to database");
       }
-    },
+
+      // Build queries for data and count
+      const queryResult = await buildCommentsQuery(options);
+
+      // Execute count query first
+      const countResult = await db.execute(queryResult.countQuery);
+      const total = extractCountValue(countResult);
+
+      // Execute data query
+      const result = await db.execute(queryResult.query);
+      const data = result.rows as Comment[];
+
+      return {
+        success: true,
+        data,
+        total,
+      };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error fetching paginated comments:", errorMessage);
+      return { 
+        success: false, 
+        error: `Failed to fetch comments: ${errorMessage}` 
+      };
+    }
+  };
+
+  // Check if we should skip caching
+  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  
+  if (shouldSkipCache) {
+    return fetchComments();
+  }
+
+  // Use Next.js unstable_cache for production or when cache is enabled
+  const getCachedComments = unstable_cache(
+    fetchComments,
     [`comments-${JSON.stringify(options)}`], // Cache key
     {
       revalidate: 86400, // 24 hours, matching your page revalidation
@@ -185,50 +196,60 @@ export async function getCommentStatistics(
   delete filterOptions.page;
   delete filterOptions.pageSize;
   
-  // Use Next.js unstable_cache for proper static generation caching
-  const getCachedStats = unstable_cache(
-    async () => {
-      try {
-        const connection = await connectDb();
-        if (!connection.success) {
-          throw new Error("Failed to connect to database");
-        }
-
-        // Build all stats queries
-        const queryResults = await buildStatsQueries(options);
-
-        // Execute all queries
-        const [totalResult, forResult, againstResult, neutralResult] = await Promise.all([
-          db.execute(queryResults.totalQuery),
-          db.execute(queryResults.forQuery),
-          db.execute(queryResults.againstQuery),
-          db.execute(queryResults.neutralQuery)
-        ]);
-
-        // Parse results
-        const totalCount = extractCountValue(totalResult);
-        const forCount = extractCountValue(forResult);
-        const againstCount = extractCountValue(againstResult);
-        const neutralCount = extractCountValue(neutralResult);
-
-        return {
-          success: true,
-          stats: {
-            total: totalCount,
-            for: forCount,
-            against: againstCount,
-            neutral: neutralCount
-          }
-        };
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error("Error fetching comment statistics:", errorMessage);
-        return { 
-          success: false, 
-          error: `Failed to fetch statistics: ${errorMessage}` 
-        };
+  // Core function that fetches statistics
+  const fetchStatistics = async () => {
+    try {
+      const connection = await connectDb();
+      if (!connection.success) {
+        throw new Error("Failed to connect to database");
       }
-    },
+
+      // Build all stats queries
+      const queryResults = await buildStatsQueries(options);
+
+      // Execute all queries
+      const [totalResult, forResult, againstResult, neutralResult] = await Promise.all([
+        db.execute(queryResults.totalQuery),
+        db.execute(queryResults.forQuery),
+        db.execute(queryResults.againstQuery),
+        db.execute(queryResults.neutralQuery)
+      ]);
+
+      // Parse results
+      const totalCount = extractCountValue(totalResult);
+      const forCount = extractCountValue(forResult);
+      const againstCount = extractCountValue(againstResult);
+      const neutralCount = extractCountValue(neutralResult);
+
+      return {
+        success: true,
+        stats: {
+          total: totalCount,
+          for: forCount,
+          against: againstCount,
+          neutral: neutralCount
+        }
+      };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error fetching comment statistics:", errorMessage);
+      return { 
+        success: false, 
+        error: `Failed to fetch statistics: ${errorMessage}` 
+      };
+    }
+  };
+
+  // Check if we should skip caching
+  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  
+  if (shouldSkipCache) {
+    return fetchStatistics();
+  }
+
+  // Use Next.js unstable_cache for production or when cache is enabled
+  const getCachedStats = unstable_cache(
+    fetchStatistics,
     [`stats-${JSON.stringify(filterOptions)}`], // Cache key
     {
       revalidate: 86400, // 24 hours, matching your page revalidation
