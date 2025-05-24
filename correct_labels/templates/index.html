@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Label Correction Interface</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .comment-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+        
+        .comment-card.corrected {
+            border-left-color: #28a745;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .comment-id {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .comment-text {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border-left: 3px solid #007bff;
+            line-height: 1.5;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .stance-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .current-stance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stance-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .stance-for {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .stance-against {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .stance-neutral {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .correction-status {
+            font-size: 12px;
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-for {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-for:hover {
+            background: #218838;
+        }
+        
+        .btn-against {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-against:hover {
+            background: #c82333;
+        }
+        
+        .btn-neutral {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-neutral:hover {
+            background: #e0a800;
+        }
+        
+        .btn-revert {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-revert:hover {
+            background: #5a6268;
+        }
+        
+        .no-comments {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: #28a745;
+        }
+        
+        .toast.error {
+            background: #dc3545;
+        }
+        
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stance-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Label Correction Interface</h1>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label for="stance-filter">Filter by Stance:</label>
+                <select id="stance-filter" onchange="applyFilters()">
+                    <option value="all" {% if current_stance_filter == 'all' %}selected{% endif %}>All Stances</option>
+                    {% for stance in stances %}
+                    <option value="{{ stance }}" {% if current_stance_filter == stance %}selected{% endif %}>{{ stance }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="corrected-filter">Filter by Status:</label>
+                <select id="corrected-filter" onchange="applyFilters()">
+                    <option value="all" {% if current_corrected_filter == 'all' %}selected{% endif %}>All Comments</option>
+                    <option value="uncorrected" {% if current_corrected_filter == 'uncorrected' %}selected{% endif %}>Uncorrected Only</option>
+                    <option value="corrected" {% if current_corrected_filter == 'corrected' %}selected{% endif %}>Corrected Only</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <span><strong>Total Comments:</strong> {{ total_comments }}</span>
+            <span><strong>Total Corrections:</strong> {{ total_corrections }}</span>
+            <span><strong>Showing:</strong> {{ comments|length }} comments</span>
+        </div>
+    </div>
+
+    {% if comments %}
+        {% for comment in comments %}
+        <div class="comment-card {% if comment.is_corrected %}corrected{% endif %}" id="comment-{{ comment.id }}">
+            <div class="comment-header">
+                <div class="comment-id">{{ comment.id }}</div>
+                {% if comment.is_corrected %}
+                <div class="correction-status">✓ CORRECTED</div>
+                {% endif %}
+            </div>
+            
+            <div class="comment-text">
+                {{ comment.comment[:500] }}{% if comment.comment|length > 500 %}...{% endif %}
+            </div>
+            
+            <div class="stance-section">
+                <div class="current-stance">
+                    <strong>Current Label:</strong>
+                    <span class="stance-badge stance-{{ comment.display_stance.lower().replace('/', '-').replace(' ', '-') }}">
+                        {{ comment.display_stance }}
+                    </span>
+                </div>
+                
+                {% if comment.is_corrected %}
+                <div style="font-size: 12px; color: #666;">
+                    (Original: {{ comment.stance }})
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="actions">
+                {% if not comment.is_corrected or comment.corrected_stance != 'For' %}
+                <button class="btn btn-for" onclick="correctLabel('{{ comment.id }}', 'For', '{{ comment.stance }}')">
+                    Mark as For
+                </button>
+                {% endif %}
+                
+                {% if not comment.is_corrected or comment.corrected_stance != 'Against' %}
+                <button class="btn btn-against" onclick="correctLabel('{{ comment.id }}', 'Against', '{{ comment.stance }}')">
+                    Mark as Against
+                </button>
+                {% endif %}
+                
+                {% if not comment.is_corrected or comment.corrected_stance != 'Neutral/Unclear' %}
+                <button class="btn btn-neutral" onclick="correctLabel('{{ comment.id }}', 'Neutral/Unclear', '{{ comment.stance }}')">
+                    Mark as Neutral
+                </button>
+                {% endif %}
+                
+                {% if comment.is_corrected %}
+                <button class="btn btn-revert" onclick="revertLabel('{{ comment.id }}')">
+                    Revert to Original
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-comments">
+            <h3>No comments found</h3>
+            <p>Try adjusting your filters to see more comments.</p>
+        </div>
+    {% endif %}
+
+    <script>
+        function applyFilters() {
+            const stanceFilter = document.getElementById('stance-filter').value;
+            const correctedFilter = document.getElementById('corrected-filter').value;
+            
+            const url = new URL(window.location);
+            url.searchParams.set('stance', stanceFilter);
+            url.searchParams.set('corrected', correctedFilter);
+            
+            window.location.href = url.toString();
+        }
+        
+        function showToast(message, type = 'success') {
+            // Remove any existing toasts
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        function correctLabel(commentId, correctedStance, originalStance) {
+            const card = document.getElementById(`comment-${commentId}`);
+            card.classList.add('loading');
+            
+            fetch('/api/correct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    comment_id: commentId,
+                    corrected_stance: correctedStance,
+                    original_stance: originalStance
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(`Corrected to ${correctedStance}`, 'success');
+                    // Reload page to update UI
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showToast(data.error || 'Error saving correction', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Network error', 'error');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                card.classList.remove('loading');
+            });
+        }
+        
+        function revertLabel(commentId) {
+            const card = document.getElementById(`comment-${commentId}`);
+            card.classList.add('loading');
+            
+            fetch('/api/uncorrect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    comment_id: commentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Reverted to original label', 'success');
+                    // Reload page to update UI
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showToast(data.error || 'Error reverting correction', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Network error', 'error');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                card.classList.remove('loading');
+            });
+        }
+    </script>
+</body>
+</html>
