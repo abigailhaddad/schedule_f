@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 """
 Comment Uniqueness Analyzer
@@ -17,6 +18,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import Counter
 import re
+import sys
+from io import StringIO
 
 def strip_html_tags(text):
     """Remove HTML tags from text"""
@@ -98,6 +101,34 @@ def analyze_uniqueness_at_lengths(comments, truncate_lengths):
         # Get distribution of duplicate counts
         duplicate_distribution = Counter(comment_counts.values())
         
+        # Calculate token estimates (roughly 4 chars = 1 token)
+        # For deduplication: only count unique comments
+        total_chars_all = sum(len(comment) for comment in comments)
+        total_tokens_all = total_chars_all / 4
+        
+        # For deduplication at this length: use full text of unique comments based on prefix
+        unique_full_comments = []
+        seen_prefixes = set()
+        for i, comment in enumerate(comments):
+            prefix = comment[:length] if length != 'full' else comment
+            if prefix not in seen_prefixes:
+                seen_prefixes.add(prefix)
+                unique_full_comments.append(comment)
+        
+        total_chars_unique = sum(len(comment) for comment in unique_full_comments)
+        total_tokens_unique = total_chars_unique / 4
+        
+        # For truncation: count truncated text
+        total_chars_truncated = sum(len(tc) for tc in truncated_comments)
+        total_tokens_truncated = total_chars_truncated / 4
+        
+        # Token savings
+        dedup_token_savings = total_tokens_all - total_tokens_unique
+        dedup_savings_pct = (dedup_token_savings / total_tokens_all * 100) if total_tokens_all > 0 else 0
+        
+        truncate_token_savings = total_tokens_all - total_tokens_truncated
+        truncate_savings_pct = (truncate_token_savings / total_tokens_all * 100) if total_tokens_all > 0 else 0
+        
         results[length] = {
             'label': label,
             'total_comments': total_comments,
@@ -108,7 +139,17 @@ def analyze_uniqueness_at_lengths(comments, truncate_lengths):
             'unique_duplicate_texts': len(duplicated_texts),
             'total_duplicate_instances': total_duplicate_instances,
             'duplicate_distribution': duplicate_distribution,
-            'top_duplicates': comment_counts.most_common(10)
+            'top_duplicates': comment_counts.most_common(10),
+            # Token analysis
+            'total_tokens_all': total_tokens_all,
+            'total_tokens_unique': total_tokens_unique,
+            'total_tokens_truncated': total_tokens_truncated,
+            'dedup_token_savings': dedup_token_savings,
+            'dedup_savings_pct': dedup_savings_pct,
+            'truncate_token_savings': truncate_token_savings,
+            'truncate_savings_pct': truncate_savings_pct,
+            'comments_kept_dedup': len(unique_full_comments),
+            'comments_removed_dedup': total_comments - len(unique_full_comments)
         }
     
     return results
@@ -130,6 +171,39 @@ def print_uniqueness_report(results):
         print(f"{stats['label']:<20} {stats['total_comments']:<10,} {stats['unique_comments']:<10,} "
               f"{stats['duplicate_comments']:<12,} {stats['uniqueness_rate']:<15.1f}")
     
+    # Token savings analysis
+    print("\n\n💰 TOKEN SAVINGS ANALYSIS")
+    print("=" * 70)
+    
+    # Get baseline tokens from full text
+    baseline_tokens = results['full']['total_tokens_all']
+    print(f"Baseline: {baseline_tokens:,.0f} tokens for all {results['full']['total_comments']:,} comments")
+    
+    print(f"\n{'Strategy':<30} {'Comments':<12} {'Tokens':<15} {'Savings':<15} {'% Saved':<10}")
+    print("-" * 85)
+    
+    for length in sorted_lengths:
+        stats = results[length]
+        
+        # Deduplication strategy
+        if length != 'full':
+            dedup_label = f"Dedup by first {length} chars"
+        else:
+            dedup_label = "Dedup by full text"
+            
+        print(f"{dedup_label:<30} {stats['comments_kept_dedup']:<12,} "
+              f"{stats['total_tokens_unique']:<15,.0f} "
+              f"{stats['dedup_token_savings']:<15,.0f} "
+              f"{stats['dedup_savings_pct']:<10.1f}")
+        
+        # Truncation strategy (skip for full text)
+        if length != 'full':
+            trunc_label = f"Truncate at {length} chars"
+            print(f"{trunc_label:<30} {stats['total_comments']:<12,} "
+                  f"{stats['total_tokens_truncated']:<15,.0f} "
+                  f"{stats['truncate_token_savings']:<15,.0f} "
+                  f"{stats['truncate_savings_pct']:<10.1f}")
+    
     # Detailed analysis for each length
     print("\n\n📝 DETAILED ANALYSIS BY LENGTH")
     print("=" * 70)
@@ -142,8 +216,18 @@ def print_uniqueness_report(results):
         print(f"  Total comments: {stats['total_comments']:,}")
         print(f"  Unique comments: {stats['unique_comments']:,} ({stats['uniqueness_rate']:.1f}%)")
         print(f"  Duplicate comments: {stats['duplicate_comments']:,} ({stats['duplication_rate']:.1f}%)")
-        print(f"  Unique texts that appear >1 time: {stats['unique_duplicate_texts']:,}")
-        print(f"  Total instances of duplicated texts: {stats['total_duplicate_instances']:,}")
+        
+        # Token analysis
+        print(f"\n  Token Analysis:")
+        print(f"    All comments: {stats['total_tokens_all']:,.0f} tokens")
+        if length != 'full':
+            print(f"    After dedup (by {length} chars): {stats['total_tokens_unique']:,.0f} tokens "
+                  f"({stats['dedup_savings_pct']:.1f}% saved)")
+            print(f"    After truncation: {stats['total_tokens_truncated']:,.0f} tokens "
+                  f"({stats['truncate_savings_pct']:.1f}% saved)")
+        else:
+            print(f"    After full dedup: {stats['total_tokens_unique']:,.0f} tokens "
+                  f"({stats['dedup_savings_pct']:.1f}% saved)")
         
         # Show distribution of duplicates
         dist = stats['duplicate_distribution']
@@ -235,65 +319,201 @@ def plot_uniqueness_analysis(results, output_dir=None):
     
     plt.show()
 
-def create_uniqueness_curve(results, output_dir=None):
-    """Create a line plot showing how uniqueness changes with text length"""
-    # Get numeric lengths and sort them
-    numeric_lengths = [k for k in results.keys() if k != 'full' and isinstance(k, int)]
-    numeric_lengths.sort()
+def plot_token_savings(results, output_dir=None):
+    """Create visualization for token savings analysis"""
+    # Prepare data
+    sorted_lengths = sorted([k for k in results.keys() if k != 'full'], key=int)
     
-    # Add some intermediate points if needed
-    all_points = numeric_lengths + ['full']
+    lengths = []
+    dedup_savings = []
+    truncate_savings = []
+    dedup_comments = []
     
-    x_values = []
-    y_values = []
-    labels = []
+    for length in sorted_lengths:
+        stats = results[length]
+        lengths.append(stats['label'])
+        dedup_savings.append(stats['dedup_savings_pct'])
+        truncate_savings.append(stats['truncate_savings_pct'])
+        dedup_comments.append(stats['comments_kept_dedup'])
     
-    for i, length in enumerate(all_points):
-        if length == 'full':
-            # Use a large number for x-axis but label it as "Full"
-            x_values.append(max(numeric_lengths) * 1.5)
-            labels.append('Full')
-        else:
-            x_values.append(length)
-            labels.append(str(length))
-        
-        y_values.append(results[length]['uniqueness_rate'])
+    # Also add full dedup
+    lengths.append('Full dedup')
+    dedup_savings.append(results['full']['dedup_savings_pct'])
+    truncate_savings.append(0)  # No truncation for full
+    dedup_comments.append(results['full']['comments_kept_dedup'])
     
-    # Create the plot
-    plt.figure(figsize=(10, 6))
+    # Create figure
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
     
-    # Plot the line
-    plt.plot(x_values[:-1], y_values[:-1], 'o-', linewidth=2, markersize=8, color='steelblue', label='Truncated text')
+    # Plot 1: Token savings comparison
+    x = np.arange(len(lengths))
+    width = 0.35
     
-    # Add the "full" point with a different marker
-    plt.plot(x_values[-1], y_values[-1], 'o', markersize=10, color='darkgreen', label='Full text')
+    bars1 = ax1.bar(x - width/2, dedup_savings, width, label='Deduplication', color='#3498db', alpha=0.8)
+    bars2 = ax1.bar(x + width/2, truncate_savings[:-1] + [0], width, label='Truncation', color='#e74c3c', alpha=0.8)
     
     # Add value labels
-    for x, y, label in zip(x_values, y_values, labels):
-        plt.annotate(f'{y:.1f}%', xy=(x, y), xytext=(0, 10), 
-                    textcoords='offset points', ha='center', fontsize=9)
+    for bar in bars1:
+        height = bar.get_height()
+        if height > 0:
+            ax1.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                    f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
     
-    plt.xlabel('Characters Used')
-    plt.ylabel('Uniqueness Rate (%)')
-    plt.title('Comment Uniqueness vs Text Length Used')
-    plt.grid(True, alpha=0.3)
-    plt.legend()
+    for bar in bars2:
+        height = bar.get_height()
+        if height > 0:
+            ax1.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                    f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
     
-    # Set x-axis labels
-    plt.xticks(x_values, labels)
+    ax1.set_xlabel('Strategy')
+    ax1.set_ylabel('Token Savings (%)')
+    ax1.set_title('Token Savings: Deduplication vs Truncation')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(lengths, rotation=45, ha='right')
+    ax1.legend()
+    ax1.grid(axis='y', alpha=0.3)
+    ax1.set_ylim(0, max(max(dedup_savings), max(truncate_savings)) * 1.1)
     
-    # Set y-axis limits
-    plt.ylim(min(y_values) - 5, 100)
+    # Plot 2: Comments retained with deduplication
+    total_comments = results['full']['total_comments']
+    retention_pct = [(c / total_comments * 100) for c in dedup_comments]
+    
+    bars = ax2.bar(x, retention_pct, color='#27ae60', alpha=0.8)
+    
+    # Add value labels
+    for i, (bar, count) in enumerate(zip(bars, dedup_comments)):
+        height = bar.get_height()
+        ax2.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                f'{count:,}\n({height:.1f}%)', ha='center', va='bottom', fontsize=9)
+    
+    ax2.set_xlabel('Deduplication Strategy')
+    ax2.set_ylabel('Comments Retained (%)')
+    ax2.set_title(f'Comments Retained After Deduplication (Total: {total_comments:,})')
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(lengths, rotation=45, ha='right')
+    ax2.grid(axis='y', alpha=0.3)
+    ax2.set_ylim(0, 105)
     
     plt.tight_layout()
     
     if output_dir:
-        plot_path = os.path.join(output_dir, 'uniqueness_curve.png')
+        plot_path = os.path.join(output_dir, 'token_savings_analysis.png')
         plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-        print(f"📊 Uniqueness curve saved to: {plot_path}")
+        print(f"\n📊 Token savings plot saved to: {plot_path}")
     
     plt.show()
 
+
+def plot_token_savings(results, output_dir=None):
+    """Create visualization for token savings analysis"""
+    # Prepare data
+    sorted_lengths = sorted([k for k in results.keys() if k != 'full'], key=int)
+    
+    lengths = []
+    dedup_savings = []
+    truncate_savings = []
+    dedup_comments = []
+    
+    for length in sorted_lengths:
+        stats = results[length]
+        lengths.append(stats['label'])
+        dedup_savings.append(stats['dedup_savings_pct'])
+        truncate_savings.append(stats['truncate_savings_pct'])
+        dedup_comments.append(stats['comments_kept_dedup'])
+    
+    # Also add full dedup
+    lengths.append('Full dedup')
+    dedup_savings.append(results['full']['dedup_savings_pct'])
+    truncate_savings.append(0)  # No truncation for full
+    dedup_comments.append(results['full']['comments_kept_dedup'])
+    
+    # Create figure
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+    
+    # Plot 1: Token savings comparison
+    x = np.arange(len(lengths))
+    width = 0.35
+    
+    bars1 = ax1.bar(x - width/2, dedup_savings, width, label='Deduplication', color='#3498db', alpha=0.8)
+    bars2 = ax1.bar(x + width/2, truncate_savings[:-1] + [0], width, label='Truncation', color='#e74c3c', alpha=0.8)
+    
+    # Add value labels
+    for bar in bars1:
+        height = bar.get_height()
+        if height > 0:
+            ax1.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                    f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
+    
+    for bar in bars2:
+        height = bar.get_height()
+        if height > 0:
+            ax1.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                    f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
+    
+    ax1.set_xlabel('Strategy')
+    ax1.set_ylabel('Token Savings (%)')
+    ax1.set_title('Token Savings: Deduplication vs Truncation')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(lengths, rotation=45, ha='right')
+    ax1.legend()
+    ax1.grid(axis='y', alpha=0.3)
+    ax1.set_ylim(0, max(max(dedup_savings), max(truncate_savings)) * 1.1)
+    
+    # Plot 2: Comments retained with deduplication
+    total_comments = results['full']['total_comments']
+    retention_pct = [(c / total_comments * 100) for c in dedup_comments]
+    
+    bars = ax2.bar(x, retention_pct, color='#27ae60', alpha=0.8)
+    
+    # Add value labels
+    for i, (bar, count) in enumerate(zip(bars, dedup_comments)):
+        height = bar.get_height()
+        ax2.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                f'{count:,}\n({height:.1f}%)', ha='center', va='bottom', fontsize=9)
+    
+    ax2.set_xlabel('Deduplication Strategy')
+    ax2.set_ylabel('Comments Retained (%)')
+    ax2.set_title(f'Comments Retained After Deduplication (Total: {total_comments:,})')
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(lengths, rotation=45, ha='right')
+    ax2.grid(axis='y', alpha=0.3)
+    ax2.set_ylim(0, 105)
+    
+    plt.tight_layout()
+    
+    if output_dir:
+        plot_path = os.path.join(output_dir, 'token_savings_analysis.png')
+        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+        print(f"\n📊 Token savings plot saved to: {plot_path}")
+    
+    plt.show()
+
+def save_report_to_file(results, output_dir):
+    """Save the uniqueness report to a text file"""
+    # Capture the print output
+    old_stdout = sys.stdout
+    sys.stdout = report_buffer = StringIO()
+    
+    # Generate the report
+    print_uniqueness_report(results)
+    
+    # Get the report content
+    report_content = report_buffer.getvalue()
+    
+    # Restore stdout
+    sys.stdout = old_stdout
+    
+    # Save to file
+    report_path = os.path.join(output_dir, 'comment_uniqueness_report.txt')
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write(report_content)
+    
+    print(f"\n📄 Report saved to: {report_path}")
+    
+    # Also print the report to console
+    print(report_content)
+
+    
 def main():
     """Main function with CLI interface"""
     parser = argparse.ArgumentParser(description='Analyze comment uniqueness at different text lengths')
@@ -343,14 +563,15 @@ def main():
     print(f"🔍 Analyzing uniqueness at lengths: {args.lengths} + full text...")
     results = analyze_uniqueness_at_lengths(comments, args.lengths)
     
-    # Print report
-    print_uniqueness_report(results)
+    # Save and print report
+    output_dir = os.path.dirname(input_file)
+    save_report_to_file(results, output_dir)
     
     # Create visualizations
     if not args.no_plots or not args.no_save:
         output_dir = os.path.dirname(input_file) if not args.no_save else None
         plot_uniqueness_analysis(results, output_dir)
-        create_uniqueness_curve(results, output_dir)
+        plot_token_savings(results, output_dir)
     
     print("\n✅ Analysis complete!")
 
