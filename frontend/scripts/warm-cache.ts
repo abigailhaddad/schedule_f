@@ -1,6 +1,6 @@
 // src/scripts/warm-cache.ts
-import { getPaginatedComments, getCommentStatistics } from '../lib/actions/comments';
-import { cache } from '../lib/cache';
+import { getPaginatedComments, getCommentStatistics } from '../src/lib/actions/comments';
+import { cache } from '../src/lib/cache';
 // import { serverLog } from '@/lib/serverLogger'; // Removed as unused
 
 async function warmCache() {
