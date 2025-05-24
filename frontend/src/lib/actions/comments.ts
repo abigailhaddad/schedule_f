@@ -4,6 +4,7 @@ import { db, connectDb } from '@/lib/db';
 import { Comment } from '@/lib/db/schema';
 import { QueryOptions, buildCommentsQuery, buildStatsQueries } from '../queryBuilder';
 import { getCachedData } from '../cache';
+import { unstable_cache } from 'next/cache';
 
 // Response types
 export interface CommentsPaginatedResponse {
@@ -129,11 +130,8 @@ function extractCountValue(result: { rows?: Array<Record<string, unknown>> }): n
 export async function getPaginatedComments(
   options: QueryOptions
 ): Promise<CommentsPaginatedResponse> {
-  // Create cache key based on options
-  const cacheKey = `comments-${JSON.stringify(options)}`;
-
-  return getCachedData(
-    cacheKey,
+  // Use Next.js unstable_cache for proper static generation caching
+  const getCachedComments = unstable_cache(
     async () => {
       try {
         const connection = await connectDb();
@@ -165,8 +163,15 @@ export async function getPaginatedComments(
           error: `Failed to fetch comments: ${errorMessage}` 
         };
       }
+    },
+    [`comments-${JSON.stringify(options)}`], // Cache key
+    {
+      revalidate: 86400, // 24 hours, matching your page revalidation
+      tags: ['comments']
     }
   );
+  
+  return getCachedComments();
 }
 
 /**
@@ -180,10 +185,8 @@ export async function getCommentStatistics(
   delete filterOptions.page;
   delete filterOptions.pageSize;
   
-  const cacheKey = `stats-${JSON.stringify(filterOptions)}`;
-
-  return getCachedData(
-    cacheKey,
+  // Use Next.js unstable_cache for proper static generation caching
+  const getCachedStats = unstable_cache(
     async () => {
       try {
         const connection = await connectDb();
@@ -225,8 +228,15 @@ export async function getCommentStatistics(
           error: `Failed to fetch statistics: ${errorMessage}` 
         };
       }
+    },
+    [`stats-${JSON.stringify(filterOptions)}`], // Cache key
+    {
+      revalidate: 86400, // 24 hours, matching your page revalidation
+      tags: ['stats']
     }
   );
+  
+  return getCachedStats();
 }
 
 /**
