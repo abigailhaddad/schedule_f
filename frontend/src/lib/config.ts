@@ -93,6 +93,20 @@ export const datasetConfig = {
           'true': 'bg-success',
           'false': 'bg-danger'
         }
+      },
+      { 
+        key: 'postedDate',
+        title: 'Posted Date',
+        filter: 'date',
+        visible: true,
+        format: 'date'
+      },
+      { 
+        key: 'receivedDate',
+        title: 'Received Date',
+        filter: 'date',
+        visible: true,
+        format: 'date'
       }
     ],
     
