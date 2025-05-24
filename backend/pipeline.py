@@ -149,7 +149,8 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
                 start_from: Optional[int] = None,
                 end_at: Optional[int] = None,
                 chunk_size: Optional[int] = None,
-                existing_results_dir: Optional[str] = None):
+                existing_results_dir: Optional[str] = None,
+                truncate_chars: Optional[int] = None):
     """
     Run the complete comment processing pipeline.
     
@@ -170,9 +171,7 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         end_at: End processing at this comment index
         chunk_size: Process exactly this many comments starting from start_from
         existing_results_dir: Path to existing results directory to copy/merge from
-        output_dir: Directory to save all results (default: data/results/results_TIMESTAMP)
-        model: Model to use for analysis
-        api_key: OpenAI API key (optional, will use environment variable if not provided)
+        truncate_chars: If specified, truncate comment text to this many characters for analysis
     
     Returns:
         Path to the results directory
@@ -327,7 +326,8 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
             model=model,
             resume=use_resume,
             batch_size=10,  # Process 10 comments in parallel
-            no_delay=True   # Remove artificial delays
+            no_delay=True,   # Remove artificial delays
+            truncate_chars=truncate_chars
             # Note: chunking already applied to raw_data_file, so no need to pass chunk params
         )
         
@@ -474,6 +474,10 @@ def main():
     parser.add_argument('--existing_results', type=str, default=None,
                       help='Path to existing results directory to copy/merge from')
     
+    # Truncation options
+    parser.add_argument('--truncate', type=int, default=None,
+                      help='Truncate comment text to this many characters for analysis (saves API costs)')
+    
     args = parser.parse_args()
     
     try:
@@ -507,7 +511,8 @@ def main():
             start_from=args.start_from,
             end_at=args.end_at,
             chunk_size=args.chunk_size,
-            existing_results_dir=args.existing_results
+            existing_results_dir=args.existing_results,
+            truncate_chars=args.truncate
         )
     except Exception as e:
         print(f"Error during pipeline execution: {e}")
