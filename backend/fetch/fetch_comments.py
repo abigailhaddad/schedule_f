@@ -40,7 +40,7 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any, Tuple
 
 # Import from backend packages
-from utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
+from backend.utils.common import create_directory, create_timestamped_dir, get_latest_results_dir
 
 # Define utility functions
 def get_headers(api_key):
@@ -932,8 +932,6 @@ def download_all_attachments(comments_data, output_dir: str):
     """
     import os
     
-    print(f"\n=== Downloading attachments ===")
-    
     total_attachments = sum(len(comment.get("attributes", {}).get("attachments", [])) 
                            for comment in comments_data)
     
@@ -941,7 +939,7 @@ def download_all_attachments(comments_data, output_dir: str):
         print("No attachments to download.")
         return comments_data
     
-    print(f"Found {total_attachments} attachments to download.")
+    print(f"Downloading {total_attachments} attachments...")
     
     # Create the main attachments directory
     attachments_base_dir = os.path.join(output_dir, "attachments")
@@ -950,6 +948,9 @@ def download_all_attachments(comments_data, output_dir: str):
     # Process each comment
     downloaded = 0
     failed = 0
+    
+    # Create progress bar for attachments
+    attachment_pbar = tqdm(total=total_attachments, desc="Downloading attachments")
     
     for comment in comments_data:
         comment_id = comment.get("id", "unknown")
@@ -963,8 +964,6 @@ def download_all_attachments(comments_data, output_dir: str):
         
         if not attachments:
             continue
-            
-        print(f"Processing {len(attachments)} attachments for comment {comment_id}")
         
         # Create a subfolder for this comment's attachments
         comment_attachments_dir = os.path.join(attachments_base_dir, comment_id)
@@ -976,8 +975,6 @@ def download_all_attachments(comments_data, output_dir: str):
         for i, attachment in enumerate(attachments):
             url = attachment.get("fileUrl")
             if url:
-                # Use existing infrastructure - first download the attachment
-                print(f"Downloading attachment {i+1}/{len(attachments)} for comment {comment_id}")
                 
                 # Determine file extension
                 attachment_title = attachment.get("title", "")
@@ -1003,7 +1000,6 @@ def download_all_attachments(comments_data, output_dir: str):
                     downloaded += 1
                     
                     # Extract text from any supported file type
-                    print(f"Extracting text from {filename}")
                     try:
                         # Use the generic extraction function for all file types
                         attachment_text = extract_text_from_file(downloaded_path)
@@ -1025,13 +1021,21 @@ def download_all_attachments(comments_data, output_dir: str):
                         })
                 else:
                     failed += 1
-                    print(f"Download failed for {url}")
+                
+                # Update progress bar for each attachment processed
+                attachment_pbar.update(1)
         
         # Add attachment texts to the comment data
         if attachment_texts:
             attributes["attachment_texts"] = attachment_texts
     
-    print(f"Downloaded {downloaded} attachments, {failed} failed.")
+    # Close progress bar
+    attachment_pbar.close()
+    
+    if failed > 0:
+        print(f"Downloaded {downloaded} attachments, {failed} failed.")
+    else:
+        print(f"Downloaded {downloaded} attachments successfully.")
     return comments_data
 
 def fetch_comments(document_id: str, output_dir: Optional[str] = None, limit: Optional[int] = None, 
@@ -1219,6 +1223,8 @@ def read_comments_from_csv(csv_file_path: str, output_dir: str, limit: Optional[
                 "country": str(row.get('Country', '')) if not pd.isna(row.get('Country', '')) else '',
                 "comment": str(row.get('Comment', '')) if not pd.isna(row.get('Comment', '')) else '',
                 "documentType": str(row.get('Document Type', '')) if not pd.isna(row.get('Document Type', '')) else '',
+                "agencyId": str(row.get('Agency ID', '')) if not pd.isna(row.get('Agency ID', '')) else '',
+                "category": str(row.get('Category', '')) if not pd.isna(row.get('Category', '')) else '',
                 "attachmentCount": 0,  # Default to 0, will be updated if attachments are found
                 "attachments": []  # Will be populated with attachment info if available
             }
