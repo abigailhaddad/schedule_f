@@ -1,45 +1,94 @@
-Created results directory: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957
 
-=== Pipeline starting at 2025-05-23 11:49:57 ===
-Results will be saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957
+=== Pipeline starting at 2025-05-24 12:41:03 ===
+Results will be saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512
 
-=== Step 1: Processing comments ===
-Using CSV file: comments.csv
-Reading comments from CSV file: comments.csv
-Saved 19879 comments to /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/raw_data.json
+=== Step 1: Skipping fetch as requested ===
 
-=== Step 1.5: Downloading attachments ===
+=== Converting --limit 15 to chunk_size for processing ===
 
-=== Downloading attachments ===
-Found 494 attachments to download.
-Processing 1 attachments for comment OPM-2025-0004-0119
-Downloading attachment 1/1 for comment OPM-2025-0004-0119
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0119/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0119/attachment_1_1748015399.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0119/attachment_1_1748015399.pdf
-Extracting text from attachment_1.pdf.pdf
-PDF text extraction minimal, trying OCR for /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0119/attachment_1_1748015399.pdf
-Processing 1 attachments for comment OPM-2025-0004-0145
-Downloading attachment 1/1 for comment OPM-2025-0004-0145
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0145/attachment_1.png
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0145/attachment_1_1748015412.png
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0145/attachment_1_1748015412.png
-Extracting text from attachment_1.png.png
-Processing 1 attachments for comment OPM-2025-0004-0210
-Downloading attachment 1/1 for comment OPM-2025-0004-0210
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0210/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0210/attachment_1_1748015414.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0210/attachment_1_1748015414.pdf
-Extracting text from attachment_1.pdf.pdf
-Processing 1 attachments for comment OPM-2025-0004-0323
-Downloading attachment 1/1 for comment OPM-2025-0004-0323
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0323/attachment_1.png
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0323/attachment_1_1748015415.png
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0323/attachment_1_1748015415.png
-Extracting text from attachment_1.png.png
-Processing 1 attachments for comment OPM-2025-0004-0408
-Downloading attachment 1/1 for comment OPM-2025-0004-0408
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0408/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0408/attachment_1_1748015418.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_114957/attachments/OPM-2025-0004-0408/attachment_1_1748015418.pdf
-Extracting text from attachment_1.pdf.pdf
+=== Applying chunking to 19879 comments ===
+=== CHUNKING INFO ===
+Original data length: 19879
+start_from: None
+end_at: None
+chunk_size: 15
+CHUNK MODE: Processing comments 0 to 14 (chunk_size=15)
+After chunking: 15 comments to process
+=== END CHUNKING INFO ===
+Saved chunked data (15 comments) to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json
+
+=== Step 1.5: Skipping attachment download as requested ===
+
+=== Step 2: Analyzing 15 comments (0 already done) ===
+
+===== Summary =====
+Total comments: 15
+Successfully analyzed: 15 (100.0%)
+Errors: 0
+
+Stance Distribution:
+  For: 0 (0.0%)
+  Against: 15 (100.0%)
+  Neutral/Unclear: 0 (0.0%)
+
+Theme Occurrences:
+  Merit-based system concerns: 10 (66.7%)
+  Due process/employee rights: 9 (60.0%)
+  Politicization concerns: 14 (93.3%)
+  Scientific integrity: 2 (13.3%)
+  Institutional knowledge loss: 3 (20.0%)
+
+=== Step 3: Running semantic clustering analysis ===
+Running semantic clustering: python /Users/abigailhaddad/Documents/repos/regs/backend/analysis/semantic.py --input /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json --output_dir /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512
+✅ Semantic clustering completed successfully
+Semantic analysis output:
+🚀 Starting semantic clustering...
+📁 Input: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
+📁 Output: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512
+🎯 Number of clusters: 15
+📖 Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json...
+✅ Loaded 15 raw comments
+✅ Processed 15 non-empty comments
+📊 Stance distribution:
+   Against: 15 (100.0%)
+🤖 Loading model: sentence-transformers/all-mpnet-base-v2
+🔄 Creating embeddings for 15 comments...
+✅ Created embeddings with shape: (15, 768)
+🌳 Performing hierarchical clustering with 15 clusters...
+✅ Clustering complete. Cluster distribution:
+  Cluster 0: 1 comments (6.7%)
+  Cluster 1: 1 comments (6.7%)
+  Cluster 2: 1 comments (6.7%)
+  Cluster 3: 1 comments (6.7%)
+  Cluster 4: 1 comments (6.7%)
+  Cluster 5: 1 comments (6.7%)
+  Cluster 6: 1 comments (6.7%)
+  Cluster 7: 1 comments (6.7%)
+  Cluster 8: 1 comments (6.7%)
+  Cluster 9: 1 comments (6.7%)
+  Cluster 10: 1 comments (6.7%)
+  Cluster 11: 1 comments (6.7%)
+  Cluster 12: 1 comments (6.7%)
+  Cluster 13: 1 comments (6.7%)
+  Cluster 14: 1 comments (6.7%)
+📊 Analyzing cluster contents and stance disagreements...
+📊 Creating visualizations...
+  Creating PCA visualization...
+✅ Visualizations saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512
+📝 Creating cluster report...
+✅ Report saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/cluster_report.txt
+
+✅ Clustering complete!
+📊 15 comments grouped into 15 clusters
+📁 Output files:
+   - /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/dendrogram.png
+   - /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/clusters_visualization.png
+   - /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/cluster_report.txt
+
+
+=== Pipeline completed at 2025-05-24 12:41:19 ===
+All results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512
+
+📊 PROCESSING SUMMARY:
+  🆕 Processed 15 comments from scratch
+  📁 Final results directory: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512
