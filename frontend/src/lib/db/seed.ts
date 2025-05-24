@@ -6,8 +6,6 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { sql } from 'drizzle-orm';
-// At the top of seed.ts, after imports
-import { dbConfig } from './index';
 
 
 // Define interface for the JSON data structure
@@ -25,16 +23,32 @@ interface CommentDataItem {
   rationale?: string;
   themes?: string;
   postedDate?: string;
+  receivedDate?: string;
+  occurrence_number?: number;
+  duplicate_of?: string;
 }
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 
+// Determine environment directly
+const getDbEnvironment = (): 'dev' | 'prod' => {
+  const dbEnv = process.env.DB_ENV?.toLowerCase();
+  if (dbEnv !== 'dev' && dbEnv !== 'prod') {
+    console.warn(`Invalid or missing DB_ENV: "${dbEnv}". Defaulting to "dev".`);
+    return 'dev';
+  }
+  return dbEnv as 'dev' | 'prod';
+};
+
+const currentDbEnv = getDbEnvironment();
+const isProdEnvironment = currentDbEnv === 'prod';
+
 const main = async () => {
   // Show which database we're seeding
-  console.log(`\n🌱 Seeding ${dbConfig.environment.toUpperCase()} database`);
+  console.log(`\n🌱 Seeding ${currentDbEnv.toUpperCase()} database`);
   
-  if (dbConfig.isProd) {
+  if (isProdEnvironment) {
     console.warn('\n⚠️  WARNING: You are about to seed the PRODUCTION database!');
     console.warn('This will modify production data. Press Ctrl+C to cancel.\n');
     
@@ -96,6 +110,9 @@ const main = async () => {
       rationale: item.rationale,
       themes: item.themes,
       postedDate: item.postedDate ? new Date(item.postedDate) : null,
+      receivedDate: item.receivedDate ? new Date(item.receivedDate) : null,
+      occurrenceNumber: item.occurrence_number,
+      duplicateOf: item.duplicate_of,
     };
     commentsToInsert.push(newComment);
   }
@@ -120,7 +137,10 @@ const main = async () => {
             keyQuote: sql`excluded.key_quote`,
             rationale: sql`excluded.rationale`,
             themes: sql`excluded.themes`,
-            postedDate: sql`excluded.posted_date`
+            postedDate: sql`excluded.posted_date`,
+            receivedDate: sql`excluded.received_date`,
+            occurrenceNumber: sql`excluded.occurrence_number`,
+            duplicateOf: sql`excluded.duplicate_of`
           } 
         });
         console.log(`Upserted chunk ${i / chunkSize + 1} of ${Math.ceil(commentsToInsert.length / chunkSize)} for comments`);
