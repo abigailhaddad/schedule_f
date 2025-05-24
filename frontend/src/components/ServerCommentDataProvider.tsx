@@ -4,9 +4,20 @@
 import { ServerDataState } from './states';
 import { ServerDataContextProvider } from '@/contexts/ServerDataContext';
 
-export default function ServerCommentDataProvider() {
+interface ServerCommentDataProviderProps {
+  initialPage?: number;
+  initialPageSize?: number;
+}
+
+export default function ServerCommentDataProvider({ 
+  initialPage, 
+  initialPageSize 
+}: ServerCommentDataProviderProps = {}) {
   return (
-    <ServerDataContextProvider>
+    <ServerDataContextProvider 
+      initialPage={initialPage}
+      initialPageSize={initialPageSize}
+    >
       <ServerDataState />
     </ServerDataContextProvider>
   );
