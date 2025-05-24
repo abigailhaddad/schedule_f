@@ -676,7 +676,8 @@ def build_comment_lookup(comments_data):
                         'link': link,
                         'agencyId': agency_id,
                         'has_attachments': bool(attachment_texts),
-                        'postedDate': attributes.get('postedDate', '')
+                        'postedDate': attributes.get('postedDate', ''),
+                        'receivedDate': attributes.get('receivedDate', '')
                     }
         except Exception as e:
             logger.error(f"Error building lookup for comment: {e}")
@@ -704,6 +705,7 @@ def format_results_for_output(results, original_comments):
                     "key_quote": result.get("analysis", {}).get("key_quote", ""),
                     "rationale": result.get("analysis", {}).get("rationale", ""),
                     "postedDate": original_comments.get(comment_id, {}).get('postedDate', ''),
+                    "receivedDate": original_comments.get(comment_id, {}).get('receivedDate', ''),
                     "occurrence_number": result.get("occurrence_number", 1),
                     "duplicate_of": result.get("duplicate_of", "")
                 }
@@ -733,6 +735,7 @@ def format_results_for_output(results, original_comments):
                     "rationale": "",
                     "themes": "",
                     "postedDate": original_comments.get(comment_id, {}).get('postedDate', ''),
+                    "receivedDate": original_comments.get(comment_id, {}).get('receivedDate', ''),
                     "occurrence_number": result.get("occurrence_number", 1),
                     "duplicate_of": result.get("duplicate_of", "")
                 }

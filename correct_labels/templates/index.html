@@ -330,6 +330,11 @@
                             {{ comment.occurrence_number }}x
                         {% endif %}
                     </div>
+                    {% if comment.receivedDate %}
+                    <div style="font-size: 12px; color: #666; margin-left: 12px;">
+                        Received: {{ comment.receivedDate[:10] if comment.receivedDate|length > 10 else comment.receivedDate }}
+                    </div>
+                    {% endif %}
                 </div>
                 {% if comment.is_corrected %}
                 <div class="correction-status">✓ CORRECTED</div>
