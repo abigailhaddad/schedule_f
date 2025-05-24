@@ -1,5 +1,5 @@
 // lib/db/schema.ts
-import { pgTable, text, timestamp, varchar, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, varchar, boolean, pgEnum, integer } from 'drizzle-orm/pg-core';
 
 export const stanceEnum = pgEnum('stance', ['For', 'Against', 'Neutral/Unclear']);
 
@@ -18,7 +18,10 @@ export const comments = pgTable('comments', {
   rationale: text('rationale'),
   themes: text('themes'),
   postedDate: timestamp('posted_date'),
-  createdAt: timestamp('created_at').defaultNow()
+  receivedDate: timestamp('received_date'),
+  occurrenceNumber: integer('occurrence_number'),
+  duplicateOf: varchar('duplicate_of'),
+  createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
 // Type inference
