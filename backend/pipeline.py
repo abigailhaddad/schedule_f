@@ -54,6 +54,85 @@ def apply_chunking(comments_data, start_from=None, end_at=None, chunk_size=None)
     
     return comments_data
 
+def copy_and_merge_existing_results(existing_results_dir, new_output_dir, target_comment_ids):
+    """
+    Copy existing results directory and merge with new target comments.
+    
+    Args:
+        existing_results_dir: Path to existing results directory
+        new_output_dir: Path to new output directory
+        target_comment_ids: Set of comment IDs we want to process
+    
+    Returns:
+        Set of comment IDs that are already processed (should be skipped)
+    """
+    print(f"\n=== Copying and merging existing results ===")
+    print(f"Source: {existing_results_dir}")
+    print(f"Target: {new_output_dir}")
+    
+    if not os.path.exists(existing_results_dir):
+        raise FileNotFoundError(f"Existing results directory not found: {existing_results_dir}")
+    
+    # Copy the entire existing results directory to the new location
+    print("Copying existing results directory...")
+    shutil.copytree(existing_results_dir, new_output_dir, dirs_exist_ok=True)
+    
+    # Check what's already been analyzed
+    analyzed_data_file = os.path.join(new_output_dir, "data.json")
+    already_processed_ids = set()
+    
+    if os.path.exists(analyzed_data_file):
+        print("Loading existing analysis results...")
+        with open(analyzed_data_file, 'r') as f:
+            existing_results = json.load(f)
+        
+        print(f"Raw existing results count: {len(existing_results)}")
+        
+        # Get IDs of already processed comments
+        for result in existing_results:
+            if isinstance(result, dict) and 'id' in result:
+                comment_id = result['id']
+                already_processed_ids.add(comment_id)
+            else:
+                print(f"Skipping malformed result: {type(result)} - {result}")
+        
+        print(f"Found {len(already_processed_ids)} already processed comments")
+        print(f"Sample existing IDs: {list(already_processed_ids)[:5]}...")
+        print(f"Sample target IDs: {list(target_comment_ids)[:5]}...")
+        
+        # Filter to only include comments that are in our target set
+        relevant_already_processed = already_processed_ids.intersection(target_comment_ids)
+        print(f"Of those, {len(relevant_already_processed)} are relevant to current chunk")
+        
+        if len(relevant_already_processed) == 0:
+            print("⚠️  WARNING: No overlap between existing results and target chunk!")
+            print("This might indicate:")
+            print("  - Different comment ID formats")
+            print("  - Target chunk is outside the range of existing results")
+            print("  - Data structure mismatch")
+        
+        # Filter existing results to only include comments in our target set
+        filtered_results = []
+        for result in existing_results:
+            if isinstance(result, dict) and 'id' in result:
+                if result['id'] in target_comment_ids:
+                    filtered_results.append(result)
+        
+        print(f"Filtered results: {len(filtered_results)} comments in target chunk")
+        
+        # Save the filtered results back
+        if len(filtered_results) != len(existing_results):
+            print(f"Filtering existing results: {len(existing_results)} -> {len(filtered_results)} (keeping only target chunk)")
+            with open(analyzed_data_file, 'w') as f:
+                json.dump(filtered_results, f, indent=2)
+        else:
+            print("No filtering needed - all existing results are in target chunk")
+        
+        return relevant_already_processed
+    else:
+        print("No existing analysis results found (data.json)")
+        return set()
+
 def run_pipeline(document_id: str = "OPM-2025-0004-0001", 
                 limit: Optional[int] = None, 
                 skip_fetch: bool = False,
@@ -67,7 +146,8 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
                 api_key: Optional[str] = None,
                 start_from: Optional[int] = None,
                 end_at: Optional[int] = None,
-                chunk_size: Optional[int] = None):
+                chunk_size: Optional[int] = None,
+                existing_results_dir: Optional[str] = None):
     """
     Run the complete comment processing pipeline.
     
@@ -86,6 +166,7 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         start_from: Start processing from this comment index
         end_at: End processing at this comment index
         chunk_size: Process exactly this many comments starting from start_from
+        existing_results_dir: Path to existing results directory to copy/merge from
         output_dir: Directory to save all results (default: data/results/results_TIMESTAMP)
         model: Model to use for analysis
         api_key: OpenAI API key (optional, will use environment variable if not provided)
@@ -157,36 +238,124 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
             json.dump(comments_data, f, indent=2)
         print(f"Saved chunked data ({len(comments_data)} comments) to {raw_data_file}")
     
-    # Step 1.5: Download attachments (only for chunked data)
+    # Handle existing results directory if specified
+    already_processed_ids = set()
+    if existing_results_dir:
+        # Get target comment IDs from the (potentially chunked) data
+        target_comment_ids = {comment.get('id') for comment in comments_data if comment.get('id')}
+        print(f"Target comment IDs for processing: {len(target_comment_ids)} comments")
+        
+        # Debug: Show sample comment structure
+        if comments_data:
+            sample_comment = comments_data[0]
+            print(f"Sample comment structure: {list(sample_comment.keys())}")
+            print(f"Sample comment ID: {sample_comment.get('id')}")
+            print(f"Sample comment type: {type(sample_comment.get('id'))}")
+        
+        # Copy existing results and get already processed IDs
+        already_processed_ids = copy_and_merge_existing_results(
+            existing_results_dir, output_dir, target_comment_ids
+        )
+        
+        print(f"Will skip {len(already_processed_ids)} already processed comments")
+        print(f"Will process {len(target_comment_ids) - len(already_processed_ids)} new comments")
+    
+    # Step 1.5: Download attachments (only for chunked data that hasn't been processed)
     if not skip_attachments:
-        print(f"\n=== Step 1.5: Downloading attachments for {len(comments_data)} comments ===")
+        # Filter out comments that already have been processed (and likely have attachments)
+        comments_needing_attachments = []
+        for comment in comments_data:
+            comment_id = comment.get('id')
+            if comment_id not in already_processed_ids:
+                comments_needing_attachments.append(comment)
         
-        # Download attachments for the (potentially chunked) comments
-        updated_comments = download_all_attachments(comments_data, output_dir)
-        
-        # Save the updated comments with local paths to attachments
-        with open(raw_data_file, 'w') as f:
-            json.dump(updated_comments, f, indent=2)
+        if len(comments_needing_attachments) > 0:
+            print(f"\n=== Step 1.5: Downloading attachments for {len(comments_needing_attachments)} new comments ===")
+            print(f"Skipping {len(already_processed_ids)} comments that already have attachments")
+            
+            # Download attachments only for new comments
+            updated_new_comments = download_all_attachments(comments_needing_attachments, output_dir)
+            
+            # Merge the updated new comments back into the full list
+            # Create a lookup of updated comments by ID
+            updated_lookup = {c.get('id'): c for c in updated_new_comments}
+            
+            # Update the full comments list
+            for i, comment in enumerate(comments_data):
+                comment_id = comment.get('id')
+                if comment_id in updated_lookup:
+                    comments_data[i] = updated_lookup[comment_id]
+            
+            # Save the updated comments with local paths to attachments
+            with open(raw_data_file, 'w') as f:
+                json.dump(comments_data, f, indent=2)
+        else:
+            print(f"\n=== Step 1.5: All {len(comments_data)} comments already have attachments - skipping download ===")
     else:
         print(f"\n=== Step 1.5: Skipping attachment download as requested ===")
     
     # Step 2: Analyze comments (chunking already applied in raw_data_file)
     if not skip_analyze:
-        print(f"\n=== Step 2: Analyzing {len(comments_data)} comments ===")
+        remaining_to_process = len(comments_data) - len(already_processed_ids)
+        print(f"\n=== Step 2: Analyzing {remaining_to_process} comments ({len(already_processed_ids)} already done) ===")
+        
+        # Create a custom analyzer call that knows about already processed IDs
+        if already_processed_ids:
+            # We need to pass the already processed IDs to analyze_comments
+            # This will be handled by the analyze_comments function's resume logic
+            # by creating a temporary checkpoint with the already processed IDs
+            temp_checkpoint = os.path.join(output_dir, "analyze_checkpoint.json")
+            checkpoint_data = {
+                'results': {},  # Empty results since they're already in data.json
+                'processed_ids': list(already_processed_ids),
+                'error_count': 0
+            }
+            with open(temp_checkpoint, 'w') as f:
+                json.dump(checkpoint_data, f)
+            
+            # Enable resume to use the checkpoint
+            use_resume = True
+        else:
+            use_resume = resume
+        
         analyze_comments(
             input_file=raw_data_file,
             output_file=analyzed_data_file,
             model=model,
-            resume=resume,
+            resume=use_resume,
             batch_size=10,  # Process 10 comments in parallel
             no_delay=True   # Remove artificial delays
             # Note: chunking already applied to raw_data_file, so no need to pass chunk params
         )
+        
+        # Clean up temporary checkpoint if we created one
+        if already_processed_ids:
+            temp_checkpoint = os.path.join(output_dir, "analyze_checkpoint.json")
+            if os.path.exists(temp_checkpoint):
+                os.remove(temp_checkpoint)
     else:
         print("\n=== Step 2: Skipping analysis as requested ===")
 
     print(f"\n=== Pipeline completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
     print(f"All results saved to: {output_dir}")
+    
+    # Print comprehensive summary
+    print(f"\n📊 PROCESSING SUMMARY:")
+    if existing_results_dir:
+        target_comment_ids = {comment.get('id') for comment in comments_data if comment.get('id')}
+        new_comments_processed = len(target_comment_ids) - len(already_processed_ids)
+        
+        print(f"  📁 Copied existing results from: {existing_results_dir}")
+        print(f"  🔄 Total comments in chunk: {len(target_comment_ids)}")
+        print(f"  ✅ Already processed (copied): {len(already_processed_ids)}")
+        print(f"  🆕 Newly processed: {new_comments_processed}")
+        
+        if len(already_processed_ids) > 0:
+            print(f"  📋 Existing results included analysis, attachments, and metadata")
+    else:
+        print(f"  🆕 Processed {len(comments_data)} comments from scratch")
+    
+    print(f"  📁 Final results directory: {output_dir}")
     
     return output_dir
 
@@ -232,6 +401,10 @@ def main():
     parser.add_argument('--chunk_size', type=int, default=None,
                       help='Process exactly this many comments starting from start_from')
     
+    # Existing results options
+    parser.add_argument('--existing_results', type=str, default=None,
+                      help='Path to existing results directory to copy/merge from')
+    
     args = parser.parse_args()
     
     try:
@@ -263,7 +436,8 @@ def main():
             api_key=args.api_key,
             start_from=args.start_from,
             end_at=args.end_at,
-            chunk_size=args.chunk_size
+            chunk_size=args.chunk_size,
+            existing_results_dir=args.existing_results
         )
     except Exception as e:
         print(f"Error during pipeline execution: {e}")
