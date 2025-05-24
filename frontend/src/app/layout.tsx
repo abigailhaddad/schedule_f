@@ -3,6 +3,7 @@ import './globals.css'
 import { datasetConfig } from '@/lib/config'
 import { Metadata } from 'next'
 import { Analytics } from "@vercel/analytics/next"
+import DatabaseStatus from '@/components/DatabaseStatus'
 
 export const metadata: Metadata = {
   title: datasetConfig.title,
@@ -29,6 +30,7 @@ export default function RootLayout({
       <title>&quot;Schedule F&quot; Analysis</title>
       <body className="bg-light font-sans">
         {children}
+        {process.env.NODE_ENV === 'development' && <DatabaseStatus />}
         <Analytics />
       </body>
     </html>

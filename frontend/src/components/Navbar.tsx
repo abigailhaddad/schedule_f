@@ -43,14 +43,14 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Beta Badge - simple horizontal badge */}
       <div className="absolute left-3 top-2 z-50 pointer-events-none sm:hidden">
         <div className="bg-yellow-700 text-white font-bold text-xs py-0.5 px-2 rounded shadow-sm">
           BETA
         </div>
       </div>
-      
+
       <nav
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           scrolled
@@ -116,7 +116,6 @@ export default function Navbar() {
                 </a>
               </div>
             </div>
-
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center">
               {subtitle && (
@@ -140,7 +139,6 @@ export default function Navbar() {
                 </Link>
               )}
             </div>
-            
             {/* Mobile Menu Button - Only show if we have a subtitle */}
             {subtitle && (
               <button
@@ -172,7 +170,7 @@ export default function Navbar() {
               </button>
             )}
           </div>
-          
+
           {/* Mobile Navigation - Only show if we have a subtitle */}
           {subtitle && (
             <div
