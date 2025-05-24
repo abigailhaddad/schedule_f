@@ -26122,3 +26122,1375 @@ LiteLLM completion() model= gpt-4o-mini; provider = openai
 Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_181445/data.json
 2025-05-23 18:26:32,005 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_181445/summary.json
 2025-05-23 18:26:32,005 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_181445/analyze_checkpoint.json
+2025-05-23 18:49:39,959 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:39,961 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:39,962 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:39,964 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:39,965 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:39,966 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:39,967 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,520 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,521 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,521 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,521 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,521 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,521 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:49:40,521 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,374 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,376 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,377 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,378 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,379 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,380 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,381 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,937 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,937 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,937 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,938 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,938 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,938 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:51:00,938 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:52:47,977 - INFO - FakeTensor cache stats:
+2025-05-23 18:52:47,978 - INFO -   cache_hits: 0
+2025-05-23 18:52:47,978 - INFO -   cache_misses: 0
+2025-05-23 18:54:29,449 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:29,452 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:29,453 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:29,454 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:29,456 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:29,457 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:29,458 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,016 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,016 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,016 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,017 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,017 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,017 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:54:30,017 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:55:23,605 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185521/raw_data.json...
+2025-05-23 18:55:23,611 - INFO - Found 1000 comments in the file
+2025-05-23 18:55:23,611 - INFO - === DIAGNOSTIC INFO ===
+2025-05-23 18:55:23,611 - INFO - Original data length: 1000
+2025-05-23 18:55:23,611 - INFO - start_from: None
+2025-05-23 18:55:23,611 - INFO - end_at: None
+2025-05-23 18:55:23,611 - INFO - chunk_size: None
+2025-05-23 18:55:23,611 - INFO - top_n: None
+2025-05-23 18:55:23,611 - INFO - Comment 0 structure:
+2025-05-23 18:55:23,611 - INFO -   Type: <class 'dict'>
+2025-05-23 18:55:23,611 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:55:23,612 - INFO -   ID: OPM-2025-0004-0002
+2025-05-23 18:55:23,612 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-23 18:55:23,612 - INFO - Comment 1 structure:
+2025-05-23 18:55:23,612 - INFO -   Type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:55:23,612 - INFO -   ID: OPM-2025-0004-0003
+2025-05-23 18:55:23,612 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-23 18:55:23,612 - INFO - Comment 2 structure:
+2025-05-23 18:55:23,612 - INFO -   Type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:55:23,612 - INFO -   ID: OPM-2025-0004-0004
+2025-05-23 18:55:23,612 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-23 18:55:23,612 - INFO - After slicing: 1000 comments to process
+2025-05-23 18:55:23,612 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-23 18:55:23,612 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-23 18:55:23,612 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-23 18:55:23,612 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:55:23,612 - INFO - Comment text length: 418 chars
+2025-05-23 18:55:23,612 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-23 18:55:23,612 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-23 18:55:23,612 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:55:23,612 - INFO - Comment text length: 1333 chars
+2025-05-23 18:55:23,612 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-23 18:55:23,612 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-23 18:55:23,612 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:55:23,612 - INFO - Comment text length: 1196 chars
+2025-05-23 18:55:23,612 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-23 18:55:23,612 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-23 18:55:23,612 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:55:23,612 - INFO - Comment text length: 554 chars
+2025-05-23 18:55:23,612 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-23 18:55:23,612 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-23 18:55:23,612 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:55:23,612 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:55:23,612 - INFO - Comment text length: 518 chars
+2025-05-23 18:55:23,613 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185521/temp_20250523_185523
+2025-05-23 18:55:23,613 - INFO - Resuming from checkpoint: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185521/analyze_checkpoint.json
+2025-05-23 18:55:23,613 - INFO - Loaded 0 results from checkpoint
+2025-05-23 18:55:23,613 - INFO - Skipping 1000 already processed comment IDs
+2025-05-23 18:55:23,613 - INFO - Processing 0 of 1000 comments
+2025-05-23 18:55:23,634 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185521/data.json
+2025-05-23 18:55:23,634 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185521/summary.json
+2025-05-23 18:55:23,634 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185521/analyze_checkpoint.json
+2025-05-23 18:56:31,565 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185629/raw_data.json...
+2025-05-23 18:56:31,571 - INFO - Found 1000 comments in the file
+2025-05-23 18:56:31,571 - INFO - === DIAGNOSTIC INFO ===
+2025-05-23 18:56:31,571 - INFO - Original data length: 1000
+2025-05-23 18:56:31,571 - INFO - start_from: None
+2025-05-23 18:56:31,571 - INFO - end_at: None
+2025-05-23 18:56:31,571 - INFO - chunk_size: None
+2025-05-23 18:56:31,571 - INFO - top_n: None
+2025-05-23 18:56:31,571 - INFO - Comment 0 structure:
+2025-05-23 18:56:31,571 - INFO -   Type: <class 'dict'>
+2025-05-23 18:56:31,571 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:31,571 - INFO -   ID: OPM-2025-0004-0002
+2025-05-23 18:56:31,572 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-23 18:56:31,572 - INFO - Comment 1 structure:
+2025-05-23 18:56:31,572 - INFO -   Type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:31,572 - INFO -   ID: OPM-2025-0004-0003
+2025-05-23 18:56:31,572 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-23 18:56:31,572 - INFO - Comment 2 structure:
+2025-05-23 18:56:31,572 - INFO -   Type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:31,572 - INFO -   ID: OPM-2025-0004-0004
+2025-05-23 18:56:31,572 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-23 18:56:31,572 - INFO - After slicing: 1000 comments to process
+2025-05-23 18:56:31,572 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-23 18:56:31,572 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-23 18:56:31,572 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-23 18:56:31,572 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:31,572 - INFO - Comment text length: 418 chars
+2025-05-23 18:56:31,572 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-23 18:56:31,572 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-23 18:56:31,572 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:31,572 - INFO - Comment text length: 1333 chars
+2025-05-23 18:56:31,572 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-23 18:56:31,572 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-23 18:56:31,572 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:31,572 - INFO - Comment text length: 1196 chars
+2025-05-23 18:56:31,572 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-23 18:56:31,572 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-23 18:56:31,572 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:31,572 - INFO - Comment text length: 554 chars
+2025-05-23 18:56:31,572 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-23 18:56:31,572 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-23 18:56:31,572 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:31,572 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:31,572 - INFO - Comment text length: 518 chars
+2025-05-23 18:56:31,573 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185629/temp_20250523_185631
+2025-05-23 18:56:31,573 - INFO - Resuming from checkpoint: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185629/analyze_checkpoint.json
+2025-05-23 18:56:31,573 - INFO - Loaded 0 results from checkpoint
+2025-05-23 18:56:31,573 - INFO - Skipping 1000 already processed comment IDs
+2025-05-23 18:56:31,573 - INFO - Processing 0 of 1000 comments
+2025-05-23 18:56:31,591 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185629/data.json
+2025-05-23 18:56:31,592 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185629/summary.json
+2025-05-23 18:56:31,592 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185629/analyze_checkpoint.json
+2025-05-23 18:56:55,823 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:56:55,859 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-23 18:56:56,187 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185653/raw_data.json...
+2025-05-23 18:56:56,191 - INFO - Found 1050 comments in the file
+2025-05-23 18:56:56,191 - INFO - === DIAGNOSTIC INFO ===
+2025-05-23 18:56:56,191 - INFO - Original data length: 1050
+2025-05-23 18:56:56,191 - INFO - start_from: None
+2025-05-23 18:56:56,191 - INFO - end_at: None
+2025-05-23 18:56:56,191 - INFO - chunk_size: None
+2025-05-23 18:56:56,191 - INFO - top_n: None
+2025-05-23 18:56:56,191 - INFO - Comment 0 structure:
+2025-05-23 18:56:56,191 - INFO -   Type: <class 'dict'>
+2025-05-23 18:56:56,191 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,191 - INFO -   ID: OPM-2025-0004-0002
+2025-05-23 18:56:56,191 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-23 18:56:56,191 - INFO - Comment 1 structure:
+2025-05-23 18:56:56,191 - INFO -   Type: <class 'dict'>
+2025-05-23 18:56:56,191 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,191 - INFO -   ID: OPM-2025-0004-0003
+2025-05-23 18:56:56,191 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-23 18:56:56,191 - INFO - Comment 2 structure:
+2025-05-23 18:56:56,191 - INFO -   Type: <class 'dict'>
+2025-05-23 18:56:56,191 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,191 - INFO -   ID: OPM-2025-0004-0004
+2025-05-23 18:56:56,192 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-23 18:56:56,192 - INFO - After slicing: 1050 comments to process
+2025-05-23 18:56:56,192 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-23 18:56:56,192 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-23 18:56:56,192 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-23 18:56:56,192 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:56,192 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:56,192 - INFO - Comment text length: 418 chars
+2025-05-23 18:56:56,192 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-23 18:56:56,192 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-23 18:56:56,192 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:56,192 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:56,192 - INFO - Comment text length: 1333 chars
+2025-05-23 18:56:56,192 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-23 18:56:56,192 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-23 18:56:56,192 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:56,192 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:56,192 - INFO - Comment text length: 1196 chars
+2025-05-23 18:56:56,192 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-23 18:56:56,192 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-23 18:56:56,192 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:56,192 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:56,192 - INFO - Comment text length: 554 chars
+2025-05-23 18:56:56,192 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-23 18:56:56,192 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-23 18:56:56,192 - INFO - Comment type: <class 'dict'>
+2025-05-23 18:56:56,192 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-23 18:56:56,192 - INFO - Comment text length: 518 chars
+2025-05-23 18:56:56,192 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185653/temp_20250523_185656
+2025-05-23 18:56:56,192 - INFO - Resuming from checkpoint: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185653/analyze_checkpoint.json
+2025-05-23 18:56:56,192 - INFO - Loaded 0 results from checkpoint
+2025-05-23 18:56:56,192 - INFO - Skipping 1000 already processed comment IDs
+2025-05-23 18:56:56,193 - INFO - Processing 50 of 1050 comments
+2025-05-23 18:56:56,206 - INFO - Processing batch 1: ['OPM-2025-0004-10002', 'OPM-2025-0004-10003', 'OPM-2025-0004-10004', 'OPM-2025-0004-10005', 'OPM-2025-0004-10006', 'OPM-2025-0004-10007', 'OPM-2025-0004-10008', 'OPM-2025-0004-10009', 'OPM-2025-0004-1001', 'OPM-2025-0004-10010']
+2025-05-23 18:56:56,206 - INFO - Batch size: 10
+2025-05-23 18:56:56,206 - INFO - Batch item 0: OPM-2025-0004-10002, type: <class 'dict'>
+2025-05-23 18:56:56,206 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,206 - INFO - Batch item 1: OPM-2025-0004-10003, type: <class 'dict'>
+2025-05-23 18:56:56,206 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,206 - INFO - Batch item 2: OPM-2025-0004-10004, type: <class 'dict'>
+2025-05-23 18:56:56,206 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,206 - INFO - Batch item 3: OPM-2025-0004-10005, type: <class 'dict'>
+2025-05-23 18:56:56,206 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,206 - INFO - Batch item 4: OPM-2025-0004-10006, type: <class 'dict'>
+2025-05-23 18:56:56,206 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,206 - INFO - Batch item 5: OPM-2025-0004-10007, type: <class 'dict'>
+2025-05-23 18:56:56,206 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - Batch item 6: OPM-2025-0004-10008, type: <class 'dict'>
+2025-05-23 18:56:56,207 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - Batch item 7: OPM-2025-0004-10009, type: <class 'dict'>
+2025-05-23 18:56:56,207 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - Batch item 8: OPM-2025-0004-1001, type: <class 'dict'>
+2025-05-23 18:56:56,207 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - Batch item 9: OPM-2025-0004-10010, type: <class 'dict'>
+2025-05-23 18:56:56,207 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - Starting batch processing (parallel=True)...
+2025-05-23 18:56:56,207 - INFO - Processing batch of 10 comments in parallel
+2025-05-23 18:56:56,207 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:56,207 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:56,207 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:56,207 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:56,207 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:56,207 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:56,208 - INFO - Processing comment OPM-2025-0004-10002
+2025-05-23 18:56:56,208 - INFO - Processing comment OPM-2025-0004-10003
+2025-05-23 18:56:56,208 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:56,208 - INFO - Comment OPM-2025-0004-10002 - text length: 988 chars
+2025-05-23 18:56:56,208 - INFO - Comment OPM-2025-0004-10003 - text length: 776 chars
+2025-05-23 18:56:56,208 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:56,208 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:56,208 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:56,208 - INFO - Comment OPM-2025-0004-10002 - title: Comment from Brent Erickson
+2025-05-23 18:56:56,208 - INFO - Comment OPM-2025-0004-10003 - title: Comment from Amy Fine
+2025-05-23 18:56:56,208 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:56,208 - INFO - Processing comment OPM-2025-0004-10004
+2025-05-23 18:56:56,208 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:56,208 - INFO - Starting analysis for comment OPM-2025-0004-10002 with 988 chars
+2025-05-23 18:56:56,208 - INFO - Starting analysis for comment OPM-2025-0004-10003 with 776 chars
+2025-05-23 18:56:56,208 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:56,208 - INFO - Comment OPM-2025-0004-10004 - text length: 233 chars
+2025-05-23 18:56:56,208 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:56,214 - INFO - Processing comment OPM-2025-0004-10005
+2025-05-23 18:56:56,214 - INFO - Comment OPM-2025-0004-10004 - title: Comment from Anonymous
+2025-05-23 18:56:56,214 - INFO - Processing comment OPM-2025-0004-10006
+2025-05-23 18:56:56,215 - INFO - Comment OPM-2025-0004-10005 - text length: 590 chars
+2025-05-23 18:56:56,215 - INFO - Comment OPM-2025-0004-10006 - text length: 1875 chars
+2025-05-23 18:56:56,215 - INFO - Starting analysis for comment OPM-2025-0004-10004 with 233 chars
+2025-05-23 18:56:56,215 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:56,216 - INFO - Comment OPM-2025-0004-10005 - title: Comment from Nancy Loran
+2025-05-23 18:56:56,216 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:56,216 - INFO - Comment OPM-2025-0004-10006 - title: Comment from Anonymous
+2025-05-23 18:56:56,218 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:56,218 - INFO - Starting analysis for comment OPM-2025-0004-10005 with 590 chars
+2025-05-23 18:56:56,218 - INFO - Starting analysis for comment OPM-2025-0004-10006 with 1875 chars
+2025-05-23 18:56:56,221 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:56,222 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:58,723 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:56:58,724 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:56:58,739 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:56:58,752 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:56:58,755 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:58,756 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:58,756 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:58,758 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:56:58,758 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:58,759 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:58,761 - INFO - Successfully analyzed OPM-2025-0004-10003
+2025-05-23 18:56:58,761 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:58,762 - INFO - Successfully analyzed OPM-2025-0004-10006
+2025-05-23 18:56:58,762 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:58,762 - INFO - Successfully processed comment OPM-2025-0004-10003 in parallel
+2025-05-23 18:56:58,762 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:58,762 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:58,762 - INFO - Successfully processed comment OPM-2025-0004-10006 in parallel
+2025-05-23 18:56:58,763 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:58,763 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:58,763 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:58,763 - INFO - Processing comment OPM-2025-0004-10007
+2025-05-23 18:56:58,763 - INFO - Processing comment OPM-2025-0004-10008
+2025-05-23 18:56:58,763 - INFO - Comment OPM-2025-0004-10007 - text length: 4810 chars
+2025-05-23 18:56:58,764 - INFO - Comment OPM-2025-0004-10008 - text length: 160 chars
+2025-05-23 18:56:58,764 - INFO - Comment OPM-2025-0004-10007 - title: Comment from Jason Dowd
+2025-05-23 18:56:58,764 - INFO - Comment OPM-2025-0004-10008 - title: Comment from Carol Moschetti
+2025-05-23 18:56:58,764 - INFO - Starting analysis for comment OPM-2025-0004-10007 with 4810 chars
+2025-05-23 18:56:58,764 - INFO - Starting analysis for comment OPM-2025-0004-10008 with 160 chars
+2025-05-23 18:56:58,766 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:58,768 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:58,782 - ERROR - Error analyzing comment OPM-2025-0004-10005: litellm.APIError: APIError: OpenAIException - Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 548, in convert_to_model_response_object
+    usage_object = litellm.Usage(**response_object["usage"])
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 921, in __init__
+    _prompt_tokens_details = PromptTokensDetailsWrapper(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 843, in __init__
+    if self.character_count is None:
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/pydantic/main.py", line 989, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'PromptTokensDetailsWrapper' object has no attribute 'character_count'
+
+
+received_args={'response_object': {'id': 'chatcmpl-BaVbtg1PvzRaWohtuCiJF6W4dlnw6', 'choices': [{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': '{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', 'refusal': None, 'role': 'assistant', 'annotations': [], 'audio': None, 'function_call': None, 'tool_calls': None}}], 'created': 1748041017, 'model': 'gpt-4o-mini-2024-07-18', 'object': 'chat.completion', 'service_tier': 'default', 'system_fingerprint': 'fp_62a23a81ef', 'usage': {'completion_tokens': 83, 'prompt_tokens': 993, 'total_tokens': 1076, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}}, 'model_response_object': ModelResponse(id='chatcmpl-29fafd51-4914-4648-96db-866dfc1d3ac8', created=1748041016, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content='{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', role='assistant', tool_calls=None, function_call=None, provider_specific_fields={'refusal': None}, annotations=[]))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Fri, 23 May 2025 22:56:58 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1609', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1612', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999029', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_048dc9bf30ef2604bb7e1848e05a69a8', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=J5VRj5jFSQ2T48PTX0Zg6OxS8_DPlK6Uujwl7pOpWJg-1748041018-1.0.1.1-DPzem4ASjxC8Z7BlPO7TLPW8qNudR0qetXxWW4crYXG9S5dpgUQfz3iaUAEqDQubxcDONN9Y_pAVp6HiAF0PAFVgZk4VJtlDemXwWLs5ZFk; path=/; expires=Fri, 23-May-25 23:26:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=OVq9PUC6UXQIKDCsT76TyiRY2vJeVTop4uuPFfxa8z0-1748041018579-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944826414b6c07fa-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+2025-05-23 18:56:58,782 - ERROR - Error analyzing OPM-2025-0004-10005 (attempt 1/3): litellm.APIError: APIError: OpenAIException - Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 548, in convert_to_model_response_object
+    usage_object = litellm.Usage(**response_object["usage"])
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 921, in __init__
+    _prompt_tokens_details = PromptTokensDetailsWrapper(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 843, in __init__
+    if self.character_count is None:
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/pydantic/main.py", line 989, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'PromptTokensDetailsWrapper' object has no attribute 'character_count'
+
+
+received_args={'response_object': {'id': 'chatcmpl-BaVbtg1PvzRaWohtuCiJF6W4dlnw6', 'choices': [{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': '{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', 'refusal': None, 'role': 'assistant', 'annotations': [], 'audio': None, 'function_call': None, 'tool_calls': None}}], 'created': 1748041017, 'model': 'gpt-4o-mini-2024-07-18', 'object': 'chat.completion', 'service_tier': 'default', 'system_fingerprint': 'fp_62a23a81ef', 'usage': {'completion_tokens': 83, 'prompt_tokens': 993, 'total_tokens': 1076, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}}, 'model_response_object': ModelResponse(id='chatcmpl-29fafd51-4914-4648-96db-866dfc1d3ac8', created=1748041016, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content='{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', role='assistant', tool_calls=None, function_call=None, provider_specific_fields={'refusal': None}, annotations=[]))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Fri, 23 May 2025 22:56:58 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1609', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1612', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999029', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_048dc9bf30ef2604bb7e1848e05a69a8', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=J5VRj5jFSQ2T48PTX0Zg6OxS8_DPlK6Uujwl7pOpWJg-1748041018-1.0.1.1-DPzem4ASjxC8Z7BlPO7TLPW8qNudR0qetXxWW4crYXG9S5dpgUQfz3iaUAEqDQubxcDONN9Y_pAVp6HiAF0PAFVgZk4VJtlDemXwWLs5ZFk; path=/; expires=Fri, 23-May-25 23:26:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=OVq9PUC6UXQIKDCsT76TyiRY2vJeVTop4uuPFfxa8z0-1748041018579-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944826414b6c07fa-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+2025-05-23 18:56:58,785 - ERROR - Traceback: Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 548, in convert_to_model_response_object
+    usage_object = litellm.Usage(**response_object["usage"])
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 921, in __init__
+    _prompt_tokens_details = PromptTokensDetailsWrapper(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 843, in __init__
+    if self.character_count is None:
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/pydantic/main.py", line 989, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'PromptTokensDetailsWrapper' object has no attribute 'character_count'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/llms/openai/openai.py", line 725, in completion
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/llms/openai/openai.py", line 669, in completion
+    final_response_obj = convert_to_model_response_object(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 693, in convert_to_model_response_object
+    raise Exception(
+Exception: Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 548, in convert_to_model_response_object
+    usage_object = litellm.Usage(**response_object["usage"])
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 921, in __init__
+    _prompt_tokens_details = PromptTokensDetailsWrapper(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 843, in __init__
+    if self.character_count is None:
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/pydantic/main.py", line 989, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'PromptTokensDetailsWrapper' object has no attribute 'character_count'
+
+
+received_args={'response_object': {'id': 'chatcmpl-BaVbtg1PvzRaWohtuCiJF6W4dlnw6', 'choices': [{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': '{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', 'refusal': None, 'role': 'assistant', 'annotations': [], 'audio': None, 'function_call': None, 'tool_calls': None}}], 'created': 1748041017, 'model': 'gpt-4o-mini-2024-07-18', 'object': 'chat.completion', 'service_tier': 'default', 'system_fingerprint': 'fp_62a23a81ef', 'usage': {'completion_tokens': 83, 'prompt_tokens': 993, 'total_tokens': 1076, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}}, 'model_response_object': ModelResponse(id='chatcmpl-29fafd51-4914-4648-96db-866dfc1d3ac8', created=1748041016, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content='{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', role='assistant', tool_calls=None, function_call=None, provider_specific_fields={'refusal': None}, annotations=[]))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Fri, 23 May 2025 22:56:58 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1609', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1612', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999029', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_048dc9bf30ef2604bb7e1848e05a69a8', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=J5VRj5jFSQ2T48PTX0Zg6OxS8_DPlK6Uujwl7pOpWJg-1748041018-1.0.1.1-DPzem4ASjxC8Z7BlPO7TLPW8qNudR0qetXxWW4crYXG9S5dpgUQfz3iaUAEqDQubxcDONN9Y_pAVp6HiAF0PAFVgZk4VJtlDemXwWLs5ZFk; path=/; expires=Fri, 23-May-25 23:26:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=OVq9PUC6UXQIKDCsT76TyiRY2vJeVTop4uuPFfxa8z0-1748041018579-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944826414b6c07fa-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/main.py", line 1838, in completion
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/main.py", line 1811, in completion
+    response = openai_chat_completions.completion(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/llms/openai/openai.py", line 736, in completion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 548, in convert_to_model_response_object
+    usage_object = litellm.Usage(**response_object["usage"])
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 921, in __init__
+    _prompt_tokens_details = PromptTokensDetailsWrapper(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 843, in __init__
+    if self.character_count is None:
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/pydantic/main.py", line 989, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'PromptTokensDetailsWrapper' object has no attribute 'character_count'
+
+
+received_args={'response_object': {'id': 'chatcmpl-BaVbtg1PvzRaWohtuCiJF6W4dlnw6', 'choices': [{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': '{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', 'refusal': None, 'role': 'assistant', 'annotations': [], 'audio': None, 'function_call': None, 'tool_calls': None}}], 'created': 1748041017, 'model': 'gpt-4o-mini-2024-07-18', 'object': 'chat.completion', 'service_tier': 'default', 'system_fingerprint': 'fp_62a23a81ef', 'usage': {'completion_tokens': 83, 'prompt_tokens': 993, 'total_tokens': 1076, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}}, 'model_response_object': ModelResponse(id='chatcmpl-29fafd51-4914-4648-96db-866dfc1d3ac8', created=1748041016, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content='{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', role='assistant', tool_calls=None, function_call=None, provider_specific_fields={'refusal': None}, annotations=[]))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Fri, 23 May 2025 22:56:58 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1609', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1612', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999029', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_048dc9bf30ef2604bb7e1848e05a69a8', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=J5VRj5jFSQ2T48PTX0Zg6OxS8_DPlK6Uujwl7pOpWJg-1748041018-1.0.1.1-DPzem4ASjxC8Z7BlPO7TLPW8qNudR0qetXxWW4crYXG9S5dpgUQfz3iaUAEqDQubxcDONN9Y_pAVp6HiAF0PAFVgZk4VJtlDemXwWLs5ZFk; path=/; expires=Fri, 23-May-25 23:26:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=OVq9PUC6UXQIKDCsT76TyiRY2vJeVTop4uuPFfxa8z0-1748041018579-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944826414b6c07fa-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 334, in process_single_comment
+    analysis = analyzer.analyze(comment_text, comment_id)
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 204, in analyze
+    return self.analyze_with_timeout(comment_text, comment_id)
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 197, in analyze_with_timeout
+    raise result_container['error']
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 158, in api_call
+    response = completion(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/utils.py", line 1281, in wrapper
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/utils.py", line 1159, in wrapper
+    result = original_function(*args, **kwargs)
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/main.py", line 3225, in completion
+    raise exception_type(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2232, in exception_type
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 467, in exception_type
+    raise APIError(
+litellm.exceptions.APIError: litellm.APIError: APIError: OpenAIException - Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 548, in convert_to_model_response_object
+    usage_object = litellm.Usage(**response_object["usage"])
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 921, in __init__
+    _prompt_tokens_details = PromptTokensDetailsWrapper(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/types/utils.py", line 843, in __init__
+    if self.character_count is None:
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/pydantic/main.py", line 989, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'PromptTokensDetailsWrapper' object has no attribute 'character_count'
+
+
+received_args={'response_object': {'id': 'chatcmpl-BaVbtg1PvzRaWohtuCiJF6W4dlnw6', 'choices': [{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': '{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', 'refusal': None, 'role': 'assistant', 'annotations': [], 'audio': None, 'function_call': None, 'tool_calls': None}}], 'created': 1748041017, 'model': 'gpt-4o-mini-2024-07-18', 'object': 'chat.completion', 'service_tier': 'default', 'system_fingerprint': 'fp_62a23a81ef', 'usage': {'completion_tokens': 83, 'prompt_tokens': 993, 'total_tokens': 1076, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}}, 'model_response_object': ModelResponse(id='chatcmpl-29fafd51-4914-4648-96db-866dfc1d3ac8', created=1748041016, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content='{"stance":"Against","themes":["Merit-based system concerns","Politicization concerns","Institutional knowledge loss"],"key_quote":"Civil servants should not be appointed by an administration so that political bias does not occur.","rationale":"The comment explicitly opposes the proposed rule by emphasizing the importance of retaining employees based on performance rather than political loyalty, highlighting concerns about politicization and the potential loss of expertise."}', role='assistant', tool_calls=None, function_call=None, provider_specific_fields={'refusal': None}, annotations=[]))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Fri, 23 May 2025 22:56:58 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1609', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1612', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999029', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_048dc9bf30ef2604bb7e1848e05a69a8', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=J5VRj5jFSQ2T48PTX0Zg6OxS8_DPlK6Uujwl7pOpWJg-1748041018-1.0.1.1-DPzem4ASjxC8Z7BlPO7TLPW8qNudR0qetXxWW4crYXG9S5dpgUQfz3iaUAEqDQubxcDONN9Y_pAVp6HiAF0PAFVgZk4VJtlDemXwWLs5ZFk; path=/; expires=Fri, 23-May-25 23:26:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=OVq9PUC6UXQIKDCsT76TyiRY2vJeVTop4uuPFfxa8z0-1748041018579-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944826414b6c07fa-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+
+2025-05-23 18:56:58,785 - INFO - Retrying in 5 seconds...
+2025-05-23 18:56:58,991 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:56:58,998 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:56:58,999 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:59,001 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:59,006 - INFO - Successfully analyzed OPM-2025-0004-10004
+2025-05-23 18:56:59,006 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:59,006 - INFO - Successfully processed comment OPM-2025-0004-10004 in parallel
+2025-05-23 18:56:59,007 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:59,007 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:59,007 - INFO - Processing comment OPM-2025-0004-10009
+2025-05-23 18:56:59,007 - INFO - Comment OPM-2025-0004-10009 - text length: 241 chars
+2025-05-23 18:56:59,007 - INFO - Comment OPM-2025-0004-10009 - title: Comment from Anonymous Anonymous
+2025-05-23 18:56:59,007 - INFO - Starting analysis for comment OPM-2025-0004-10009 with 241 chars
+2025-05-23 18:56:59,010 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:56:59,732 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:56:59,736 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:56:59,737 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:59,737 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:59,739 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:56:59,741 - INFO - Successfully analyzed OPM-2025-0004-10002
+2025-05-23 18:56:59,742 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:56:59,742 - INFO - Successfully processed comment OPM-2025-0004-10002 in parallel
+2025-05-23 18:56:59,742 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:56:59,742 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:56:59,743 - INFO - Processing comment OPM-2025-0004-1001
+2025-05-23 18:56:59,743 - INFO - Comment OPM-2025-0004-1001 - text length: 235 chars
+2025-05-23 18:56:59,743 - INFO - Comment OPM-2025-0004-1001 - title: Comment from Susan Richardson
+2025-05-23 18:56:59,743 - INFO - Starting analysis for comment OPM-2025-0004-1001 with 235 chars
+2025-05-23 18:56:59,746 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:00,467 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:00,471 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:00,472 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:00,472 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:00,474 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:00,476 - INFO - Successfully analyzed OPM-2025-0004-10007
+2025-05-23 18:57:00,476 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:00,476 - INFO - Successfully processed comment OPM-2025-0004-10007 in parallel
+2025-05-23 18:57:00,476 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:00,476 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:00,477 - INFO - Processing comment OPM-2025-0004-10010
+2025-05-23 18:57:00,477 - INFO - Comment OPM-2025-0004-10010 - text length: 305 chars
+2025-05-23 18:57:00,477 - INFO - Comment OPM-2025-0004-10010 - title: Comment from L Pearman
+2025-05-23 18:57:00,477 - INFO - Starting analysis for comment OPM-2025-0004-10010 with 305 chars
+2025-05-23 18:57:00,481 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:01,280 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:01,284 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:01,285 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,287 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,288 - INFO - Successfully analyzed OPM-2025-0004-10008
+2025-05-23 18:57:01,289 - INFO - Successfully processed comment OPM-2025-0004-10008 in parallel
+2025-05-23 18:57:01,538 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:01,546 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:01,548 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,548 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,551 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,554 - INFO - Successfully analyzed OPM-2025-0004-10009
+2025-05-23 18:57:01,554 - INFO - Successfully processed comment OPM-2025-0004-10009 in parallel
+2025-05-23 18:57:01,898 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:01,902 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:01,903 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,903 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,906 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:01,907 - INFO - Successfully analyzed OPM-2025-0004-1001
+2025-05-23 18:57:01,907 - INFO - Successfully processed comment OPM-2025-0004-1001 in parallel
+2025-05-23 18:57:02,242 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:02,249 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:02,250 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:02,250 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:02,256 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:02,258 - INFO - Successfully analyzed OPM-2025-0004-10010
+2025-05-23 18:57:02,258 - INFO - Successfully processed comment OPM-2025-0004-10010 in parallel
+2025-05-23 18:57:03,795 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:05,683 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:05,687 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:05,687 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:05,687 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:05,689 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:05,690 - INFO - Successfully analyzed OPM-2025-0004-10005
+2025-05-23 18:57:05,690 - INFO - Successfully processed comment OPM-2025-0004-10005 in parallel
+2025-05-23 18:57:05,691 - INFO - Batch processing completed with 10 results
+2025-05-23 18:57:05,693 - INFO - ✅ Checkpoint saved with 10 processed comments
+2025-05-23 18:57:05,694 - INFO - Processing batch 2: ['OPM-2025-0004-10011', 'OPM-2025-0004-10012', 'OPM-2025-0004-10013', 'OPM-2025-0004-10014', 'OPM-2025-0004-10015', 'OPM-2025-0004-10016', 'OPM-2025-0004-10017', 'OPM-2025-0004-10018', 'OPM-2025-0004-10019', 'OPM-2025-0004-1002']
+2025-05-23 18:57:05,694 - INFO - Batch size: 10
+2025-05-23 18:57:05,694 - INFO - Batch item 0: OPM-2025-0004-10011, type: <class 'dict'>
+2025-05-23 18:57:05,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,694 - INFO - Batch item 1: OPM-2025-0004-10012, type: <class 'dict'>
+2025-05-23 18:57:05,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,694 - INFO - Batch item 2: OPM-2025-0004-10013, type: <class 'dict'>
+2025-05-23 18:57:05,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 3: OPM-2025-0004-10014, type: <class 'dict'>
+2025-05-23 18:57:05,695 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 4: OPM-2025-0004-10015, type: <class 'dict'>
+2025-05-23 18:57:05,695 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 5: OPM-2025-0004-10016, type: <class 'dict'>
+2025-05-23 18:57:05,695 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 6: OPM-2025-0004-10017, type: <class 'dict'>
+2025-05-23 18:57:05,695 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 7: OPM-2025-0004-10018, type: <class 'dict'>
+2025-05-23 18:57:05,695 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 8: OPM-2025-0004-10019, type: <class 'dict'>
+2025-05-23 18:57:05,695 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,695 - INFO - Batch item 9: OPM-2025-0004-1002, type: <class 'dict'>
+2025-05-23 18:57:05,696 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:05,696 - INFO - Starting batch processing (parallel=True)...
+2025-05-23 18:57:05,696 - INFO - Processing batch of 10 comments in parallel
+2025-05-23 18:57:05,696 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:05,696 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:05,697 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:05,697 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:05,697 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:05,697 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:05,697 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:05,697 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:05,697 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:05,698 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:05,698 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:05,698 - INFO - Processing comment OPM-2025-0004-10011
+2025-05-23 18:57:05,698 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:05,698 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:05,698 - INFO - Processing comment OPM-2025-0004-10012
+2025-05-23 18:57:05,698 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:05,698 - INFO - Comment OPM-2025-0004-10011 - text length: 74 chars
+2025-05-23 18:57:05,698 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:05,698 - INFO - Processing comment OPM-2025-0004-10013
+2025-05-23 18:57:05,699 - INFO - Comment OPM-2025-0004-10012 - text length: 285 chars
+2025-05-23 18:57:05,699 - INFO - Processing comment OPM-2025-0004-10014
+2025-05-23 18:57:05,699 - INFO - Comment OPM-2025-0004-10011 - title: Comment from Mark  Thoma
+2025-05-23 18:57:05,699 - INFO - Processing comment OPM-2025-0004-10015
+2025-05-23 18:57:05,699 - INFO - Comment OPM-2025-0004-10013 - text length: 434 chars
+2025-05-23 18:57:05,699 - INFO - Comment OPM-2025-0004-10012 - title: Comment from Dorothy Foley
+2025-05-23 18:57:05,699 - INFO - Comment OPM-2025-0004-10014 - text length: 186 chars
+2025-05-23 18:57:05,699 - INFO - Comment OPM-2025-0004-10015 - text length: 85 chars
+2025-05-23 18:57:05,700 - INFO - Starting analysis for comment OPM-2025-0004-10011 with 74 chars
+2025-05-23 18:57:05,700 - INFO - Comment OPM-2025-0004-10013 - title: Comment from Anonymous
+2025-05-23 18:57:05,700 - INFO - Starting analysis for comment OPM-2025-0004-10012 with 285 chars
+2025-05-23 18:57:05,700 - INFO - Comment OPM-2025-0004-10014 - title: Comment from Anonymous
+2025-05-23 18:57:05,700 - INFO - Comment OPM-2025-0004-10015 - title: Comment from Silas Byrne
+2025-05-23 18:57:05,703 - INFO - Starting analysis for comment OPM-2025-0004-10013 with 434 chars
+2025-05-23 18:57:05,703 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:05,703 - INFO - Starting analysis for comment OPM-2025-0004-10014 with 186 chars
+2025-05-23 18:57:05,703 - INFO - Starting analysis for comment OPM-2025-0004-10015 with 85 chars
+2025-05-23 18:57:05,705 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:05,708 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:05,711 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:05,713 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:07,016 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:07,021 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:07,022 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,022 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,024 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,026 - INFO - Successfully analyzed OPM-2025-0004-10013
+2025-05-23 18:57:07,026 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:07,027 - INFO - Successfully processed comment OPM-2025-0004-10013 in parallel
+2025-05-23 18:57:07,028 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:07,029 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:07,029 - INFO - Processing comment OPM-2025-0004-10016
+2025-05-23 18:57:07,029 - INFO - Comment OPM-2025-0004-10016 - text length: 305 chars
+2025-05-23 18:57:07,030 - INFO - Comment OPM-2025-0004-10016 - title: Comment from Linda Nelsen
+2025-05-23 18:57:07,030 - INFO - Starting analysis for comment OPM-2025-0004-10016 with 305 chars
+2025-05-23 18:57:07,032 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:07,249 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:07,253 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:07,254 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,254 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,256 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,257 - INFO - Successfully analyzed OPM-2025-0004-10015
+2025-05-23 18:57:07,258 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:07,258 - INFO - Successfully processed comment OPM-2025-0004-10015 in parallel
+2025-05-23 18:57:07,258 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:07,258 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:07,259 - INFO - Processing comment OPM-2025-0004-10017
+2025-05-23 18:57:07,259 - INFO - Comment OPM-2025-0004-10017 - text length: 1572 chars
+2025-05-23 18:57:07,260 - INFO - Comment OPM-2025-0004-10017 - title: Comment from Steve Den Herder
+2025-05-23 18:57:07,260 - INFO - Starting analysis for comment OPM-2025-0004-10017 with 1572 chars
+2025-05-23 18:57:07,263 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:07,302 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:07,307 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:07,308 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,308 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,309 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,311 - INFO - Successfully analyzed OPM-2025-0004-10011
+2025-05-23 18:57:07,311 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:07,311 - INFO - Successfully processed comment OPM-2025-0004-10011 in parallel
+2025-05-23 18:57:07,311 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:07,311 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:07,311 - INFO - Processing comment OPM-2025-0004-10018
+2025-05-23 18:57:07,311 - INFO - Comment OPM-2025-0004-10018 - text length: 742 chars
+2025-05-23 18:57:07,311 - INFO - Comment OPM-2025-0004-10018 - title: Comment from Diana King
+2025-05-23 18:57:07,311 - INFO - Starting analysis for comment OPM-2025-0004-10018 with 742 chars
+2025-05-23 18:57:07,313 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:07,833 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:07,838 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:07,838 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,839 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,842 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:07,846 - INFO - Successfully analyzed OPM-2025-0004-10012
+2025-05-23 18:57:07,846 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:07,846 - INFO - Successfully processed comment OPM-2025-0004-10012 in parallel
+2025-05-23 18:57:07,847 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:07,847 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:07,847 - INFO - Processing comment OPM-2025-0004-10019
+2025-05-23 18:57:07,847 - INFO - Comment OPM-2025-0004-10019 - text length: 555 chars
+2025-05-23 18:57:07,847 - INFO - Comment OPM-2025-0004-10019 - title: Comment from Anonymous
+2025-05-23 18:57:07,847 - INFO - Starting analysis for comment OPM-2025-0004-10019 with 555 chars
+2025-05-23 18:57:07,849 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:08,447 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:08,453 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:08,454 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:08,454 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:08,456 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:08,458 - INFO - Successfully analyzed OPM-2025-0004-10014
+2025-05-23 18:57:08,459 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:08,459 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:08,460 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:08,460 - INFO - Successfully processed comment OPM-2025-0004-10014 in parallel
+2025-05-23 18:57:08,460 - INFO - Processing comment OPM-2025-0004-1002
+2025-05-23 18:57:08,460 - INFO - Comment OPM-2025-0004-1002 - text length: 280 chars
+2025-05-23 18:57:08,460 - INFO - Comment OPM-2025-0004-1002 - title: Comment from Mike Woods
+2025-05-23 18:57:08,460 - INFO - Starting analysis for comment OPM-2025-0004-1002 with 280 chars
+2025-05-23 18:57:08,463 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:09,087 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:09,105 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:09,106 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,106 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,108 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,109 - INFO - Successfully analyzed OPM-2025-0004-10016
+2025-05-23 18:57:09,109 - INFO - Successfully processed comment OPM-2025-0004-10016 in parallel
+2025-05-23 18:57:09,486 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:09,495 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:09,496 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:09,497 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,497 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,500 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,502 - INFO - Successfully analyzed OPM-2025-0004-10019
+2025-05-23 18:57:09,505 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:09,506 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,506 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,507 - INFO - Successfully processed comment OPM-2025-0004-10019 in parallel
+2025-05-23 18:57:09,508 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:09,509 - INFO - Successfully analyzed OPM-2025-0004-10018
+2025-05-23 18:57:09,509 - INFO - Successfully processed comment OPM-2025-0004-10018 in parallel
+2025-05-23 18:57:10,163 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:10,163 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:10,165 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:10,165 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:10,165 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:10,166 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:10,166 - INFO - Successfully analyzed OPM-2025-0004-1002
+2025-05-23 18:57:10,167 - INFO - Successfully processed comment OPM-2025-0004-1002 in parallel
+2025-05-23 18:57:10,270 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:10,271 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:10,271 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:10,273 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:10,274 - INFO - Successfully analyzed OPM-2025-0004-10017
+2025-05-23 18:57:10,274 - INFO - Successfully processed comment OPM-2025-0004-10017 in parallel
+2025-05-23 18:57:10,275 - INFO - Batch processing completed with 10 results
+2025-05-23 18:57:10,279 - INFO - ✅ Checkpoint saved with 20 processed comments
+2025-05-23 18:57:10,279 - INFO - Processing batch 3: ['OPM-2025-0004-10020', 'OPM-2025-0004-10021', 'OPM-2025-0004-10022', 'OPM-2025-0004-10023', 'OPM-2025-0004-10024', 'OPM-2025-0004-10025', 'OPM-2025-0004-10026', 'OPM-2025-0004-10027', 'OPM-2025-0004-10028', 'OPM-2025-0004-10029']
+2025-05-23 18:57:10,279 - INFO - Batch size: 10
+2025-05-23 18:57:10,279 - INFO - Batch item 0: OPM-2025-0004-10020, type: <class 'dict'>
+2025-05-23 18:57:10,279 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,280 - INFO - Batch item 1: OPM-2025-0004-10021, type: <class 'dict'>
+2025-05-23 18:57:10,280 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,280 - INFO - Batch item 2: OPM-2025-0004-10022, type: <class 'dict'>
+2025-05-23 18:57:10,280 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,280 - INFO - Batch item 3: OPM-2025-0004-10023, type: <class 'dict'>
+2025-05-23 18:57:10,280 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,280 - INFO - Batch item 4: OPM-2025-0004-10024, type: <class 'dict'>
+2025-05-23 18:57:10,280 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,280 - INFO - Batch item 5: OPM-2025-0004-10025, type: <class 'dict'>
+2025-05-23 18:57:10,280 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,280 - INFO - Batch item 6: OPM-2025-0004-10026, type: <class 'dict'>
+2025-05-23 18:57:10,281 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,281 - INFO - Batch item 7: OPM-2025-0004-10027, type: <class 'dict'>
+2025-05-23 18:57:10,281 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,281 - INFO - Batch item 8: OPM-2025-0004-10028, type: <class 'dict'>
+2025-05-23 18:57:10,281 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,281 - INFO - Batch item 9: OPM-2025-0004-10029, type: <class 'dict'>
+2025-05-23 18:57:10,281 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:10,281 - INFO - Starting batch processing (parallel=True)...
+2025-05-23 18:57:10,281 - INFO - Processing batch of 10 comments in parallel
+2025-05-23 18:57:10,281 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:10,282 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:10,282 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:10,282 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:10,282 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:10,282 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:10,282 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:10,282 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:10,282 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:10,282 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:10,283 - INFO - Processing comment OPM-2025-0004-10020
+2025-05-23 18:57:10,283 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:10,283 - INFO - Processing comment OPM-2025-0004-10021
+2025-05-23 18:57:10,283 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:10,283 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:10,283 - INFO - Comment OPM-2025-0004-10020 - text length: 1423 chars
+2025-05-23 18:57:10,283 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:10,283 - INFO - Comment OPM-2025-0004-10021 - text length: 179 chars
+2025-05-23 18:57:10,283 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:10,283 - INFO - Processing comment OPM-2025-0004-10022
+2025-05-23 18:57:10,284 - INFO - Comment OPM-2025-0004-10020 - title: Comment from Maja Holmes
+2025-05-23 18:57:10,284 - INFO - Processing comment OPM-2025-0004-10023
+2025-05-23 18:57:10,284 - INFO - Comment OPM-2025-0004-10021 - title: Comment from Matt Chorpenning
+2025-05-23 18:57:10,284 - INFO - Processing comment OPM-2025-0004-10024
+2025-05-23 18:57:10,284 - INFO - Comment OPM-2025-0004-10022 - text length: 302 chars
+2025-05-23 18:57:10,284 - INFO - Comment OPM-2025-0004-10023 - text length: 306 chars
+2025-05-23 18:57:10,284 - INFO - Starting analysis for comment OPM-2025-0004-10020 with 1423 chars
+2025-05-23 18:57:10,285 - INFO - Comment OPM-2025-0004-10024 - text length: 1813 chars
+2025-05-23 18:57:10,285 - INFO - Starting analysis for comment OPM-2025-0004-10021 with 179 chars
+2025-05-23 18:57:10,285 - INFO - Comment OPM-2025-0004-10022 - title: Comment from Rita ARMENTROUT
+2025-05-23 18:57:10,285 - INFO - Comment OPM-2025-0004-10023 - title: Comment from Ted Kelly
+2025-05-23 18:57:10,286 - INFO - Comment OPM-2025-0004-10024 - title: Comment from Anonymous
+2025-05-23 18:57:10,287 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:10,287 - INFO - Starting analysis for comment OPM-2025-0004-10022 with 302 chars
+2025-05-23 18:57:10,288 - INFO - Starting analysis for comment OPM-2025-0004-10023 with 306 chars
+2025-05-23 18:57:10,288 - INFO - Starting analysis for comment OPM-2025-0004-10024 with 1813 chars
+2025-05-23 18:57:10,292 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:10,294 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:10,297 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:10,298 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:11,752 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:11,757 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:11,759 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:11,762 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:11,765 - INFO - Successfully analyzed OPM-2025-0004-10022
+2025-05-23 18:57:11,765 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:11,765 - INFO - Successfully processed comment OPM-2025-0004-10022 in parallel
+2025-05-23 18:57:11,765 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:11,765 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:11,766 - INFO - Processing comment OPM-2025-0004-10025
+2025-05-23 18:57:11,766 - INFO - Comment OPM-2025-0004-10025 - text length: 221 chars
+2025-05-23 18:57:11,766 - INFO - Comment OPM-2025-0004-10025 - title: Comment from Anonymous
+2025-05-23 18:57:11,766 - INFO - Starting analysis for comment OPM-2025-0004-10025 with 221 chars
+2025-05-23 18:57:11,768 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:11,852 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:11,864 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:11,865 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:11,865 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:11,868 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:11,871 - INFO - Successfully analyzed OPM-2025-0004-10024
+2025-05-23 18:57:11,872 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:11,872 - INFO - Successfully processed comment OPM-2025-0004-10024 in parallel
+2025-05-23 18:57:11,872 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:11,872 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:11,872 - INFO - Processing comment OPM-2025-0004-10026
+2025-05-23 18:57:11,872 - INFO - Comment OPM-2025-0004-10026 - text length: 484 chars
+2025-05-23 18:57:11,872 - INFO - Comment OPM-2025-0004-10026 - title: Comment from Jonat Logie
+2025-05-23 18:57:11,873 - INFO - Starting analysis for comment OPM-2025-0004-10026 with 484 chars
+2025-05-23 18:57:11,875 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:12,445 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:12,448 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:12,449 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:12,449 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:12,454 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:12,456 - INFO - Successfully analyzed OPM-2025-0004-10021
+2025-05-23 18:57:12,456 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:12,457 - INFO - Successfully processed comment OPM-2025-0004-10021 in parallel
+2025-05-23 18:57:12,457 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:12,457 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:12,457 - INFO - Processing comment OPM-2025-0004-10027
+2025-05-23 18:57:12,457 - INFO - Comment OPM-2025-0004-10027 - text length: 304 chars
+2025-05-23 18:57:12,457 - INFO - Comment OPM-2025-0004-10027 - title: Comment from Tina Blake
+2025-05-23 18:57:12,458 - INFO - Starting analysis for comment OPM-2025-0004-10027 with 304 chars
+2025-05-23 18:57:12,460 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:13,056 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:13,057 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:13,061 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:13,062 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,062 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,064 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,066 - INFO - Successfully analyzed OPM-2025-0004-10020
+2025-05-23 18:57:13,066 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:13,066 - INFO - Successfully processed comment OPM-2025-0004-10020 in parallel
+2025-05-23 18:57:13,066 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:13,066 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:13,066 - INFO - Processing comment OPM-2025-0004-10028
+2025-05-23 18:57:13,067 - INFO - Comment OPM-2025-0004-10028 - text length: 89 chars
+2025-05-23 18:57:13,067 - INFO - Comment OPM-2025-0004-10028 - title: Comment from John Johnson
+2025-05-23 18:57:13,067 - INFO - Starting analysis for comment OPM-2025-0004-10028 with 89 chars
+2025-05-23 18:57:13,070 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:13,146 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:13,146 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,147 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,149 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,151 - INFO - Successfully analyzed OPM-2025-0004-10023
+2025-05-23 18:57:13,151 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:13,151 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:13,151 - INFO - Successfully processed comment OPM-2025-0004-10023 in parallel
+2025-05-23 18:57:13,152 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:13,152 - INFO - Processing comment OPM-2025-0004-10029
+2025-05-23 18:57:13,152 - INFO - Comment OPM-2025-0004-10029 - text length: 610 chars
+2025-05-23 18:57:13,152 - INFO - Comment OPM-2025-0004-10029 - title: Comment from Todd Christenson
+2025-05-23 18:57:13,152 - INFO - Starting analysis for comment OPM-2025-0004-10029 with 610 chars
+2025-05-23 18:57:13,154 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:13,272 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:13,276 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:13,277 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,277 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,280 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,281 - INFO - Successfully analyzed OPM-2025-0004-10026
+2025-05-23 18:57:13,281 - INFO - Successfully processed comment OPM-2025-0004-10026 in parallel
+2025-05-23 18:57:13,568 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:13,573 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:13,573 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,574 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,578 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:13,580 - INFO - Successfully analyzed OPM-2025-0004-10025
+2025-05-23 18:57:13,580 - INFO - Successfully processed comment OPM-2025-0004-10025 in parallel
+2025-05-23 18:57:14,106 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:14,111 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:14,111 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:14,112 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:14,114 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:14,115 - INFO - Successfully analyzed OPM-2025-0004-10027
+2025-05-23 18:57:14,115 - INFO - Successfully processed comment OPM-2025-0004-10027 in parallel
+2025-05-23 18:57:14,489 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:14,494 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:14,494 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:14,495 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:14,497 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:14,500 - INFO - Successfully analyzed OPM-2025-0004-10028
+2025-05-23 18:57:14,500 - INFO - Successfully processed comment OPM-2025-0004-10028 in parallel
+2025-05-23 18:57:15,737 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:15,739 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:15,740 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:15,740 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:15,741 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:15,743 - INFO - Successfully analyzed OPM-2025-0004-10029
+2025-05-23 18:57:15,743 - INFO - Successfully processed comment OPM-2025-0004-10029 in parallel
+2025-05-23 18:57:15,743 - INFO - Batch processing completed with 10 results
+2025-05-23 18:57:15,746 - INFO - ✅ Checkpoint saved with 30 processed comments
+2025-05-23 18:57:15,746 - INFO - Processing batch 4: ['OPM-2025-0004-1003', 'OPM-2025-0004-10030', 'OPM-2025-0004-10031', 'OPM-2025-0004-10032', 'OPM-2025-0004-10033', 'OPM-2025-0004-10034', 'OPM-2025-0004-10035', 'OPM-2025-0004-10036', 'OPM-2025-0004-10037', 'OPM-2025-0004-10038']
+2025-05-23 18:57:15,747 - INFO - Batch size: 10
+2025-05-23 18:57:15,747 - INFO - Batch item 0: OPM-2025-0004-1003, type: <class 'dict'>
+2025-05-23 18:57:15,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,747 - INFO - Batch item 1: OPM-2025-0004-10030, type: <class 'dict'>
+2025-05-23 18:57:15,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,747 - INFO - Batch item 2: OPM-2025-0004-10031, type: <class 'dict'>
+2025-05-23 18:57:15,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,747 - INFO - Batch item 3: OPM-2025-0004-10032, type: <class 'dict'>
+2025-05-23 18:57:15,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,747 - INFO - Batch item 4: OPM-2025-0004-10033, type: <class 'dict'>
+2025-05-23 18:57:15,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,747 - INFO - Batch item 5: OPM-2025-0004-10034, type: <class 'dict'>
+2025-05-23 18:57:15,748 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,748 - INFO - Batch item 6: OPM-2025-0004-10035, type: <class 'dict'>
+2025-05-23 18:57:15,748 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,748 - INFO - Batch item 7: OPM-2025-0004-10036, type: <class 'dict'>
+2025-05-23 18:57:15,748 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,748 - INFO - Batch item 8: OPM-2025-0004-10037, type: <class 'dict'>
+2025-05-23 18:57:15,748 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,748 - INFO - Batch item 9: OPM-2025-0004-10038, type: <class 'dict'>
+2025-05-23 18:57:15,748 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:15,748 - INFO - Starting batch processing (parallel=True)...
+2025-05-23 18:57:15,748 - INFO - Processing batch of 10 comments in parallel
+2025-05-23 18:57:15,748 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:15,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:15,749 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:15,749 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:15,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:15,749 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:15,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:15,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:15,749 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:15,750 - INFO - Processing comment OPM-2025-0004-10030
+2025-05-23 18:57:15,750 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:15,750 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:15,751 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:15,750 - INFO - Comment OPM-2025-0004-10030 - text length: 1539 chars
+2025-05-23 18:57:15,750 - INFO - Processing comment OPM-2025-0004-1003
+2025-05-23 18:57:15,750 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:15,750 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:15,751 - INFO - Processing comment OPM-2025-0004-10032
+2025-05-23 18:57:15,751 - INFO - Comment OPM-2025-0004-10030 - title: Comment from Erin Corvinova
+2025-05-23 18:57:15,751 - INFO - Comment OPM-2025-0004-1003 - text length: 1284 chars
+2025-05-23 18:57:15,752 - INFO - Processing comment OPM-2025-0004-10031
+2025-05-23 18:57:15,752 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:15,752 - INFO - Comment OPM-2025-0004-10032 - text length: 297 chars
+2025-05-23 18:57:15,752 - INFO - Comment OPM-2025-0004-1003 - title: Comment from Michelle W
+2025-05-23 18:57:15,752 - INFO - Starting analysis for comment OPM-2025-0004-10030 with 1539 chars
+2025-05-23 18:57:15,752 - INFO - Comment OPM-2025-0004-10031 - text length: 361 chars
+2025-05-23 18:57:15,753 - INFO - Processing comment OPM-2025-0004-10033
+2025-05-23 18:57:15,753 - INFO - Comment OPM-2025-0004-10032 - title: Comment from Michael Sheridan
+2025-05-23 18:57:15,753 - INFO - Starting analysis for comment OPM-2025-0004-1003 with 1284 chars
+2025-05-23 18:57:15,753 - INFO - Comment OPM-2025-0004-10031 - title: Comment from Anonymous
+2025-05-23 18:57:15,755 - INFO - Comment OPM-2025-0004-10033 - text length: 185 chars
+2025-05-23 18:57:15,755 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:15,755 - INFO - Starting analysis for comment OPM-2025-0004-10032 with 297 chars
+2025-05-23 18:57:15,755 - INFO - Starting analysis for comment OPM-2025-0004-10031 with 361 chars
+2025-05-23 18:57:15,756 - INFO - Comment OPM-2025-0004-10033 - title: Comment from Gayle Owens
+2025-05-23 18:57:15,757 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:15,761 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:15,762 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:15,763 - INFO - Starting analysis for comment OPM-2025-0004-10033 with 185 chars
+2025-05-23 18:57:15,771 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:17,665 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:17,666 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:17,670 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:17,671 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:17,672 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,672 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,673 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,673 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,679 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,680 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,681 - INFO - Successfully analyzed OPM-2025-0004-10032
+2025-05-23 18:57:17,682 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:17,682 - INFO - Successfully processed comment OPM-2025-0004-10032 in parallel
+2025-05-23 18:57:17,682 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:17,682 - INFO - Successfully analyzed OPM-2025-0004-10033
+2025-05-23 18:57:17,683 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:17,683 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:17,683 - INFO - Successfully processed comment OPM-2025-0004-10033 in parallel
+2025-05-23 18:57:17,683 - INFO - Processing comment OPM-2025-0004-10034
+2025-05-23 18:57:17,683 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:17,683 - INFO - Comment OPM-2025-0004-10034 - text length: 327 chars
+2025-05-23 18:57:17,683 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:17,683 - INFO - Comment OPM-2025-0004-10034 - title: Comment from Elizabeth Stapleton
+2025-05-23 18:57:17,684 - INFO - Processing comment OPM-2025-0004-10035
+2025-05-23 18:57:17,684 - INFO - Starting analysis for comment OPM-2025-0004-10034 with 327 chars
+2025-05-23 18:57:17,684 - INFO - Comment OPM-2025-0004-10035 - text length: 170 chars
+2025-05-23 18:57:17,684 - INFO - Comment OPM-2025-0004-10035 - title: Comment from Fredrick McCurdy
+2025-05-23 18:57:17,685 - INFO - Starting analysis for comment OPM-2025-0004-10035 with 170 chars
+2025-05-23 18:57:17,687 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:17,688 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:17,899 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:17,912 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:17,913 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,913 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,915 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:17,917 - INFO - Successfully analyzed OPM-2025-0004-10031
+2025-05-23 18:57:17,917 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:17,917 - INFO - Successfully processed comment OPM-2025-0004-10031 in parallel
+2025-05-23 18:57:17,917 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:17,919 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:17,919 - INFO - Processing comment OPM-2025-0004-10036
+2025-05-23 18:57:17,920 - INFO - Comment OPM-2025-0004-10036 - text length: 367 chars
+2025-05-23 18:57:17,920 - INFO - Comment OPM-2025-0004-10036 - title: Comment from Anonymous
+2025-05-23 18:57:17,920 - INFO - Starting analysis for comment OPM-2025-0004-10036 with 367 chars
+2025-05-23 18:57:17,922 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:18,380 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:18,381 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:18,385 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:18,386 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:18,386 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:18,389 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:18,391 - INFO - Successfully analyzed OPM-2025-0004-1003
+2025-05-23 18:57:18,391 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:18,391 - INFO - Successfully processed comment OPM-2025-0004-1003 in parallel
+2025-05-23 18:57:18,391 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:18,391 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:18,392 - INFO - Processing comment OPM-2025-0004-10037
+2025-05-23 18:57:18,392 - INFO - Comment OPM-2025-0004-10037 - text length: 3025 chars
+2025-05-23 18:57:18,392 - INFO - Comment OPM-2025-0004-10037 - title: Comment from Anonymous
+2025-05-23 18:57:18,392 - INFO - Starting analysis for comment OPM-2025-0004-10037 with 3025 chars
+2025-05-23 18:57:18,395 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:18,506 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:18,506 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:18,506 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:18,507 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:18,507 - INFO - Successfully analyzed OPM-2025-0004-10030
+2025-05-23 18:57:18,508 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:18,508 - INFO - Successfully processed comment OPM-2025-0004-10030 in parallel
+2025-05-23 18:57:18,508 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:18,508 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:18,508 - INFO - Processing comment OPM-2025-0004-10038
+2025-05-23 18:57:18,508 - INFO - Comment OPM-2025-0004-10038 - text length: 2562 chars
+2025-05-23 18:57:18,508 - INFO - Comment OPM-2025-0004-10038 - title: Comment from Michael Kearns
+2025-05-23 18:57:18,508 - INFO - Starting analysis for comment OPM-2025-0004-10038 with 2562 chars
+2025-05-23 18:57:18,509 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:19,507 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:19,510 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:19,511 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:19,511 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:19,513 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:19,514 - INFO - Successfully analyzed OPM-2025-0004-10035
+2025-05-23 18:57:19,514 - INFO - Successfully processed comment OPM-2025-0004-10035 in parallel
+2025-05-23 18:57:19,529 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:19,532 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:19,533 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:19,533 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:19,535 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:19,537 - INFO - Successfully analyzed OPM-2025-0004-10036
+2025-05-23 18:57:19,537 - INFO - Successfully processed comment OPM-2025-0004-10036 in parallel
+2025-05-23 18:57:20,122 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:20,126 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:20,127 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:20,127 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:20,129 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:20,131 - INFO - Successfully analyzed OPM-2025-0004-10034
+2025-05-23 18:57:20,131 - INFO - Successfully processed comment OPM-2025-0004-10034 in parallel
+2025-05-23 18:57:20,941 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:20,945 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:20,945 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:20,946 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:20,948 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:20,950 - INFO - Successfully analyzed OPM-2025-0004-10038
+2025-05-23 18:57:20,950 - INFO - Successfully processed comment OPM-2025-0004-10038 in parallel
+2025-05-23 18:57:21,555 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:21,560 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:21,560 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:21,561 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:21,567 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:21,569 - INFO - Successfully analyzed OPM-2025-0004-10037
+2025-05-23 18:57:21,569 - INFO - Successfully processed comment OPM-2025-0004-10037 in parallel
+2025-05-23 18:57:21,570 - INFO - Batch processing completed with 10 results
+2025-05-23 18:57:21,572 - INFO - ✅ Checkpoint saved with 40 processed comments
+2025-05-23 18:57:21,572 - INFO - Processing batch 5: ['OPM-2025-0004-10039', 'OPM-2025-0004-1004', 'OPM-2025-0004-10040', 'OPM-2025-0004-10041', 'OPM-2025-0004-10042', 'OPM-2025-0004-10043', 'OPM-2025-0004-10044', 'OPM-2025-0004-10045', 'OPM-2025-0004-10046', 'OPM-2025-0004-10047']
+2025-05-23 18:57:21,572 - INFO - Batch size: 10
+2025-05-23 18:57:21,572 - INFO - Batch item 0: OPM-2025-0004-10039, type: <class 'dict'>
+2025-05-23 18:57:21,572 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,572 - INFO - Batch item 1: OPM-2025-0004-1004, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 2: OPM-2025-0004-10040, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 3: OPM-2025-0004-10041, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 4: OPM-2025-0004-10042, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 5: OPM-2025-0004-10043, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 6: OPM-2025-0004-10044, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 7: OPM-2025-0004-10045, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 8: OPM-2025-0004-10046, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Batch item 9: OPM-2025-0004-10047, type: <class 'dict'>
+2025-05-23 18:57:21,573 - INFO -   Keys: ['id', 'attributes']
+2025-05-23 18:57:21,573 - INFO - Starting batch processing (parallel=True)...
+2025-05-23 18:57:21,574 - INFO - Processing batch of 10 comments in parallel
+2025-05-23 18:57:21,574 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:21,574 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:21,574 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:21,574 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:21,574 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:21,575 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:21,575 - INFO - Processing comment OPM-2025-0004-10039
+2025-05-23 18:57:21,575 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:21,575 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:21,575 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:21,575 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:21,575 - INFO - Comment OPM-2025-0004-10039 - text length: 453 chars
+2025-05-23 18:57:21,575 - INFO - Processing comment OPM-2025-0004-1004
+2025-05-23 18:57:21,576 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:21,576 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:21,576 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:21,576 - INFO - Comment OPM-2025-0004-10039 - title: Comment from Anonymous
+2025-05-23 18:57:21,576 - INFO - Comment OPM-2025-0004-1004 - text length: 272 chars
+2025-05-23 18:57:21,576 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:21,576 - INFO - Processing comment OPM-2025-0004-10040
+2025-05-23 18:57:21,576 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:21,576 - INFO - Starting analysis for comment OPM-2025-0004-10039 with 453 chars
+2025-05-23 18:57:21,576 - INFO - Comment OPM-2025-0004-1004 - title: Comment from Anonymous
+2025-05-23 18:57:21,576 - INFO - Processing comment OPM-2025-0004-10041
+2025-05-23 18:57:21,577 - INFO - Comment OPM-2025-0004-10040 - text length: 324 chars
+2025-05-23 18:57:21,577 - INFO - Processing comment OPM-2025-0004-10042
+2025-05-23 18:57:21,577 - INFO - Comment OPM-2025-0004-10041 - text length: 3631 chars
+2025-05-23 18:57:21,577 - INFO - Starting analysis for comment OPM-2025-0004-1004 with 272 chars
+2025-05-23 18:57:21,577 - INFO - Comment OPM-2025-0004-10040 - title: Comment from William Holburn
+2025-05-23 18:57:21,579 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:21,579 - INFO - Comment OPM-2025-0004-10042 - text length: 171 chars
+2025-05-23 18:57:21,579 - INFO - Comment OPM-2025-0004-10041 - title: Comment from Anonymous
+2025-05-23 18:57:21,581 - INFO - Starting analysis for comment OPM-2025-0004-10040 with 324 chars
+2025-05-23 18:57:21,581 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:21,583 - INFO - Comment OPM-2025-0004-10042 - title: Comment from Anonymous
+2025-05-23 18:57:21,583 - INFO - Starting analysis for comment OPM-2025-0004-10041 with 3631 chars
+2025-05-23 18:57:21,585 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:21,587 - INFO - Starting analysis for comment OPM-2025-0004-10042 with 171 chars
+2025-05-23 18:57:21,589 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:21,593 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:22,879 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:22,896 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:22,897 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:22,897 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:22,899 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:22,900 - INFO - Successfully analyzed OPM-2025-0004-10040
+2025-05-23 18:57:22,900 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:22,900 - INFO - Successfully processed comment OPM-2025-0004-10040 in parallel
+2025-05-23 18:57:22,901 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:22,901 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:22,901 - INFO - Processing comment OPM-2025-0004-10043
+2025-05-23 18:57:22,901 - INFO - Comment OPM-2025-0004-10043 - text length: 831 chars
+2025-05-23 18:57:22,901 - INFO - Comment OPM-2025-0004-10043 - title: Comment from Jason Connelly
+2025-05-23 18:57:22,901 - INFO - Starting analysis for comment OPM-2025-0004-10043 with 831 chars
+2025-05-23 18:57:22,904 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:23,501 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:23,506 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:23,506 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,507 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,514 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,515 - INFO - Successfully analyzed OPM-2025-0004-10039
+2025-05-23 18:57:23,515 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:23,516 - INFO - Successfully processed comment OPM-2025-0004-10039 in parallel
+2025-05-23 18:57:23,516 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:23,516 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:23,516 - INFO - Processing comment OPM-2025-0004-10044
+2025-05-23 18:57:23,516 - INFO - Comment OPM-2025-0004-10044 - text length: 1294 chars
+2025-05-23 18:57:23,516 - INFO - Comment OPM-2025-0004-10044 - title: Comment from Susan Sesack
+2025-05-23 18:57:23,516 - INFO - Starting analysis for comment OPM-2025-0004-10044 with 1294 chars
+2025-05-23 18:57:23,518 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:23,661 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:23,666 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:23,667 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,667 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,672 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,673 - INFO - Successfully analyzed OPM-2025-0004-1004
+2025-05-23 18:57:23,674 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:23,674 - INFO - Successfully processed comment OPM-2025-0004-1004 in parallel
+2025-05-23 18:57:23,674 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:23,674 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:23,675 - INFO - Processing comment OPM-2025-0004-10045
+2025-05-23 18:57:23,675 - INFO - Comment OPM-2025-0004-10045 - text length: 489 chars
+2025-05-23 18:57:23,675 - INFO - Comment OPM-2025-0004-10045 - title: Comment from Nellyn Cox
+2025-05-23 18:57:23,675 - INFO - Starting analysis for comment OPM-2025-0004-10045 with 489 chars
+2025-05-23 18:57:23,678 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:23,718 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:23,724 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:23,725 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,725 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,727 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:23,728 - INFO - Successfully analyzed OPM-2025-0004-10042
+2025-05-23 18:57:23,728 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:23,728 - INFO - Successfully processed comment OPM-2025-0004-10042 in parallel
+2025-05-23 18:57:23,728 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:23,728 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:23,728 - INFO - Processing comment OPM-2025-0004-10046
+2025-05-23 18:57:23,728 - INFO - Comment OPM-2025-0004-10046 - text length: 472 chars
+2025-05-23 18:57:23,728 - INFO - Comment OPM-2025-0004-10046 - title: Comment from anonymous anonymous
+2025-05-23 18:57:23,728 - INFO - Starting analysis for comment OPM-2025-0004-10046 with 472 chars
+2025-05-23 18:57:23,730 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:24,320 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:24,325 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:24,325 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:24,326 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:24,329 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:24,331 - INFO - Successfully analyzed OPM-2025-0004-10041
+2025-05-23 18:57:24,332 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-23 18:57:24,332 - INFO - Successfully processed comment OPM-2025-0004-10041 in parallel
+2025-05-23 18:57:24,332 - INFO - Comment data type: <class 'dict'>
+2025-05-23 18:57:24,332 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-23 18:57:24,333 - INFO - Processing comment OPM-2025-0004-10047
+2025-05-23 18:57:24,333 - INFO - Comment OPM-2025-0004-10047 - text length: 580 chars
+2025-05-23 18:57:24,333 - INFO - Comment OPM-2025-0004-10047 - title: Comment from Rebecca Plant
+2025-05-23 18:57:24,333 - INFO - Starting analysis for comment OPM-2025-0004-10047 with 580 chars
+2025-05-23 18:57:24,335 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-23 18:57:25,139 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:25,143 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:25,144 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,144 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,147 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,148 - INFO - Successfully analyzed OPM-2025-0004-10043
+2025-05-23 18:57:25,149 - INFO - Successfully processed comment OPM-2025-0004-10043 in parallel
+2025-05-23 18:57:25,160 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:25,172 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:25,172 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,173 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,174 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,175 - INFO - Successfully analyzed OPM-2025-0004-10045
+2025-05-23 18:57:25,175 - INFO - Successfully processed comment OPM-2025-0004-10045 in parallel
+2025-05-23 18:57:25,754 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:25,757 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:25,758 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,758 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,760 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,762 - INFO - Successfully analyzed OPM-2025-0004-10044
+2025-05-23 18:57:25,762 - INFO - Successfully processed comment OPM-2025-0004-10044 in parallel
+2025-05-23 18:57:25,863 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:25,869 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:25,870 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,871 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,873 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:25,874 - INFO - Successfully analyzed OPM-2025-0004-10046
+2025-05-23 18:57:25,874 - INFO - Successfully processed comment OPM-2025-0004-10046 in parallel
+2025-05-23 18:57:26,056 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-23 18:57:26,070 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-23 18:57:26,071 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:26,071 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:26,073 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-23 18:57:26,075 - INFO - Successfully analyzed OPM-2025-0004-10047
+2025-05-23 18:57:26,077 - INFO - Successfully processed comment OPM-2025-0004-10047 in parallel
+2025-05-23 18:57:26,077 - INFO - Batch processing completed with 10 results
+2025-05-23 18:57:26,081 - INFO - ✅ Checkpoint saved with 50 processed comments
+2025-05-23 18:57:26,089 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185653/data.json
+2025-05-23 18:57:26,089 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185653/summary.json
+2025-05-23 18:57:26,090 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250523_185653/analyze_checkpoint.json
