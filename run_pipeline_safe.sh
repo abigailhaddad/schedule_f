@@ -6,6 +6,26 @@ BASE_RESULTS_DIR="results"
 BATCH_SIZE=10  # Number of comments to process in parallel
 VENV_PATH="./myenv/bin/activate"  # adjust path if needed
 
+# Check if user provided a specific results directory as first argument
+if [ -n "$1" ] && [ -d "$1" ]; then
+    SPECIFIC_RESULTS_DIR="$1"
+    echo "Using specified results directory: $SPECIFIC_RESULTS_DIR"
+fi
+
+# Check for optional truncate parameter as second argument
+TRUNCATE_CHARS=""
+if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
+    TRUNCATE_CHARS="--truncate $2"
+    echo "Will truncate comments to $2 characters for analysis"
+fi
+
+# Check for optional limit parameter as third argument
+LIMIT_CHARS=""
+if [ -n "$3" ] && [ "$3" -eq "$3" ] 2>/dev/null; then
+    LIMIT_CHARS="--limit $3"
+    echo "Will limit processing to $3 comments"
+fi
+
 # Create results dir if it doesn't exist
 mkdir -p "$BASE_RESULTS_DIR"
 
@@ -15,12 +35,17 @@ LATEST_RESULTS=$(find "$BASE_RESULTS_DIR" -name "results_*" -type d | sort -r | 
 # Check for input files to set up pipeline arguments
 PIPELINE_ARGS=""
 
-if [ -f "comments.csv" ]; then
+if [ -n "$SPECIFIC_RESULTS_DIR" ] && [ -f "$SPECIFIC_RESULTS_DIR/raw_data.json" ]; then
+    echo "Using existing results directory with raw_data.json: $SPECIFIC_RESULTS_DIR"
+    echo "Will skip fetch and attachments (assuming already processed)"
+    PIPELINE_ARGS="--output_dir $SPECIFIC_RESULTS_DIR --skip_fetch --skip_attachments $TRUNCATE_CHARS $LIMIT_CHARS"
+elif [ -f "comments.csv" ]; then
     echo "Found comments.csv file, will use this as input"
-    PIPELINE_ARGS="--csv_file comments.csv"
+    PIPELINE_ARGS="--csv_file comments.csv $TRUNCATE_CHARS"
 elif [ -n "$LATEST_RESULTS" ] && [ -f "$LATEST_RESULTS/raw_data.json" ]; then
     echo "Found recent results directory with data: $LATEST_RESULTS"
-    PIPELINE_ARGS="--output_dir $LATEST_RESULTS"
+    echo "Will skip fetch and attachments (assuming already processed)"
+    PIPELINE_ARGS="--output_dir $LATEST_RESULTS --skip_fetch --skip_attachments $TRUNCATE_CHARS $LIMIT_CHARS"
 elif [ -f "comments.json" ]; then
     echo "Found comments.json file, will use this as input"
     PIPELINE_ARGS="--input_file comments.json"

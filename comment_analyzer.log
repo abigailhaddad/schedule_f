@@ -45206,3 +45206,600 @@ Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/r
 Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_115005/data.json
 2025-05-24 12:00:20,309 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_115005/summary.json
 2025-05-24 12:00:20,309 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_115005/analyze_checkpoint.json
+2025-05-24 12:18:19,772 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_121819/raw_data.json...
+2025-05-24 12:18:19,772 - INFO - Found 50 comments in the file
+2025-05-24 12:18:19,772 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:18:19,772 - INFO - Original data length: 50
+2025-05-24 12:18:19,772 - INFO - start_from: None
+2025-05-24 12:18:19,772 - INFO - end_at: None
+2025-05-24 12:18:19,772 - INFO - chunk_size: None
+2025-05-24 12:18:19,772 - INFO - top_n: None
+2025-05-24 12:18:19,772 - INFO - Comment 0 structure:
+2025-05-24 12:18:19,772 - INFO -   Type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:18:19,773 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:18:19,773 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of gover...
+2025-05-24 12:18:19,773 - INFO - Comment 1 structure:
+2025-05-24 12:18:19,773 - INFO -   Type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:18:19,773 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:18:19,773 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be ...
+2025-05-24 12:18:19,773 - INFO - Comment 2 structure:
+2025-05-24 12:18:19,773 - INFO -   Type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:18:19,773 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:18:19,773 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not ...
+2025-05-24 12:18:19,773 - INFO - After slicing: 50 comments to process
+2025-05-24 12:18:19,773 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:18:19,773 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:18:19,773 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:18:19,773 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:18:19,773 - INFO - Comment text length: 418 chars
+2025-05-24 12:18:19,773 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:18:19,773 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:18:19,773 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:18:19,773 - INFO - Comment text length: 1333 chars
+2025-05-24 12:18:19,773 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:18:19,773 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:18:19,773 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:18:19,773 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:18:19,773 - INFO - Comment text length: 1196 chars
+2025-05-24 12:18:19,773 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:18:19,773 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:18:19,773 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:18:19,773 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:18:19,773 - INFO - Comment text length: 554 chars
+2025-05-24 12:18:19,773 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:18:19,773 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:18:19,773 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:18:19,773 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:18:19,773 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:18:19,774 - INFO - Comment text length: 518 chars
+2025-05-24 12:18:19,774 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:18:19,774 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_121819/temp_20250524_121819
+2025-05-24 12:18:19,774 - INFO - Creating duplicate mapping with truncation to 500 chars...
+2025-05-24 12:18:19,774 - INFO - Duplicate mapping complete:
+2025-05-24 12:18:19,774 - INFO -   Unique comment texts: 50
+2025-05-24 12:18:19,774 - INFO -   Total comments: 50
+2025-05-24 12:18:19,774 - INFO -   Texts with duplicates: 0
+2025-05-24 12:18:19,774 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:18:19,774 - INFO - Processing 50 of 50 comments
+2025-05-24 12:18:42,078 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_121819/data.json
+2025-05-24 12:18:42,078 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_121819/summary.json
+2025-05-24 12:18:42,079 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_121819/analyze_checkpoint.json
+2025-05-24 12:31:36,408 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:31:36,516 - INFO - Found 19879 comments in the file
+2025-05-24 12:31:36,517 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:31:36,517 - INFO - Original data length: 19879
+2025-05-24 12:31:36,517 - INFO - start_from: None
+2025-05-24 12:31:36,518 - INFO - end_at: None
+2025-05-24 12:31:36,518 - INFO - chunk_size: None
+2025-05-24 12:31:36,518 - INFO - top_n: None
+2025-05-24 12:31:36,519 - INFO - Comment 0 structure:
+2025-05-24 12:31:36,519 - INFO -   Type: <class 'dict'>
+2025-05-24 12:31:36,519 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:31:36,520 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:31:36,520 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:31:36,521 - INFO - Comment 1 structure:
+2025-05-24 12:31:36,521 - INFO -   Type: <class 'dict'>
+2025-05-24 12:31:36,522 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:31:36,522 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:31:36,523 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:31:36,523 - INFO - Comment 2 structure:
+2025-05-24 12:31:36,523 - INFO -   Type: <class 'dict'>
+2025-05-24 12:31:36,524 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:31:36,525 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:31:36,525 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:31:36,526 - INFO - After slicing: 19879 comments to process
+2025-05-24 12:31:36,528 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:31:36,528 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:31:36,533 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:31:36,533 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:31:36,533 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:31:36,533 - INFO - Comment text length: 418 chars
+2025-05-24 12:31:36,533 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:31:36,533 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:31:36,533 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:31:36,533 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:31:36,533 - INFO - Comment text length: 1333 chars
+2025-05-24 12:31:36,533 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:31:36,533 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:31:36,533 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:31:36,533 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:31:36,533 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:31:36,533 - INFO - Comment text length: 1196 chars
+2025-05-24 12:31:36,533 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:31:36,533 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:31:36,533 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:31:36,533 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:31:36,533 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:31:36,533 - INFO - Comment text length: 554 chars
+2025-05-24 12:31:36,534 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:31:36,534 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:31:36,534 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:31:36,534 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:31:36,534 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:31:36,534 - INFO - Comment text length: 518 chars
+2025-05-24 12:31:36,534 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 12:31:36,534 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_123136
+2025-05-24 12:31:36,534 - INFO - Creating duplicate mapping with truncation to 500 chars...
+2025-05-24 12:31:36,689 - WARNING - Comment OPM-2025-0004-7033 has empty text
+2025-05-24 12:31:36,702 - INFO - Duplicate mapping complete:
+2025-05-24 12:31:36,702 - INFO -   Unique comment texts: 14413
+2025-05-24 12:31:36,702 - INFO -   Total comments: 19878
+2025-05-24 12:31:36,702 - INFO -   Texts with duplicates: 342
+2025-05-24 12:31:36,702 - INFO -   Duplicate comment instances: 5465
+2025-05-24 12:31:36,704 - INFO - Processing 19879 of 19879 comments
+2025-05-24 12:33:16,775 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:33:16,856 - INFO - Found 19879 comments in the file
+2025-05-24 12:33:16,856 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:33:16,856 - INFO - Original data length: 19879
+2025-05-24 12:33:16,856 - INFO - start_from: None
+2025-05-24 12:33:16,856 - INFO - end_at: None
+2025-05-24 12:33:16,856 - INFO - chunk_size: None
+2025-05-24 12:33:16,856 - INFO - top_n: None
+2025-05-24 12:33:16,856 - INFO - Comment 0 structure:
+2025-05-24 12:33:16,856 - INFO -   Type: <class 'dict'>
+2025-05-24 12:33:16,856 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:33:16,856 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:33:16,856 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:33:16,856 - INFO - Comment 1 structure:
+2025-05-24 12:33:16,856 - INFO -   Type: <class 'dict'>
+2025-05-24 12:33:16,856 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:33:16,856 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:33:16,856 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:33:16,856 - INFO - Comment 2 structure:
+2025-05-24 12:33:16,856 - INFO -   Type: <class 'dict'>
+2025-05-24 12:33:16,856 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:33:16,856 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:33:16,856 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:33:16,856 - INFO - After slicing: 19879 comments to process
+2025-05-24 12:33:16,856 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:33:16,856 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:33:16,856 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:33:16,856 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:33:16,856 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:33:16,857 - INFO - Comment text length: 418 chars
+2025-05-24 12:33:16,857 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:33:16,857 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:33:16,857 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:33:16,857 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:33:16,857 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:33:16,857 - INFO - Comment text length: 1333 chars
+2025-05-24 12:33:16,857 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:33:16,857 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:33:16,857 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:33:16,857 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:33:16,857 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:33:16,857 - INFO - Comment text length: 1196 chars
+2025-05-24 12:33:16,857 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:33:16,857 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:33:16,857 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:33:16,857 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:33:16,857 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:33:16,857 - INFO - Comment text length: 554 chars
+2025-05-24 12:33:16,857 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:33:16,857 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:33:16,857 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:33:16,857 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:33:16,857 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:33:16,857 - INFO - Comment text length: 518 chars
+2025-05-24 12:33:16,857 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:33:16,857 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_123316
+2025-05-24 12:33:16,857 - INFO - Creating duplicate mapping with truncation to 200 chars...
+2025-05-24 12:33:16,966 - WARNING - Comment OPM-2025-0004-7033 has empty text
+2025-05-24 12:33:16,978 - INFO - Duplicate mapping complete:
+2025-05-24 12:33:16,978 - INFO -   Unique comment texts: 14073
+2025-05-24 12:33:16,978 - INFO -   Total comments: 19878
+2025-05-24 12:33:16,978 - INFO -   Texts with duplicates: 383
+2025-05-24 12:33:16,978 - INFO -   Duplicate comment instances: 5805
+2025-05-24 12:33:16,980 - INFO - Processing 19879 of 19879 comments
+2025-05-24 12:35:59,692 - INFO - Starting analysis of '/Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json' using model 'gpt-4o-mini'
+2025-05-24 12:35:59,692 - INFO - Processing only the first 15 comments
+2025-05-24 12:35:59,692 - INFO - Truncating comments to 200 characters for analysis
+2025-05-24 12:35:59,692 - INFO - Using parallel processing with batch size of 5
+2025-05-24 12:35:59,692 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:35:59,789 - INFO - Found 19879 comments in the file
+2025-05-24 12:35:59,789 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:35:59,789 - INFO - Original data length: 19879
+2025-05-24 12:35:59,789 - INFO - start_from: None
+2025-05-24 12:35:59,789 - INFO - end_at: None
+2025-05-24 12:35:59,789 - INFO - chunk_size: None
+2025-05-24 12:35:59,789 - INFO - top_n: 15
+2025-05-24 12:35:59,789 - INFO - Comment 0 structure:
+2025-05-24 12:35:59,789 - INFO -   Type: <class 'dict'>
+2025-05-24 12:35:59,789 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:35:59,789 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:35:59,789 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:35:59,789 - INFO - Comment 1 structure:
+2025-05-24 12:35:59,789 - INFO -   Type: <class 'dict'>
+2025-05-24 12:35:59,789 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:35:59,789 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:35:59,789 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:35:59,789 - INFO - Comment 2 structure:
+2025-05-24 12:35:59,789 - INFO -   Type: <class 'dict'>
+2025-05-24 12:35:59,789 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:35:59,790 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:35:59,790 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:35:59,790 - INFO - TOP_N MODE: Processing first 15 comments
+2025-05-24 12:35:59,796 - INFO - After slicing: 15 comments to process
+2025-05-24 12:35:59,796 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:35:59,796 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:35:59,796 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:35:59,796 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:35:59,796 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:35:59,796 - INFO - Comment text length: 418 chars
+2025-05-24 12:35:59,796 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:35:59,796 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:35:59,796 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:35:59,796 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:35:59,796 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:35:59,796 - INFO - Comment text length: 1333 chars
+2025-05-24 12:35:59,796 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:35:59,796 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:35:59,796 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:35:59,796 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:35:59,796 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:35:59,796 - INFO - Comment text length: 1196 chars
+2025-05-24 12:35:59,796 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:35:59,796 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:35:59,796 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:35:59,796 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:35:59,796 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:35:59,796 - INFO - Comment text length: 554 chars
+2025-05-24 12:35:59,797 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:35:59,797 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:35:59,797 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:35:59,797 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:35:59,797 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:35:59,797 - INFO - Comment text length: 518 chars
+2025-05-24 12:35:59,797 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:35:59,797 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_123559
+2025-05-24 12:35:59,797 - INFO - Creating duplicate mapping with truncation to 200 chars...
+2025-05-24 12:35:59,797 - INFO - Duplicate mapping complete:
+2025-05-24 12:35:59,797 - INFO -   Unique comment texts: 15
+2025-05-24 12:35:59,797 - INFO -   Total comments: 15
+2025-05-24 12:35:59,797 - INFO -   Texts with duplicates: 0
+2025-05-24 12:35:59,797 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:35:59,797 - INFO - Processing 15 of 15 comments
+2025-05-24 12:36:07,016 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
+2025-05-24 12:36:07,017 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/summary.json
+2025-05-24 12:36:07,017 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/analyze_checkpoint.json
+2025-05-24 12:38:47,509 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:38:47,596 - INFO - Found 19879 comments in the file
+2025-05-24 12:38:47,597 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:38:47,597 - INFO - Original data length: 19879
+2025-05-24 12:38:47,597 - INFO - start_from: None
+2025-05-24 12:38:47,597 - INFO - end_at: None
+2025-05-24 12:38:47,597 - INFO - chunk_size: None
+2025-05-24 12:38:47,597 - INFO - top_n: None
+2025-05-24 12:38:47,597 - INFO - Comment 0 structure:
+2025-05-24 12:38:47,598 - INFO -   Type: <class 'dict'>
+2025-05-24 12:38:47,598 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:38:47,598 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:38:47,598 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:38:47,598 - INFO - Comment 1 structure:
+2025-05-24 12:38:47,598 - INFO -   Type: <class 'dict'>
+2025-05-24 12:38:47,598 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:38:47,598 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:38:47,598 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:38:47,598 - INFO - Comment 2 structure:
+2025-05-24 12:38:47,598 - INFO -   Type: <class 'dict'>
+2025-05-24 12:38:47,598 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:38:47,598 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:38:47,598 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:38:47,598 - INFO - After slicing: 19879 comments to process
+2025-05-24 12:38:47,598 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:38:47,598 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:38:47,598 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:38:47,598 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:38:47,598 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:38:47,598 - INFO - Comment text length: 418 chars
+2025-05-24 12:38:47,598 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:38:47,598 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:38:47,598 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:38:47,598 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:38:47,598 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:38:47,598 - INFO - Comment text length: 1333 chars
+2025-05-24 12:38:47,599 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:38:47,599 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:38:47,599 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:38:47,599 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:38:47,599 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:38:47,599 - INFO - Comment text length: 1196 chars
+2025-05-24 12:38:47,599 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:38:47,599 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:38:47,599 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:38:47,599 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:38:47,599 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:38:47,599 - INFO - Comment text length: 554 chars
+2025-05-24 12:38:47,599 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:38:47,599 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:38:47,599 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:38:47,599 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:38:47,599 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:38:47,599 - INFO - Comment text length: 518 chars
+2025-05-24 12:38:47,599 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:38:47,599 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_123847
+2025-05-24 12:38:47,599 - INFO - Creating duplicate mapping with truncation to 200 chars...
+2025-05-24 12:38:47,708 - WARNING - Comment OPM-2025-0004-7033 has empty text
+2025-05-24 12:38:47,721 - INFO - Duplicate mapping complete:
+2025-05-24 12:38:47,721 - INFO -   Unique comment texts: 14073
+2025-05-24 12:38:47,721 - INFO -   Total comments: 19878
+2025-05-24 12:38:47,721 - INFO -   Texts with duplicates: 383
+2025-05-24 12:38:47,721 - INFO -   Duplicate comment instances: 5805
+2025-05-24 12:38:47,722 - INFO - Processing 19879 of 19879 comments
+2025-05-24 12:41:03,383 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:41:03,384 - INFO - Found 15 comments in the file
+2025-05-24 12:41:03,384 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:41:03,384 - INFO - Original data length: 15
+2025-05-24 12:41:03,384 - INFO - start_from: None
+2025-05-24 12:41:03,384 - INFO - end_at: None
+2025-05-24 12:41:03,384 - INFO - chunk_size: None
+2025-05-24 12:41:03,384 - INFO - top_n: None
+2025-05-24 12:41:03,384 - INFO - Comment 0 structure:
+2025-05-24 12:41:03,384 - INFO -   Type: <class 'dict'>
+2025-05-24 12:41:03,384 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:41:03,384 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:41:03,384 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:41:03,384 - INFO - Comment 1 structure:
+2025-05-24 12:41:03,384 - INFO -   Type: <class 'dict'>
+2025-05-24 12:41:03,384 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:41:03,384 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:41:03,384 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:41:03,384 - INFO - Comment 2 structure:
+2025-05-24 12:41:03,384 - INFO -   Type: <class 'dict'>
+2025-05-24 12:41:03,384 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:41:03,384 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:41:03,384 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:41:03,384 - INFO - After slicing: 15 comments to process
+2025-05-24 12:41:03,384 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:41:03,384 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:41:03,384 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:41:03,384 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:41:03,384 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:41:03,384 - INFO - Comment text length: 418 chars
+2025-05-24 12:41:03,384 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:41:03,384 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:41:03,384 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:41:03,384 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:41:03,384 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:41:03,385 - INFO - Comment text length: 1333 chars
+2025-05-24 12:41:03,385 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:41:03,385 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:41:03,385 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:41:03,385 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:41:03,385 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:41:03,385 - INFO - Comment text length: 1196 chars
+2025-05-24 12:41:03,385 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:41:03,385 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:41:03,385 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:41:03,385 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:41:03,385 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:41:03,385 - INFO - Comment text length: 554 chars
+2025-05-24 12:41:03,385 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:41:03,385 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:41:03,385 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:41:03,385 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:41:03,385 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:41:03,385 - INFO - Comment text length: 518 chars
+2025-05-24 12:41:03,385 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 12:41:03,385 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_124103
+2025-05-24 12:41:03,385 - INFO - Creating duplicate mapping with truncation to 200 chars...
+2025-05-24 12:41:03,385 - INFO - Duplicate mapping complete:
+2025-05-24 12:41:03,385 - INFO -   Unique comment texts: 15
+2025-05-24 12:41:03,385 - INFO -   Total comments: 15
+2025-05-24 12:41:03,385 - INFO -   Texts with duplicates: 0
+2025-05-24 12:41:03,385 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:41:03,385 - INFO - Processing 15 of 15 comments
+2025-05-24 12:41:10,443 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
+2025-05-24 12:41:10,443 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/summary.json
+2025-05-24 12:41:10,443 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/analyze_checkpoint.json

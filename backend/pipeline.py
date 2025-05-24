@@ -231,9 +231,15 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         comments_data = json.load(f)
     
     # Apply chunking if specified (this affects both attachments and analysis)
-    if start_from is not None or end_at is not None or chunk_size is not None:
+    # Convert limit to chunk_size if no other chunking is specified
+    effective_chunk_size = chunk_size
+    if limit is not None and start_from is None and end_at is None and chunk_size is None:
+        effective_chunk_size = limit
+        print(f"\n=== Converting --limit {limit} to chunk_size for processing ===")
+    
+    if start_from is not None or end_at is not None or effective_chunk_size is not None:
         print(f"\n=== Applying chunking to {len(comments_data)} comments ===")
-        comments_data = apply_chunking(comments_data, start_from, end_at, chunk_size)
+        comments_data = apply_chunking(comments_data, start_from, end_at, effective_chunk_size)
         
         # Save the chunked data back to raw_data_file
         with open(raw_data_file, 'w') as f:
