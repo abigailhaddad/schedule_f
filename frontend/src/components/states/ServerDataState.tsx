@@ -3,6 +3,7 @@
 import ServerFilterSection from '../ServerFilterSection';
 import ServerCommentTable from '../ServerCommentTable';
 import ServerStatisticsCard from '../ServerStatisticsCard';
+import StanceOverTimeCard from '../StanceOverTime';
 
 export default function ServerDataState() {
   return (
@@ -16,8 +17,15 @@ export default function ServerDataState() {
           <ServerFilterSection />
         </div>
       </div>
+
+      {/* New Second row: Stance Over Time Chart */}
+      <div className="row mb-4">
+        <div className="col-12">
+          <StanceOverTimeCard />
+        </div>
+      </div>
       
-      {/* Second row: Data Table */}
+      {/* Third row: Data Table */}
       <div className="row">
         <div className="col-12">
           <div className="card">
