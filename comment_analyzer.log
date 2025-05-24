@@ -29776,3 +29776,2180 @@ Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/r
 2025-05-24 07:14:43,144 - WARNING - CropBox missing from /Page, defaulting to MediaBox
 2025-05-24 07:14:43,144 - WARNING - CropBox missing from /Page, defaulting to MediaBox
 2025-05-24 07:14:43,144 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 08:14:29,725 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081429/raw_data.json...
+2025-05-24 08:14:29,726 - INFO - Found 100 comments in the file
+2025-05-24 08:14:29,726 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 08:14:29,726 - INFO - Original data length: 100
+2025-05-24 08:14:29,726 - INFO - start_from: None
+2025-05-24 08:14:29,726 - INFO - end_at: None
+2025-05-24 08:14:29,726 - INFO - chunk_size: None
+2025-05-24 08:14:29,726 - INFO - top_n: None
+2025-05-24 08:14:29,726 - INFO - Comment 0 structure:
+2025-05-24 08:14:29,726 - INFO -   Type: <class 'dict'>
+2025-05-24 08:14:29,726 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,726 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 08:14:29,726 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 08:14:29,726 - INFO - Comment 1 structure:
+2025-05-24 08:14:29,726 - INFO -   Type: <class 'dict'>
+2025-05-24 08:14:29,726 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,726 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 08:14:29,726 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 08:14:29,726 - INFO - Comment 2 structure:
+2025-05-24 08:14:29,726 - INFO -   Type: <class 'dict'>
+2025-05-24 08:14:29,726 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,726 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 08:14:29,727 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 08:14:29,727 - INFO - After slicing: 100 comments to process
+2025-05-24 08:14:29,727 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 08:14:29,727 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 08:14:29,727 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 08:14:29,727 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:14:29,727 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:14:29,727 - INFO - Comment text length: 418 chars
+2025-05-24 08:14:29,727 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:14:29,727 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 08:14:29,727 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 08:14:29,727 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:14:29,727 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:14:29,727 - INFO - Comment text length: 1333 chars
+2025-05-24 08:14:29,727 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:14:29,727 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 08:14:29,727 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 08:14:29,727 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:14:29,727 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:14:29,727 - INFO - Comment text length: 1196 chars
+2025-05-24 08:14:29,727 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:14:29,727 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 08:14:29,727 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 08:14:29,727 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:14:29,727 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:14:29,727 - INFO - Comment text length: 554 chars
+2025-05-24 08:14:29,727 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:14:29,727 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 08:14:29,727 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 08:14:29,727 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:14:29,727 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:14:29,727 - INFO - Comment text length: 518 chars
+2025-05-24 08:14:29,727 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:14:29,727 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081429/temp_20250524_081429
+2025-05-24 08:14:29,727 - INFO - Creating duplicate mapping with truncation to 200 chars...
+2025-05-24 08:14:29,728 - INFO - Duplicate mapping complete:
+2025-05-24 08:14:29,728 - INFO -   Unique comment texts: 100
+2025-05-24 08:14:29,728 - INFO -   Total comments: 100
+2025-05-24 08:14:29,728 - INFO -   Texts with duplicates: 0
+2025-05-24 08:14:29,728 - INFO -   Duplicate comment instances: 0
+2025-05-24 08:14:29,728 - INFO - Processing 100 of 100 comments
+2025-05-24 08:14:29,744 - INFO - Processing batch 1: ['OPM-2025-0004-0002', 'OPM-2025-0004-0003', 'OPM-2025-0004-0004', 'OPM-2025-0004-0005', 'OPM-2025-0004-0006', 'OPM-2025-0004-0007', 'OPM-2025-0004-0008', 'OPM-2025-0004-0009', 'OPM-2025-0004-0010', 'OPM-2025-0004-0011']
+2025-05-24 08:14:29,744 - INFO - Batch size: 10
+2025-05-24 08:14:29,744 - INFO - Batch item 0: OPM-2025-0004-0002, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 1: OPM-2025-0004-0003, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 2: OPM-2025-0004-0004, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 3: OPM-2025-0004-0005, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 4: OPM-2025-0004-0006, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 5: OPM-2025-0004-0007, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 6: OPM-2025-0004-0008, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 7: OPM-2025-0004-0009, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 8: OPM-2025-0004-0010, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Batch item 9: OPM-2025-0004-0011, type: <class 'dict'>
+2025-05-24 08:14:29,744 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:29,744 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:14:29,744 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:14:29,744 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:29,745 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:29,745 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:29,745 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:29,745 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:29,745 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:29,745 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:29,745 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:29,745 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:29,745 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:29,745 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:29,745 - INFO - Processing comment OPM-2025-0004-0002
+2025-05-24 08:14:29,745 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:29,745 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:29,745 - INFO - Processing comment OPM-2025-0004-0003
+2025-05-24 08:14:29,745 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:29,745 - INFO - Comment OPM-2025-0004-0002 - full text length: 418 chars
+2025-05-24 08:14:29,745 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:29,745 - INFO - Processing comment OPM-2025-0004-0004
+2025-05-24 08:14:29,745 - INFO - Comment OPM-2025-0004-0003 - full text length: 1333 chars
+2025-05-24 08:14:29,746 - INFO - Processing comment OPM-2025-0004-0005
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0002 - title: Comment from Elsa Lankford
+2025-05-24 08:14:29,746 - INFO - Processing comment OPM-2025-0004-0006
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0004 - full text length: 1196 chars
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0003 - title: Comment from Anonymous
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0006 - full text length: 518 chars
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0005 - full text length: 554 chars
+2025-05-24 08:14:29,746 - INFO - Starting analysis for comment OPM-2025-0004-0002 with 418 chars
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0004 - title: Comment from Anonymous
+2025-05-24 08:14:29,746 - INFO - Starting analysis for comment OPM-2025-0004-0003 with 1333 chars
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0006 - title: Comment from Anonymous
+2025-05-24 08:14:29,746 - INFO - Comment OPM-2025-0004-0005 - title: Comment from Sarah Weintraub Schommer
+2025-05-24 08:14:29,746 - INFO - Starting analysis for comment OPM-2025-0004-0004 with 1196 chars
+2025-05-24 08:14:29,752 - INFO - Starting analysis for comment OPM-2025-0004-0006 with 518 chars
+2025-05-24 08:14:29,752 - INFO - Starting analysis for comment OPM-2025-0004-0005 with 554 chars
+2025-05-24 08:14:29,753 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:29,753 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:29,754 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:29,755 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:29,757 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:32,535 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:32,536 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:32,544 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:32,544 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:32,545 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,545 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,546 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:32,547 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,547 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:32,548 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,548 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,549 - INFO - Successfully analyzed OPM-2025-0004-0002
+2025-05-24 08:14:32,548 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,548 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,549 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:32,549 - INFO - Successfully processed comment OPM-2025-0004-0002 in parallel
+2025-05-24 08:14:32,549 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,550 - INFO - Successfully analyzed OPM-2025-0004-0005
+2025-05-24 08:14:32,550 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,550 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:32,550 - INFO - Successfully analyzed OPM-2025-0004-0003
+2025-05-24 08:14:32,551 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:32,551 - INFO - Successfully processed comment OPM-2025-0004-0005 in parallel
+2025-05-24 08:14:32,551 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:32,551 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:32,551 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:32,551 - INFO - Successfully processed comment OPM-2025-0004-0003 in parallel
+2025-05-24 08:14:32,551 - INFO - Processing comment OPM-2025-0004-0007
+2025-05-24 08:14:32,551 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:32,551 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:32,551 - INFO - Comment OPM-2025-0004-0007 - full text length: 504 chars
+2025-05-24 08:14:32,551 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:32,551 - INFO - Processing comment OPM-2025-0004-0008
+2025-05-24 08:14:32,551 - INFO - Comment OPM-2025-0004-0007 - title: Comment from Joshua Meyer
+2025-05-24 08:14:32,551 - INFO - Processing comment OPM-2025-0004-0009
+2025-05-24 08:14:32,551 - INFO - Comment OPM-2025-0004-0008 - full text length: 908 chars
+2025-05-24 08:14:32,551 - INFO - Starting analysis for comment OPM-2025-0004-0007 with 504 chars
+2025-05-24 08:14:32,552 - INFO - Comment OPM-2025-0004-0009 - full text length: 487 chars
+2025-05-24 08:14:32,552 - INFO - Comment OPM-2025-0004-0008 - title: Comment from Catherine Carter
+2025-05-24 08:14:32,552 - INFO - Comment OPM-2025-0004-0009 - title: Comment from Mary Smith
+2025-05-24 08:14:32,553 - INFO - Starting analysis for comment OPM-2025-0004-0008 with 908 chars
+2025-05-24 08:14:32,553 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:32,553 - INFO - Starting analysis for comment OPM-2025-0004-0009 with 487 chars
+2025-05-24 08:14:32,556 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:32,557 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:32,596 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:32,601 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:32,601 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,601 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,602 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,602 - INFO - Successfully analyzed OPM-2025-0004-0004
+2025-05-24 08:14:32,602 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:32,602 - INFO - Successfully processed comment OPM-2025-0004-0004 in parallel
+2025-05-24 08:14:32,602 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:32,602 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:32,602 - INFO - Processing comment OPM-2025-0004-0010
+2025-05-24 08:14:32,602 - INFO - Comment OPM-2025-0004-0010 - full text length: 306 chars
+2025-05-24 08:14:32,602 - INFO - Comment OPM-2025-0004-0010 - title: Comment from Anonymous
+2025-05-24 08:14:32,603 - INFO - Starting analysis for comment OPM-2025-0004-0010 with 306 chars
+2025-05-24 08:14:32,603 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:32,638 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:32,639 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:32,639 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,639 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,640 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:32,641 - INFO - Successfully analyzed OPM-2025-0004-0006
+2025-05-24 08:14:32,641 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:32,641 - INFO - Successfully processed comment OPM-2025-0004-0006 in parallel
+2025-05-24 08:14:32,641 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:32,641 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:32,641 - INFO - Processing comment OPM-2025-0004-0011
+2025-05-24 08:14:32,641 - INFO - Comment OPM-2025-0004-0011 - full text length: 579 chars
+2025-05-24 08:14:32,641 - INFO - Comment OPM-2025-0004-0011 - title: Comment from Michael Ore
+2025-05-24 08:14:32,641 - INFO - Starting analysis for comment OPM-2025-0004-0011 with 579 chars
+2025-05-24 08:14:32,642 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:36,178 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:36,181 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:36,182 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:36,183 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:36,189 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:36,191 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,192 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,194 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:36,195 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,196 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,196 - INFO - Successfully analyzed OPM-2025-0004-0011
+2025-05-24 08:14:36,196 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,197 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:36,199 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:36,200 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,200 - INFO - Successfully processed comment OPM-2025-0004-0011 in parallel
+2025-05-24 08:14:36,201 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,201 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,201 - INFO - Successfully analyzed OPM-2025-0004-0010
+2025-05-24 08:14:36,201 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,202 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,203 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,203 - INFO - Successfully processed comment OPM-2025-0004-0010 in parallel
+2025-05-24 08:14:36,204 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,205 - INFO - Successfully analyzed OPM-2025-0004-0009
+2025-05-24 08:14:36,206 - INFO - Successfully analyzed OPM-2025-0004-0007
+2025-05-24 08:14:36,206 - INFO - Successfully processed comment OPM-2025-0004-0009 in parallel
+2025-05-24 08:14:36,206 - INFO - Successfully processed comment OPM-2025-0004-0007 in parallel
+2025-05-24 08:14:36,794 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:36,798 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:36,798 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,799 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,801 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:36,802 - INFO - Successfully analyzed OPM-2025-0004-0008
+2025-05-24 08:14:36,802 - INFO - Successfully processed comment OPM-2025-0004-0008 in parallel
+2025-05-24 08:14:36,804 - INFO - Batch processing completed with 10 results
+2025-05-24 08:14:36,807 - INFO - ✅ Checkpoint saved with 10 processed comments
+2025-05-24 08:14:36,807 - INFO - Processing batch 2: ['OPM-2025-0004-0012', 'OPM-2025-0004-0013', 'OPM-2025-0004-0014', 'OPM-2025-0004-0015', 'OPM-2025-0004-0016', 'OPM-2025-0004-0017', 'OPM-2025-0004-0018', 'OPM-2025-0004-0019', 'OPM-2025-0004-0020', 'OPM-2025-0004-0021']
+2025-05-24 08:14:36,807 - INFO - Batch size: 10
+2025-05-24 08:14:36,807 - INFO - Batch item 0: OPM-2025-0004-0012, type: <class 'dict'>
+2025-05-24 08:14:36,807 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,807 - INFO - Batch item 1: OPM-2025-0004-0013, type: <class 'dict'>
+2025-05-24 08:14:36,807 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,807 - INFO - Batch item 2: OPM-2025-0004-0014, type: <class 'dict'>
+2025-05-24 08:14:36,807 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,807 - INFO - Batch item 3: OPM-2025-0004-0015, type: <class 'dict'>
+2025-05-24 08:14:36,807 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,807 - INFO - Batch item 4: OPM-2025-0004-0016, type: <class 'dict'>
+2025-05-24 08:14:36,808 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,808 - INFO - Batch item 5: OPM-2025-0004-0017, type: <class 'dict'>
+2025-05-24 08:14:36,808 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,808 - INFO - Batch item 6: OPM-2025-0004-0018, type: <class 'dict'>
+2025-05-24 08:14:36,808 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,808 - INFO - Batch item 7: OPM-2025-0004-0019, type: <class 'dict'>
+2025-05-24 08:14:36,808 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,808 - INFO - Batch item 8: OPM-2025-0004-0020, type: <class 'dict'>
+2025-05-24 08:14:36,808 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,808 - INFO - Batch item 9: OPM-2025-0004-0021, type: <class 'dict'>
+2025-05-24 08:14:36,808 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:36,808 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:14:36,808 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:14:36,808 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:36,809 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:36,809 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:36,809 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:36,809 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:36,809 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:36,809 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:36,809 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:36,809 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:36,810 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:36,810 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:36,810 - INFO - Processing comment OPM-2025-0004-0012
+2025-05-24 08:14:36,810 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:36,810 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:36,810 - INFO - Processing comment OPM-2025-0004-0013
+2025-05-24 08:14:36,810 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:36,810 - INFO - Comment OPM-2025-0004-0012 - full text length: 461 chars
+2025-05-24 08:14:36,810 - INFO - Processing comment OPM-2025-0004-0014
+2025-05-24 08:14:36,811 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0013 - full text length: 2234 chars
+2025-05-24 08:14:36,811 - INFO - Processing comment OPM-2025-0004-0015
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0012 - title: Comment from Anonymous
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0014 - full text length: 619 chars
+2025-05-24 08:14:36,811 - INFO - Processing comment OPM-2025-0004-0016
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0013 - title: Comment from Pamela Elders
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0015 - full text length: 896 chars
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0014 - title: Comment from Neil Schneider
+2025-05-24 08:14:36,811 - INFO - Starting analysis for comment OPM-2025-0004-0012 with 461 chars
+2025-05-24 08:14:36,811 - INFO - Comment OPM-2025-0004-0016 - full text length: 942 chars
+2025-05-24 08:14:36,812 - INFO - Starting analysis for comment OPM-2025-0004-0013 with 2234 chars
+2025-05-24 08:14:36,812 - INFO - Comment OPM-2025-0004-0015 - title: Comment from Miles Ingram
+2025-05-24 08:14:36,812 - INFO - Starting analysis for comment OPM-2025-0004-0014 with 619 chars
+2025-05-24 08:14:36,812 - INFO - Comment OPM-2025-0004-0016 - title: Comment from Peter Sokol-Hessner
+2025-05-24 08:14:36,814 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:36,814 - INFO - Starting analysis for comment OPM-2025-0004-0015 with 896 chars
+2025-05-24 08:14:36,816 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:36,816 - INFO - Starting analysis for comment OPM-2025-0004-0016 with 942 chars
+2025-05-24 08:14:36,817 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:36,824 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:36,827 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:38,944 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:38,947 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:38,958 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:38,962 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:38,967 - INFO - Successfully analyzed OPM-2025-0004-0014
+2025-05-24 08:14:38,967 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:38,967 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:38,967 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:38,967 - INFO - Processing comment OPM-2025-0004-0017
+2025-05-24 08:14:38,967 - INFO - Comment OPM-2025-0004-0017 - full text length: 882 chars
+2025-05-24 08:14:38,967 - INFO - Comment OPM-2025-0004-0017 - title: Comment from A H
+2025-05-24 08:14:38,967 - INFO - Starting analysis for comment OPM-2025-0004-0017 with 882 chars
+2025-05-24 08:14:38,972 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:38,975 - INFO - Successfully processed comment OPM-2025-0004-0014 in parallel
+2025-05-24 08:14:39,172 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:39,176 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:39,177 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:39,179 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:39,180 - INFO - Successfully analyzed OPM-2025-0004-0012
+2025-05-24 08:14:39,181 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:39,181 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:39,181 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:39,181 - INFO - Successfully processed comment OPM-2025-0004-0012 in parallel
+2025-05-24 08:14:39,181 - INFO - Processing comment OPM-2025-0004-0018
+2025-05-24 08:14:39,182 - INFO - Comment OPM-2025-0004-0018 - full text length: 818 chars
+2025-05-24 08:14:39,182 - INFO - Comment OPM-2025-0004-0018 - title: Comment from Martha Frommelt
+2025-05-24 08:14:39,182 - INFO - Starting analysis for comment OPM-2025-0004-0018 with 818 chars
+2025-05-24 08:14:39,186 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:39,320 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:39,324 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:39,325 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:39,325 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:39,327 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:39,330 - INFO - Successfully analyzed OPM-2025-0004-0016
+2025-05-24 08:14:39,330 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:39,330 - INFO - Successfully processed comment OPM-2025-0004-0016 in parallel
+2025-05-24 08:14:39,330 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:39,330 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:39,331 - INFO - Processing comment OPM-2025-0004-0019
+2025-05-24 08:14:39,331 - INFO - Comment OPM-2025-0004-0019 - full text length: 419 chars
+2025-05-24 08:14:39,331 - INFO - Comment OPM-2025-0004-0019 - title: Comment from Carrie Corboy
+2025-05-24 08:14:39,331 - INFO - Starting analysis for comment OPM-2025-0004-0019 with 419 chars
+2025-05-24 08:14:39,334 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:40,172 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:40,173 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:40,177 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:40,178 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:40,179 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,179 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,179 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,180 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,183 - INFO - Successfully analyzed OPM-2025-0004-0013
+2025-05-24 08:14:40,183 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,184 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,184 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:40,184 - INFO - Successfully analyzed OPM-2025-0004-0015
+2025-05-24 08:14:40,184 - INFO - Successfully processed comment OPM-2025-0004-0013 in parallel
+2025-05-24 08:14:40,186 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:40,186 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:40,186 - INFO - Successfully processed comment OPM-2025-0004-0015 in parallel
+2025-05-24 08:14:40,187 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:40,187 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:40,187 - INFO - Processing comment OPM-2025-0004-0020
+2025-05-24 08:14:40,187 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:40,187 - INFO - Comment OPM-2025-0004-0020 - full text length: 4409 chars
+2025-05-24 08:14:40,187 - INFO - Processing comment OPM-2025-0004-0021
+2025-05-24 08:14:40,187 - INFO - Comment OPM-2025-0004-0020 - title: Comment from Judith Mitchell
+2025-05-24 08:14:40,187 - INFO - Comment OPM-2025-0004-0021 - full text length: 902 chars
+2025-05-24 08:14:40,188 - INFO - Comment OPM-2025-0004-0021 - title: Comment from Anonymous
+2025-05-24 08:14:40,188 - INFO - Starting analysis for comment OPM-2025-0004-0020 with 4409 chars
+2025-05-24 08:14:40,188 - INFO - Starting analysis for comment OPM-2025-0004-0021 with 902 chars
+2025-05-24 08:14:40,190 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:40,196 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:40,560 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:40,564 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:40,564 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,565 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,567 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:40,568 - INFO - Successfully analyzed OPM-2025-0004-0017
+2025-05-24 08:14:40,568 - INFO - Successfully processed comment OPM-2025-0004-0017 in parallel
+2025-05-24 08:14:41,307 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:41,331 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:41,334 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:41,335 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:41,339 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:41,339 - INFO - Successfully analyzed OPM-2025-0004-0018
+2025-05-24 08:14:41,339 - INFO - Successfully processed comment OPM-2025-0004-0018 in parallel
+2025-05-24 08:14:41,914 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:41,917 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:41,918 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:41,918 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:41,921 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:41,923 - INFO - Successfully analyzed OPM-2025-0004-0019
+2025-05-24 08:14:41,923 - INFO - Successfully processed comment OPM-2025-0004-0019 in parallel
+2025-05-24 08:14:42,936 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:42,939 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:42,940 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:42,941 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:42,943 - INFO - Successfully analyzed OPM-2025-0004-0020
+2025-05-24 08:14:42,943 - INFO - Successfully processed comment OPM-2025-0004-0020 in parallel
+2025-05-24 08:14:51,642 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:51,647 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:51,648 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:51,648 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:51,651 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:51,657 - INFO - Successfully analyzed OPM-2025-0004-0021
+2025-05-24 08:14:51,657 - INFO - Successfully processed comment OPM-2025-0004-0021 in parallel
+2025-05-24 08:14:51,657 - INFO - Batch processing completed with 10 results
+2025-05-24 08:14:51,659 - INFO - ✅ Checkpoint saved with 20 processed comments
+2025-05-24 08:14:51,659 - INFO - Processing batch 3: ['OPM-2025-0004-0022', 'OPM-2025-0004-0023', 'OPM-2025-0004-0024', 'OPM-2025-0004-0025', 'OPM-2025-0004-0027', 'OPM-2025-0004-0028', 'OPM-2025-0004-0029', 'OPM-2025-0004-0030', 'OPM-2025-0004-0031', 'OPM-2025-0004-0032']
+2025-05-24 08:14:51,659 - INFO - Batch size: 10
+2025-05-24 08:14:51,659 - INFO - Batch item 0: OPM-2025-0004-0022, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 1: OPM-2025-0004-0023, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 2: OPM-2025-0004-0024, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 3: OPM-2025-0004-0025, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 4: OPM-2025-0004-0027, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 5: OPM-2025-0004-0028, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 6: OPM-2025-0004-0029, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 7: OPM-2025-0004-0030, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,660 - INFO - Batch item 8: OPM-2025-0004-0031, type: <class 'dict'>
+2025-05-24 08:14:51,660 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,661 - INFO - Batch item 9: OPM-2025-0004-0032, type: <class 'dict'>
+2025-05-24 08:14:51,661 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:51,661 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:14:51,661 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:14:51,661 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:51,661 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:51,661 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:51,661 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:51,661 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:51,662 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:51,662 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:51,662 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:51,662 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:51,662 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:51,662 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:51,663 - INFO - Processing comment OPM-2025-0004-0022
+2025-05-24 08:14:51,663 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:51,663 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:51,663 - INFO - Processing comment OPM-2025-0004-0023
+2025-05-24 08:14:51,663 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:51,663 - INFO - Comment OPM-2025-0004-0022 - full text length: 392 chars
+2025-05-24 08:14:51,663 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:51,663 - INFO - Processing comment OPM-2025-0004-0024
+2025-05-24 08:14:51,663 - INFO - Comment OPM-2025-0004-0023 - full text length: 690 chars
+2025-05-24 08:14:51,663 - INFO - Processing comment OPM-2025-0004-0025
+2025-05-24 08:14:51,663 - INFO - Comment OPM-2025-0004-0022 - title: Comment from Kei Shao Tikkanen
+2025-05-24 08:14:51,664 - INFO - Processing comment OPM-2025-0004-0027
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0024 - full text length: 4650 chars
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0023 - title: Comment from Melanie Pennington
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0025 - full text length: 1992 chars
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0027 - full text length: 180 chars
+2025-05-24 08:14:51,664 - INFO - Starting analysis for comment OPM-2025-0004-0022 with 392 chars
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0024 - title: Comment from Alexander Tsai
+2025-05-24 08:14:51,664 - INFO - Starting analysis for comment OPM-2025-0004-0023 with 690 chars
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0025 - title: Comment from Rachel F
+2025-05-24 08:14:51,664 - INFO - Comment OPM-2025-0004-0027 - title: Comment from Marcia E Fehl
+2025-05-24 08:14:51,665 - INFO - Starting analysis for comment OPM-2025-0004-0024 with 4650 chars
+2025-05-24 08:14:51,666 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:51,668 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:51,668 - INFO - Comment OPM-2025-0004-0027 is the first occurrence of this text
+2025-05-24 08:14:51,669 - INFO - Starting analysis for comment OPM-2025-0004-0025 with 1992 chars
+2025-05-24 08:14:51,670 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:51,674 - INFO - Starting analysis for comment OPM-2025-0004-0027 with 180 chars
+2025-05-24 08:14:51,675 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:51,680 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:53,280 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:53,281 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:53,285 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:53,288 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:53,289 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,289 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,289 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,290 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,292 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,294 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,295 - INFO - Successfully analyzed OPM-2025-0004-0022
+2025-05-24 08:14:53,296 - INFO - Successfully analyzed OPM-2025-0004-0027
+2025-05-24 08:14:53,296 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:53,296 - INFO - Successfully processed comment OPM-2025-0004-0022 in parallel
+2025-05-24 08:14:53,296 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:53,296 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:53,296 - INFO - Successfully processed comment OPM-2025-0004-0027 in parallel
+2025-05-24 08:14:53,296 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:53,296 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:53,297 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:53,297 - INFO - Processing comment OPM-2025-0004-0028
+2025-05-24 08:14:53,297 - INFO - Processing comment OPM-2025-0004-0029
+2025-05-24 08:14:53,297 - INFO - Comment OPM-2025-0004-0028 - full text length: 321 chars
+2025-05-24 08:14:53,297 - INFO - Comment OPM-2025-0004-0029 - full text length: 260 chars
+2025-05-24 08:14:53,297 - INFO - Comment OPM-2025-0004-0028 - title: Comment from Anonymous
+2025-05-24 08:14:53,297 - INFO - Comment OPM-2025-0004-0029 - title: Comment from Olive Baldridge
+2025-05-24 08:14:53,297 - INFO - Starting analysis for comment OPM-2025-0004-0028 with 321 chars
+2025-05-24 08:14:53,297 - INFO - Starting analysis for comment OPM-2025-0004-0029 with 260 chars
+2025-05-24 08:14:53,300 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:53,301 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:53,628 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:53,633 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:53,633 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,634 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,640 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,641 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:53,643 - INFO - Successfully analyzed OPM-2025-0004-0023
+2025-05-24 08:14:53,643 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:53,644 - INFO - Successfully processed comment OPM-2025-0004-0023 in parallel
+2025-05-24 08:14:53,644 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:53,644 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:53,646 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:53,646 - INFO - Processing comment OPM-2025-0004-0030
+2025-05-24 08:14:53,646 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,647 - INFO - Comment OPM-2025-0004-0030 - full text length: 1038 chars
+2025-05-24 08:14:53,646 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,647 - INFO - Comment OPM-2025-0004-0030 - title: Comment from Kendra Eshleman
+2025-05-24 08:14:53,648 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,648 - INFO - Starting analysis for comment OPM-2025-0004-0030 with 1038 chars
+2025-05-24 08:14:53,649 - INFO - Successfully analyzed OPM-2025-0004-0024
+2025-05-24 08:14:53,649 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:53,650 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:53,650 - INFO - Successfully processed comment OPM-2025-0004-0024 in parallel
+2025-05-24 08:14:53,651 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:53,651 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:53,654 - INFO - Processing comment OPM-2025-0004-0031
+2025-05-24 08:14:53,654 - INFO - Comment OPM-2025-0004-0031 - full text length: 729 chars
+2025-05-24 08:14:53,654 - INFO - Comment OPM-2025-0004-0031 - title: Comment from Randy Cron
+2025-05-24 08:14:53,655 - INFO - Starting analysis for comment OPM-2025-0004-0031 with 729 chars
+2025-05-24 08:14:53,656 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:53,792 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:53,796 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:53,797 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,799 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:53,800 - INFO - Successfully analyzed OPM-2025-0004-0025
+2025-05-24 08:14:53,800 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:53,800 - INFO - Successfully processed comment OPM-2025-0004-0025 in parallel
+2025-05-24 08:14:53,800 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:53,800 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:53,800 - INFO - Processing comment OPM-2025-0004-0032
+2025-05-24 08:14:53,801 - INFO - Comment OPM-2025-0004-0032 - full text length: 634 chars
+2025-05-24 08:14:53,801 - INFO - Comment OPM-2025-0004-0032 - title: Comment from Russell  Evans
+2025-05-24 08:14:53,801 - INFO - Starting analysis for comment OPM-2025-0004-0032 with 634 chars
+2025-05-24 08:14:53,806 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:54,995 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:55,005 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:55,006 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,006 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,009 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,011 - INFO - Successfully analyzed OPM-2025-0004-0028
+2025-05-24 08:14:55,011 - INFO - Successfully processed comment OPM-2025-0004-0028 in parallel
+2025-05-24 08:14:55,068 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:55,072 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:55,073 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,073 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,075 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,076 - INFO - Successfully analyzed OPM-2025-0004-0029
+2025-05-24 08:14:55,077 - INFO - Successfully processed comment OPM-2025-0004-0029 in parallel
+2025-05-24 08:14:55,943 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:55,944 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:55,948 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:55,949 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,949 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,951 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:55,956 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,957 - INFO - Successfully analyzed OPM-2025-0004-0031
+2025-05-24 08:14:55,957 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,957 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,960 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:55,960 - INFO - Successfully processed comment OPM-2025-0004-0031 in parallel
+2025-05-24 08:14:55,961 - INFO - Successfully analyzed OPM-2025-0004-0032
+2025-05-24 08:14:55,961 - INFO - Successfully processed comment OPM-2025-0004-0032 in parallel
+2025-05-24 08:14:59,732 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:14:59,735 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:14:59,736 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:59,736 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:59,740 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:14:59,742 - INFO - Successfully analyzed OPM-2025-0004-0030
+2025-05-24 08:14:59,742 - INFO - Successfully processed comment OPM-2025-0004-0030 in parallel
+2025-05-24 08:14:59,743 - INFO - Batch processing completed with 10 results
+2025-05-24 08:14:59,746 - INFO - ✅ Checkpoint saved with 30 processed comments
+2025-05-24 08:14:59,746 - INFO - Processing batch 4: ['OPM-2025-0004-0033', 'OPM-2025-0004-0034', 'OPM-2025-0004-0035', 'OPM-2025-0004-0036', 'OPM-2025-0004-0037', 'OPM-2025-0004-0038', 'OPM-2025-0004-0039', 'OPM-2025-0004-0040', 'OPM-2025-0004-0041', 'OPM-2025-0004-0042']
+2025-05-24 08:14:59,746 - INFO - Batch size: 10
+2025-05-24 08:14:59,746 - INFO - Batch item 0: OPM-2025-0004-0033, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 1: OPM-2025-0004-0034, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 2: OPM-2025-0004-0035, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 3: OPM-2025-0004-0036, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 4: OPM-2025-0004-0037, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 5: OPM-2025-0004-0038, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 6: OPM-2025-0004-0039, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 7: OPM-2025-0004-0040, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,747 - INFO - Batch item 8: OPM-2025-0004-0041, type: <class 'dict'>
+2025-05-24 08:14:59,747 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,748 - INFO - Batch item 9: OPM-2025-0004-0042, type: <class 'dict'>
+2025-05-24 08:14:59,748 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:14:59,748 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:14:59,748 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:14:59,748 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:59,748 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:59,748 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:59,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:59,749 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:59,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:59,749 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:59,749 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:14:59,749 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:59,750 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:59,750 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:59,750 - INFO - Processing comment OPM-2025-0004-0033
+2025-05-24 08:14:59,750 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:14:59,750 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:59,750 - INFO - Processing comment OPM-2025-0004-0034
+2025-05-24 08:14:59,750 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:59,750 - INFO - Comment OPM-2025-0004-0033 - full text length: 132 chars
+2025-05-24 08:14:59,750 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:14:59,750 - INFO - Processing comment OPM-2025-0004-0035
+2025-05-24 08:14:59,750 - INFO - Comment OPM-2025-0004-0034 - full text length: 783 chars
+2025-05-24 08:14:59,751 - INFO - Processing comment OPM-2025-0004-0036
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0033 - title: Comment from Anonymous
+2025-05-24 08:14:59,751 - INFO - Processing comment OPM-2025-0004-0037
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0035 - full text length: 48 chars
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0034 - title: Comment from Bailey Zook
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0036 - full text length: 3858 chars
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0033 is the first occurrence of this text
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0037 - full text length: 180 chars
+2025-05-24 08:14:59,751 - INFO - Comment OPM-2025-0004-0035 - title: Comment from B A McClain
+2025-05-24 08:14:59,751 - INFO - Starting analysis for comment OPM-2025-0004-0034 with 783 chars
+2025-05-24 08:14:59,752 - INFO - Comment OPM-2025-0004-0036 - title: Comment from Richard Levy
+2025-05-24 08:14:59,752 - INFO - Comment OPM-2025-0004-0037 - title: Comment from Anonymous
+2025-05-24 08:14:59,752 - INFO - Comment OPM-2025-0004-0035 is the first occurrence of this text
+2025-05-24 08:14:59,752 - INFO - Starting analysis for comment OPM-2025-0004-0033 with 132 chars
+2025-05-24 08:14:59,752 - INFO - Starting analysis for comment OPM-2025-0004-0036 with 3858 chars
+2025-05-24 08:14:59,755 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:59,755 - INFO - Comment OPM-2025-0004-0037 is the first occurrence of this text
+2025-05-24 08:14:59,756 - INFO - Starting analysis for comment OPM-2025-0004-0035 with 48 chars
+2025-05-24 08:14:59,758 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:59,761 - INFO - Starting analysis for comment OPM-2025-0004-0037 with 180 chars
+2025-05-24 08:14:59,759 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:59,763 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:14:59,766 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:01,538 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:01,539 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:01,543 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:01,544 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,545 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:01,545 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,551 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,551 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,552 - INFO - Successfully analyzed OPM-2025-0004-0037
+2025-05-24 08:15:01,552 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,554 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,555 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:01,555 - INFO - Successfully analyzed OPM-2025-0004-0035
+2025-05-24 08:15:01,555 - INFO - Successfully processed comment OPM-2025-0004-0037 in parallel
+2025-05-24 08:15:01,556 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:01,557 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:01,557 - INFO - Successfully processed comment OPM-2025-0004-0035 in parallel
+2025-05-24 08:15:01,557 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:01,557 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:01,557 - INFO - Processing comment OPM-2025-0004-0038
+2025-05-24 08:15:01,557 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:01,557 - INFO - Comment OPM-2025-0004-0038 - full text length: 268 chars
+2025-05-24 08:15:01,557 - INFO - Processing comment OPM-2025-0004-0039
+2025-05-24 08:15:01,557 - INFO - Comment OPM-2025-0004-0038 - title: Comment from Jessica Barlow
+2025-05-24 08:15:01,558 - INFO - Comment OPM-2025-0004-0039 - full text length: 897 chars
+2025-05-24 08:15:01,558 - INFO - Starting analysis for comment OPM-2025-0004-0038 with 268 chars
+2025-05-24 08:15:01,558 - INFO - Comment OPM-2025-0004-0039 - title: Comment from Michele Smith
+2025-05-24 08:15:01,560 - INFO - Starting analysis for comment OPM-2025-0004-0039 with 897 chars
+2025-05-24 08:15:01,560 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:01,565 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:01,679 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:01,683 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:01,684 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,684 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,691 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:01,692 - INFO - Successfully analyzed OPM-2025-0004-0033
+2025-05-24 08:15:01,693 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:01,693 - INFO - Successfully processed comment OPM-2025-0004-0033 in parallel
+2025-05-24 08:15:01,693 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:01,693 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:01,693 - INFO - Processing comment OPM-2025-0004-0040
+2025-05-24 08:15:01,693 - INFO - Comment OPM-2025-0004-0040 - full text length: 721 chars
+2025-05-24 08:15:01,693 - INFO - Comment OPM-2025-0004-0040 - title: Comment from Allison Newman
+2025-05-24 08:15:01,693 - INFO - Starting analysis for comment OPM-2025-0004-0040 with 721 chars
+2025-05-24 08:15:01,696 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:02,088 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:02,092 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:02,092 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:02,095 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:02,098 - INFO - Successfully analyzed OPM-2025-0004-0036
+2025-05-24 08:15:02,099 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:02,099 - INFO - Successfully processed comment OPM-2025-0004-0036 in parallel
+2025-05-24 08:15:02,099 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:02,099 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:02,099 - INFO - Processing comment OPM-2025-0004-0041
+2025-05-24 08:15:02,099 - INFO - Comment OPM-2025-0004-0041 - full text length: 580 chars
+2025-05-24 08:15:02,100 - INFO - Comment OPM-2025-0004-0041 - title: Comment from Anonymous
+2025-05-24 08:15:02,100 - INFO - Starting analysis for comment OPM-2025-0004-0041 with 580 chars
+2025-05-24 08:15:02,102 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:03,538 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:03,540 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:03,541 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:03,541 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:03,543 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:03,546 - INFO - Successfully analyzed OPM-2025-0004-0038
+2025-05-24 08:15:03,546 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:03,547 - INFO - Successfully processed comment OPM-2025-0004-0038 in parallel
+2025-05-24 08:15:03,547 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:03,547 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:03,547 - INFO - Processing comment OPM-2025-0004-0042
+2025-05-24 08:15:03,547 - INFO - Comment OPM-2025-0004-0042 - full text length: 78 chars
+2025-05-24 08:15:03,548 - INFO - Comment OPM-2025-0004-0042 - title: Comment from Ann Ercelawn
+2025-05-24 08:15:03,548 - INFO - Comment OPM-2025-0004-0042 is the first occurrence of this text
+2025-05-24 08:15:03,548 - INFO - Starting analysis for comment OPM-2025-0004-0042 with 78 chars
+2025-05-24 08:15:03,551 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:03,597 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:03,599 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:03,600 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:03,600 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:03,601 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:03,602 - INFO - Successfully analyzed OPM-2025-0004-0040
+2025-05-24 08:15:03,603 - INFO - Successfully processed comment OPM-2025-0004-0040 in parallel
+2025-05-24 08:15:04,933 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:04,936 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:04,939 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:04,939 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:04,941 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:04,943 - INFO - Successfully analyzed OPM-2025-0004-0042
+2025-05-24 08:15:04,943 - INFO - Successfully processed comment OPM-2025-0004-0042 in parallel
+2025-05-24 08:15:05,673 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:05,677 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:05,678 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:05,678 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:05,682 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:05,685 - INFO - Successfully analyzed OPM-2025-0004-0039
+2025-05-24 08:15:05,686 - INFO - Successfully processed comment OPM-2025-0004-0039 in parallel
+2025-05-24 08:15:06,389 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:06,393 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:06,393 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:06,394 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:06,397 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:06,399 - INFO - Successfully analyzed OPM-2025-0004-0041
+2025-05-24 08:15:06,400 - INFO - Successfully processed comment OPM-2025-0004-0041 in parallel
+2025-05-24 08:15:07,968 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:07,970 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:07,970 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:07,970 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:07,971 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:07,972 - INFO - Successfully analyzed OPM-2025-0004-0034
+2025-05-24 08:15:07,972 - INFO - Successfully processed comment OPM-2025-0004-0034 in parallel
+2025-05-24 08:15:07,972 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:07,973 - INFO - ✅ Checkpoint saved with 40 processed comments
+2025-05-24 08:15:07,974 - INFO - Processing batch 5: ['OPM-2025-0004-0043', 'OPM-2025-0004-0044', 'OPM-2025-0004-0045', 'OPM-2025-0004-0046', 'OPM-2025-0004-0047', 'OPM-2025-0004-0048', 'OPM-2025-0004-0049', 'OPM-2025-0004-0050', 'OPM-2025-0004-0051', 'OPM-2025-0004-0052']
+2025-05-24 08:15:07,974 - INFO - Batch size: 10
+2025-05-24 08:15:07,974 - INFO - Batch item 0: OPM-2025-0004-0043, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 1: OPM-2025-0004-0044, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 2: OPM-2025-0004-0045, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 3: OPM-2025-0004-0046, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 4: OPM-2025-0004-0047, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 5: OPM-2025-0004-0048, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 6: OPM-2025-0004-0049, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 7: OPM-2025-0004-0050, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,974 - INFO - Batch item 8: OPM-2025-0004-0051, type: <class 'dict'>
+2025-05-24 08:15:07,974 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,975 - INFO - Batch item 9: OPM-2025-0004-0052, type: <class 'dict'>
+2025-05-24 08:15:07,975 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:07,975 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:15:07,975 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:15:07,975 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:07,975 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:07,975 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:07,975 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:07,975 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:07,975 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:07,975 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:07,975 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:07,975 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:07,976 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:07,976 - INFO - Processing comment OPM-2025-0004-0043
+2025-05-24 08:15:07,976 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:07,976 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:07,976 - INFO - Processing comment OPM-2025-0004-0044
+2025-05-24 08:15:07,976 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:07,976 - INFO - Comment OPM-2025-0004-0043 - full text length: 895 chars
+2025-05-24 08:15:07,976 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:07,976 - INFO - Processing comment OPM-2025-0004-0045
+2025-05-24 08:15:07,976 - INFO - Comment OPM-2025-0004-0044 - full text length: 1423 chars
+2025-05-24 08:15:07,977 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0043 - title: Comment from Elizabeth Hildebrandt
+2025-05-24 08:15:07,977 - INFO - Processing comment OPM-2025-0004-0046
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0045 - full text length: 769 chars
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0044 - title: Comment from Corinne Scheman
+2025-05-24 08:15:07,977 - INFO - Processing comment OPM-2025-0004-0047
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0046 - full text length: 331 chars
+2025-05-24 08:15:07,977 - INFO - Starting analysis for comment OPM-2025-0004-0043 with 895 chars
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0045 - title: Comment from David  J
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0047 - full text length: 292 chars
+2025-05-24 08:15:07,977 - INFO - Starting analysis for comment OPM-2025-0004-0044 with 1423 chars
+2025-05-24 08:15:07,977 - INFO - Comment OPM-2025-0004-0046 - title: Comment from Anonymous
+2025-05-24 08:15:07,978 - INFO - Starting analysis for comment OPM-2025-0004-0045 with 769 chars
+2025-05-24 08:15:07,978 - INFO - Comment OPM-2025-0004-0047 - title: Comment from Anonymous
+2025-05-24 08:15:07,979 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:07,979 - INFO - Starting analysis for comment OPM-2025-0004-0046 with 331 chars
+2025-05-24 08:15:07,981 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:07,981 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:07,981 - INFO - Starting analysis for comment OPM-2025-0004-0047 with 292 chars
+2025-05-24 08:15:07,985 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:07,989 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:09,463 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:09,467 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:09,468 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,468 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,473 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,475 - INFO - Successfully analyzed OPM-2025-0004-0046
+2025-05-24 08:15:09,476 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:09,476 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:09,476 - INFO - Successfully processed comment OPM-2025-0004-0046 in parallel
+2025-05-24 08:15:09,476 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:09,477 - INFO - Processing comment OPM-2025-0004-0048
+2025-05-24 08:15:09,477 - INFO - Comment OPM-2025-0004-0048 - full text length: 1211 chars
+2025-05-24 08:15:09,477 - INFO - Comment OPM-2025-0004-0048 - title: Comment from Jeffrey Chenoweth
+2025-05-24 08:15:09,478 - INFO - Starting analysis for comment OPM-2025-0004-0048 with 1211 chars
+2025-05-24 08:15:09,480 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:09,622 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:09,626 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:09,627 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,627 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,632 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,634 - INFO - Successfully analyzed OPM-2025-0004-0044
+2025-05-24 08:15:09,634 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:09,634 - INFO - Successfully processed comment OPM-2025-0004-0044 in parallel
+2025-05-24 08:15:09,635 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:09,635 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:09,635 - INFO - Processing comment OPM-2025-0004-0049
+2025-05-24 08:15:09,635 - INFO - Comment OPM-2025-0004-0049 - full text length: 1739 chars
+2025-05-24 08:15:09,635 - INFO - Comment OPM-2025-0004-0049 - title: Comment from Kira Swanson
+2025-05-24 08:15:09,635 - INFO - Starting analysis for comment OPM-2025-0004-0049 with 1739 chars
+2025-05-24 08:15:09,638 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:09,650 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:09,656 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:09,656 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,656 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,658 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,658 - INFO - Successfully analyzed OPM-2025-0004-0047
+2025-05-24 08:15:09,658 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:09,659 - INFO - Successfully processed comment OPM-2025-0004-0047 in parallel
+2025-05-24 08:15:09,659 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:09,659 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:09,659 - INFO - Processing comment OPM-2025-0004-0050
+2025-05-24 08:15:09,659 - INFO - Comment OPM-2025-0004-0050 - full text length: 324 chars
+2025-05-24 08:15:09,659 - INFO - Comment OPM-2025-0004-0050 - title: Comment from Nancy Crocker
+2025-05-24 08:15:09,659 - INFO - Starting analysis for comment OPM-2025-0004-0050 with 324 chars
+2025-05-24 08:15:09,661 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:09,828 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:09,834 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:09,834 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,835 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,838 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:09,841 - INFO - Successfully analyzed OPM-2025-0004-0045
+2025-05-24 08:15:09,841 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:09,842 - INFO - Successfully processed comment OPM-2025-0004-0045 in parallel
+2025-05-24 08:15:09,842 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:09,842 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:09,842 - INFO - Processing comment OPM-2025-0004-0051
+2025-05-24 08:15:09,842 - INFO - Comment OPM-2025-0004-0051 - full text length: 815 chars
+2025-05-24 08:15:09,842 - INFO - Comment OPM-2025-0004-0051 - title: Comment from Frankie Fachilla
+2025-05-24 08:15:09,842 - INFO - Starting analysis for comment OPM-2025-0004-0051 with 815 chars
+2025-05-24 08:15:09,845 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:10,483 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:10,485 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:10,485 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:10,485 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:10,486 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:10,487 - INFO - Successfully analyzed OPM-2025-0004-0043
+2025-05-24 08:15:10,487 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:10,487 - INFO - Successfully processed comment OPM-2025-0004-0043 in parallel
+2025-05-24 08:15:10,487 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:10,487 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:10,487 - INFO - Processing comment OPM-2025-0004-0052
+2025-05-24 08:15:10,487 - INFO - Comment OPM-2025-0004-0052 - full text length: 403 chars
+2025-05-24 08:15:10,487 - INFO - Comment OPM-2025-0004-0052 - title: Comment from Elizabeth Migliore
+2025-05-24 08:15:10,487 - INFO - Starting analysis for comment OPM-2025-0004-0052 with 403 chars
+2025-05-24 08:15:10,490 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:11,918 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:11,920 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:11,921 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:11,922 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:11,926 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:11,928 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,930 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,931 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:11,933 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,933 - INFO - Successfully analyzed OPM-2025-0004-0049
+2025-05-24 08:15:11,933 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,935 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:11,935 - INFO - Successfully processed comment OPM-2025-0004-0049 in parallel
+2025-05-24 08:15:11,936 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,936 - INFO - Successfully analyzed OPM-2025-0004-0050
+2025-05-24 08:15:11,937 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,937 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,938 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:11,940 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,940 - INFO - Successfully processed comment OPM-2025-0004-0050 in parallel
+2025-05-24 08:15:11,940 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,940 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,941 - INFO - Successfully analyzed OPM-2025-0004-0048
+2025-05-24 08:15:11,942 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:11,942 - INFO - Successfully analyzed OPM-2025-0004-0051
+2025-05-24 08:15:11,942 - INFO - Successfully processed comment OPM-2025-0004-0048 in parallel
+2025-05-24 08:15:11,943 - INFO - Successfully processed comment OPM-2025-0004-0051 in parallel
+2025-05-24 08:15:12,463 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:12,467 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:12,467 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:12,467 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:12,471 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:12,473 - INFO - Successfully analyzed OPM-2025-0004-0052
+2025-05-24 08:15:12,474 - INFO - Successfully processed comment OPM-2025-0004-0052 in parallel
+2025-05-24 08:15:12,474 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:12,477 - INFO - ✅ Checkpoint saved with 50 processed comments
+2025-05-24 08:15:12,477 - INFO - Processing batch 6: ['OPM-2025-0004-0053', 'OPM-2025-0004-0054', 'OPM-2025-0004-0055', 'OPM-2025-0004-0056', 'OPM-2025-0004-0057', 'OPM-2025-0004-0058', 'OPM-2025-0004-0059', 'OPM-2025-0004-0060', 'OPM-2025-0004-0061', 'OPM-2025-0004-0062']
+2025-05-24 08:15:12,477 - INFO - Batch size: 10
+2025-05-24 08:15:12,477 - INFO - Batch item 0: OPM-2025-0004-0053, type: <class 'dict'>
+2025-05-24 08:15:12,477 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 1: OPM-2025-0004-0054, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 2: OPM-2025-0004-0055, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 3: OPM-2025-0004-0056, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 4: OPM-2025-0004-0057, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 5: OPM-2025-0004-0058, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 6: OPM-2025-0004-0059, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 7: OPM-2025-0004-0060, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 8: OPM-2025-0004-0061, type: <class 'dict'>
+2025-05-24 08:15:12,478 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,478 - INFO - Batch item 9: OPM-2025-0004-0062, type: <class 'dict'>
+2025-05-24 08:15:12,479 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:12,479 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:15:12,479 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:15:12,479 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:12,479 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:12,479 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:12,479 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:12,479 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:12,480 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:12,480 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:12,480 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:12,480 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:12,480 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:12,480 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:12,480 - INFO - Processing comment OPM-2025-0004-0053
+2025-05-24 08:15:12,480 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:12,480 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:12,481 - INFO - Processing comment OPM-2025-0004-0054
+2025-05-24 08:15:12,481 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:12,481 - INFO - Comment OPM-2025-0004-0053 - full text length: 1033 chars
+2025-05-24 08:15:12,481 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:12,481 - INFO - Processing comment OPM-2025-0004-0055
+2025-05-24 08:15:12,481 - INFO - Comment OPM-2025-0004-0054 - full text length: 380 chars
+2025-05-24 08:15:12,481 - INFO - Processing comment OPM-2025-0004-0056
+2025-05-24 08:15:12,481 - INFO - Comment OPM-2025-0004-0053 - title: Comment from Anonymous
+2025-05-24 08:15:12,481 - INFO - Processing comment OPM-2025-0004-0057
+2025-05-24 08:15:12,481 - INFO - Comment OPM-2025-0004-0055 - full text length: 336 chars
+2025-05-24 08:15:12,481 - INFO - Comment OPM-2025-0004-0054 - title: Comment from Anonymous
+2025-05-24 08:15:12,481 - INFO - Comment OPM-2025-0004-0056 - full text length: 1098 chars
+2025-05-24 08:15:12,482 - INFO - Starting analysis for comment OPM-2025-0004-0053 with 1033 chars
+2025-05-24 08:15:12,482 - INFO - Comment OPM-2025-0004-0057 - full text length: 297 chars
+2025-05-24 08:15:12,482 - INFO - Comment OPM-2025-0004-0055 - title: Comment from LJane Smith
+2025-05-24 08:15:12,482 - INFO - Starting analysis for comment OPM-2025-0004-0054 with 380 chars
+2025-05-24 08:15:12,482 - INFO - Comment OPM-2025-0004-0056 - title: Comment from Anonymous
+2025-05-24 08:15:12,482 - INFO - Comment OPM-2025-0004-0057 - title: Comment from Anonymous
+2025-05-24 08:15:12,484 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:12,484 - INFO - Starting analysis for comment OPM-2025-0004-0055 with 336 chars
+2025-05-24 08:15:12,485 - INFO - Starting analysis for comment OPM-2025-0004-0056 with 1098 chars
+2025-05-24 08:15:12,486 - INFO - Starting analysis for comment OPM-2025-0004-0057 with 297 chars
+2025-05-24 08:15:12,486 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:12,491 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:12,492 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:12,495 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:14,171 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:14,172 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:14,173 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:14,177 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:14,179 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:14,179 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,179 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,180 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,180 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,182 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,184 - INFO - Successfully analyzed OPM-2025-0004-0057
+2025-05-24 08:15:14,184 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,185 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:14,186 - INFO - Successfully analyzed OPM-2025-0004-0054
+2025-05-24 08:15:14,186 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:14,186 - INFO - Successfully processed comment OPM-2025-0004-0057 in parallel
+2025-05-24 08:15:14,186 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:14,187 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:14,187 - INFO - Successfully processed comment OPM-2025-0004-0054 in parallel
+2025-05-24 08:15:14,187 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:14,187 - INFO - Processing comment OPM-2025-0004-0058
+2025-05-24 08:15:14,187 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:14,187 - INFO - Comment OPM-2025-0004-0058 - full text length: 688 chars
+2025-05-24 08:15:14,187 - INFO - Processing comment OPM-2025-0004-0059
+2025-05-24 08:15:14,187 - INFO - Comment OPM-2025-0004-0058 - title: Comment from Anonymous
+2025-05-24 08:15:14,187 - INFO - Comment OPM-2025-0004-0059 - full text length: 266 chars
+2025-05-24 08:15:14,188 - INFO - Starting analysis for comment OPM-2025-0004-0058 with 688 chars
+2025-05-24 08:15:14,188 - INFO - Comment OPM-2025-0004-0059 - title: Comment from Ellen Wahle
+2025-05-24 08:15:14,190 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:14,190 - INFO - Starting analysis for comment OPM-2025-0004-0059 with 266 chars
+2025-05-24 08:15:14,195 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:14,222 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:14,223 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,223 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,224 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:14,225 - INFO - Successfully analyzed OPM-2025-0004-0053
+2025-05-24 08:15:14,225 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:14,225 - INFO - Successfully processed comment OPM-2025-0004-0053 in parallel
+2025-05-24 08:15:14,225 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:14,225 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:14,225 - INFO - Processing comment OPM-2025-0004-0060
+2025-05-24 08:15:14,225 - INFO - Comment OPM-2025-0004-0060 - full text length: 2190 chars
+2025-05-24 08:15:14,225 - INFO - Comment OPM-2025-0004-0060 - title: Comment from Anonymous
+2025-05-24 08:15:14,225 - INFO - Starting analysis for comment OPM-2025-0004-0060 with 2190 chars
+2025-05-24 08:15:14,227 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:15,195 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:15,199 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:15,199 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,200 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,201 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,204 - INFO - Successfully analyzed OPM-2025-0004-0055
+2025-05-24 08:15:15,206 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:15,206 - INFO - Successfully processed comment OPM-2025-0004-0055 in parallel
+2025-05-24 08:15:15,206 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:15,206 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:15,207 - INFO - Processing comment OPM-2025-0004-0061
+2025-05-24 08:15:15,207 - INFO - Comment OPM-2025-0004-0061 - full text length: 4423 chars
+2025-05-24 08:15:15,207 - INFO - Comment OPM-2025-0004-0061 - title: Comment from Prathima Radhakrishnan
+2025-05-24 08:15:15,207 - INFO - Starting analysis for comment OPM-2025-0004-0061 with 4423 chars
+2025-05-24 08:15:15,210 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:15,809 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:15,814 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:15,814 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,815 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,817 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,818 - INFO - Successfully analyzed OPM-2025-0004-0056
+2025-05-24 08:15:15,819 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:15,819 - INFO - Successfully processed comment OPM-2025-0004-0056 in parallel
+2025-05-24 08:15:15,819 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:15,819 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:15,819 - INFO - Processing comment OPM-2025-0004-0062
+2025-05-24 08:15:15,819 - INFO - Comment OPM-2025-0004-0062 - full text length: 382 chars
+2025-05-24 08:15:15,819 - INFO - Comment OPM-2025-0004-0062 - title: Comment from Brooke Hammond
+2025-05-24 08:15:15,819 - INFO - Starting analysis for comment OPM-2025-0004-0062 with 382 chars
+2025-05-24 08:15:15,821 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:15,939 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:15,944 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:15,944 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,945 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,947 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:15,949 - INFO - Successfully analyzed OPM-2025-0004-0059
+2025-05-24 08:15:15,949 - INFO - Successfully processed comment OPM-2025-0004-0059 in parallel
+2025-05-24 08:15:16,322 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:16,326 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:16,327 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:16,327 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:16,330 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:16,331 - INFO - Successfully analyzed OPM-2025-0004-0060
+2025-05-24 08:15:16,331 - INFO - Successfully processed comment OPM-2025-0004-0060 in parallel
+2025-05-24 08:15:16,629 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:16,633 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:16,634 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:16,634 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:16,639 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:16,641 - INFO - Successfully analyzed OPM-2025-0004-0058
+2025-05-24 08:15:16,641 - INFO - Successfully processed comment OPM-2025-0004-0058 in parallel
+2025-05-24 08:15:17,407 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:17,411 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:17,412 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:17,412 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:17,415 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:17,416 - INFO - Successfully analyzed OPM-2025-0004-0062
+2025-05-24 08:15:17,416 - INFO - Successfully processed comment OPM-2025-0004-0062 in parallel
+2025-05-24 08:15:18,119 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:18,122 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:18,122 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:18,123 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:18,124 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:18,126 - INFO - Successfully analyzed OPM-2025-0004-0061
+2025-05-24 08:15:18,126 - INFO - Successfully processed comment OPM-2025-0004-0061 in parallel
+2025-05-24 08:15:18,126 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:18,128 - INFO - ✅ Checkpoint saved with 60 processed comments
+2025-05-24 08:15:18,129 - INFO - Processing batch 7: ['OPM-2025-0004-0063', 'OPM-2025-0004-0064', 'OPM-2025-0004-0065', 'OPM-2025-0004-0066', 'OPM-2025-0004-0067', 'OPM-2025-0004-0068', 'OPM-2025-0004-0069', 'OPM-2025-0004-0070', 'OPM-2025-0004-0071', 'OPM-2025-0004-0072']
+2025-05-24 08:15:18,129 - INFO - Batch size: 10
+2025-05-24 08:15:18,129 - INFO - Batch item 0: OPM-2025-0004-0063, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,129 - INFO - Batch item 1: OPM-2025-0004-0064, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,129 - INFO - Batch item 2: OPM-2025-0004-0065, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,129 - INFO - Batch item 3: OPM-2025-0004-0066, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,129 - INFO - Batch item 4: OPM-2025-0004-0067, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,129 - INFO - Batch item 5: OPM-2025-0004-0068, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,129 - INFO - Batch item 6: OPM-2025-0004-0069, type: <class 'dict'>
+2025-05-24 08:15:18,129 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,130 - INFO - Batch item 7: OPM-2025-0004-0070, type: <class 'dict'>
+2025-05-24 08:15:18,130 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,130 - INFO - Batch item 8: OPM-2025-0004-0071, type: <class 'dict'>
+2025-05-24 08:15:18,130 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,130 - INFO - Batch item 9: OPM-2025-0004-0072, type: <class 'dict'>
+2025-05-24 08:15:18,130 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:18,130 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:15:18,130 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:15:18,130 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:18,130 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:18,130 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:18,130 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:18,130 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:18,131 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:18,131 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:18,131 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:18,131 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:18,131 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:18,131 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:18,131 - INFO - Processing comment OPM-2025-0004-0063
+2025-05-24 08:15:18,131 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:18,131 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:18,131 - INFO - Processing comment OPM-2025-0004-0064
+2025-05-24 08:15:18,132 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0063 - full text length: 2313 chars
+2025-05-24 08:15:18,132 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:18,132 - INFO - Processing comment OPM-2025-0004-0065
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0064 - full text length: 185 chars
+2025-05-24 08:15:18,132 - INFO - Processing comment OPM-2025-0004-0066
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0063 - title: Comment from Anonymous
+2025-05-24 08:15:18,132 - INFO - Processing comment OPM-2025-0004-0067
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0065 - full text length: 211 chars
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0064 - title: Comment from Sara Franklin
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0066 - full text length: 3757 chars
+2025-05-24 08:15:18,132 - INFO - Starting analysis for comment OPM-2025-0004-0063 with 2313 chars
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0067 - full text length: 560 chars
+2025-05-24 08:15:18,132 - INFO - Comment OPM-2025-0004-0065 - title: Comment from Anonymous
+2025-05-24 08:15:18,133 - INFO - Comment OPM-2025-0004-0064 is the first occurrence of this text
+2025-05-24 08:15:18,133 - INFO - Comment OPM-2025-0004-0066 - title: Comment from Alexis  Gibson
+2025-05-24 08:15:18,133 - INFO - Comment OPM-2025-0004-0067 - title: Comment from Anonymous
+2025-05-24 08:15:18,134 - INFO - Starting analysis for comment OPM-2025-0004-0065 with 211 chars
+2025-05-24 08:15:18,134 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:18,135 - INFO - Starting analysis for comment OPM-2025-0004-0064 with 185 chars
+2025-05-24 08:15:18,135 - INFO - Starting analysis for comment OPM-2025-0004-0066 with 3757 chars
+2025-05-24 08:15:18,135 - INFO - Starting analysis for comment OPM-2025-0004-0067 with 560 chars
+2025-05-24 08:15:18,137 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:18,141 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:18,142 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:18,144 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:19,548 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:19,572 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:19,573 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,574 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,576 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,577 - INFO - Successfully analyzed OPM-2025-0004-0065
+2025-05-24 08:15:19,577 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:19,577 - INFO - Successfully processed comment OPM-2025-0004-0065 in parallel
+2025-05-24 08:15:19,577 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:19,577 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:19,578 - INFO - Processing comment OPM-2025-0004-0068
+2025-05-24 08:15:19,578 - INFO - Comment OPM-2025-0004-0068 - full text length: 340 chars
+2025-05-24 08:15:19,578 - INFO - Comment OPM-2025-0004-0068 - title: Comment from Lee Weingast
+2025-05-24 08:15:19,578 - INFO - Starting analysis for comment OPM-2025-0004-0068 with 340 chars
+2025-05-24 08:15:19,580 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:19,905 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:19,909 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:19,910 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,910 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,911 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,914 - INFO - Successfully analyzed OPM-2025-0004-0066
+2025-05-24 08:15:19,914 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:19,914 - INFO - Successfully processed comment OPM-2025-0004-0066 in parallel
+2025-05-24 08:15:19,914 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:19,914 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:19,915 - INFO - Processing comment OPM-2025-0004-0069
+2025-05-24 08:15:19,915 - INFO - Comment OPM-2025-0004-0069 - full text length: 328 chars
+2025-05-24 08:15:19,915 - INFO - Comment OPM-2025-0004-0069 - title: Comment from G Thompson
+2025-05-24 08:15:19,915 - INFO - Starting analysis for comment OPM-2025-0004-0069 with 328 chars
+2025-05-24 08:15:19,919 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:19,932 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:19,934 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:19,935 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,935 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,937 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:19,938 - INFO - Successfully analyzed OPM-2025-0004-0064
+2025-05-24 08:15:19,938 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:19,938 - INFO - Successfully processed comment OPM-2025-0004-0064 in parallel
+2025-05-24 08:15:19,938 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:19,938 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:19,938 - INFO - Processing comment OPM-2025-0004-0070
+2025-05-24 08:15:19,938 - INFO - Comment OPM-2025-0004-0070 - full text length: 1246 chars
+2025-05-24 08:15:19,938 - INFO - Comment OPM-2025-0004-0070 - title: Comment from Peggy Lubozynski
+2025-05-24 08:15:19,939 - INFO - Starting analysis for comment OPM-2025-0004-0070 with 1246 chars
+2025-05-24 08:15:19,940 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:19,998 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:20,001 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:20,001 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:20,001 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:20,003 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:20,004 - INFO - Successfully analyzed OPM-2025-0004-0067
+2025-05-24 08:15:20,004 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:20,004 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:20,004 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:20,004 - INFO - Successfully processed comment OPM-2025-0004-0067 in parallel
+2025-05-24 08:15:20,005 - INFO - Processing comment OPM-2025-0004-0071
+2025-05-24 08:15:20,005 - INFO - Comment OPM-2025-0004-0071 - full text length: 197 chars
+2025-05-24 08:15:20,005 - INFO - Comment OPM-2025-0004-0071 - title: Comment from Delphi Harrington
+2025-05-24 08:15:20,005 - INFO - Comment OPM-2025-0004-0071 is the first occurrence of this text
+2025-05-24 08:15:20,005 - INFO - Starting analysis for comment OPM-2025-0004-0071 with 197 chars
+2025-05-24 08:15:20,007 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:20,345 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:20,349 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:20,349 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:20,349 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:20,351 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:20,352 - INFO - Successfully analyzed OPM-2025-0004-0063
+2025-05-24 08:15:20,352 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:20,352 - INFO - Successfully processed comment OPM-2025-0004-0063 in parallel
+2025-05-24 08:15:20,352 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:20,353 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:20,353 - INFO - Processing comment OPM-2025-0004-0072
+2025-05-24 08:15:20,353 - INFO - Comment OPM-2025-0004-0072 - full text length: 154 chars
+2025-05-24 08:15:20,353 - INFO - Comment OPM-2025-0004-0072 - title: Comment from Christine Brittnacher
+2025-05-24 08:15:20,353 - INFO - Comment OPM-2025-0004-0072 is the first occurrence of this text
+2025-05-24 08:15:20,353 - INFO - Starting analysis for comment OPM-2025-0004-0072 with 154 chars
+2025-05-24 08:15:20,356 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:21,691 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:21,692 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:21,696 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:21,698 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:21,699 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,700 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,700 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,700 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,705 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,706 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,707 - INFO - Successfully analyzed OPM-2025-0004-0071
+2025-05-24 08:15:21,708 - INFO - Successfully analyzed OPM-2025-0004-0068
+2025-05-24 08:15:21,708 - INFO - Successfully processed comment OPM-2025-0004-0071 in parallel
+2025-05-24 08:15:21,708 - INFO - Successfully processed comment OPM-2025-0004-0068 in parallel
+2025-05-24 08:15:21,899 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:21,903 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:21,903 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,904 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,907 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:21,909 - INFO - Successfully analyzed OPM-2025-0004-0070
+2025-05-24 08:15:21,909 - INFO - Successfully processed comment OPM-2025-0004-0070 in parallel
+2025-05-24 08:15:22,753 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:22,755 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:22,755 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:22,755 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:22,756 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:22,757 - INFO - Successfully analyzed OPM-2025-0004-0069
+2025-05-24 08:15:22,757 - INFO - Successfully processed comment OPM-2025-0004-0069 in parallel
+2025-05-24 08:15:22,889 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:22,893 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:22,894 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:22,896 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:22,897 - INFO - Successfully analyzed OPM-2025-0004-0072
+2025-05-24 08:15:22,898 - INFO - Successfully processed comment OPM-2025-0004-0072 in parallel
+2025-05-24 08:15:22,898 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:22,902 - INFO - ✅ Checkpoint saved with 70 processed comments
+2025-05-24 08:15:22,902 - INFO - Processing batch 8: ['OPM-2025-0004-0073', 'OPM-2025-0004-0074', 'OPM-2025-0004-0075', 'OPM-2025-0004-0076', 'OPM-2025-0004-0077', 'OPM-2025-0004-0078', 'OPM-2025-0004-0079', 'OPM-2025-0004-0080', 'OPM-2025-0004-0081', 'OPM-2025-0004-0082']
+2025-05-24 08:15:22,902 - INFO - Batch size: 10
+2025-05-24 08:15:22,903 - INFO - Batch item 0: OPM-2025-0004-0073, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 1: OPM-2025-0004-0074, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 2: OPM-2025-0004-0075, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 3: OPM-2025-0004-0076, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 4: OPM-2025-0004-0077, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 5: OPM-2025-0004-0078, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 6: OPM-2025-0004-0079, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,903 - INFO - Batch item 7: OPM-2025-0004-0080, type: <class 'dict'>
+2025-05-24 08:15:22,903 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,904 - INFO - Batch item 8: OPM-2025-0004-0081, type: <class 'dict'>
+2025-05-24 08:15:22,904 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,904 - INFO - Batch item 9: OPM-2025-0004-0082, type: <class 'dict'>
+2025-05-24 08:15:22,904 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:22,904 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:15:22,904 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:15:22,904 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:22,904 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:22,904 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:22,905 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:22,905 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:22,905 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:22,905 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:22,905 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:22,905 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:22,905 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:22,905 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:22,906 - INFO - Processing comment OPM-2025-0004-0073
+2025-05-24 08:15:22,906 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:22,906 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:22,906 - INFO - Processing comment OPM-2025-0004-0074
+2025-05-24 08:15:22,906 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:22,906 - INFO - Comment OPM-2025-0004-0073 - full text length: 1152 chars
+2025-05-24 08:15:22,906 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:22,906 - INFO - Processing comment OPM-2025-0004-0075
+2025-05-24 08:15:22,906 - INFO - Comment OPM-2025-0004-0074 - full text length: 1399 chars
+2025-05-24 08:15:22,906 - INFO - Processing comment OPM-2025-0004-0076
+2025-05-24 08:15:22,906 - INFO - Comment OPM-2025-0004-0073 - title: Comment from Savannah Salazar
+2025-05-24 08:15:22,907 - INFO - Processing comment OPM-2025-0004-0077
+2025-05-24 08:15:22,907 - INFO - Comment OPM-2025-0004-0077 - full text length: 517 chars
+2025-05-24 08:15:22,907 - INFO - Comment OPM-2025-0004-0077 - title: Comment from Anonymous
+2025-05-24 08:15:22,907 - INFO - Comment OPM-2025-0004-0076 - full text length: 428 chars
+2025-05-24 08:15:22,907 - INFO - Starting analysis for comment OPM-2025-0004-0073 with 1152 chars
+2025-05-24 08:15:22,907 - INFO - Comment OPM-2025-0004-0075 - full text length: 906 chars
+2025-05-24 08:15:22,907 - INFO - Comment OPM-2025-0004-0074 - title: Comment from Anne DeVries
+2025-05-24 08:15:22,907 - INFO - Starting analysis for comment OPM-2025-0004-0077 with 517 chars
+2025-05-24 08:15:22,907 - INFO - Comment OPM-2025-0004-0076 - title: Comment from Zelda Blair
+2025-05-24 08:15:22,908 - INFO - Comment OPM-2025-0004-0075 - title: Comment from Andrea Versenyi
+2025-05-24 08:15:22,910 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:22,910 - INFO - Starting analysis for comment OPM-2025-0004-0074 with 1399 chars
+2025-05-24 08:15:22,911 - INFO - Starting analysis for comment OPM-2025-0004-0076 with 428 chars
+2025-05-24 08:15:22,913 - INFO - Starting analysis for comment OPM-2025-0004-0075 with 906 chars
+2025-05-24 08:15:22,915 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:22,916 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:22,918 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:22,919 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:24,616 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:24,618 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:24,619 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:24,619 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:24,621 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:24,623 - INFO - Successfully analyzed OPM-2025-0004-0076
+2025-05-24 08:15:24,623 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:24,623 - INFO - Successfully processed comment OPM-2025-0004-0076 in parallel
+2025-05-24 08:15:24,623 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:24,624 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:24,624 - INFO - Processing comment OPM-2025-0004-0078
+2025-05-24 08:15:24,624 - INFO - Comment OPM-2025-0004-0078 - full text length: 528 chars
+2025-05-24 08:15:24,624 - INFO - Comment OPM-2025-0004-0078 - title: Comment from Tobias Barske
+2025-05-24 08:15:24,624 - INFO - Starting analysis for comment OPM-2025-0004-0078 with 528 chars
+2025-05-24 08:15:24,627 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:24,642 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:24,647 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:24,648 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:24,648 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:24,649 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:24,650 - INFO - Successfully analyzed OPM-2025-0004-0073
+2025-05-24 08:15:24,650 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:24,650 - INFO - Successfully processed comment OPM-2025-0004-0073 in parallel
+2025-05-24 08:15:24,650 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:24,650 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:24,651 - INFO - Processing comment OPM-2025-0004-0079
+2025-05-24 08:15:24,651 - INFO - Comment OPM-2025-0004-0079 - full text length: 306 chars
+2025-05-24 08:15:24,651 - INFO - Comment OPM-2025-0004-0079 - title: Comment from Suzanne Baker
+2025-05-24 08:15:24,651 - INFO - Starting analysis for comment OPM-2025-0004-0079 with 306 chars
+2025-05-24 08:15:24,653 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:25,535 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:25,541 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:25,540 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:25,543 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:25,543 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:25,546 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:25,549 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:25,550 - INFO - Successfully analyzed OPM-2025-0004-0077
+2025-05-24 08:15:25,550 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:25,550 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:25,550 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:25,550 - INFO - Successfully processed comment OPM-2025-0004-0077 in parallel
+2025-05-24 08:15:25,551 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:25,552 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:25,552 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:25,552 - INFO - Successfully analyzed OPM-2025-0004-0074
+2025-05-24 08:15:25,553 - INFO - Processing comment OPM-2025-0004-0080
+2025-05-24 08:15:25,553 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:25,553 - INFO - Successfully processed comment OPM-2025-0004-0074 in parallel
+2025-05-24 08:15:25,553 - INFO - Comment OPM-2025-0004-0080 - full text length: 1059 chars
+2025-05-24 08:15:25,553 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:25,553 - INFO - Comment OPM-2025-0004-0080 - title: Comment from Rebecca Klymkowsky
+2025-05-24 08:15:25,553 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:25,554 - INFO - Starting analysis for comment OPM-2025-0004-0080 with 1059 chars
+2025-05-24 08:15:25,554 - INFO - Processing comment OPM-2025-0004-0081
+2025-05-24 08:15:25,554 - INFO - Comment OPM-2025-0004-0081 - full text length: 619 chars
+2025-05-24 08:15:25,554 - INFO - Comment OPM-2025-0004-0081 - title: Comment from Jennifer G
+2025-05-24 08:15:25,556 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:25,556 - INFO - Starting analysis for comment OPM-2025-0004-0081 with 619 chars
+2025-05-24 08:15:25,560 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:27,675 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:27,679 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:27,680 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,681 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,683 - INFO - Successfully analyzed OPM-2025-0004-0080
+2025-05-24 08:15:27,683 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:27,683 - INFO - Successfully processed comment OPM-2025-0004-0080 in parallel
+2025-05-24 08:15:27,683 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:27,683 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:27,684 - INFO - Processing comment OPM-2025-0004-0082
+2025-05-24 08:15:27,684 - INFO - Comment OPM-2025-0004-0082 - full text length: 572 chars
+2025-05-24 08:15:27,684 - INFO - Comment OPM-2025-0004-0082 - title: Comment from Karl  Bronn
+2025-05-24 08:15:27,684 - INFO - Starting analysis for comment OPM-2025-0004-0082 with 572 chars
+2025-05-24 08:15:27,686 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:27,809 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:27,811 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:27,811 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,812 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,813 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,814 - INFO - Successfully analyzed OPM-2025-0004-0079
+2025-05-24 08:15:27,814 - INFO - Successfully processed comment OPM-2025-0004-0079 in parallel
+2025-05-24 08:15:27,897 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:27,901 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:27,901 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,901 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,903 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,904 - INFO - Successfully analyzed OPM-2025-0004-0081
+2025-05-24 08:15:27,904 - INFO - Successfully processed comment OPM-2025-0004-0081 in parallel
+2025-05-24 08:15:27,918 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:27,925 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:27,926 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,926 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,927 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:27,928 - INFO - Successfully analyzed OPM-2025-0004-0078
+2025-05-24 08:15:27,928 - INFO - Successfully processed comment OPM-2025-0004-0078 in parallel
+2025-05-24 08:15:28,591 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:28,595 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:28,595 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:28,597 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:28,599 - INFO - Successfully analyzed OPM-2025-0004-0075
+2025-05-24 08:15:28,599 - INFO - Successfully processed comment OPM-2025-0004-0075 in parallel
+2025-05-24 08:15:29,701 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:29,726 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:29,727 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:29,727 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:29,729 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:29,730 - INFO - Successfully analyzed OPM-2025-0004-0082
+2025-05-24 08:15:29,731 - INFO - Successfully processed comment OPM-2025-0004-0082 in parallel
+2025-05-24 08:15:29,731 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:29,735 - INFO - ✅ Checkpoint saved with 80 processed comments
+2025-05-24 08:15:29,735 - INFO - Processing batch 9: ['OPM-2025-0004-0083', 'OPM-2025-0004-0084', 'OPM-2025-0004-0085', 'OPM-2025-0004-0086', 'OPM-2025-0004-0087', 'OPM-2025-0004-0088', 'OPM-2025-0004-0089', 'OPM-2025-0004-0090', 'OPM-2025-0004-0091', 'OPM-2025-0004-0092']
+2025-05-24 08:15:29,735 - INFO - Batch size: 10
+2025-05-24 08:15:29,736 - INFO - Batch item 0: OPM-2025-0004-0083, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,736 - INFO - Batch item 1: OPM-2025-0004-0084, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,736 - INFO - Batch item 2: OPM-2025-0004-0085, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,736 - INFO - Batch item 3: OPM-2025-0004-0086, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,736 - INFO - Batch item 4: OPM-2025-0004-0087, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,736 - INFO - Batch item 5: OPM-2025-0004-0088, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,736 - INFO - Batch item 6: OPM-2025-0004-0089, type: <class 'dict'>
+2025-05-24 08:15:29,736 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,737 - INFO - Batch item 7: OPM-2025-0004-0090, type: <class 'dict'>
+2025-05-24 08:15:29,737 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,737 - INFO - Batch item 8: OPM-2025-0004-0091, type: <class 'dict'>
+2025-05-24 08:15:29,737 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,737 - INFO - Batch item 9: OPM-2025-0004-0092, type: <class 'dict'>
+2025-05-24 08:15:29,737 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:29,737 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:15:29,737 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:15:29,737 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:29,737 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:29,738 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:29,738 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:29,738 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:29,738 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:29,738 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:29,739 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:29,739 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:29,739 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:29,739 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:29,739 - INFO - Processing comment OPM-2025-0004-0083
+2025-05-24 08:15:29,739 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:29,739 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:29,740 - INFO - Processing comment OPM-2025-0004-0084
+2025-05-24 08:15:29,740 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:29,740 - INFO - Comment OPM-2025-0004-0083 - full text length: 594 chars
+2025-05-24 08:15:29,740 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:29,740 - INFO - Processing comment OPM-2025-0004-0085
+2025-05-24 08:15:29,740 - INFO - Comment OPM-2025-0004-0084 - full text length: 453 chars
+2025-05-24 08:15:29,740 - INFO - Processing comment OPM-2025-0004-0086
+2025-05-24 08:15:29,740 - INFO - Comment OPM-2025-0004-0083 - title: Comment from Sarah Conway
+2025-05-24 08:15:29,740 - INFO - Processing comment OPM-2025-0004-0087
+2025-05-24 08:15:29,741 - INFO - Comment OPM-2025-0004-0085 - full text length: 2093 chars
+2025-05-24 08:15:29,741 - INFO - Comment OPM-2025-0004-0084 - title: Comment from Melissa Cline
+2025-05-24 08:15:29,741 - INFO - Comment OPM-2025-0004-0086 - full text length: 391 chars
+2025-05-24 08:15:29,741 - INFO - Comment OPM-2025-0004-0087 - full text length: 191 chars
+2025-05-24 08:15:29,741 - INFO - Starting analysis for comment OPM-2025-0004-0083 with 594 chars
+2025-05-24 08:15:29,741 - INFO - Comment OPM-2025-0004-0085 - title: Comment from Anonymous
+2025-05-24 08:15:29,741 - INFO - Starting analysis for comment OPM-2025-0004-0084 with 453 chars
+2025-05-24 08:15:29,742 - INFO - Comment OPM-2025-0004-0086 - title: Comment from Joan Friedman
+2025-05-24 08:15:29,742 - INFO - Comment OPM-2025-0004-0087 - title: Comment from April  Rodeghero
+2025-05-24 08:15:29,742 - INFO - Starting analysis for comment OPM-2025-0004-0085 with 2093 chars
+2025-05-24 08:15:29,744 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:29,744 - INFO - Starting analysis for comment OPM-2025-0004-0086 with 391 chars
+2025-05-24 08:15:29,746 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:29,746 - INFO - Comment OPM-2025-0004-0087 is the first occurrence of this text
+2025-05-24 08:15:29,749 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:29,751 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:29,753 - INFO - Starting analysis for comment OPM-2025-0004-0087 with 191 chars
+2025-05-24 08:15:29,759 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:31,786 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:31,791 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:31,792 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:31,792 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:31,794 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:31,795 - INFO - Successfully analyzed OPM-2025-0004-0087
+2025-05-24 08:15:31,796 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:31,796 - INFO - Successfully processed comment OPM-2025-0004-0087 in parallel
+2025-05-24 08:15:31,796 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:31,796 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:31,796 - INFO - Processing comment OPM-2025-0004-0088
+2025-05-24 08:15:31,796 - INFO - Comment OPM-2025-0004-0088 - full text length: 212 chars
+2025-05-24 08:15:31,796 - INFO - Comment OPM-2025-0004-0088 - title: Comment from Gemma Alexander
+2025-05-24 08:15:31,796 - INFO - Starting analysis for comment OPM-2025-0004-0088 with 212 chars
+2025-05-24 08:15:31,800 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:32,131 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:32,135 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:32,136 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,137 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,140 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,142 - INFO - Successfully analyzed OPM-2025-0004-0083
+2025-05-24 08:15:32,142 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:32,142 - INFO - Successfully processed comment OPM-2025-0004-0083 in parallel
+2025-05-24 08:15:32,142 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:32,142 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:32,142 - INFO - Processing comment OPM-2025-0004-0089
+2025-05-24 08:15:32,142 - INFO - Comment OPM-2025-0004-0089 - full text length: 510 chars
+2025-05-24 08:15:32,143 - INFO - Comment OPM-2025-0004-0089 - title: Comment from Pennie Bucilla
+2025-05-24 08:15:32,143 - INFO - Starting analysis for comment OPM-2025-0004-0089 with 510 chars
+2025-05-24 08:15:32,146 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:32,245 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:32,249 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:32,250 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,250 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,252 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,258 - INFO - Successfully analyzed OPM-2025-0004-0084
+2025-05-24 08:15:32,258 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:32,258 - INFO - Successfully processed comment OPM-2025-0004-0084 in parallel
+2025-05-24 08:15:32,258 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:32,259 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:32,259 - INFO - Processing comment OPM-2025-0004-0090
+2025-05-24 08:15:32,259 - INFO - Comment OPM-2025-0004-0090 - full text length: 311 chars
+2025-05-24 08:15:32,259 - INFO - Comment OPM-2025-0004-0090 - title: Comment from J Z
+2025-05-24 08:15:32,259 - INFO - Starting analysis for comment OPM-2025-0004-0090 with 311 chars
+2025-05-24 08:15:32,261 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:32,322 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:32,326 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:32,327 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,327 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,330 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,331 - INFO - Successfully analyzed OPM-2025-0004-0086
+2025-05-24 08:15:32,331 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:32,331 - INFO - Successfully processed comment OPM-2025-0004-0086 in parallel
+2025-05-24 08:15:32,331 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:32,332 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:32,332 - INFO - Processing comment OPM-2025-0004-0091
+2025-05-24 08:15:32,332 - INFO - Comment OPM-2025-0004-0091 - full text length: 266 chars
+2025-05-24 08:15:32,332 - INFO - Comment OPM-2025-0004-0091 - title: Comment from Anonymous
+2025-05-24 08:15:32,332 - INFO - Starting analysis for comment OPM-2025-0004-0091 with 266 chars
+2025-05-24 08:15:32,334 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:32,360 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:32,365 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:32,366 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,366 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,367 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:32,368 - INFO - Successfully analyzed OPM-2025-0004-0085
+2025-05-24 08:15:32,368 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:32,368 - INFO - Successfully processed comment OPM-2025-0004-0085 in parallel
+2025-05-24 08:15:32,368 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:32,369 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:32,369 - INFO - Processing comment OPM-2025-0004-0092
+2025-05-24 08:15:32,369 - INFO - Comment OPM-2025-0004-0092 - full text length: 627 chars
+2025-05-24 08:15:32,369 - INFO - Comment OPM-2025-0004-0092 - title: Comment from Len Liu
+2025-05-24 08:15:32,369 - INFO - Starting analysis for comment OPM-2025-0004-0092 with 627 chars
+2025-05-24 08:15:32,371 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:33,992 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:33,996 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:33,996 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:33,997 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:33,999 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,001 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:34,003 - INFO - Successfully analyzed OPM-2025-0004-0088
+2025-05-24 08:15:34,006 - INFO - Successfully processed comment OPM-2025-0004-0088 in parallel
+2025-05-24 08:15:34,006 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:34,006 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,007 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,008 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,009 - INFO - Successfully analyzed OPM-2025-0004-0091
+2025-05-24 08:15:34,009 - INFO - Successfully processed comment OPM-2025-0004-0091 in parallel
+2025-05-24 08:15:34,229 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:34,232 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:34,233 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,233 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,235 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,236 - INFO - Successfully analyzed OPM-2025-0004-0089
+2025-05-24 08:15:34,238 - INFO - Successfully processed comment OPM-2025-0004-0089 in parallel
+2025-05-24 08:15:34,842 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:34,846 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:34,847 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,847 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,849 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,850 - INFO - Successfully analyzed OPM-2025-0004-0092
+2025-05-24 08:15:34,851 - INFO - Successfully processed comment OPM-2025-0004-0092 in parallel
+2025-05-24 08:15:34,895 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:34,899 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:34,900 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,900 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,902 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:34,903 - INFO - Successfully analyzed OPM-2025-0004-0090
+2025-05-24 08:15:34,903 - INFO - Successfully processed comment OPM-2025-0004-0090 in parallel
+2025-05-24 08:15:34,903 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:34,906 - INFO - ✅ Checkpoint saved with 90 processed comments
+2025-05-24 08:15:34,907 - INFO - Processing batch 10: ['OPM-2025-0004-0093', 'OPM-2025-0004-0094', 'OPM-2025-0004-0095', 'OPM-2025-0004-0096', 'OPM-2025-0004-0097', 'OPM-2025-0004-0098', 'OPM-2025-0004-0099', 'OPM-2025-0004-0100', 'OPM-2025-0004-0101', 'OPM-2025-0004-0102']
+2025-05-24 08:15:34,907 - INFO - Batch size: 10
+2025-05-24 08:15:34,907 - INFO - Batch item 0: OPM-2025-0004-0093, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 1: OPM-2025-0004-0094, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 2: OPM-2025-0004-0095, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 3: OPM-2025-0004-0096, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 4: OPM-2025-0004-0097, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 5: OPM-2025-0004-0098, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 6: OPM-2025-0004-0099, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 7: OPM-2025-0004-0100, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,907 - INFO - Batch item 8: OPM-2025-0004-0101, type: <class 'dict'>
+2025-05-24 08:15:34,907 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,908 - INFO - Batch item 9: OPM-2025-0004-0102, type: <class 'dict'>
+2025-05-24 08:15:34,908 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:15:34,908 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:15:34,908 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:15:34,908 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:34,908 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:34,908 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:34,908 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:34,908 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:34,908 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:34,908 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:34,909 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:34,909 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:34,909 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:34,909 - INFO - Processing comment OPM-2025-0004-0093
+2025-05-24 08:15:34,909 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:34,909 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:34,909 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:34,909 - INFO - Processing comment OPM-2025-0004-0094
+2025-05-24 08:15:34,909 - INFO - Comment OPM-2025-0004-0093 - full text length: 173 chars
+2025-05-24 08:15:34,909 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:34,909 - INFO - Processing comment OPM-2025-0004-0095
+2025-05-24 08:15:34,909 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0094 - full text length: 641 chars
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0093 - title: Comment from Maureen Loughney
+2025-05-24 08:15:34,910 - INFO - Processing comment OPM-2025-0004-0096
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0095 - full text length: 229 chars
+2025-05-24 08:15:34,910 - INFO - Processing comment OPM-2025-0004-0097
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0094 - title: Comment from anonymous anonymous
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0093 is the first occurrence of this text
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0096 - full text length: 898 chars
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0095 - title: Comment from George David Kerlick
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0097 - full text length: 344 chars
+2025-05-24 08:15:34,910 - INFO - Starting analysis for comment OPM-2025-0004-0094 with 641 chars
+2025-05-24 08:15:34,910 - INFO - Starting analysis for comment OPM-2025-0004-0093 with 173 chars
+2025-05-24 08:15:34,910 - INFO - Comment OPM-2025-0004-0096 - title: Comment from Andrew Klymkowsky
+2025-05-24 08:15:34,911 - INFO - Starting analysis for comment OPM-2025-0004-0095 with 229 chars
+2025-05-24 08:15:34,911 - INFO - Comment OPM-2025-0004-0097 - title: Comment from Emily Howard
+2025-05-24 08:15:34,911 - INFO - Starting analysis for comment OPM-2025-0004-0096 with 898 chars
+2025-05-24 08:15:34,913 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:34,915 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:34,915 - INFO - Starting analysis for comment OPM-2025-0004-0097 with 344 chars
+2025-05-24 08:15:34,916 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:34,917 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:34,925 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:36,497 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:36,500 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:36,501 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,501 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,507 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,508 - INFO - Successfully analyzed OPM-2025-0004-0094
+2025-05-24 08:15:36,509 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:36,509 - INFO - Successfully processed comment OPM-2025-0004-0094 in parallel
+2025-05-24 08:15:36,509 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:36,509 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:36,509 - INFO - Processing comment OPM-2025-0004-0098
+2025-05-24 08:15:36,509 - INFO - Comment OPM-2025-0004-0098 - full text length: 353 chars
+2025-05-24 08:15:36,510 - INFO - Comment OPM-2025-0004-0098 - title: Comment from Jill Grauman
+2025-05-24 08:15:36,510 - INFO - Starting analysis for comment OPM-2025-0004-0098 with 353 chars
+2025-05-24 08:15:36,512 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:36,681 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:36,686 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:36,689 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,690 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,692 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,693 - INFO - Successfully analyzed OPM-2025-0004-0093
+2025-05-24 08:15:36,694 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:36,694 - INFO - Successfully processed comment OPM-2025-0004-0093 in parallel
+2025-05-24 08:15:36,694 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:36,694 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:36,694 - INFO - Processing comment OPM-2025-0004-0099
+2025-05-24 08:15:36,695 - INFO - Comment OPM-2025-0004-0099 - full text length: 1030 chars
+2025-05-24 08:15:36,695 - INFO - Comment OPM-2025-0004-0099 - title: Comment from Anonymous
+2025-05-24 08:15:36,695 - INFO - Starting analysis for comment OPM-2025-0004-0099 with 1030 chars
+2025-05-24 08:15:36,698 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:36,800 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:36,804 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:36,805 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,805 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,807 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,808 - INFO - Successfully analyzed OPM-2025-0004-0095
+2025-05-24 08:15:36,810 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:36,810 - INFO - Successfully processed comment OPM-2025-0004-0095 in parallel
+2025-05-24 08:15:36,810 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:36,811 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:36,811 - INFO - Processing comment OPM-2025-0004-0100
+2025-05-24 08:15:36,811 - INFO - Comment OPM-2025-0004-0100 - full text length: 2160 chars
+2025-05-24 08:15:36,811 - INFO - Comment OPM-2025-0004-0100 - title: Comment from Thomas Krueger
+2025-05-24 08:15:36,811 - INFO - Starting analysis for comment OPM-2025-0004-0100 with 2160 chars
+2025-05-24 08:15:36,814 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:36,956 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:36,959 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:36,960 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,960 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,963 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:36,966 - INFO - Successfully analyzed OPM-2025-0004-0097
+2025-05-24 08:15:36,966 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:36,966 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:36,966 - INFO - Successfully processed comment OPM-2025-0004-0097 in parallel
+2025-05-24 08:15:36,966 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:36,966 - INFO - Processing comment OPM-2025-0004-0101
+2025-05-24 08:15:36,967 - INFO - Comment OPM-2025-0004-0101 - full text length: 721 chars
+2025-05-24 08:15:36,967 - INFO - Comment OPM-2025-0004-0101 - title: Comment from Evan Chevalier
+2025-05-24 08:15:36,967 - INFO - Starting analysis for comment OPM-2025-0004-0101 with 721 chars
+2025-05-24 08:15:36,969 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:37,259 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:37,262 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:37,263 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:37,263 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:37,265 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:37,266 - INFO - Successfully analyzed OPM-2025-0004-0096
+2025-05-24 08:15:37,267 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:15:37,267 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:15:37,267 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:15:37,267 - INFO - Successfully processed comment OPM-2025-0004-0096 in parallel
+2025-05-24 08:15:37,267 - INFO - Processing comment OPM-2025-0004-0102
+2025-05-24 08:15:37,268 - INFO - Comment OPM-2025-0004-0102 - full text length: 544 chars
+2025-05-24 08:15:37,268 - INFO - Comment OPM-2025-0004-0102 - title: Comment from Tyraina Berry
+2025-05-24 08:15:37,268 - INFO - Starting analysis for comment OPM-2025-0004-0102 with 544 chars
+2025-05-24 08:15:37,272 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-24 08:15:38,850 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:38,852 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:38,857 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:38,858 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:38,859 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:38,859 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:38,863 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:38,864 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:38,865 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:38,866 - INFO - Successfully analyzed OPM-2025-0004-0098
+2025-05-24 08:15:38,867 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:38,868 - INFO - Successfully processed comment OPM-2025-0004-0098 in parallel
+2025-05-24 08:15:38,868 - INFO - Successfully analyzed OPM-2025-0004-0099
+2025-05-24 08:15:38,869 - INFO - Successfully processed comment OPM-2025-0004-0099 in parallel
+2025-05-24 08:15:39,157 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:39,161 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:39,162 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,162 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,164 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,167 - INFO - Successfully analyzed OPM-2025-0004-0101
+2025-05-24 08:15:39,167 - INFO - Successfully processed comment OPM-2025-0004-0101 in parallel
+2025-05-24 08:15:39,243 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:39,246 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:39,247 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,247 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,250 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,251 - INFO - Successfully analyzed OPM-2025-0004-0100
+2025-05-24 08:15:39,251 - INFO - Successfully processed comment OPM-2025-0004-0100 in parallel
+2025-05-24 08:15:39,730 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-24 08:15:39,739 - INFO - Wrapper: Completed Call, calling success_handler
+2025-05-24 08:15:39,742 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,742 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,744 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-24 08:15:39,747 - INFO - Successfully analyzed OPM-2025-0004-0102
+2025-05-24 08:15:39,748 - INFO - Successfully processed comment OPM-2025-0004-0102 in parallel
+2025-05-24 08:15:39,748 - INFO - Batch processing completed with 10 results
+2025-05-24 08:15:39,753 - INFO - ✅ Checkpoint saved with 100 processed comments
+2025-05-24 08:15:39,761 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081429/data.json
+2025-05-24 08:15:39,761 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081429/summary.json
+2025-05-24 08:15:39,762 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081429/analyze_checkpoint.json
+2025-05-24 08:18:46,679 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081846/raw_data.json...
+2025-05-24 08:18:46,679 - INFO - Found 10 comments in the file
+2025-05-24 08:18:46,679 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 08:18:46,679 - INFO - Original data length: 10
+2025-05-24 08:18:46,679 - INFO - start_from: None
+2025-05-24 08:18:46,679 - INFO - end_at: None
+2025-05-24 08:18:46,679 - INFO - chunk_size: None
+2025-05-24 08:18:46,679 - INFO - top_n: None
+2025-05-24 08:18:46,679 - INFO - Comment 0 structure:
+2025-05-24 08:18:46,679 - INFO -   Type: <class 'dict'>
+2025-05-24 08:18:46,679 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,679 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 08:18:46,680 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 08:18:46,680 - INFO - Comment 1 structure:
+2025-05-24 08:18:46,680 - INFO -   Type: <class 'dict'>
+2025-05-24 08:18:46,680 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,680 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 08:18:46,680 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 08:18:46,680 - INFO - Comment 2 structure:
+2025-05-24 08:18:46,680 - INFO -   Type: <class 'dict'>
+2025-05-24 08:18:46,680 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,680 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 08:18:46,680 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 08:18:46,680 - INFO - After slicing: 10 comments to process
+2025-05-24 08:18:46,680 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 08:18:46,680 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 08:18:46,680 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 08:18:46,680 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:18:46,680 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:18:46,680 - INFO - Comment text length: 418 chars
+2025-05-24 08:18:46,680 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:18:46,680 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 08:18:46,680 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 08:18:46,680 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:18:46,680 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:18:46,680 - INFO - Comment text length: 1333 chars
+2025-05-24 08:18:46,680 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:18:46,680 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 08:18:46,680 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 08:18:46,680 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:18:46,680 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:18:46,680 - INFO - Comment text length: 1196 chars
+2025-05-24 08:18:46,680 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:18:46,680 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 08:18:46,680 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 08:18:46,680 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:18:46,680 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:18:46,680 - INFO - Comment text length: 554 chars
+2025-05-24 08:18:46,680 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:18:46,681 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 08:18:46,681 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 08:18:46,681 - INFO - Comment type: <class 'dict'>
+2025-05-24 08:18:46,681 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 08:18:46,681 - INFO - Comment text length: 518 chars
+2025-05-24 08:18:46,681 - INFO - Analysis text length: 200 chars (truncated)
+2025-05-24 08:18:46,681 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081846/temp_20250524_081846
+2025-05-24 08:18:46,681 - INFO - Creating duplicate mapping with truncation to 200 chars...
+2025-05-24 08:18:46,681 - INFO - Duplicate mapping complete:
+2025-05-24 08:18:46,681 - INFO -   Unique comment texts: 10
+2025-05-24 08:18:46,681 - INFO -   Total comments: 10
+2025-05-24 08:18:46,681 - INFO -   Texts with duplicates: 0
+2025-05-24 08:18:46,681 - INFO -   Duplicate comment instances: 0
+2025-05-24 08:18:46,682 - INFO - Processing 10 of 10 comments
+2025-05-24 08:18:46,693 - INFO - Processing batch 1: ['OPM-2025-0004-0002', 'OPM-2025-0004-0003', 'OPM-2025-0004-0004', 'OPM-2025-0004-0005', 'OPM-2025-0004-0006', 'OPM-2025-0004-0007', 'OPM-2025-0004-0008', 'OPM-2025-0004-0009', 'OPM-2025-0004-0010', 'OPM-2025-0004-0011']
+2025-05-24 08:18:46,694 - INFO - Batch size: 10
+2025-05-24 08:18:46,694 - INFO - Batch item 0: OPM-2025-0004-0002, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 1: OPM-2025-0004-0003, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 2: OPM-2025-0004-0004, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 3: OPM-2025-0004-0005, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 4: OPM-2025-0004-0006, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 5: OPM-2025-0004-0007, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 6: OPM-2025-0004-0008, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 7: OPM-2025-0004-0009, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 8: OPM-2025-0004-0010, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Batch item 9: OPM-2025-0004-0011, type: <class 'dict'>
+2025-05-24 08:18:46,694 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 08:18:46,694 - INFO - Starting batch processing (parallel=True)...
+2025-05-24 08:18:46,694 - INFO - Processing batch of 10 comments in parallel
+2025-05-24 08:18:46,694 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:46,695 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:46,695 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:46,695 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:46,695 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:46,695 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:46,695 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:46,695 - INFO - Processing comment OPM-2025-0004-0002
+2025-05-24 08:18:46,695 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:46,695 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:46,695 - INFO - Processing comment OPM-2025-0004-0003
+2025-05-24 08:18:46,695 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:46,695 - INFO - Comment OPM-2025-0004-0002 - full text length: 418 chars
+2025-05-24 08:18:46,695 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:46,695 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:46,695 - INFO - Comment OPM-2025-0004-0003 - full text length: 1333 chars
+2025-05-24 08:18:46,695 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:46,695 - INFO - Comment OPM-2025-0004-0002 - title: Comment from Elsa Lankford
+2025-05-24 08:18:46,695 - INFO - Processing comment OPM-2025-0004-0004
+2025-05-24 08:18:46,695 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:46,695 - INFO - Comment OPM-2025-0004-0003 - title: Comment from Anonymous
+2025-05-24 08:18:46,695 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:46,696 - INFO - Comment OPM-2025-0004-0004 - full text length: 1196 chars
+2025-05-24 08:18:46,696 - INFO - Starting analysis for comment OPM-2025-0004-0002 with 418 chars
+2025-05-24 08:18:46,696 - INFO - Processing comment OPM-2025-0004-0005
+2025-05-24 08:18:46,696 - INFO - Starting analysis for comment OPM-2025-0004-0003 with 1333 chars
+2025-05-24 08:18:46,696 - INFO - Processing comment OPM-2025-0004-0006
+2025-05-24 08:18:46,696 - INFO - Comment OPM-2025-0004-0004 - title: Comment from Anonymous
+2025-05-24 08:18:46,701 - INFO - Comment OPM-2025-0004-0005 - full text length: 554 chars
+2025-05-24 08:18:46,702 - INFO - Comment OPM-2025-0004-0005 - title: Comment from Sarah Weintraub Schommer
+2025-05-24 08:18:46,702 - INFO - Starting analysis for comment OPM-2025-0004-0005 with 554 chars
+2025-05-24 08:18:46,704 - INFO - Starting analysis for comment OPM-2025-0004-0004 with 1196 chars
+2025-05-24 08:18:46,705 - INFO - Comment OPM-2025-0004-0006 - full text length: 518 chars
+2025-05-24 08:18:46,708 - INFO - Comment OPM-2025-0004-0006 - title: Comment from Anonymous
+2025-05-24 08:18:46,709 - INFO - Starting analysis for comment OPM-2025-0004-0006 with 518 chars
+2025-05-24 08:18:48,524 - INFO - Successfully analyzed OPM-2025-0004-0002
+2025-05-24 08:18:48,524 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:48,524 - INFO - Successfully processed comment OPM-2025-0004-0002 in parallel
+2025-05-24 08:18:48,525 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:48,525 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:48,525 - INFO - Processing comment OPM-2025-0004-0007
+2025-05-24 08:18:48,525 - INFO - Comment OPM-2025-0004-0007 - full text length: 504 chars
+2025-05-24 08:18:48,525 - INFO - Comment OPM-2025-0004-0007 - title: Comment from Joshua Meyer
+2025-05-24 08:18:48,525 - INFO - Starting analysis for comment OPM-2025-0004-0007 with 504 chars
+2025-05-24 08:18:48,635 - INFO - Successfully analyzed OPM-2025-0004-0003
+2025-05-24 08:18:48,635 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:48,635 - INFO - Successfully processed comment OPM-2025-0004-0003 in parallel
+2025-05-24 08:18:48,635 - INFO - Successfully analyzed OPM-2025-0004-0004
+2025-05-24 08:18:48,636 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:48,636 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:48,636 - INFO - Successfully processed comment OPM-2025-0004-0004 in parallel
+2025-05-24 08:18:48,636 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:48,636 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:48,636 - INFO - Processing comment OPM-2025-0004-0008
+2025-05-24 08:18:48,636 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:48,636 - INFO - Comment OPM-2025-0004-0008 - full text length: 908 chars
+2025-05-24 08:18:48,636 - INFO - Processing comment OPM-2025-0004-0009
+2025-05-24 08:18:48,636 - INFO - Comment OPM-2025-0004-0008 - title: Comment from Catherine Carter
+2025-05-24 08:18:48,637 - INFO - Comment OPM-2025-0004-0009 - full text length: 487 chars
+2025-05-24 08:18:48,637 - INFO - Starting analysis for comment OPM-2025-0004-0008 with 908 chars
+2025-05-24 08:18:48,637 - INFO - Comment OPM-2025-0004-0009 - title: Comment from Mary Smith
+2025-05-24 08:18:48,637 - INFO - Starting analysis for comment OPM-2025-0004-0009 with 487 chars
+2025-05-24 08:18:49,333 - INFO - Successfully analyzed OPM-2025-0004-0006
+2025-05-24 08:18:49,333 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:49,333 - INFO - Successfully processed comment OPM-2025-0004-0006 in parallel
+2025-05-24 08:18:49,333 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:49,333 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:49,334 - INFO - Processing comment OPM-2025-0004-0010
+2025-05-24 08:18:49,334 - INFO - Comment OPM-2025-0004-0010 - full text length: 306 chars
+2025-05-24 08:18:49,334 - INFO - Comment OPM-2025-0004-0010 - title: Comment from Anonymous
+2025-05-24 08:18:49,334 - INFO - Starting analysis for comment OPM-2025-0004-0010 with 306 chars
+2025-05-24 08:18:49,394 - INFO - Successfully analyzed OPM-2025-0004-0005
+2025-05-24 08:18:49,394 - INFO - === PROCESSING SINGLE COMMENT ===
+2025-05-24 08:18:49,394 - INFO - Comment data type: <class 'dict'>
+2025-05-24 08:18:49,394 - INFO - Successfully processed comment OPM-2025-0004-0005 in parallel
+2025-05-24 08:18:49,394 - INFO - Comment data keys: ['id', 'attributes']
+2025-05-24 08:18:49,395 - INFO - Processing comment OPM-2025-0004-0011
+2025-05-24 08:18:49,395 - INFO - Comment OPM-2025-0004-0011 - full text length: 579 chars
+2025-05-24 08:18:49,395 - INFO - Comment OPM-2025-0004-0011 - title: Comment from Michael Ore
+2025-05-24 08:18:49,395 - INFO - Starting analysis for comment OPM-2025-0004-0011 with 579 chars
+2025-05-24 08:18:50,351 - INFO - Successfully analyzed OPM-2025-0004-0009
+2025-05-24 08:18:50,351 - INFO - Successfully processed comment OPM-2025-0004-0009 in parallel
+2025-05-24 08:18:50,393 - INFO - Successfully analyzed OPM-2025-0004-0007
+2025-05-24 08:18:50,393 - INFO - Successfully processed comment OPM-2025-0004-0007 in parallel
+2025-05-24 08:18:50,550 - INFO - Successfully analyzed OPM-2025-0004-0008
+2025-05-24 08:18:50,550 - INFO - Successfully processed comment OPM-2025-0004-0008 in parallel
+2025-05-24 08:18:51,169 - INFO - Successfully analyzed OPM-2025-0004-0010
+2025-05-24 08:18:51,170 - INFO - Successfully processed comment OPM-2025-0004-0010 in parallel
+2025-05-24 08:18:51,333 - INFO - Successfully analyzed OPM-2025-0004-0011
+2025-05-24 08:18:51,333 - INFO - Successfully processed comment OPM-2025-0004-0011 in parallel
+2025-05-24 08:18:51,334 - INFO - Batch processing completed with 10 results
+2025-05-24 08:18:51,336 - INFO - ✅ Checkpoint saved with 10 processed comments
+2025-05-24 08:18:51,338 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081846/data.json
+2025-05-24 08:18:51,338 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081846/summary.json
+2025-05-24 08:18:51,338 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_081846/analyze_checkpoint.json

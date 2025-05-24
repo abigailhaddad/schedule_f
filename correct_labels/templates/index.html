@@ -88,6 +88,21 @@
             border-radius: 4px;
         }
         
+        .occurrence-count {
+            font-size: 12px;
+            font-weight: 600;
+            color: #007bff;
+            background: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+        
+        .occurrence-count.high {
+            background: #ffecb3;
+            color: #f57c00;
+        }
+        
         .comment-text {
             background: #f8f9fa;
             padding: 15px;
@@ -95,8 +110,9 @@
             margin: 15px 0;
             border-left: 3px solid #007bff;
             line-height: 1.5;
-            max-height: 200px;
+            max-height: 400px;
             overflow-y: auto;
+            white-space: pre-wrap;
         }
         
         .stance-section {
@@ -272,11 +288,31 @@
                     <option value="corrected" {% if current_corrected_filter == 'corrected' %}selected{% endif %}>Corrected Only</option>
                 </select>
             </div>
+            
+            <div class="filter-group">
+                <label for="count-filter">Filter by Count:</label>
+                <select id="count-filter" onchange="applyFilters()">
+                    <option value="all" {% if current_count_filter == 'all' %}selected{% endif %}>All Comments</option>
+                    <option value="unique" {% if current_count_filter == 'unique' %}selected{% endif %}>Unique Only (1)</option>
+                    <option value="duplicates" {% if current_count_filter == 'duplicates' %}selected{% endif %}>Duplicates Only (>1)</option>
+                    {% if max_occurrence_count >= 5 %}
+                    <option value="min_5" {% if current_count_filter == 'min_5' %}selected{% endif %}>5+ Occurrences</option>
+                    {% endif %}
+                    {% if max_occurrence_count >= 10 %}
+                    <option value="min_10" {% if current_count_filter == 'min_10' %}selected{% endif %}>10+ Occurrences</option>
+                    {% endif %}
+                    {% if max_occurrence_count >= 20 %}
+                    <option value="min_20" {% if current_count_filter == 'min_20' %}selected{% endif %}>20+ Occurrences</option>
+                    {% endif %}
+                </select>
+            </div>
         </div>
         
         <div class="stats">
             <span><strong>Total Comments:</strong> {{ total_comments }}</span>
-            <span><strong>Total Corrections:</strong> {{ total_corrections }}</span>
+            <span><strong>Unique:</strong> {{ unique_comments }}</span>
+            <span><strong>Duplicates:</strong> {{ duplicate_comments }}</span>
+            <span><strong>Corrections Made:</strong> {{ total_corrections }}</span>
             <span><strong>Showing:</strong> {{ comments|length }} comments</span>
         </div>
     </div>
@@ -285,14 +321,23 @@
         {% for comment in comments %}
         <div class="comment-card {% if comment.is_corrected %}corrected{% endif %}" id="comment-{{ comment.id }}">
             <div class="comment-header">
-                <div class="comment-id">{{ comment.id }}</div>
+                <div style="display: flex; align-items: center;">
+                    <div class="comment-id">{{ comment.id }}</div>
+                    <div class="occurrence-count {% if comment.occurrence_number > 5 %}high{% endif %}">
+                        {% if comment.occurrence_number == 1 %}
+                            Unique
+                        {% else %}
+                            {{ comment.occurrence_number }}x
+                        {% endif %}
+                    </div>
+                </div>
                 {% if comment.is_corrected %}
                 <div class="correction-status">✓ CORRECTED</div>
                 {% endif %}
             </div>
             
             <div class="comment-text">
-                {{ comment.comment[:500] }}{% if comment.comment|length > 500 %}...{% endif %}
+                {{ comment.comment }}
             </div>
             
             <div class="stance-section">
@@ -348,10 +393,12 @@
         function applyFilters() {
             const stanceFilter = document.getElementById('stance-filter').value;
             const correctedFilter = document.getElementById('corrected-filter').value;
+            const countFilter = document.getElementById('count-filter').value;
             
             const url = new URL(window.location);
             url.searchParams.set('stance', stanceFilter);
             url.searchParams.set('corrected', correctedFilter);
+            url.searchParams.set('count', countFilter);
             
             window.location.href = url.toString();
         }

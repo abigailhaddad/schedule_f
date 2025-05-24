@@ -18,6 +18,50 @@ comments_data = []
 corrections = {}
 data_file_path = None
 
+def calculate_duplicates():
+    """Calculate duplicate occurrences for data that doesn't have occurrence_number field."""
+    comment_text_map = {}
+    
+    # First pass: map normalized text to comment IDs
+    for comment in comments_data:
+        comment_id = comment.get('id')
+        if not comment_id:
+            continue
+            
+        comment_text = comment.get('comment', comment.get('original_comment', ''))
+        normalized_text = comment_text.strip().lower()
+        
+        if normalized_text not in comment_text_map:
+            comment_text_map[normalized_text] = []
+        comment_text_map[normalized_text].append(comment_id)
+    
+    # Second pass: assign occurrence numbers
+    for comment in comments_data:
+        comment_id = comment.get('id')
+        if not comment_id:
+            continue
+            
+        comment_text = comment.get('comment', comment.get('original_comment', ''))
+        normalized_text = comment_text.strip().lower()
+        
+        matching_ids = comment_text_map[normalized_text]
+        occurrence_number = matching_ids.index(comment_id) + 1
+        
+        # Add calculated fields
+        comment['occurrence_number'] = occurrence_number
+        if occurrence_number == 1:
+            comment['duplicate_of'] = ""
+        else:
+            comment['duplicate_of'] = matching_ids[0]  # First occurrence
+    
+    # Log statistics
+    unique_texts = sum(1 for ids in comment_text_map.values() if len(ids) == 1)
+    duplicate_texts = len(comment_text_map) - unique_texts
+    total_duplicates = sum(len(ids) - 1 for ids in comment_text_map.values() if len(ids) > 1)
+    
+    print(f"Calculated duplicates: {unique_texts} unique texts, {duplicate_texts} texts with duplicates")
+    print(f"Total duplicate instances: {total_duplicates}")
+
 def load_data(data_file):
     """Load comments data from JSON file."""
     global comments_data, data_file_path
@@ -38,6 +82,15 @@ def load_data(data_file):
         # Count comments with stance field
         with_stance = sum(1 for c in comments_data if c.get('stance'))
         print(f"Comments with stance field: {with_stance}/{len(comments_data)}")
+        
+        # Check if occurrence_number field exists
+        has_occurrence_field = any(c.get('occurrence_number') is not None for c in comments_data)
+        print(f"Data has occurrence_number field: {has_occurrence_field}")
+        
+        # If no occurrence_number field, calculate duplicates dynamically
+        if not has_occurrence_field:
+            print("Calculating duplicates dynamically...")
+            calculate_duplicates()
 
 def load_corrections():
     """Load existing corrections from file."""
@@ -58,8 +111,8 @@ def save_corrections():
     with open(corrections_file, 'w', encoding='utf-8') as f:
         json.dump(corrections, f, indent=2)
 
-def get_filtered_comments(stance_filter=None, corrected_filter=None):
-    """Get comments filtered by stance and correction status."""
+def get_filtered_comments(stance_filter=None, corrected_filter=None, count_filter=None):
+    """Get comments filtered by stance, correction status, and count."""
     filtered = []
     
     for comment in comments_data:
@@ -69,6 +122,16 @@ def get_filtered_comments(stance_filter=None, corrected_filter=None):
             continue
             
         original_stance = comment.get('stance', 'Unknown')
+        occurrence_number = comment.get('occurrence_number', 1)
+        
+        # Apply count filter
+        if count_filter and count_filter != 'all':
+            if count_filter == 'unique' and occurrence_number > 1:
+                continue
+            elif count_filter == 'duplicates' and occurrence_number == 1:
+                continue
+            elif count_filter.startswith('min_') and occurrence_number < int(count_filter.split('_')[1]):
+                continue
         
         # Check if this comment has been corrected
         is_corrected = comment_id in corrections
@@ -92,12 +155,16 @@ def get_filtered_comments(stance_filter=None, corrected_filter=None):
         comment_data['is_corrected'] = is_corrected
         comment_data['corrected_stance'] = corrected_stance if is_corrected else None
         comment_data['display_stance'] = corrected_stance if is_corrected else original_stance
+        comment_data['occurrence_number'] = occurrence_number
         
         # Ensure we have a comment text to display
         if not comment_data.get('comment'):
             comment_data['comment'] = comment_data.get('original_comment', 'No comment text available')
         
         filtered.append(comment_data)
+    
+    # Sort by occurrence number descending (highest count first), then by ID for consistency
+    filtered.sort(key=lambda x: (-x.get('occurrence_number', 1), x.get('id', '')))
     
     return filtered
 
@@ -106,9 +173,10 @@ def index():
     """Main page."""
     stance_filter = request.args.get('stance', 'all')
     corrected_filter = request.args.get('corrected', 'all')
+    count_filter = request.args.get('count', 'all')
     
-    print(f"Filtering with stance={stance_filter}, corrected={corrected_filter}")
-    filtered_comments = get_filtered_comments(stance_filter, corrected_filter)
+    print(f"Filtering with stance={stance_filter}, corrected={corrected_filter}, count={count_filter}")
+    filtered_comments = get_filtered_comments(stance_filter, corrected_filter, count_filter)
     print(f"Found {len(filtered_comments)} filtered comments")
     
     # Get unique stances for filter dropdown
@@ -120,15 +188,26 @@ def index():
         if comment_id in corrections:
             all_stances.add(corrections[comment_id]['corrected_stance'])
     
+    # Get count statistics
+    occurrence_counts = [comment.get('occurrence_number', 1) for comment in comments_data]
+    max_count = max(occurrence_counts) if occurrence_counts else 1
+    unique_count = sum(1 for count in occurrence_counts if count == 1)
+    duplicate_count = len(occurrence_counts) - unique_count
+    
     print(f"Available stances: {sorted(list(all_stances))}")
+    print(f"Count stats: max={max_count}, unique={unique_count}, duplicates={duplicate_count}")
     
     return render_template('index.html', 
                          comments=filtered_comments,
                          stances=sorted(list(all_stances)),
                          current_stance_filter=stance_filter,
                          current_corrected_filter=corrected_filter,
+                         current_count_filter=count_filter,
                          total_comments=len(comments_data),
-                         total_corrections=len(corrections))
+                         total_corrections=len(corrections),
+                         max_occurrence_count=max_count,
+                         unique_comments=unique_count,
+                         duplicate_comments=duplicate_count)
 
 @app.route('/api/correct', methods=['POST'])
 def correct_label():
