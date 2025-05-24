@@ -46,6 +46,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Suppress verbose logging from litellm
+logging.getLogger("LiteLLM").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
+
 class TimeoutException(Exception):
     """Custom exception for timeout handling"""
     pass
@@ -206,7 +211,7 @@ Analyze objectively and avoid inserting personal opinions or biases."""
             logger.error(f"Error analyzing comment{f' {comment_id}' if comment_id else ''}: {str(e)}")
             raise
 
-def extract_comment_text(comment_data):
+def extract_comment_text(comment_data, truncate_chars=None):
     """Extract text and metadata from a comment."""
     try:
         if isinstance(comment_data, dict) and 'id' in comment_data:
@@ -237,13 +242,20 @@ def extract_comment_text(comment_data):
                 category = comment_data.get('category', '')
                 attachment_texts = []
             
+            # Create truncated version if specified
+            truncated_text = comment_text
+            if truncate_chars and len(comment_text) > truncate_chars:
+                truncated_text = comment_text[:truncate_chars]
+                logger.debug(f"Comment {comment_id} truncated from {len(comment_text)} to {truncate_chars} chars")
+            
             # Log if comment is empty
             if not comment_text.strip():
                 logger.warning(f"Comment {comment_id} has empty text")
             
             return {
                 'id': comment_id,
-                'text': comment_text,
+                'text': comment_text,  # Full original text
+                'truncated_text': truncated_text,  # Text to use for analysis (may be truncated)
                 'title': title,
                 'category': category,
                 'has_attachments': bool(attachment_texts)
@@ -253,7 +265,7 @@ def extract_comment_text(comment_data):
         logger.error(f"Comment data: {json.dumps(comment_data, indent=2)[:500]}...")  # Log first 500 chars
     return None
 
-def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
+def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None, processed_results=None, max_retries=3):
     """Process a single comment and return its analysis result."""
     # Add comprehensive diagnostics for comment processing
     logger.info(f"=== PROCESSING SINGLE COMMENT ===")
@@ -270,13 +282,59 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
         
         comment_id = extracted['id']
         logger.info(f"Processing comment {comment_id}")
-        comment_text = extracted['text']
+        full_text = extracted['text']  # Full original text
+        analysis_text = extracted['truncated_text']  # Text to send to API (may be truncated)
         title = extracted['title']
         category = extracted['category']
         
         # Add safety checks
-        logger.info(f"Comment {comment_id} - text length: {len(comment_text)} chars")
+        logger.info(f"Comment {comment_id} - full text length: {len(full_text)} chars")
+        if analysis_text != full_text:
+            logger.info(f"Comment {comment_id} - analysis text length: {len(analysis_text)} chars (truncated)")
         logger.info(f"Comment {comment_id} - title: {title[:100]}..." if len(title) > 100 else f"Comment {comment_id} - title: {title}")
+        
+        # Check for duplicates and get occurrence number (using analysis text for consistency)
+        occurrence_number = 1
+        normalized_text = analysis_text.strip().lower()
+        
+        if duplicate_map and normalized_text in duplicate_map:
+            # Find this comment's occurrence number
+            for cid, onum in duplicate_map[normalized_text]['occurrences']:
+                if cid == comment_id:
+                    occurrence_number = onum
+                    break
+            
+            # If this is not the first occurrence, check if we can reuse results
+            if occurrence_number > 1:
+                first_id = duplicate_map[normalized_text]['first_id']
+                logger.info(f"Comment {comment_id} is duplicate #{occurrence_number} of {first_id}")
+                
+                # Check if first occurrence has been processed
+                if processed_results and first_id in processed_results:
+                    logger.info(f"Reusing analysis from first occurrence {first_id}")
+                    # Copy the result from the first occurrence
+                    original_result = processed_results[first_id]
+                    if "status" not in original_result.get("analysis", {}):  # Only reuse successful analyses
+                        result = {
+                            "id": comment_id,
+                            "title": title,
+                            "category": category,
+                            "analysis": original_result.get("analysis", {}),
+                            "occurrence_number": occurrence_number,
+                            "duplicate_of": first_id
+                        }
+                        
+                        # Save individual result to temp directory
+                        result_file = os.path.join(temp_dir, f"{comment_id}.json")
+                        with open(result_file, 'w', encoding='utf-8') as f:
+                            json.dump(result, f, indent=2)
+                        
+                        logger.info(f"Successfully reused analysis for duplicate {comment_id}")
+                        return result
+                else:
+                    logger.info(f"First occurrence {first_id} not yet processed, will analyze normally")
+            else:
+                logger.info(f"Comment {comment_id} is the first occurrence of this text")
         
     except Exception as e:
         logger.error(f"CRITICAL ERROR in extract_comment_text: {e}")
@@ -295,13 +353,14 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
             logger.warning(f"Failed to load existing result for {comment_id}: {e}")
     
     # Skip if comment text is too long (potential cause of hanging)
+    # Note: This is for the analysis text, which may already be truncated
     MAX_COMMENT_LENGTH = 50000  # Adjust as needed
-    if len(comment_text) > MAX_COMMENT_LENGTH:
-        logger.warning(f"Comment {comment_id} is too long ({len(comment_text)} chars), truncating...")
-        comment_text = comment_text[:MAX_COMMENT_LENGTH] + "\n\n[TRUNCATED DUE TO LENGTH]"
+    if len(analysis_text) > MAX_COMMENT_LENGTH:
+        logger.warning(f"Comment {comment_id} analysis text is too long ({len(analysis_text)} chars), truncating...")
+        analysis_text = analysis_text[:MAX_COMMENT_LENGTH] + "\n\n[TRUNCATED DUE TO LENGTH]"
     
     # Additional safety checks
-    if not comment_text.strip():
+    if not analysis_text.strip():
         logger.warning(f"Comment {comment_id} has empty text after processing")
         error_result = {
             "id": comment_id,
@@ -310,7 +369,8 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
             "analysis": {
                 "status": "error",
                 "error": "Empty comment text"
-            }
+            },
+            "occurrence_number": occurrence_number
         }
         with open(result_file, 'w', encoding='utf-8') as f:
             json.dump(error_result, f, indent=2)
@@ -318,27 +378,28 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
     
     # Check for potentially problematic characters or encoding
     try:
-        comment_text.encode('utf-8')
+        analysis_text.encode('utf-8')
     except UnicodeEncodeError as e:
         logger.warning(f"Comment {comment_id} has encoding issues: {e}")
         # Clean the text
-        comment_text = comment_text.encode('utf-8', errors='ignore').decode('utf-8')
+        analysis_text = analysis_text.encode('utf-8', errors='ignore').decode('utf-8')
     
     # Analyze the comment
     retry_delay = 5  # seconds
     
-    logger.info(f"Starting analysis for comment {comment_id} with {len(comment_text)} chars")
+    logger.info(f"Starting analysis for comment {comment_id} with {len(analysis_text)} chars")
     
     for attempt in range(max_retries):
         try:
-            analysis = analyzer.analyze(comment_text, comment_id)
+            analysis = analyzer.analyze(analysis_text, comment_id)
             
             # Add metadata
             result = {
                 "id": comment_id,
                 "title": title,
                 "category": category,
-                "analysis": analysis
+                "analysis": analysis,
+                "occurrence_number": occurrence_number
             }
             
             # Save individual result to temp directory
@@ -364,7 +425,8 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
                     "analysis": {
                         "status": "error",
                         "error": "Timeout - comment may be too long or complex"
-                    }
+                    },
+                    "occurrence_number": occurrence_number
                 }
                 # Still save the error result
                 with open(result_file, 'w', encoding='utf-8') as f:
@@ -388,14 +450,15 @@ def process_single_comment(comment_data, analyzer, temp_dir, max_retries=3):
                     "analysis": {
                         "status": "error",
                         "error": str(e)
-                    }
+                    },
+                    "occurrence_number": occurrence_number
                 }
                 # Still save the error result
                 with open(result_file, 'w', encoding='utf-8') as f:
                     json.dump(error_result, f, indent=2)
                 return error_result
 
-def process_comments_batch(comments_batch, analyzer, temp_dir, use_parallel=True):
+def process_comments_batch(comments_batch, analyzer, temp_dir, duplicate_map=None, processed_results=None, use_parallel=True):
     """Process a batch of comments with configurable parallel processing."""
     results = []
     
@@ -404,7 +467,7 @@ def process_comments_batch(comments_batch, analyzer, temp_dir, use_parallel=True
         logger.info(f"Processing batch of {len(comments_batch)} comments sequentially")
         for comment in comments_batch:
             try:
-                result = process_single_comment(comment, analyzer, temp_dir)
+                result = process_single_comment(comment, analyzer, temp_dir, duplicate_map, processed_results)
                 if result:
                     results.append(result)
                     logger.info(f"Successfully processed comment {result.get('id', 'unknown')}")
@@ -433,7 +496,7 @@ def process_comments_batch(comments_batch, analyzer, temp_dir, use_parallel=True
         def safe_process_comment(comment):
             """Wrapper for safe parallel processing."""
             try:
-                return process_single_comment(comment, analyzer, temp_dir)
+                return process_single_comment(comment, analyzer, temp_dir, duplicate_map, processed_results)
             except Exception as e:
                 comment_id = comment.get('id', 'unknown') if isinstance(comment, dict) else 'unknown'
                 logger.error(f"Error in parallel processing for comment {comment_id}: {e}")
@@ -640,7 +703,9 @@ def format_results_for_output(results, original_comments):
                     "stance": result.get("analysis", {}).get("stance", ""),
                     "key_quote": result.get("analysis", {}).get("key_quote", ""),
                     "rationale": result.get("analysis", {}).get("rationale", ""),
-                    "postedDate": original_comments.get(comment_id, {}).get('postedDate', '')
+                    "postedDate": original_comments.get(comment_id, {}).get('postedDate', ''),
+                    "occurrence_number": result.get("occurrence_number", 1),
+                    "duplicate_of": result.get("duplicate_of", "")
                 }
                 
                 # Convert themes to a comma-separated string
@@ -667,7 +732,9 @@ def format_results_for_output(results, original_comments):
                     "key_quote": "",
                     "rationale": "",
                     "themes": "",
-                    "postedDate": original_comments.get(comment_id, {}).get('postedDate', '')
+                    "postedDate": original_comments.get(comment_id, {}).get('postedDate', ''),
+                    "occurrence_number": result.get("occurrence_number", 1),
+                    "duplicate_of": result.get("duplicate_of", "")
                 }
                     
                 flat_results.append(flat_item)
@@ -693,10 +760,74 @@ def print_summary(summary):
         percentage = round(count / summary['successfully_analyzed'] * 100, 1) if summary['successfully_analyzed'] > 0 else 0
         print(f"  {theme}: {count} ({percentage}%)")
 
+def create_duplicate_mapping(comments_data, truncate_chars=None):
+    """
+    Create a mapping of comment text to track duplicates and occurrence numbers.
+    
+    Args:
+        comments_data: List of comment data objects
+        truncate_chars: If specified, use truncated text for duplicate detection
+    
+    Returns:
+        duplicate_map: dict mapping normalized comment text to {
+            'first_id': comment_id of first occurrence,
+            'occurrences': list of (comment_id, occurrence_number) tuples
+        }
+    """
+    duplicate_map = {}
+    
+    logger.info(f"Creating duplicate mapping{' with truncation to ' + str(truncate_chars) + ' chars' if truncate_chars else ''}...")
+    
+    for comment_data in comments_data:
+        try:
+            extracted = extract_comment_text(comment_data, truncate_chars)
+            if not extracted:
+                continue
+                
+            comment_id = extracted['id']
+            # Use truncated text for duplicate detection
+            comment_text = extracted['truncated_text'] if truncate_chars else extracted['text']
+            
+            # Normalize text for comparison (strip whitespace, convert to lowercase)
+            normalized_text = comment_text.strip().lower()
+            
+            # Skip empty comments
+            if not normalized_text:
+                continue
+                
+            if normalized_text not in duplicate_map:
+                # First occurrence of this text
+                duplicate_map[normalized_text] = {
+                    'first_id': comment_id,
+                    'occurrences': [(comment_id, 1)]
+                }
+            else:
+                # Duplicate occurrence
+                occurrence_number = len(duplicate_map[normalized_text]['occurrences']) + 1
+                duplicate_map[normalized_text]['occurrences'].append((comment_id, occurrence_number))
+                
+        except Exception as e:
+            logger.error(f"Error processing comment for duplicate mapping: {e}")
+            continue
+    
+    # Log statistics
+    total_unique_texts = len(duplicate_map)
+    total_comments = sum(len(entry['occurrences']) for entry in duplicate_map.values())
+    duplicate_texts = sum(1 for entry in duplicate_map.values() if len(entry['occurrences']) > 1)
+    duplicate_comments = sum(len(entry['occurrences']) - 1 for entry in duplicate_map.values())
+    
+    logger.info(f"Duplicate mapping complete:")
+    logger.info(f"  Unique comment texts: {total_unique_texts}")
+    logger.info(f"  Total comments: {total_comments}")
+    logger.info(f"  Texts with duplicates: {duplicate_texts}")
+    logger.info(f"  Duplicate comment instances: {duplicate_comments}")
+    
+    return duplicate_map
+
 def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-mini", 
                   api_key=None, resume=False, batch_size=5, no_delay=True, 
                   timeout_seconds=30, start_from=None, end_at=None, chunk_size=None,
-                  use_parallel=True):
+                  use_parallel=True, truncate_chars=None):
     """
     Analyze comments from JSON file and save structured results with parallel processing.
     
@@ -714,6 +845,7 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
         end_at: Optional index to end processing at (for chunks)
         chunk_size: If specified, process only this many comments starting from start_from
         use_parallel: Whether to use parallel processing for batches (default: True)
+        truncate_chars: If specified, truncate comment text to this many characters for analysis
     
     Returns:
         Path to the final results file
@@ -789,10 +921,13 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
         if isinstance(comment, dict):
             logger.info(f"Comment keys: {list(comment.keys())[:5]}...")  # First 5 keys
             # Log comment text length if available
-            extracted = extract_comment_text(comment)
+            extracted = extract_comment_text(comment, truncate_chars)
             if extracted:
                 text_len = len(extracted.get('text', ''))
+                analysis_len = len(extracted.get('truncated_text', ''))
                 logger.info(f"Comment text length: {text_len} chars")
+                if truncate_chars and analysis_len < text_len:
+                    logger.info(f"Analysis text length: {analysis_len} chars (truncated)")
                 if text_len > 40000:
                     logger.warning(f"Very long comment detected (may cause processing delays)")
             else:
@@ -836,6 +971,10 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
         already_processed = set()
         error_count = 0
     
+    # Create duplicate mapping for all comments (not just the slice being processed)
+    # This ensures we can detect duplicates even if the original is outside the current slice
+    duplicate_map = create_duplicate_mapping(comments_data, truncate_chars)
+    
     # Filter comments to process
     comments_to_process = [c for c in comments_data if c.get('id') not in already_processed]
     logger.info(f"Processing {len(comments_to_process)} of {len(comments_data)} comments")
@@ -861,7 +1000,7 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
             # Process batch
             try:
                 logger.info(f"Starting batch processing (parallel={use_parallel})...")
-                batch_results = process_comments_batch(batch, analyzer, temp_dir, use_parallel)
+                batch_results = process_comments_batch(batch, analyzer, temp_dir, duplicate_map, results, use_parallel)
                 logger.info(f"Batch processing completed with {len(batch_results)} results")
                 
                 # Update results dictionary and progress tracking
@@ -888,7 +1027,7 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
                 # Try to process comments using sequential batch processing
                 logger.info("Attempting to process batch comments sequentially...")
                 try:
-                    sequential_results = process_comments_batch(batch, analyzer, temp_dir, use_parallel=False)
+                    sequential_results = process_comments_batch(batch, analyzer, temp_dir, duplicate_map, results, use_parallel=False)
                     for result in sequential_results:
                         if result:
                             results[result['id']] = result
@@ -901,7 +1040,7 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
                     logger.info("Final fallback: processing comments individually...")
                     for comment in batch:
                         try:
-                            result = process_single_comment(comment, analyzer, temp_dir)
+                            result = process_single_comment(comment, analyzer, temp_dir, duplicate_map, processed_results)
                             if result:
                                 results[result['id']] = result
                                 already_processed.add(result['id'])
@@ -979,6 +1118,8 @@ def main():
                         help='Start processing from this comment ID (e.g., OPM-2025-0004-0183)')
     parser.add_argument('--no_parallel', action='store_true',
                         help='Disable parallel processing (process all comments sequentially)')
+    parser.add_argument('--truncate', type=int, default=None,
+                        help='Truncate comment text to this many characters for analysis (saves API costs)')
     args = parser.parse_args()
     
     # Auto-detect most recent raw_data.json if no input file specified
@@ -1023,6 +1164,8 @@ def main():
     logger.info(f"Starting analysis of '{input_file}' using model '{args.model}'")
     if args.top_n:
         logger.info(f"Processing only the first {args.top_n} comments")
+    if args.truncate:
+        logger.info(f"Truncating comments to {args.truncate} characters for analysis")
     if args.chunk_size:
         logger.info(f"Processing chunk of {args.chunk_size} comments starting from index {args.start_from or 0}")
     elif args.start_from_id:
@@ -1047,7 +1190,8 @@ def main():
         start_from=args.start_from,
         end_at=args.end_at,
         chunk_size=args.chunk_size,
-        use_parallel=not args.no_parallel
+        use_parallel=not args.no_parallel,
+        truncate_chars=args.truncate
     )
 
 if __name__ == "__main__":
