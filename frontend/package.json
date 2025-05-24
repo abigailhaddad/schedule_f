@@ -35,6 +35,7 @@
     "postgres": "^3.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^2.15.3",
     "server-only": "^0.0.1",
     "styled-components": "^6.1.8"
   },
