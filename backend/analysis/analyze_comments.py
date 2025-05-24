@@ -675,6 +675,7 @@ def build_comment_lookup(comments_data):
                         'original_comment': comment_text,  # Just the main comment
                         'link': link,
                         'agencyId': agency_id,
+                        'category': attributes.get('category', ''),
                         'has_attachments': bool(attachment_texts),
                         'postedDate': attributes.get('postedDate', ''),
                         'receivedDate': attributes.get('receivedDate', '')
@@ -695,7 +696,7 @@ def format_results_for_output(results, original_comments):
                 flat_item = {
                     "id": comment_id,
                     "title": result.get("title", ""),
-                    "category": result.get("category", ""),
+                    "category": original_comments.get(comment_id, {}).get('category', ''),
                     "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
                     "comment": original_comments.get(comment_id, {}).get('comment', ''),
                     "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
@@ -723,7 +724,7 @@ def format_results_for_output(results, original_comments):
                 flat_item = {
                     "id": comment_id,
                     "title": result.get("title", ""),
-                    "category": result.get("category", ""),
+                    "category": original_comments.get(comment_id, {}).get('category', ''),
                     "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
                     "comment": original_comments.get(comment_id, {}).get('comment', ''),
                     "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),

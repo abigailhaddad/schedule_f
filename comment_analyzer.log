@@ -45803,3 +45803,1200 @@ Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/r
 Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
 2025-05-24 12:41:10,443 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/summary.json
 2025-05-24 12:41:10,443 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/analyze_checkpoint.json
+2025-05-24 12:42:45,118 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:42:45,118 - INFO - Found 15 comments in the file
+2025-05-24 12:42:45,118 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:42:45,118 - INFO - Original data length: 15
+2025-05-24 12:42:45,118 - INFO - start_from: None
+2025-05-24 12:42:45,118 - INFO - end_at: None
+2025-05-24 12:42:45,118 - INFO - chunk_size: None
+2025-05-24 12:42:45,118 - INFO - top_n: None
+2025-05-24 12:42:45,118 - INFO - Comment 0 structure:
+2025-05-24 12:42:45,118 - INFO -   Type: <class 'dict'>
+2025-05-24 12:42:45,118 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:42:45,118 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:42:45,118 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:42:45,118 - INFO - Comment 1 structure:
+2025-05-24 12:42:45,118 - INFO -   Type: <class 'dict'>
+2025-05-24 12:42:45,118 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:42:45,118 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:42:45,118 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:42:45,118 - INFO - Comment 2 structure:
+2025-05-24 12:42:45,118 - INFO -   Type: <class 'dict'>
+2025-05-24 12:42:45,118 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:42:45,118 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:42:45,118 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:42:45,118 - INFO - After slicing: 15 comments to process
+2025-05-24 12:42:45,118 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:42:45,118 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:42:45,118 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:42:45,118 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:42:45,118 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:42:45,119 - INFO - Comment text length: 418 chars
+2025-05-24 12:42:45,119 - INFO - Analysis text length: 15 chars (truncated)
+2025-05-24 12:42:45,119 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:42:45,119 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:42:45,119 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:42:45,119 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:42:45,119 - INFO - Comment text length: 1333 chars
+2025-05-24 12:42:45,119 - INFO - Analysis text length: 15 chars (truncated)
+2025-05-24 12:42:45,119 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:42:45,119 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:42:45,119 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:42:45,119 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:42:45,119 - INFO - Comment text length: 1196 chars
+2025-05-24 12:42:45,119 - INFO - Analysis text length: 15 chars (truncated)
+2025-05-24 12:42:45,119 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:42:45,119 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:42:45,119 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:42:45,119 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:42:45,119 - INFO - Comment text length: 554 chars
+2025-05-24 12:42:45,119 - INFO - Analysis text length: 15 chars (truncated)
+2025-05-24 12:42:45,119 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:42:45,119 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:42:45,119 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:42:45,119 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:42:45,119 - INFO - Comment text length: 518 chars
+2025-05-24 12:42:45,119 - INFO - Analysis text length: 15 chars (truncated)
+2025-05-24 12:42:45,119 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_124245
+2025-05-24 12:42:45,119 - INFO - Creating duplicate mapping with truncation to 15 chars...
+2025-05-24 12:42:45,119 - INFO - Duplicate mapping complete:
+2025-05-24 12:42:45,119 - INFO -   Unique comment texts: 15
+2025-05-24 12:42:45,119 - INFO -   Total comments: 15
+2025-05-24 12:42:45,119 - INFO -   Texts with duplicates: 0
+2025-05-24 12:42:45,119 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:42:45,119 - INFO - Processing 15 of 15 comments
+2025-05-24 12:42:52,596 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
+2025-05-24 12:42:52,596 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/summary.json
+2025-05-24 12:42:52,597 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/analyze_checkpoint.json
+2025-05-24 12:43:45,183 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:43:45,183 - INFO - Found 15 comments in the file
+2025-05-24 12:43:45,183 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:43:45,183 - INFO - Original data length: 15
+2025-05-24 12:43:45,183 - INFO - start_from: None
+2025-05-24 12:43:45,183 - INFO - end_at: None
+2025-05-24 12:43:45,183 - INFO - chunk_size: None
+2025-05-24 12:43:45,183 - INFO - top_n: None
+2025-05-24 12:43:45,183 - INFO - Comment 0 structure:
+2025-05-24 12:43:45,183 - INFO -   Type: <class 'dict'>
+2025-05-24 12:43:45,183 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:43:45,183 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:43:45,183 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:43:45,183 - INFO - Comment 1 structure:
+2025-05-24 12:43:45,183 - INFO -   Type: <class 'dict'>
+2025-05-24 12:43:45,183 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:43:45,183 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:43:45,183 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:43:45,183 - INFO - Comment 2 structure:
+2025-05-24 12:43:45,183 - INFO -   Type: <class 'dict'>
+2025-05-24 12:43:45,183 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:43:45,183 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:43:45,183 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:43:45,183 - INFO - After slicing: 15 comments to process
+2025-05-24 12:43:45,183 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:43:45,183 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:43:45,184 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:43:45,184 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:43:45,184 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:43:45,184 - INFO - Comment text length: 418 chars
+2025-05-24 12:43:45,184 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:43:45,184 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:43:45,184 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:43:45,184 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:43:45,184 - INFO - Comment text length: 1333 chars
+2025-05-24 12:43:45,184 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:43:45,184 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:43:45,184 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:43:45,184 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:43:45,184 - INFO - Comment text length: 1196 chars
+2025-05-24 12:43:45,184 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:43:45,184 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:43:45,184 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:43:45,184 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:43:45,184 - INFO - Comment text length: 554 chars
+2025-05-24 12:43:45,184 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:43:45,184 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:43:45,184 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:43:45,184 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:43:45,184 - INFO - Comment text length: 518 chars
+2025-05-24 12:43:45,184 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_124345
+2025-05-24 12:43:45,184 - INFO - Creating duplicate mapping...
+2025-05-24 12:43:45,184 - INFO - Duplicate mapping complete:
+2025-05-24 12:43:45,184 - INFO -   Unique comment texts: 15
+2025-05-24 12:43:45,184 - INFO -   Total comments: 15
+2025-05-24 12:43:45,184 - INFO -   Texts with duplicates: 0
+2025-05-24 12:43:45,184 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:43:45,184 - INFO - Processing 15 of 15 comments
+2025-05-24 12:43:51,561 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
+2025-05-24 12:43:51,561 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/summary.json
+2025-05-24 12:43:51,561 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/analyze_checkpoint.json
+2025-05-24 12:44:24,367 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:44:24,367 - INFO - Found 15 comments in the file
+2025-05-24 12:44:24,368 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:44:24,368 - INFO - Original data length: 15
+2025-05-24 12:44:24,368 - INFO - start_from: None
+2025-05-24 12:44:24,368 - INFO - end_at: None
+2025-05-24 12:44:24,368 - INFO - chunk_size: None
+2025-05-24 12:44:24,368 - INFO - top_n: None
+2025-05-24 12:44:24,368 - INFO - Comment 0 structure:
+2025-05-24 12:44:24,368 - INFO -   Type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:44:24,368 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:44:24,368 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:44:24,368 - INFO - Comment 1 structure:
+2025-05-24 12:44:24,368 - INFO -   Type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:44:24,368 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:44:24,368 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:44:24,368 - INFO - Comment 2 structure:
+2025-05-24 12:44:24,368 - INFO -   Type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:44:24,368 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:44:24,368 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:44:24,368 - INFO - After slicing: 15 comments to process
+2025-05-24 12:44:24,368 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:44:24,368 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:44:24,368 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:44:24,368 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:44:24,368 - INFO - Comment text length: 418 chars
+2025-05-24 12:44:24,368 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:44:24,368 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:44:24,368 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:44:24,368 - INFO - Comment text length: 1333 chars
+2025-05-24 12:44:24,368 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:44:24,368 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:44:24,368 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:44:24,368 - INFO - Comment text length: 1196 chars
+2025-05-24 12:44:24,368 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:44:24,368 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:44:24,368 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:44:24,368 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:44:24,368 - INFO - Comment text length: 554 chars
+2025-05-24 12:44:24,368 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:44:24,368 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:44:24,368 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:44:24,369 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:44:24,369 - INFO - Comment text length: 518 chars
+2025-05-24 12:44:24,369 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_124424
+2025-05-24 12:44:24,369 - INFO - Creating duplicate mapping...
+2025-05-24 12:44:24,369 - INFO - Duplicate mapping complete:
+2025-05-24 12:44:24,369 - INFO -   Unique comment texts: 15
+2025-05-24 12:44:24,369 - INFO -   Total comments: 15
+2025-05-24 12:44:24,369 - INFO -   Texts with duplicates: 0
+2025-05-24 12:44:24,369 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:44:24,369 - INFO - Processing 15 of 15 comments
+2025-05-24 12:45:52,282 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/raw_data.json...
+2025-05-24 12:45:52,282 - INFO - Found 15 comments in the file
+2025-05-24 12:45:52,282 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:45:52,282 - INFO - Original data length: 15
+2025-05-24 12:45:52,282 - INFO - start_from: None
+2025-05-24 12:45:52,282 - INFO - end_at: None
+2025-05-24 12:45:52,282 - INFO - chunk_size: None
+2025-05-24 12:45:52,282 - INFO - top_n: None
+2025-05-24 12:45:52,282 - INFO - Comment 0 structure:
+2025-05-24 12:45:52,282 - INFO -   Type: <class 'dict'>
+2025-05-24 12:45:52,282 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:45:52,282 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:45:52,282 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of government civil servants is to work for the b...
+2025-05-24 12:45:52,282 - INFO - Comment 1 structure:
+2025-05-24 12:45:52,282 - INFO -   Type: <class 'dict'>
+2025-05-24 12:45:52,282 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:45:52,282 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:45:52,282 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be loyal to the President. This is, of cours...
+2025-05-24 12:45:52,282 - INFO - Comment 2 structure:
+2025-05-24 12:45:52,282 - INFO -   Type: <class 'dict'>
+2025-05-24 12:45:52,282 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:45:52,282 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:45:52,282 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not achieve the goals outlined in the regulat...
+2025-05-24 12:45:52,282 - INFO - After slicing: 15 comments to process
+2025-05-24 12:45:52,282 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:45:52,282 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:45:52,282 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:45:52,282 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:45:52,282 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:45:52,282 - INFO - Comment text length: 418 chars
+2025-05-24 12:45:52,282 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:45:52,282 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:45:52,282 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:45:52,282 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:45:52,283 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:45:52,283 - INFO - Comment text length: 1333 chars
+2025-05-24 12:45:52,283 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:45:52,283 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:45:52,283 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:45:52,283 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:45:52,283 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:45:52,283 - INFO - Comment text length: 1196 chars
+2025-05-24 12:45:52,283 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:45:52,283 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:45:52,283 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:45:52,283 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:45:52,283 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:45:52,283 - INFO - Comment text length: 554 chars
+2025-05-24 12:45:52,283 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:45:52,283 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:45:52,283 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:45:52,283 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:45:52,283 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:45:52,283 - INFO - Comment text length: 518 chars
+2025-05-24 12:45:52,283 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:45:52,283 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/temp_20250524_124552
+2025-05-24 12:45:52,283 - INFO - Creating duplicate mapping with truncation to 50 chars...
+2025-05-24 12:45:52,283 - INFO - Duplicate mapping complete:
+2025-05-24 12:45:52,283 - INFO -   Unique comment texts: 15
+2025-05-24 12:45:52,283 - INFO -   Total comments: 15
+2025-05-24 12:45:52,283 - INFO -   Texts with duplicates: 0
+2025-05-24 12:45:52,283 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:45:52,283 - INFO - Processing 15 of 15 comments
+2025-05-24 12:46:06,649 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/data.json
+2025-05-24 12:46:06,649 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/summary.json
+2025-05-24 12:46:06,650 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_064512/analyze_checkpoint.json
+2025-05-24 12:53:44,157 - INFO - Starting analysis of '/Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125104/raw_data.json' using model 'gpt-4o-mini'
+2025-05-24 12:53:44,157 - INFO - Processing only the first 3 comments
+2025-05-24 12:53:44,158 - INFO - Using parallel processing with batch size of 5
+2025-05-24 12:53:44,158 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125104/raw_data.json...
+2025-05-24 12:53:44,259 - INFO - Found 19879 comments in the file
+2025-05-24 12:53:44,259 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:53:44,259 - INFO - Original data length: 19879
+2025-05-24 12:53:44,259 - INFO - start_from: None
+2025-05-24 12:53:44,259 - INFO - end_at: None
+2025-05-24 12:53:44,259 - INFO - chunk_size: None
+2025-05-24 12:53:44,259 - INFO - top_n: 3
+2025-05-24 12:53:44,259 - INFO - Comment 0 structure:
+2025-05-24 12:53:44,259 - INFO -   Type: <class 'dict'>
+2025-05-24 12:53:44,259 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:53:44,259 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:53:44,259 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of gover...
+2025-05-24 12:53:44,259 - INFO - Comment 1 structure:
+2025-05-24 12:53:44,259 - INFO -   Type: <class 'dict'>
+2025-05-24 12:53:44,259 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:53:44,259 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:53:44,259 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be ...
+2025-05-24 12:53:44,259 - INFO - Comment 2 structure:
+2025-05-24 12:53:44,259 - INFO -   Type: <class 'dict'>
+2025-05-24 12:53:44,259 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:53:44,259 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:53:44,259 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not ...
+2025-05-24 12:53:44,259 - INFO - TOP_N MODE: Processing first 3 comments
+2025-05-24 12:53:44,267 - INFO - After slicing: 3 comments to process
+2025-05-24 12:53:44,267 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:53:44,267 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:53:44,267 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:53:44,267 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:53:44,267 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:53:44,267 - INFO - Comment text length: 418 chars
+2025-05-24 12:53:44,267 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:53:44,267 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:53:44,267 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:53:44,267 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:53:44,267 - INFO - Comment text length: 1333 chars
+2025-05-24 12:53:44,268 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:53:44,268 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:53:44,268 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:53:44,268 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:53:44,268 - INFO - Comment text length: 1196 chars
+2025-05-24 12:53:51,176 - INFO - Starting analysis of '/Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125104/raw_data.json' using model 'gpt-4o-mini'
+2025-05-24 12:53:51,176 - INFO - Processing only the first 3 comments
+2025-05-24 12:53:51,176 - INFO - Using parallel processing with batch size of 5
+2025-05-24 12:53:51,176 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125104/raw_data.json...
+2025-05-24 12:53:51,255 - INFO - Found 19879 comments in the file
+2025-05-24 12:53:51,255 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:53:51,255 - INFO - Original data length: 19879
+2025-05-24 12:53:51,255 - INFO - start_from: None
+2025-05-24 12:53:51,255 - INFO - end_at: None
+2025-05-24 12:53:51,255 - INFO - chunk_size: None
+2025-05-24 12:53:51,255 - INFO - top_n: 3
+2025-05-24 12:53:51,255 - INFO - Comment 0 structure:
+2025-05-24 12:53:51,255 - INFO -   Type: <class 'dict'>
+2025-05-24 12:53:51,255 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:53:51,255 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:53:51,255 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of gover...
+2025-05-24 12:53:51,255 - INFO - Comment 1 structure:
+2025-05-24 12:53:51,255 - INFO -   Type: <class 'dict'>
+2025-05-24 12:53:51,255 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:53:51,255 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:53:51,255 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be ...
+2025-05-24 12:53:51,255 - INFO - Comment 2 structure:
+2025-05-24 12:53:51,255 - INFO -   Type: <class 'dict'>
+2025-05-24 12:53:51,255 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:53:51,255 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:53:51,255 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not ...
+2025-05-24 12:53:51,255 - INFO - TOP_N MODE: Processing first 3 comments
+2025-05-24 12:53:51,264 - INFO - After slicing: 3 comments to process
+2025-05-24 12:53:51,264 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:53:51,264 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:53:51,264 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:53:51,264 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:53:51,264 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:53:51,264 - INFO - Comment text length: 418 chars
+2025-05-24 12:53:51,264 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:53:51,264 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:53:51,264 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:53:51,264 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:53:51,264 - INFO - Comment text length: 1333 chars
+2025-05-24 12:53:51,264 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:53:51,264 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:53:51,265 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:53:51,265 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:53:51,265 - INFO - Comment text length: 1196 chars
+2025-05-24 12:53:51,265 - INFO - Saving intermediate results to ./temp_20250524_125351
+2025-05-24 12:53:51,265 - INFO - Creating duplicate mapping...
+2025-05-24 12:53:51,265 - INFO - Duplicate mapping complete:
+2025-05-24 12:53:51,265 - INFO -   Unique comment texts: 3
+2025-05-24 12:53:51,265 - INFO -   Total comments: 3
+2025-05-24 12:53:51,265 - INFO -   Texts with duplicates: 0
+2025-05-24 12:53:51,265 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:53:51,265 - INFO - Processing 3 of 3 comments
+2025-05-24 12:53:54,300 - INFO - 
+Analysis complete! Results saved to: ./test_category_copy.json
+2025-05-24 12:53:54,301 - INFO - Summary stats saved to: ./summary.json
+2025-05-24 12:53:54,301 - INFO - Checkpoint file removed: ./analyze_checkpoint.json
+2025-05-24 12:55:00,497 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,498 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:00,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,514 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,515 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,515 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,516 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,516 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,516 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,517 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,517 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,518 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,518 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:15,518 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,508 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,508 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,509 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,574 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,574 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,974 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:17,974 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:18,038 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:18,039 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:18,039 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:18,340 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:18,340 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:18,340 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,917 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,917 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,917 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,918 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,918 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,918 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,918 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,919 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,919 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,919 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:20,919 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,562 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,562 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,563 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,616 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,617 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,617 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,617 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,618 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,902 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,902 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,903 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,903 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,903 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,963 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:21,963 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,296 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,296 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,348 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,349 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,475 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,475 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,546 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,547 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,547 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,547 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,548 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,548 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,548 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,549 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:22,550 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,682 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,753 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,753 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,753 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,754 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,754 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,754 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,755 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,755 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:24,756 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,314 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,315 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,706 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,707 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,767 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:26,767 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,080 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,081 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,139 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,139 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,139 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,613 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,613 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,613 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,677 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,677 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:27,678 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,007 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,007 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,007 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,227 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,227 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,228 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,228 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,228 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,229 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,229 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,229 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,229 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,230 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,230 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,230 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,231 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,231 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,231 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,232 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,232 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,232 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,233 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,233 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,233 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,234 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,234 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,234 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,234 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,235 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,235 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,235 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,236 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,236 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,236 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,237 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,237 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,237 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,238 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,238 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,238 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,239 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,239 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,239 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,240 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,240 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,240 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,241 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,241 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,241 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,242 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,242 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,242 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,242 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,244 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,244 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,245 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,245 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,245 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,246 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,246 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,246 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,247 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,247 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,247 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,247 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,248 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,248 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,248 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,249 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,249 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,249 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,250 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,250 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,250 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,251 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,251 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,251 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,252 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,252 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,252 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,253 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,253 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,253 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,253 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,254 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,254 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,254 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,255 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,255 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,255 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,256 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,256 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,256 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,257 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,257 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,257 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,258 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,258 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,258 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,258 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,259 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,259 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,259 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,260 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,261 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,261 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,261 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,262 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,262 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,262 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,263 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,263 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,263 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,264 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,264 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,264 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,265 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,265 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,265 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,267 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,267 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,267 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,268 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,268 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,268 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,268 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,269 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,269 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,269 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,270 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,270 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,270 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,270 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,271 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,271 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,271 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,272 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,272 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,272 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,273 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,273 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,273 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,273 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,274 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,274 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,274 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,275 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,275 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,275 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,276 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,276 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,276 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,276 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,277 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,277 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,277 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,278 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,278 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,278 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,279 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,279 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,279 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,279 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,280 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,280 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,280 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,281 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,281 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,281 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,282 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,282 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,282 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,283 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,283 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,283 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,283 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,284 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,284 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,284 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,285 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,285 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,285 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,285 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,286 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,286 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,286 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,287 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,287 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,287 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,287 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,288 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,288 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,288 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,289 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,289 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,289 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,290 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,290 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,290 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,291 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,291 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,291 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,291 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,292 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:55:28,292 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 12:57:21,598 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125721/raw_data.json...
+2025-05-24 12:57:21,599 - INFO - Found 15 comments in the file
+2025-05-24 12:57:21,599 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:57:21,599 - INFO - Original data length: 15
+2025-05-24 12:57:21,599 - INFO - start_from: None
+2025-05-24 12:57:21,599 - INFO - end_at: None
+2025-05-24 12:57:21,599 - INFO - chunk_size: None
+2025-05-24 12:57:21,599 - INFO - top_n: None
+2025-05-24 12:57:21,599 - INFO - Comment 0 structure:
+2025-05-24 12:57:21,599 - INFO -   Type: <class 'dict'>
+2025-05-24 12:57:21,599 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:57:21,599 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:57:21,599 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of gover...
+2025-05-24 12:57:21,599 - INFO - Comment 1 structure:
+2025-05-24 12:57:21,599 - INFO -   Type: <class 'dict'>
+2025-05-24 12:57:21,599 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:57:21,599 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:57:21,599 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be ...
+2025-05-24 12:57:21,599 - INFO - Comment 2 structure:
+2025-05-24 12:57:21,599 - INFO -   Type: <class 'dict'>
+2025-05-24 12:57:21,599 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:57:21,599 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:57:21,599 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not ...
+2025-05-24 12:57:21,599 - INFO - After slicing: 15 comments to process
+2025-05-24 12:57:21,599 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:57:21,599 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:57:21,599 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:57:21,599 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:57:21,599 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:57:21,599 - INFO - Comment text length: 418 chars
+2025-05-24 12:57:21,599 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:57:21,599 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:57:21,599 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:57:21,599 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:57:21,599 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:57:21,599 - INFO - Comment text length: 1333 chars
+2025-05-24 12:57:21,599 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:57:21,599 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:57:21,599 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:57:21,600 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:57:21,600 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:57:21,600 - INFO - Comment text length: 1196 chars
+2025-05-24 12:57:21,600 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:57:21,600 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:57:21,600 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:57:21,600 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:57:21,600 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:57:21,600 - INFO - Comment text length: 554 chars
+2025-05-24 12:57:21,600 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:57:21,600 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:57:21,600 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:57:21,600 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:57:21,600 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:57:21,600 - INFO - Comment text length: 518 chars
+2025-05-24 12:57:21,600 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:57:21,600 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125721/temp_20250524_125721
+2025-05-24 12:57:21,600 - INFO - Creating duplicate mapping with truncation to 50 chars...
+2025-05-24 12:57:21,600 - INFO - Duplicate mapping complete:
+2025-05-24 12:57:21,600 - INFO -   Unique comment texts: 15
+2025-05-24 12:57:21,600 - INFO -   Total comments: 15
+2025-05-24 12:57:21,600 - INFO -   Texts with duplicates: 0
+2025-05-24 12:57:21,600 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:57:21,600 - INFO - Processing 15 of 15 comments
+2025-05-24 12:57:28,765 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125721/data.json
+2025-05-24 12:57:28,765 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125721/summary.json
+2025-05-24 12:57:28,766 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125721/analyze_checkpoint.json
+2025-05-24 12:58:13,750 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125813/raw_data.json...
+2025-05-24 12:58:13,750 - INFO - Found 15 comments in the file
+2025-05-24 12:58:13,750 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 12:58:13,750 - INFO - Original data length: 15
+2025-05-24 12:58:13,750 - INFO - start_from: None
+2025-05-24 12:58:13,750 - INFO - end_at: None
+2025-05-24 12:58:13,750 - INFO - chunk_size: None
+2025-05-24 12:58:13,750 - INFO - top_n: None
+2025-05-24 12:58:13,750 - INFO - Comment 0 structure:
+2025-05-24 12:58:13,751 - INFO -   Type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:58:13,751 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 12:58:13,751 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of gover...
+2025-05-24 12:58:13,751 - INFO - Comment 1 structure:
+2025-05-24 12:58:13,751 - INFO -   Type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:58:13,751 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 12:58:13,751 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be ...
+2025-05-24 12:58:13,751 - INFO - Comment 2 structure:
+2025-05-24 12:58:13,751 - INFO -   Type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 12:58:13,751 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 12:58:13,751 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not ...
+2025-05-24 12:58:13,751 - INFO - After slicing: 15 comments to process
+2025-05-24 12:58:13,751 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 12:58:13,751 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 12:58:13,751 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 12:58:13,751 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:58:13,751 - INFO - Comment text length: 418 chars
+2025-05-24 12:58:13,751 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:58:13,751 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 12:58:13,751 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 12:58:13,751 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:58:13,751 - INFO - Comment text length: 1333 chars
+2025-05-24 12:58:13,751 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:58:13,751 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 12:58:13,751 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 12:58:13,751 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:58:13,751 - INFO - Comment text length: 1196 chars
+2025-05-24 12:58:13,751 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:58:13,751 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 12:58:13,751 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 12:58:13,751 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:58:13,751 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:58:13,751 - INFO - Comment text length: 554 chars
+2025-05-24 12:58:13,752 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:58:13,752 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 12:58:13,752 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 12:58:13,752 - INFO - Comment type: <class 'dict'>
+2025-05-24 12:58:13,752 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 12:58:13,752 - INFO - Comment text length: 518 chars
+2025-05-24 12:58:13,752 - INFO - Analysis text length: 50 chars (truncated)
+2025-05-24 12:58:13,752 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125813/temp_20250524_125813
+2025-05-24 12:58:13,752 - INFO - Creating duplicate mapping with truncation to 50 chars...
+2025-05-24 12:58:13,752 - INFO - Duplicate mapping complete:
+2025-05-24 12:58:13,752 - INFO -   Unique comment texts: 15
+2025-05-24 12:58:13,752 - INFO -   Total comments: 15
+2025-05-24 12:58:13,752 - INFO -   Texts with duplicates: 0
+2025-05-24 12:58:13,752 - INFO -   Duplicate comment instances: 0
+2025-05-24 12:58:13,752 - INFO - Processing 15 of 15 comments
+2025-05-24 12:58:15,373 - ERROR - Error analyzing comment OPM-2025-0004-0006: litellm.APIError: APIError: OpenAIException - Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 458, in convert_to_model_response_object
+    assert response_object["choices"] is not None and isinstance(
+KeyError: 'choices'
+
+
+received_args={'response_object': {}, 'model_response_object': ModelResponse(id='chatcmpl-928d91fd-016c-4928-b8da-dcc8bfc23789', created=1748105893, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content=None, role='assistant', tool_calls=None, function_call=None, provider_specific_fields=None))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Sat, 24 May 2025 16:58:15 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1279', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1283', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999046', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_f872cc5fc63c118319ed69cee75d4564', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=nXfTsIXdBCy1JByA.UIAv9JE6BIO9DLmX59OF75Z47s-1748105895-1.0.1.1-nO8peVNJXS441nlWeqvHo_PnjdPIVa4dl660XH00V8lGvIv6Gt1b.z3RRkehL7t1bvmfKjwtZdMq57Ed1EQaytRrHHwh94sqWqTSJl8TX0o; path=/; expires=Sat, 24-May-25 17:28:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=lIUYnL3uUJa9saFwcB_jRQDqcsPJ_hw3lBXAakp9.d4-1748105895253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944e562c9a477fed-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+2025-05-24 12:58:15,374 - ERROR - Error analyzing OPM-2025-0004-0006 (attempt 1/3): litellm.APIError: APIError: OpenAIException - Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 458, in convert_to_model_response_object
+    assert response_object["choices"] is not None and isinstance(
+KeyError: 'choices'
+
+
+received_args={'response_object': {}, 'model_response_object': ModelResponse(id='chatcmpl-928d91fd-016c-4928-b8da-dcc8bfc23789', created=1748105893, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content=None, role='assistant', tool_calls=None, function_call=None, provider_specific_fields=None))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Sat, 24 May 2025 16:58:15 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1279', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1283', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999046', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_f872cc5fc63c118319ed69cee75d4564', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=nXfTsIXdBCy1JByA.UIAv9JE6BIO9DLmX59OF75Z47s-1748105895-1.0.1.1-nO8peVNJXS441nlWeqvHo_PnjdPIVa4dl660XH00V8lGvIv6Gt1b.z3RRkehL7t1bvmfKjwtZdMq57Ed1EQaytRrHHwh94sqWqTSJl8TX0o; path=/; expires=Sat, 24-May-25 17:28:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=lIUYnL3uUJa9saFwcB_jRQDqcsPJ_hw3lBXAakp9.d4-1748105895253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944e562c9a477fed-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+2025-05-24 12:58:15,377 - ERROR - Traceback: Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 458, in convert_to_model_response_object
+    assert response_object["choices"] is not None and isinstance(
+KeyError: 'choices'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/llms/openai/openai.py", line 725, in completion
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/llms/openai/openai.py", line 669, in completion
+    final_response_obj = convert_to_model_response_object(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 693, in convert_to_model_response_object
+    raise Exception(
+Exception: Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 458, in convert_to_model_response_object
+    assert response_object["choices"] is not None and isinstance(
+KeyError: 'choices'
+
+
+received_args={'response_object': {}, 'model_response_object': ModelResponse(id='chatcmpl-928d91fd-016c-4928-b8da-dcc8bfc23789', created=1748105893, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content=None, role='assistant', tool_calls=None, function_call=None, provider_specific_fields=None))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Sat, 24 May 2025 16:58:15 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1279', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1283', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999046', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_f872cc5fc63c118319ed69cee75d4564', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=nXfTsIXdBCy1JByA.UIAv9JE6BIO9DLmX59OF75Z47s-1748105895-1.0.1.1-nO8peVNJXS441nlWeqvHo_PnjdPIVa4dl660XH00V8lGvIv6Gt1b.z3RRkehL7t1bvmfKjwtZdMq57Ed1EQaytRrHHwh94sqWqTSJl8TX0o; path=/; expires=Sat, 24-May-25 17:28:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=lIUYnL3uUJa9saFwcB_jRQDqcsPJ_hw3lBXAakp9.d4-1748105895253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944e562c9a477fed-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/main.py", line 1838, in completion
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/main.py", line 1811, in completion
+    response = openai_chat_completions.completion(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/llms/openai/openai.py", line 736, in completion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 458, in convert_to_model_response_object
+    assert response_object["choices"] is not None and isinstance(
+KeyError: 'choices'
+
+
+received_args={'response_object': {}, 'model_response_object': ModelResponse(id='chatcmpl-928d91fd-016c-4928-b8da-dcc8bfc23789', created=1748105893, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content=None, role='assistant', tool_calls=None, function_call=None, provider_specific_fields=None))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Sat, 24 May 2025 16:58:15 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1279', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1283', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999046', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_f872cc5fc63c118319ed69cee75d4564', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=nXfTsIXdBCy1JByA.UIAv9JE6BIO9DLmX59OF75Z47s-1748105895-1.0.1.1-nO8peVNJXS441nlWeqvHo_PnjdPIVa4dl660XH00V8lGvIv6Gt1b.z3RRkehL7t1bvmfKjwtZdMq57Ed1EQaytRrHHwh94sqWqTSJl8TX0o; path=/; expires=Sat, 24-May-25 17:28:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=lIUYnL3uUJa9saFwcB_jRQDqcsPJ_hw3lBXAakp9.d4-1748105895253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944e562c9a477fed-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 394, in process_single_comment
+    analysis = analyzer.analyze(analysis_text, comment_id)
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 209, in analyze
+    return self.analyze_with_timeout(comment_text, comment_id)
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 202, in analyze_with_timeout
+    raise result_container['error']
+  File "/Users/abigailhaddad/Documents/repos/regs/backend/analysis/analyze_comments.py", line 163, in api_call
+    response = completion(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/utils.py", line 1281, in wrapper
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/utils.py", line 1159, in wrapper
+    result = original_function(*args, **kwargs)
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/main.py", line 3225, in completion
+    raise exception_type(
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2232, in exception_type
+    raise e
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 467, in exception_type
+    raise APIError(
+litellm.exceptions.APIError: litellm.APIError: APIError: OpenAIException - Invalid response object Traceback (most recent call last):
+  File "/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/litellm/litellm_core_utils/llm_response_utils/convert_dict_to_response.py", line 458, in convert_to_model_response_object
+    assert response_object["choices"] is not None and isinstance(
+KeyError: 'choices'
+
+
+received_args={'response_object': {}, 'model_response_object': ModelResponse(id='chatcmpl-928d91fd-016c-4928-b8da-dcc8bfc23789', created=1748105893, model=None, object='chat.completion', system_fingerprint=None, choices=[Choices(finish_reason='stop', index=0, message=Message(content=None, role='assistant', tool_calls=None, function_call=None, provider_specific_fields=None))], usage=Usage(completion_tokens=0, prompt_tokens=0, total_tokens=0, completion_tokens_details=None, prompt_tokens_details=None)), 'response_type': 'completion', 'stream': False, 'start_time': None, 'end_time': None, 'hidden_params': None, '_response_headers': {'date': 'Sat, 24 May 2025 16:58:15 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-uec1mrkbjrnoe34sf8xyq3kt', 'openai-processing-ms': '1279', 'openai-version': '2020-10-01', 'x-envoy-upstream-service-time': '1283', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '10000000', 'x-ratelimit-remaining-requests': '9999', 'x-ratelimit-remaining-tokens': '9999046', 'x-ratelimit-reset-requests': '6ms', 'x-ratelimit-reset-tokens': '5ms', 'x-request-id': 'req_f872cc5fc63c118319ed69cee75d4564', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'set-cookie': '__cf_bm=nXfTsIXdBCy1JByA.UIAv9JE6BIO9DLmX59OF75Z47s-1748105895-1.0.1.1-nO8peVNJXS441nlWeqvHo_PnjdPIVa4dl660XH00V8lGvIv6Gt1b.z3RRkehL7t1bvmfKjwtZdMq57Ed1EQaytRrHHwh94sqWqTSJl8TX0o; path=/; expires=Sat, 24-May-25 17:28:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=lIUYnL3uUJa9saFwcB_jRQDqcsPJ_hw3lBXAakp9.d4-1748105895253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '944e562c9a477fed-IAD', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'}, 'convert_tool_call_to_json_mode': None}
+
+2025-05-24 12:58:15,378 - INFO - Retrying in 5 seconds...
+2025-05-24 12:58:23,773 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125813/data.json
+2025-05-24 12:58:23,773 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125813/summary.json
+2025-05-24 12:58:23,773 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_125813/analyze_checkpoint.json
