@@ -231,9 +231,9 @@ def run_pipeline(document_id: str = "OPM-2025-0004-0001",
         comments_data = json.load(f)
     
     # Apply chunking if specified (this affects both attachments and analysis)
-    # Convert limit to chunk_size if no other chunking is specified
+    # Convert limit to chunk_size only if we're not using CSV (CSV already applied the limit)
     effective_chunk_size = chunk_size
-    if limit is not None and start_from is None and end_at is None and chunk_size is None:
+    if limit is not None and start_from is None and end_at is None and chunk_size is None and not csv_file:
         effective_chunk_size = limit
         print(f"\n=== Converting --limit {limit} to chunk_size for processing ===")
     

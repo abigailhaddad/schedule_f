@@ -6,25 +6,54 @@ BASE_RESULTS_DIR="results"
 BATCH_SIZE=10  # Number of comments to process in parallel
 VENV_PATH="./myenv/bin/activate"  # adjust path if needed
 
-# Check if user provided a specific results directory as first argument
-if [ -n "$1" ] && [ -d "$1" ]; then
-    SPECIFIC_RESULTS_DIR="$1"
-    echo "Using specified results directory: $SPECIFIC_RESULTS_DIR"
-fi
-
-# Check for optional truncate parameter as second argument
+# Parse arguments (supports both positional and flag-style)
+SPECIFIC_RESULTS_DIR=""
 TRUNCATE_CHARS=""
-if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
-    TRUNCATE_CHARS="--truncate $2"
-    echo "Will truncate comments to $2 characters for analysis"
-fi
-
-# Check for optional limit parameter as third argument
 LIMIT_CHARS=""
-if [ -n "$3" ] && [ "$3" -eq "$3" ] 2>/dev/null; then
-    LIMIT_CHARS="--limit $3"
-    echo "Will limit processing to $3 comments"
-fi
+
+# Process arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --truncate)
+            if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
+                TRUNCATE_CHARS="--truncate $2"
+                echo "Will truncate comments to $2 characters for analysis"
+                shift 2
+            else
+                echo "Error: --truncate requires a numeric value"
+                exit 1
+            fi
+            ;;
+        --limit)
+            if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
+                LIMIT_CHARS="--limit $2"
+                echo "Will limit processing to $2 comments"
+                shift 2
+            else
+                echo "Error: --limit requires a numeric value"
+                exit 1
+            fi
+            ;;
+        *)
+            # If it's a directory and no specific dir set yet, use as results dir
+            if [ -d "$1" ] && [ -z "$SPECIFIC_RESULTS_DIR" ]; then
+                SPECIFIC_RESULTS_DIR="$1"
+                echo "Using specified results directory: $SPECIFIC_RESULTS_DIR"
+            # Otherwise check if it's a numeric value for backward compatibility
+            elif [ -z "$SPECIFIC_RESULTS_DIR" ] && [ -z "$TRUNCATE_CHARS" ] && [ "$1" -eq "$1" ] 2>/dev/null; then
+                TRUNCATE_CHARS="--truncate $1"
+                echo "Will truncate comments to $1 characters for analysis"
+            elif [ -z "$SPECIFIC_RESULTS_DIR" ] && [ -n "$TRUNCATE_CHARS" ] && [ -z "$LIMIT_CHARS" ] && [ "$1" -eq "$1" ] 2>/dev/null; then
+                LIMIT_CHARS="--limit $1"
+                echo "Will limit processing to $1 comments"
+            else
+                echo "Error: Unknown argument or invalid directory: $1"
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
 
 # Create results dir if it doesn't exist
 mkdir -p "$BASE_RESULTS_DIR"
@@ -41,7 +70,7 @@ if [ -n "$SPECIFIC_RESULTS_DIR" ] && [ -f "$SPECIFIC_RESULTS_DIR/raw_data.json" 
     PIPELINE_ARGS="--output_dir $SPECIFIC_RESULTS_DIR --skip_fetch --skip_attachments $TRUNCATE_CHARS $LIMIT_CHARS"
 elif [ -f "comments.csv" ]; then
     echo "Found comments.csv file, will use this as input"
-    PIPELINE_ARGS="--csv_file comments.csv $TRUNCATE_CHARS"
+    PIPELINE_ARGS="--csv_file comments.csv $TRUNCATE_CHARS $LIMIT_CHARS"
 elif [ -n "$LATEST_RESULTS" ] && [ -f "$LATEST_RESULTS/raw_data.json" ]; then
     echo "Found recent results directory with data: $LATEST_RESULTS"
     echo "Will skip fetch and attachments (assuming already processed)"
