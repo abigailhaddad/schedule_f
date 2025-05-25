@@ -22,8 +22,8 @@ interface CommentDataItem {
   key_quote?: string;
   rationale?: string;
   themes?: string;
-  postedDate?: string;
-  receivedDate?: string;
+  posted_date?: string;
+  received_date?: string;
   occurrence_number?: number;
   duplicate_of?: string;
   cluster_id?: number;
@@ -105,13 +105,12 @@ const main = async () => {
       originalComment: item.original_comment,
       hasAttachments: item.has_attachments,
       link: item.link,
-      // Analysis fields now directly in comments table
       stance: stance,
       keyQuote: item.key_quote,
       rationale: item.rationale,
       themes: item.themes,
-      postedDate: item.postedDate ? new Date(item.postedDate) : null,
-      receivedDate: item.receivedDate ? new Date(item.receivedDate) : null,
+      postedDate: item.posted_date ? new Date(item.posted_date) : null,
+      receivedDate: item.received_date ? new Date(item.received_date) : null,
       occurrenceNumber: item.occurrence_number,
       duplicateOf: processDuplicateOf(item.duplicate_of),
       clusterId: item.cluster_id,
