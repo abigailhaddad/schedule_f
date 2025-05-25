@@ -16,7 +16,8 @@ results/
 analyzed_comments/
 comments.json
 *.json
-*.json
+!data/**
+data/attachments/
 !frontend/package.json
 !frontend/package-lock.json
 !frontend/tsconfig.json
