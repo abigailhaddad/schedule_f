@@ -4,7 +4,7 @@ import Card from '@/components/ui/Card';
 
 const LoadingSkeleton = () => {
   return (
-    <Card className="h-96">
+    <Card className="h-96" collapsible={false}>
       <Card.Header className="bg-gradient-to-r from-indigo-500 to-purple-600">
         <h5 className="text-lg font-bold text-white flex items-center">
           <span className="mr-2">📈</span>

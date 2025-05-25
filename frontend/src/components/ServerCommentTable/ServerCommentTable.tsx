@@ -220,7 +220,6 @@ export default function ServerCommentTable() {
   const bottomPaginationId = "bottom-pagination";
 
   return (
-    <div>
       <DataTable
         data={data}
         columns={columns}
@@ -245,6 +244,5 @@ export default function ServerCommentTable() {
         rowClassName={() => "cursor-pointer hover:bg-blue-50"}
         loading={loading}
       />
-    </div>
   );
 } 
