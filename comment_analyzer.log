@@ -49034,3 +49034,675 @@ Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/r
 Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_200253/data.json
 2025-05-24 20:14:52,373 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_200253/summary.json
 2025-05-24 20:14:52,373 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_200253/analyze_checkpoint.json
+2025-05-24 20:51:43,702 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:43,702 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:43,703 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:43,703 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:43,704 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:43,704 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:43,704 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,243 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,244 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,244 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:44,244 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,117 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,118 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,119 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,120 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,121 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,122 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,123 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,124 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,125 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,125 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:51:58,126 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,709 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,709 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,710 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,792 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:00,793 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,319 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,319 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,409 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,409 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,410 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,713 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,713 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:01,713 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,211 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,211 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,211 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,212 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,212 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,212 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,213 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,213 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,213 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,214 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,214 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,896 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,983 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,984 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,985 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,985 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:04,985 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,265 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,266 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,368 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,369 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,715 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,715 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,809 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,810 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:05,943 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,082 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,082 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,083 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,083 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,084 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,085 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,085 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,086 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:06,087 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,580 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,581 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,581 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,699 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,699 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,700 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,700 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,701 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,701 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,702 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,703 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:07,703 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,200 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,297 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,297 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,698 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,698 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,802 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:09,802 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,111 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,111 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,204 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,205 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,205 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,541 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,541 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,541 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,624 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,625 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,625 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,921 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,921 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:10,921 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,347 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,348 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,348 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,348 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,349 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,349 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,349 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,350 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,350 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,350 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,350 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,351 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,351 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,352 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,352 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,352 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,353 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,353 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,353 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,354 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,354 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,354 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,355 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,355 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,355 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,356 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,356 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,356 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,357 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,357 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,357 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,358 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,358 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,358 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,359 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,359 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,359 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,360 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,360 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,361 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,361 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,361 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,362 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,362 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,362 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,363 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,363 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,363 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,364 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,364 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,364 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,365 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,365 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,365 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,366 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,366 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,367 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,367 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,367 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,368 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,368 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,368 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,369 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,369 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,369 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,370 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,370 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,370 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,371 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,371 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,371 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,371 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,372 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,373 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,373 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,373 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,374 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,374 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,374 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,375 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,375 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,375 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,376 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,376 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,376 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,376 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,377 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,377 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,378 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,378 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,378 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,379 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,379 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,379 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,380 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,380 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,380 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,381 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,381 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,381 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,382 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,382 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,382 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,383 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,383 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,383 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,384 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,384 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,384 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,385 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,385 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,386 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,386 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,386 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,387 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,387 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,387 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,388 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,388 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,388 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,389 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,389 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,389 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,390 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,390 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,390 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,390 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,391 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,391 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,391 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,392 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,392 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,392 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,392 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,393 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,393 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,393 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,394 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,394 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,394 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,395 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,395 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,395 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,395 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,396 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,396 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,396 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,397 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,397 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,397 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,398 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,398 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,398 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,398 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,399 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,399 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,399 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,400 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,400 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,400 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,401 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,401 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,401 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,402 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,402 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,402 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,402 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,403 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,403 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,403 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,404 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,404 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,404 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,405 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,405 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,405 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,406 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,406 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,406 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,406 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,407 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,407 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,407 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,408 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,408 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,408 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,409 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,409 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,409 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,409 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,410 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,410 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,410 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,411 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,411 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,411 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,411 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,412 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,412 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,412 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,413 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,413 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,413 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,414 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,414 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,414 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,414 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:11,415 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,499 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,500 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,501 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,502 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,503 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,504 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,505 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,506 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:52:25,507 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:06,558 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:06,560 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:06,560 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:07,013 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:07,013 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:07,013 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-24 20:53:07,032 - INFO - Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/raw_data.json...
+2025-05-24 20:53:07,039 - INFO - Found 1000 comments in the file
+2025-05-24 20:53:07,039 - INFO - === DIAGNOSTIC INFO ===
+2025-05-24 20:53:07,039 - INFO - Original data length: 1000
+2025-05-24 20:53:07,039 - INFO - start_from: None
+2025-05-24 20:53:07,039 - INFO - end_at: None
+2025-05-24 20:53:07,039 - INFO - chunk_size: None
+2025-05-24 20:53:07,039 - INFO - top_n: None
+2025-05-24 20:53:07,040 - INFO - Comment 0 structure:
+2025-05-24 20:53:07,040 - INFO -   Type: <class 'dict'>
+2025-05-24 20:53:07,040 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 20:53:07,040 - INFO -   ID: OPM-2025-0004-0002
+2025-05-24 20:53:07,040 - INFO - Comment 0 structure sample: {
+  "id": "OPM-2025-0004-0002",
+  "attributes": {
+    "title": "Comment from Elsa Lankford",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "This is an absolutely horrible idea. You're talking about removing 50,000 career public servants to replace them with unqualified Trump supporters?\n\nThe purpose of gover...
+2025-05-24 20:53:07,040 - INFO - Comment 1 structure:
+2025-05-24 20:53:07,040 - INFO -   Type: <class 'dict'>
+2025-05-24 20:53:07,040 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 20:53:07,040 - INFO -   ID: OPM-2025-0004-0003
+2025-05-24 20:53:07,040 - INFO - Comment 1 structure sample: {
+  "id": "OPM-2025-0004-0003",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "this is a terrible idea. The underlying logic of this proposal is that, 1) all federal employees, no matter where they are located or what they do, must first and foremost be ...
+2025-05-24 20:53:07,040 - INFO - Comment 2 structure:
+2025-05-24 20:53:07,040 - INFO -   Type: <class 'dict'>
+2025-05-24 20:53:07,040 - INFO -   Keys: ['id', 'attributes']
+2025-05-24 20:53:07,040 - INFO -   ID: OPM-2025-0004-0004
+2025-05-24 20:53:07,040 - INFO - Comment 2 structure sample: {
+  "id": "OPM-2025-0004-0004",
+  "attributes": {
+    "title": "Comment from Anonymous",
+    "commentOn": "OPM-2025-0004-0001",
+    "postedDate": "2025-04-28T04:00Z",
+    "receivedDate": "2025-04-26T04:00Z",
+    "submitterName": "",
+    "organization": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "comment": "The Schedule F/Policy and Career reclassification plans outlined in this new regulation, Improving Performance, Accountability and Responsiveness in the Civil Service, do not ...
+2025-05-24 20:53:07,040 - INFO - After slicing: 1000 comments to process
+2025-05-24 20:53:07,040 - INFO - === END DIAGNOSTIC INFO ===
+2025-05-24 20:53:07,040 - INFO - Validating sliced comment 0 (original idx 0)
+2025-05-24 20:53:07,040 - INFO - Comment ID: OPM-2025-0004-0002
+2025-05-24 20:53:07,040 - INFO - Comment type: <class 'dict'>
+2025-05-24 20:53:07,040 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 20:53:07,040 - INFO - Comment text length: 418 chars
+2025-05-24 20:53:07,040 - INFO - Validating sliced comment 1 (original idx 1)
+2025-05-24 20:53:07,040 - INFO - Comment ID: OPM-2025-0004-0003
+2025-05-24 20:53:07,040 - INFO - Comment type: <class 'dict'>
+2025-05-24 20:53:07,040 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 20:53:07,040 - INFO - Comment text length: 1333 chars
+2025-05-24 20:53:07,040 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 20:53:07,040 - INFO - Validating sliced comment 2 (original idx 2)
+2025-05-24 20:53:07,040 - INFO - Comment ID: OPM-2025-0004-0004
+2025-05-24 20:53:07,040 - INFO - Comment type: <class 'dict'>
+2025-05-24 20:53:07,040 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 20:53:07,040 - INFO - Comment text length: 1196 chars
+2025-05-24 20:53:07,040 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 20:53:07,041 - INFO - Validating sliced comment 3 (original idx 3)
+2025-05-24 20:53:07,041 - INFO - Comment ID: OPM-2025-0004-0005
+2025-05-24 20:53:07,041 - INFO - Comment type: <class 'dict'>
+2025-05-24 20:53:07,041 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 20:53:07,041 - INFO - Comment text length: 554 chars
+2025-05-24 20:53:07,041 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 20:53:07,041 - INFO - Validating sliced comment 4 (original idx 4)
+2025-05-24 20:53:07,041 - INFO - Comment ID: OPM-2025-0004-0006
+2025-05-24 20:53:07,041 - INFO - Comment type: <class 'dict'>
+2025-05-24 20:53:07,041 - INFO - Comment keys: ['id', 'attributes']...
+2025-05-24 20:53:07,041 - INFO - Comment text length: 518 chars
+2025-05-24 20:53:07,041 - INFO - Analysis text length: 500 chars (truncated)
+2025-05-24 20:53:07,041 - INFO - Saving intermediate results to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/temp_20250524_205307
+2025-05-24 20:53:07,041 - INFO - Creating duplicate mapping with truncation to 500 chars...
+2025-05-24 20:53:07,047 - INFO - Duplicate mapping complete:
+2025-05-24 20:53:07,047 - INFO -   Unique comment texts: 955
+2025-05-24 20:53:07,047 - INFO -   Total comments: 1000
+2025-05-24 20:53:07,047 - INFO -   Texts with duplicates: 17
+2025-05-24 20:53:07,047 - INFO -   Duplicate comment instances: 45
+2025-05-24 20:53:07,048 - INFO - Processing 1000 of 1000 comments
+2025-05-24 20:56:50,304 - WARNING - Comment OPM-2025-0004-0408 analysis text is too long (527398 chars), truncating...
+2025-05-24 21:01:58,105 - WARNING - Comment OPM-2025-0004-0948 analysis text is too long (235892 chars), truncating...
+2025-05-24 21:02:45,355 - ERROR - API call timed out for comment (ID: OPM-2025-0004-0963)
+2025-05-24 21:02:45,357 - ERROR - Error analyzing comment OPM-2025-0004-0963: API call timed out after 30 seconds
+2025-05-24 21:02:45,357 - ERROR - Timeout analyzing OPM-2025-0004-0963 (attempt 1/3): API call timed out after 30 seconds
+2025-05-24 21:02:45,357 - INFO - Retrying in 5 seconds...
+2025-05-24 21:03:10,707 - INFO - 
+Analysis complete! Results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/data.json
+2025-05-24 21:03:10,708 - INFO - Summary stats saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/summary.json
+2025-05-24 21:03:10,708 - INFO - Checkpoint file removed: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/analyze_checkpoint.json
