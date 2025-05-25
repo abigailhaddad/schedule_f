@@ -4,10 +4,9 @@ import ServerCommentDataProvider from "@/components/ServerCommentDataProvider";
 import Navbar from "@/components/Navbar";
 import { datasetConfig } from "@/lib/config";
 import { redirect } from "next/navigation";
-import { cacheConfig } from "@/lib/cache-config";
 
 // Disable caching in development if configured to do so
-export const revalidate = (process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment) ? 0 : 86400;
+export const revalidate = 86400;
 
 // Generate metadata
 export const metadata: Metadata = {

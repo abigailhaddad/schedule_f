@@ -5,7 +5,15 @@ import { comments } from '../src/lib/db/schema';
 
 async function checkDatabaseStatus() {
   console.log('🔍 Database Status Check\n');
-  console.log(`Environment: ${dbConfig.environment.toUpperCase()}`);
+  
+  let environment = 'Unknown';
+  if (dbConfig.isProd) {
+    environment = 'Production';
+  } else if (dbConfig.isDev) {
+    environment = 'Development';
+  }
+  
+  console.log(`Environment: ${environment.toUpperCase()}`);
   console.log(`Database URL: ${dbConfig.url.substring(0, 30)}...`);
   console.log('-------------------\n');
 
