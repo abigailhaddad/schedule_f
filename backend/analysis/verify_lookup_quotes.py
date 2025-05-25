@@ -1,27 +1,23 @@
 #!/usr/bin/env python3
 """
-Quote Verifier for Schedule F Analysis
+Quote Verifier for Lookup Table Analysis
 
-This script verifies that key quotes extracted by the analysis tool are actually 
-present in the original comment text. This helps validate the accuracy of the AI's
-quote extraction.
+This script verifies that key quotes extracted by the lookup table analysis tool are actually 
+present in the original truncated text. This helps validate the accuracy of the AI's
+quote extraction in the deduplicated workflow.
 
 Requirements:
 - Python 3.8+
 
 Usage:
-python -m backend.analysis.verify_quotes --help
+python -m backend.analysis.verify_lookup_quotes --input lookup_table_analyzed.json
 """
 
 import os
 import json
 import argparse
-import glob
 import re
-from typing import Dict, List, Tuple, Optional, Union
-
-# Import from backend packages
-from backend.utils.common import strip_html_tags, get_latest_results_dir
+from typing import Dict, List, Tuple, Optional
 
 def clean_for_comparison(text: str) -> str:
     """
@@ -43,9 +39,6 @@ def clean_for_comparison(text: str) -> str:
     text = text.replace(''', "'").replace(''', "'")
     text = text.replace('"', '"').replace('"', '"')
     text = text.replace('—', '-').replace('–', '-')
-    
-    # Remove non-alphanumeric chars for looser matching
-    # text = re.sub(r'[^\w\s]', '', text)
     
     return text.strip().lower()
 
@@ -101,7 +94,6 @@ def find_quote_in_text(quote: str, full_text: str) -> Tuple[bool, Optional[str],
         if clean_quote in clean_text:
             position = clean_text.find(clean_quote)
             # Extract the matching section from the original text
-            # This is approximate due to the cleaning
             approx_start = max(0, position - 10)
             approx_end = min(len(clean_text), position + len(clean_quote) + 10)
             context = clean_text[approx_start:approx_end]
@@ -122,60 +114,61 @@ def find_quote_in_text(quote: str, full_text: str) -> Tuple[bool, Optional[str],
     
     return False, None, None
 
-def verify_quotes(data_file: str, output_file: Optional[str] = None) -> Dict:
+def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = None) -> Dict:
     """
-    Verify quotes in analyzed comments and generate a report.
+    Verify quotes in analyzed lookup table and generate a report.
     
     Args:
-        data_file: Path to the analyzed data file (data.json)
+        lookup_table_file: Path to the analyzed lookup table file (lookup_table_analyzed.json)
         output_file: Path to save verification results
         
     Returns:
         Dictionary with verification results
     """
-    print(f"Loading analyzed data from {data_file}...")
+    print(f"Loading analyzed lookup table from {lookup_table_file}...")
     
-    with open(data_file, 'r', encoding='utf-8') as f:
+    with open(lookup_table_file, 'r', encoding='utf-8') as f:
         try:
-            data = json.load(f)
+            lookup_table = json.load(f)
         except json.JSONDecodeError:
-            print(f"Error: {data_file} is not valid JSON")
+            print(f"Error: {lookup_table_file} is not valid JSON")
             return {}
     
-    if not data:
-        print("No data found in file")
+    if not lookup_table:
+        print("No data found in lookup table")
         return {}
     
-    print(f"Loaded {len(data)} analyzed comments")
+    print(f"Loaded {len(lookup_table)} lookup entries")
     
     # Initialize results
     results = {
-        "total_comments": len(data),
-        "comments_with_quotes": 0,
+        "total_lookup_entries": len(lookup_table),
+        "entries_with_quotes": 0,
         "quotes_found_exact": 0,
         "quotes_found_similar": 0,
         "quotes_not_found": 0,
         "verification_rate": 0,
+        "total_comments_represented": sum(entry.get('comment_count', 0) for entry in lookup_table),
         "problematic_quotes": []
     }
     
-    # Verify each comment
-    for i, comment in enumerate(data):
+    # Verify each lookup entry
+    for i, entry in enumerate(lookup_table):
         if i % 10 == 0:
-            print(f"Verifying comment {i+1}/{len(data)}...")
+            print(f"Verifying lookup entry {i+1}/{len(lookup_table)}...")
         
-        # Skip comments without quotes or text
-        if not comment.get("key_quote") or not comment.get("comment"):
+        # Skip entries without quotes or text
+        if not entry.get("key_quote") or not entry.get("truncated_text"):
             continue
         
-        results["comments_with_quotes"] += 1
+        results["entries_with_quotes"] += 1
         
-        # Get the key quote and comment text
-        quote = comment.get("key_quote", "").strip()
-        comment_text = comment.get("comment", "").strip()
+        # Get the key quote and truncated text
+        quote = entry.get("key_quote", "").strip()
+        truncated_text = entry.get("truncated_text", "").strip()
         
         # Verify the quote
-        found_exact, match_text, position = find_quote_in_text(quote, comment_text)
+        found_exact, match_text, position = find_quote_in_text(quote, truncated_text)
         
         if found_exact:
             results["quotes_found_exact"] += 1
@@ -183,9 +176,11 @@ def verify_quotes(data_file: str, output_file: Optional[str] = None) -> Dict:
             results["quotes_found_similar"] += 1
             # Add to problematic quotes for review
             results["problematic_quotes"].append({
-                "id": comment.get("id", f"comment_{i}"),
-                "title": comment.get("title", ""),
+                "lookup_id": entry.get("lookup_id", f"lookup_{i}"),
+                "comment_count": entry.get("comment_count", 0),
+                "comment_ids": entry.get("comment_ids", []),
                 "quote": quote,
+                "truncated_text": truncated_text[:200] + "..." if len(truncated_text) > 200 else truncated_text,
                 "match_info": match_text,
                 "match_type": "similar"
             })
@@ -193,10 +188,12 @@ def verify_quotes(data_file: str, output_file: Optional[str] = None) -> Dict:
             results["quotes_not_found"] += 1
             # Add to problematic quotes
             results["problematic_quotes"].append({
-                "id": comment.get("id", f"comment_{i}"),
-                "title": comment.get("title", ""),
+                "lookup_id": entry.get("lookup_id", f"lookup_{i}"),
+                "comment_count": entry.get("comment_count", 0),
+                "comment_ids": entry.get("comment_ids", []),
                 "quote": quote,
-                "match_info": "Not found in comment text",
+                "truncated_text": truncated_text[:200] + "..." if len(truncated_text) > 200 else truncated_text,
+                "match_info": "Not found in truncated text",
                 "match_type": "not_found"
             })
     
@@ -204,15 +201,31 @@ def verify_quotes(data_file: str, output_file: Optional[str] = None) -> Dict:
     total_quotes = results["quotes_found_exact"] + results["quotes_found_similar"] + results["quotes_not_found"]
     if total_quotes > 0:
         results["verification_rate"] = round((results["quotes_found_exact"] + results["quotes_found_similar"]) / total_quotes * 100, 1)
+        results["exact_match_rate"] = round(results["quotes_found_exact"] / total_quotes * 100, 1)
+    
+    # Calculate percentage of quotes that couldn't be found
+    unverified_percentage = round(results["quotes_not_found"] / total_quotes * 100, 1) if total_quotes > 0 else 0
     
     # Print summary
-    print("\n===== Quote Verification Results =====")
-    print(f"Total comments: {results['total_comments']}")
-    print(f"Comments with quotes: {results['comments_with_quotes']}")
-    print(f"Quotes found (exact): {results['quotes_found_exact']} ({round(results['quotes_found_exact']/total_quotes*100, 1)}%)")
-    print(f"Quotes found (similar): {results['quotes_found_similar']} ({round(results['quotes_found_similar']/total_quotes*100, 1)}%)")
-    print(f"Quotes not found: {results['quotes_not_found']} ({round(results['quotes_not_found']/total_quotes*100, 1)}%)")
+    print("\n===== Lookup Table Quote Verification Results =====")
+    print(f"Total lookup entries: {results['total_lookup_entries']}")
+    print(f"Total comments represented: {results['total_comments_represented']}")
+    print(f"Lookup entries with quotes: {results['entries_with_quotes']}")
+    print(f"Quotes found (exact): {results['quotes_found_exact']} ({results.get('exact_match_rate', 0)}%)")
+    print(f"Quotes found (similar): {results['quotes_found_similar']} ({round(results['quotes_found_similar']/total_quotes*100, 1) if total_quotes > 0 else 0}%)")
+    print(f"Quotes NOT found: {results['quotes_not_found']} ({unverified_percentage}%)")
     print(f"Overall verification rate: {results['verification_rate']}%")
+    
+    # Print problematic quotes
+    if results["problematic_quotes"]:
+        print(f"\n===== {len(results['problematic_quotes'])} Problematic Quotes =====")
+        for i, problem in enumerate(results["problematic_quotes"], 1):
+            print(f"\n{i}. {problem['lookup_id']} (represents {problem['comment_count']} comments)")
+            print(f"   Quote: \"{problem['quote']}\"")
+            print(f"   Issue: {problem['match_info']}")
+            print(f"   Comment IDs: {', '.join(problem['comment_ids'][:3])}{'...' if len(problem['comment_ids']) > 3 else ''}")
+            if problem['match_type'] == 'not_found':
+                print(f"   Text sample: {problem['truncated_text']}")
     
     # Save results
     if output_file:
@@ -224,64 +237,29 @@ def verify_quotes(data_file: str, output_file: Optional[str] = None) -> Dict:
 
 def main():
     """Parse arguments and run the verification."""
-    parser = argparse.ArgumentParser(description='Verify quotes in analyzed comments')
-    parser.add_argument('--input', type=str, default=None,
-                        help='Path to input JSON file with analyzed comments (default: auto-detect most recent data.json)')
+    parser = argparse.ArgumentParser(description='Verify quotes in analyzed lookup table')
+    parser.add_argument('--input', type=str, required=True,
+                        help='Path to analyzed lookup table JSON file (lookup_table_analyzed.json)')
     parser.add_argument('--output', type=str, default=None,
-                        help='Path to save verification results (default: quote_verification.json in same directory as input)')
+                        help='Path to save verification results (default: lookup_quote_verification.json in same directory as input)')
     
     args = parser.parse_args()
     
-    # Auto-detect most recent data.json if no input file specified
-    input_file = args.input
-    if input_file is None:
-        # Try to find the most recent results directory
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        results_base = os.path.join(project_root, "data", "results")
-        
-        if os.path.exists(results_base):
-            latest_dir = get_latest_results_dir(results_base)
-            if latest_dir:
-                data_path = os.path.join(latest_dir, "data.json")
-                if os.path.exists(data_path):
-                    input_file = data_path
-                    print(f"Auto-detected most recent data file: {input_file}")
-        
-        # If still not found, look in processed directory
-        if input_file is None:
-            processed_dir = os.path.join(project_root, "data", "processed")
-            if os.path.exists(processed_dir):
-                analysis_files = glob.glob(os.path.join(processed_dir, "comment_analysis_*.json"))
-                if analysis_files:
-                    # Sort by creation time (newest first)
-                    analysis_files.sort(key=os.path.getctime, reverse=True)
-                    input_file = analysis_files[0]
-                    print(f"Auto-detected most recent analysis file: {input_file}")
-        
-        # If still not found, look in the current directory
-        if input_file is None:
-            for file in ["data.json", "comments_analyzed.json", "analyzed_comments.json"]:
-                if os.path.exists(file):
-                    input_file = file
-                    print(f"Using {file} from current directory")
-                    break
-    
     # Check if input file exists
-    if not input_file or not os.path.exists(input_file):
-        print("Error: No valid input file specified or found")
-        print("Please provide a path to an analyzed comments file with --input")
+    if not os.path.exists(args.input):
+        print(f"Error: Input file {args.input} does not exist")
         return 1
     
     # Set default output file if not provided
     if args.output is None:
-        output_dir = os.path.dirname(input_file)
-        output_file = os.path.join(output_dir, "quote_verification.json")
+        output_dir = os.path.dirname(args.input)
+        output_file = os.path.join(output_dir, "lookup_quote_verification.json")
     else:
         output_file = args.output
     
     # Verify quotes
-    verify_quotes(input_file, output_file)
+    verify_lookup_quotes(args.input, output_file)
     return 0
 
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

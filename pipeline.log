@@ -1,166 +1,20 @@
-Created results directory: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
-
-=== Pipeline starting at 2025-05-24 20:51:27 ===
-Results will be saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
-
-=== Step 1: Processing comments ===
-Using CSV file: comments.csv
-Reading comments from CSV file: comments.csv
-Saved 1000 comments to /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/raw_data.json
-
-=== Step 1.5: Downloading attachments for 1000 new comments ===
-Skipping 0 comments that already have attachments
-Downloading 24 attachments...
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0119/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0119/attachment_1_1748134288.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0119/attachment_1_1748134288.pdf
-PDF text extraction minimal, trying OCR for /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0119/attachment_1_1748134288.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0145/attachment_1.png
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0145/attachment_1_1748134301.png
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0145/attachment_1_1748134301.png
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0210/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0210/attachment_1_1748134303.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0210/attachment_1_1748134303.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0323/attachment_1.png
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0323/attachment_1_1748134304.png
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0323/attachment_1_1748134304.png
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0408/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0408/attachment_1_1748134306.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0408/attachment_1_1748134306.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0625/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0625/attachment_1_1748134317.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0625/attachment_1_1748134317.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0629/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0629/attachment_1_1748134320.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0629/attachment_1_1748134320.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0630/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0630/attachment_1_1748134321.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0630/attachment_1_1748134321.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0645/attachment_1.docx
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0645/attachment_1_1748134321.docx
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0645/attachment_1_1748134321.docx
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0658/attachment_1.png
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0658/attachment_1_1748134321.png
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0658/attachment_1_1748134321.png
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0772/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0772/attachment_1_1748134324.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0772/attachment_1_1748134324.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0821/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0821/attachment_1_1748134324.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0821/attachment_1_1748134324.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0841/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0841/attachment_1_1748134325.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0841/attachment_1_1748134325.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0859/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0859/attachment_1_1748134325.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0859/attachment_1_1748134325.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0893/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0893/attachment_1_1748134325.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0893/attachment_1_1748134325.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0894/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0894/attachment_1_1748134327.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0894/attachment_1_1748134327.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0897/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0897/attachment_1_1748134329.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0897/attachment_1_1748134329.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0934/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0934/attachment_1_1748134329.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0934/attachment_1_1748134329.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0946/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0946/attachment_1_1748134330.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0946/attachment_1_1748134330.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0947/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0947/attachment_1_1748134330.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0947/attachment_1_1748134330.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0948/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0948/attachment_1_1748134330.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0948/attachment_1_1748134330.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0986/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0986/attachment_1_1748134345.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0986/attachment_1_1748134345.pdf
-PDF text extraction minimal, trying OCR for /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0986/attachment_1_1748134345.pdf
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0990/attachment_1.txt
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0990/attachment_1_1748134386.txt
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0990/attachment_1_1748134386.txt
-Downloading from https://downloads.regulations.gov/OPM-2025-0004-0991/attachment_1.pdf
-Target path: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0991/attachment_1_1748134386.pdf
-Successfully downloaded to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/attachments/OPM-2025-0004-0991/attachment_1_1748134386.pdf
-Downloaded 24 attachments successfully.
-
-=== Step 2: Analyzing 1000 comments (0 already done) ===
-Analyzing comments:   0%|          | 0/1000 [00:00<?, ?it/s]Analyzing comments:   1%|          | 10/1000 [00:04<07:06,  2.32it/s]Analyzing comments:   2%|▏         | 20/1000 [00:10<08:48,  1.85it/s]Analyzing comments:   3%|▎         | 30/1000 [00:14<08:00,  2.02it/s]Analyzing comments:   4%|▍         | 40/1000 [00:20<08:15,  1.94it/s]Analyzing comments:   5%|▌         | 50/1000 [00:24<07:19,  2.16it/s]Analyzing comments:   6%|▌         | 60/1000 [00:33<09:54,  1.58it/s]Analyzing comments:   7%|▋         | 70/1000 [00:37<08:43,  1.78it/s]Analyzing comments:   8%|▊         | 80/1000 [00:48<11:01,  1.39it/s]Analyzing comments:   9%|▉         | 90/1000 [00:52<09:30,  1.59it/s]Analyzing comments:  10%|█         | 100/1000 [01:00<10:02,  1.49it/s]Analyzing comments:  11%|█         | 110/1000 [01:04<08:59,  1.65it/s]Analyzing comments:  12%|█▏        | 120/1000 [01:11<09:06,  1.61it/s]Analyzing comments:  13%|█▎        | 130/1000 [01:16<08:28,  1.71it/s]Analyzing comments:  14%|█▍        | 140/1000 [01:20<07:46,  1.84it/s]Analyzing comments:  15%|█▌        | 150/1000 [01:25<07:24,  1.91it/s]Analyzing comments:  16%|█▌        | 160/1000 [01:31<07:38,  1.83it/s]Analyzing comments:  17%|█▋        | 170/1000 [01:36<07:05,  1.95it/s]Analyzing comments:  18%|█▊        | 180/1000 [01:41<07:08,  1.92it/s]Analyzing comments:  19%|█▉        | 190/1000 [01:45<06:35,  2.05it/s]Analyzing comments:  20%|██        | 200/1000 [01:49<06:10,  2.16it/s]Analyzing comments:  21%|██        | 210/1000 [01:54<06:11,  2.13it/s]Analyzing comments:  22%|██▏       | 220/1000 [02:02<07:33,  1.72it/s]Analyzing comments:  23%|██▎       | 230/1000 [02:09<07:48,  1.64it/s]Analyzing comments:  24%|██▍       | 240/1000 [02:14<07:17,  1.74it/s]Analyzing comments:  25%|██▌       | 250/1000 [02:21<07:34,  1.65it/s]Analyzing comments:  26%|██▌       | 260/1000 [02:30<08:40,  1.42it/s]Analyzing comments:  27%|██▋       | 270/1000 [02:34<07:25,  1.64it/s]Analyzing comments:  28%|██▊       | 280/1000 [02:38<06:35,  1.82it/s]Analyzing comments:  29%|██▉       | 290/1000 [02:42<06:00,  1.97it/s]Analyzing comments:  30%|███       | 300/1000 [02:47<05:52,  1.99it/s]Analyzing comments:  31%|███       | 310/1000 [02:52<05:40,  2.03it/s]Analyzing comments:  32%|███▏      | 320/1000 [02:57<05:46,  1.96it/s]Analyzing comments:  33%|███▎      | 330/1000 [03:03<05:42,  1.96it/s]Analyzing comments:  34%|███▍      | 340/1000 [03:08<05:51,  1.88it/s]Analyzing comments:  35%|███▌      | 350/1000 [03:17<06:44,  1.61it/s]Analyzing comments:  36%|███▌      | 360/1000 [03:21<06:03,  1.76it/s]Analyzing comments:  37%|███▋      | 370/1000 [03:28<06:12,  1.69it/s]Analyzing comments:  38%|███▊      | 380/1000 [03:34<06:15,  1.65it/s]Analyzing comments:  39%|███▉      | 390/1000 [03:38<05:26,  1.87it/s]Analyzing comments:  40%|████      | 400/1000 [03:41<04:51,  2.06it/s]Analyzing comments:  41%|████      | 410/1000 [03:49<05:43,  1.72it/s]Analyzing comments:  42%|████▏     | 420/1000 [04:01<07:22,  1.31it/s]Analyzing comments:  43%|████▎     | 430/1000 [04:10<07:27,  1.27it/s]Analyzing comments:  44%|████▍     | 440/1000 [04:14<06:26,  1.45it/s]Analyzing comments:  45%|████▌     | 450/1000 [04:18<05:29,  1.67it/s]Analyzing comments:  46%|████▌     | 460/1000 [04:23<05:00,  1.80it/s]Analyzing comments:  47%|████▋     | 470/1000 [04:27<04:37,  1.91it/s]Analyzing comments:  48%|████▊     | 480/1000 [04:33<04:41,  1.85it/s]Analyzing comments:  49%|████▉     | 490/1000 [04:38<04:27,  1.90it/s]Analyzing comments:  50%|█████     | 500/1000 [04:45<04:43,  1.76it/s]Analyzing comments:  51%|█████     | 510/1000 [04:48<04:09,  1.97it/s]Analyzing comments:  52%|█████▏    | 520/1000 [04:52<03:50,  2.08it/s]Analyzing comments:  53%|█████▎    | 530/1000 [04:57<03:42,  2.11it/s]Analyzing comments:  54%|█████▍    | 540/1000 [05:01<03:24,  2.25it/s]Analyzing comments:  55%|█████▌    | 550/1000 [05:06<03:29,  2.15it/s]Analyzing comments:  56%|█████▌    | 560/1000 [05:11<03:24,  2.15it/s]Analyzing comments:  57%|█████▋    | 570/1000 [05:15<03:17,  2.18it/s]Analyzing comments:  58%|█████▊    | 580/1000 [05:19<03:03,  2.29it/s]Analyzing comments:  59%|█████▉    | 590/1000 [05:23<02:54,  2.35it/s]Analyzing comments:  60%|██████    | 600/1000 [05:28<02:54,  2.29it/s]Analyzing comments:  61%|██████    | 610/1000 [05:32<02:47,  2.33it/s]Analyzing comments:  62%|██████▏   | 620/1000 [05:38<03:11,  1.99it/s]Analyzing comments:  63%|██████▎   | 630/1000 [05:44<03:15,  1.90it/s]Analyzing comments:  64%|██████▍   | 640/1000 [05:49<03:04,  1.95it/s]Analyzing comments:  65%|██████▌   | 650/1000 [05:53<02:47,  2.09it/s]Analyzing comments:  66%|██████▌   | 660/1000 [05:57<02:39,  2.14it/s]Analyzing comments:  67%|██████▋   | 670/1000 [06:05<03:07,  1.76it/s]Analyzing comments:  68%|██████▊   | 680/1000 [06:09<02:44,  1.95it/s]Analyzing comments:  69%|██████▉   | 690/1000 [06:14<02:38,  1.96it/s]Analyzing comments:  70%|███████   | 700/1000 [06:19<02:26,  2.04it/s]Analyzing comments:  71%|███████   | 710/1000 [06:23<02:18,  2.09it/s]Analyzing comments:  72%|███████▏  | 720/1000 [06:29<02:18,  2.02it/s]Analyzing comments:  73%|███████▎  | 730/1000 [06:33<02:13,  2.03it/s]Analyzing comments:  74%|███████▍  | 740/1000 [06:38<02:06,  2.06it/s]Analyzing comments:  75%|███████▌  | 750/1000 [06:44<02:08,  1.95it/s]Analyzing comments:  76%|███████▌  | 760/1000 [06:55<02:42,  1.48it/s]Analyzing comments:  77%|███████▋  | 770/1000 [07:03<02:47,  1.38it/s]Analyzing comments:  78%|███████▊  | 780/1000 [07:07<02:20,  1.57it/s]Analyzing comments:  79%|███████▉  | 790/1000 [07:15<02:21,  1.48it/s]Analyzing comments:  80%|████████  | 800/1000 [07:20<02:04,  1.61it/s]Analyzing comments:  81%|████████  | 810/1000 [07:25<01:54,  1.66it/s]Analyzing comments:  82%|████████▏ | 820/1000 [07:30<01:42,  1.75it/s]Analyzing comments:  83%|████████▎ | 830/1000 [07:37<01:42,  1.66it/s]Analyzing comments:  84%|████████▍ | 840/1000 [07:43<01:34,  1.70it/s]Analyzing comments:  85%|████████▌ | 850/1000 [07:48<01:25,  1.76it/s]Analyzing comments:  86%|████████▌ | 860/1000 [07:55<01:24,  1.67it/s]Analyzing comments:  87%|████████▋ | 870/1000 [08:00<01:13,  1.76it/s]Analyzing comments:  88%|████████▊ | 880/1000 [08:05<01:07,  1.79it/s]Analyzing comments:  89%|████████▉ | 890/1000 [08:16<01:19,  1.39it/s]Analyzing comments:  90%|█████████ | 900/1000 [08:23<01:10,  1.42it/s]Analyzing comments:  91%|█████████ | 910/1000 [08:27<00:55,  1.62it/s]Analyzing comments:  92%|█████████▏| 920/1000 [08:32<00:46,  1.73it/s]Analyzing comments:  93%|█████████▎| 930/1000 [08:38<00:41,  1.68it/s]Analyzing comments:  94%|█████████▍| 940/1000 [08:49<00:44,  1.36it/s]Analyzing comments:  95%|█████████▌| 950/1000 [08:54<00:34,  1.46it/s]Analyzing comments:  96%|█████████▌| 960/1000 [09:03<00:29,  1.36it/s]Analyzing comments:  97%|█████████▋| 970/1000 [09:46<00:54,  1.80s/it]Analyzing comments:  98%|█████████▊| 980/1000 [09:51<00:28,  1.42s/it]Analyzing comments:  99%|█████████▉| 990/1000 [09:57<00:11,  1.19s/it]Analyzing comments: 100%|██████████| 1000/1000 [10:03<00:00,  1.00s/it]Analyzing comments: 100%|██████████| 1000/1000 [10:03<00:00,  1.66it/s]
-
-===== Summary =====
-Total comments: 1000
-Successfully analyzed: 1000 (100.0%)
-Errors: 0
-
-Stance Distribution:
-  For: 3 (0.3%)
-  Against: 962 (96.2%)
-  Neutral/Unclear: 35 (3.5%)
-
-Theme Occurrences:
-  Merit-based system concerns: 675 (67.5%)
-  Due process/employee rights: 660 (66.0%)
-  Politicization concerns: 904 (90.4%)
-  Scientific integrity: 119 (11.9%)
-  Institutional knowledge loss: 166 (16.6%)
-
-=== Step 3: Running semantic clustering analysis ===
-Running semantic clustering: python /Users/abigailhaddad/Documents/repos/regs/backend/analysis/semantic.py --input /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/data.json --output_dir /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
-✅ Semantic clustering completed successfully
-Semantic analysis output:
-🚀 Starting semantic clustering...
-📁 Input: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/data.json
-📁 Output: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
-🎯 Number of clusters: 15
-📖 Loading comments from /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/data.json...
-✅ Loaded 1,000 raw comments
-✅ Processed 1,000 non-empty comments
-📊 Stance distribution:
-   Against: 962 (96.2%)
-   For: 3 (0.3%)
-   Neutral/Unclear: 35 (3.5%)
-🤖 Loading model: sentence-transformers/all-mpnet-base-v2
-🔄 Creating embeddings for 1,000 comments...
-✅ Created embeddings with shape: (1000, 768)
-🌳 Performing hierarchical clustering with 15 clusters...
-✅ Clustering complete. Cluster distribution:
-  Cluster 0: 106 comments (10.6%)
-  Cluster 1: 51 comments (5.1%)
-  Cluster 2: 58 comments (5.8%)
-  Cluster 3: 69 comments (6.9%)
-  Cluster 4: 111 comments (11.1%)
-  Cluster 5: 85 comments (8.5%)
-  Cluster 6: 32 comments (3.2%)
-  Cluster 7: 116 comments (11.6%)
-  Cluster 8: 62 comments (6.2%)
-  Cluster 9: 13 comments (1.3%)
-  Cluster 10: 55 comments (5.5%)
-  Cluster 11: 112 comments (11.2%)
-  Cluster 12: 88 comments (8.8%)
-  Cluster 13: 25 comments (2.5%)
-  Cluster 14: 17 comments (1.7%)
-📊 Analyzing cluster contents and stance disagreements...
-📊 Creating visualizations...
-  Creating PCA visualization...
-✅ Visualizations saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
-📝 Creating cluster report...
-✅ Report saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/cluster_report.txt
-✅ Updated 1000 comments with cluster IDs and PCA coordinates in /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/data.json
-
-✅ Clustering complete!
-📊 1,000 comments grouped into 15 clusters
-📁 Output files:
-   - /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/dendrogram.png
-   - /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/clusters_visualization.png
-   - /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127/cluster_report.txt
-
-
-=== Pipeline completed at 2025-05-24 21:03:44 ===
-All results saved to: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
-
-📊 PROCESSING SUMMARY:
-  🆕 Processed 1000 comments from scratch
-  📁 Final results directory: /Users/abigailhaddad/Documents/repos/regs/results/results_20250524_205127
+2025-05-25 19:18:17,285 - INFO - 🚀 Starting Schedule F analysis pipeline...
+2025-05-25 19:18:17,285 - INFO - 📁 CSV file: comments.csv
+2025-05-25 19:18:17,285 - INFO - 📁 Output directory: test_output
+2025-05-25 19:18:17,285 - INFO - 🎯 Truncation: None
+2025-05-25 19:18:17,285 - INFO - 🤖 Model: gpt-4o-mini
+2025-05-25 19:18:17,285 - INFO - 
+=== STEP 1: Fetching Comments from CSV ===
+2025-05-25 19:18:17,285 - ERROR - ❌ Pipeline failed: attempted relative import with no known parent package
+2025-05-25 19:18:27,002 - INFO - 🚀 Starting Schedule F analysis pipeline...
+2025-05-25 19:18:27,002 - INFO - 📁 CSV file: comments.csv
+2025-05-25 19:18:27,002 - INFO - 📁 Output directory: test_output
+2025-05-25 19:18:27,002 - INFO - 🎯 Truncation: None
+2025-05-25 19:18:27,002 - INFO - 🤖 Model: gpt-4o-mini
+2025-05-25 19:18:27,002 - INFO - 
+=== STEP 1: Fetching Comments from CSV ===
+2025-05-25 19:18:27,104 - INFO - Reading comments from comments.csv...
+2025-05-25 19:18:29,063 - INFO - ✅ Raw comments saved to test_output/raw_data.json
+2025-05-25 19:18:29,063 - INFO - 
+=== STEP 2: Creating Deduplicated Lookup Table ===
+2025-05-25 19:18:29,064 - ERROR - ❌ Pipeline failed: cannot import name 'create_lookup_table_from_raw_data' from 'backend.analysis.create_lookup_table' (/Users/abigailhaddad/Documents/repos/regs/backend/analysis/create_lookup_table.py)

@@ -1,15 +1,26 @@
 # Label Correction Interface
 
-A simple web-based interface for reviewing and correcting comment stance labels.
+A web-based interface for reviewing and correcting stance labels in both individual comments and lookup tables.
+
+## Two Interfaces Available
+
+### 1. Lookup Table Correction (Recommended)
+- **Works with**: `lookup_table_analyzed.json` files from the new pipeline
+- **Benefits**: Review unique text patterns, high-impact corrections
+- **Filter by comment count**: Focus on patterns affecting many comments
+- **Export corrected table**: Ready to use in pipeline
+
+### 2. Individual Comment Correction (Legacy)  
+- **Works with**: `data.json` files from old pipeline
+- **Use case**: Legacy data or individual comment review
 
 ## Features
 
-- **Review Comments**: View comments with their current stance labels
-- **Correct Labels**: Click buttons to change labels (For, Against, Neutral/Unclear)
-- **Filter by Stance**: Only show comments with specific stances
-- **Filter by Status**: Show only corrected/uncorrected comments
-- **Persistent Corrections**: All corrections are saved to `corrections.json`
-- **No Duplicates**: Won't ask you to review comments you've already corrected
+- **Smart Filtering**: By stance, correction status, and comment count
+- **High Impact**: Focus on patterns affecting the most comments
+- **Persistent Corrections**: All corrections saved and tracked
+- **Export Ready**: Generate corrected lookup tables for pipeline use
+- **No Duplicates**: Won't ask you to review the same patterns twice
 
 ## Setup
 
@@ -18,36 +29,48 @@ A simple web-based interface for reviewing and correcting comment stance labels.
    pip install -r requirements.txt
    ```
 
-2. Run the interface:
-   ```bash
-   python app.py --data path/to/your/data.json
-   ```
-
-3. Open your browser to: http://127.0.0.1:5000
-
 ## Usage
 
-### Basic Usage
+### Lookup Table Correction (Recommended)
+
+1. **Easy Start**:
+   ```bash
+   ./run_lookup_corrections.sh path/to/lookup_table_analyzed.json
+   ```
+
+2. **Manual Start**:
+   ```bash
+   python app_lookup.py --data path/to/lookup_table_analyzed.json
+   ```
+
+3. **Custom Port**:
+   ```bash
+   ./run_lookup_corrections.sh path/to/lookup_table_analyzed.json 8000
+   ```
+
+### Individual Comment Correction (Legacy)
+
 ```bash
 python app.py --data /path/to/results/data.json
 ```
 
-### Custom Port/Host
-```bash
-python app.py --data /path/to/results/data.json --port 8080 --host 0.0.0.0
-```
-
 ### Command Line Options
-- `--data`: Path to the data.json file to review (required)
+- `--data`: Path to the lookup table or data file (required)
 - `--port`: Port to run on (default: 5000)
 - `--host`: Host to run on (default: 127.0.0.1)
 
 ## Data Files
 
-- **Input**: `data.json` - The analyzed comments from your pipeline
-- **Output**: `corrections.json` - Stores all your label corrections
+### Lookup Table Workflow
+- **Input**: `lookup_table_analyzed.json` - Deduplicated text patterns with analysis
+- **Corrections**: `lookup_corrections.json` - Stores corrections by lookup_id
+- **Output**: `lookup_table_analyzed_corrected.json` - Ready for pipeline use
 
-The corrections file is created in the same directory as your data.json file.
+### Legacy Workflow  
+- **Input**: `data.json` - Individual analyzed comments
+- **Output**: `corrections.json` - Stores corrections by comment_id
+
+Correction files are created in the same directory as your input file.
 
 ## Interface Features
 
