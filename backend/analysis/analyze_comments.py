@@ -295,15 +295,21 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
         logger.debug(f"Comment {comment_id} - title: {title[:100]}..." if len(title) > 100 else f"Comment {comment_id} - title: {title}")
         
         # Check for duplicates and get occurrence number (using analysis text for consistency)
-        occurrence_number = 1
+        occurrence_number = 0
         normalized_text = analysis_text.strip().lower()
         
+        duplicate_of = ""
         if duplicate_map and normalized_text in duplicate_map:
-            # Find this comment's occurrence number
+            # Find this comment's occurrence number and get all duplicate IDs
             for cid, onum in duplicate_map[normalized_text]['occurrences']:
                 if cid == comment_id:
                     occurrence_number = onum
                     break
+            
+            # Get all duplicate comment IDs (excluding this one)
+            all_duplicate_ids = [cid for cid, _ in duplicate_map[normalized_text]['occurrences']]
+            if len(all_duplicate_ids) > 1:
+                duplicate_of = ",".join(all_duplicate_ids)
             
             # If this is not the first occurrence, check if we can reuse results
             if occurrence_number > 1:
@@ -322,7 +328,7 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
                             "category": category,
                             "analysis": original_result.get("analysis", {}),
                             "occurrence_number": occurrence_number,
-                            "duplicate_of": first_id
+                            "duplicate_of": duplicate_of
                         }
                         
                         # Save individual result to temp directory
@@ -371,7 +377,8 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
                 "status": "error",
                 "error": "Empty comment text"
             },
-            "occurrence_number": occurrence_number
+            "occurrence_number": occurrence_number,
+            "duplicate_of": duplicate_of
         }
         with open(result_file, 'w', encoding='utf-8') as f:
             json.dump(error_result, f, indent=2)
@@ -400,7 +407,8 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
                 "title": title,
                 "category": category,
                 "analysis": analysis,
-                "occurrence_number": occurrence_number
+                "occurrence_number": occurrence_number,
+                "duplicate_of": duplicate_of
             }
             
             # Save individual result to temp directory
@@ -427,7 +435,8 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
                         "status": "error",
                         "error": "Timeout - comment may be too long or complex"
                     },
-                    "occurrence_number": occurrence_number
+                    "occurrence_number": occurrence_number,
+                    "duplicate_of": duplicate_of
                 }
                 # Still save the error result
                 with open(result_file, 'w', encoding='utf-8') as f:
@@ -452,7 +461,8 @@ def process_single_comment(comment_data, analyzer, temp_dir, duplicate_map=None,
                         "status": "error",
                         "error": str(e)
                     },
-                    "occurrence_number": occurrence_number
+                    "occurrence_number": occurrence_number,
+                    "duplicate_of": duplicate_of
                 }
                 # Still save the error result
                 with open(result_file, 'w', encoding='utf-8') as f:
@@ -698,7 +708,7 @@ def format_results_for_output(results, original_comments):
                     "id": comment_id,
                     "title": result.get("title", ""),
                     "category": original_comments.get(comment_id, {}).get('category', ''),
-                    "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
+                    "agency_id": original_comments.get(comment_id, {}).get('agencyId', ''),
                     "comment": original_comments.get(comment_id, {}).get('comment', ''),
                     "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
                     "has_attachments": original_comments.get(comment_id, {}).get('has_attachments', False),
@@ -708,7 +718,7 @@ def format_results_for_output(results, original_comments):
                     "rationale": result.get("analysis", {}).get("rationale", ""),
                     "posted_date": original_comments.get(comment_id, {}).get('postedDate', ''),
                     "received_date": original_comments.get(comment_id, {}).get('receivedDate', ''),
-                    "occurrence_number": result.get("occurrence_number", 1),
+                    "occurrence_number": result.get("occurrence_number", 0),
                     "duplicate_of": result.get("duplicate_of", "")
                 }
                 
@@ -726,7 +736,7 @@ def format_results_for_output(results, original_comments):
                     "id": comment_id,
                     "title": result.get("title", ""),
                     "category": original_comments.get(comment_id, {}).get('category', ''),
-                    "agencyId": original_comments.get(comment_id, {}).get('agencyId', ''),
+                    "agency_id": original_comments.get(comment_id, {}).get('agencyId', ''),
                     "comment": original_comments.get(comment_id, {}).get('comment', ''),
                     "original_comment": original_comments.get(comment_id, {}).get('original_comment', ''),
                     "has_attachments": original_comments.get(comment_id, {}).get('has_attachments', False),
@@ -738,7 +748,7 @@ def format_results_for_output(results, original_comments):
                     "themes": "",
                     "posted_date": original_comments.get(comment_id, {}).get('postedDate', ''),
                     "received_date": original_comments.get(comment_id, {}).get('receivedDate', ''),
-                    "occurrence_number": result.get("occurrence_number", 1),
+                    "occurrence_number": result.get("occurrence_number", 0),
                     "duplicate_of": result.get("duplicate_of", "")
                 }
                     
