@@ -396,3 +396,43 @@ export async function buildStatsQueries(options: QueryOptions) {
     neutralQuery
   };
 }
+
+export { buildFilterConditions, buildSearchConditions };
+
+/**
+ * Builds a time series query for comments grouped by date and stance
+ */
+export async function buildTimeSeriesQuery(
+  options: QueryOptions,
+  dateField: 'postedDate' | 'receivedDate' = 'postedDate'
+) {
+  // Build filter conditions
+  const filterConditions = buildFilterConditions(options.filters);
+  const searchConditions = buildSearchConditions(options.search, options.searchFields);
+  const allConditions = [...filterConditions, ...searchConditions];
+
+  // Create the date truncation for grouping by day
+  const dateTrunc = sql`DATE_TRUNC('day', ${comments[dateField]})`;
+  
+  // Build the aggregation query
+  const baseQuery = db
+    .select({
+      date: dateTrunc.as('date'),
+      stance: comments.stance,
+      count: sql<number>`COUNT(*)`.mapWith(Number),
+    })
+    .from(comments)
+    .$dynamic();
+
+  // Add WHERE conditions if any
+  if (allConditions.length > 0) {
+    baseQuery.where(and(...allConditions));
+  }
+
+  // Group by date and stance
+  baseQuery
+    .groupBy(dateTrunc, comments.stance)
+    .orderBy(sql`date ASC`);
+
+  return baseQuery;
+}
