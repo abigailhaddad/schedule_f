@@ -4,8 +4,8 @@ import * as schema from './schema';
 import { NewComment, stanceEnum } from './schema';
 import fs from 'fs';
 import path from 'path';
-import dotenv from 'dotenv';
 import { sql } from 'drizzle-orm';
+import { dbConfig } from './config';
 
 
 // Define interface for the JSON data structure
@@ -26,40 +26,16 @@ interface CommentDataItem {
   receivedDate?: string;
   occurrence_number?: number;
   duplicate_of?: string;
+  cluster_id?: number;
+  pca_x?: number;
+  pca_y?: number;
 }
 
-// Load environment variables from .env file in the current working directory (expected to be 'frontend')
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
-
-// Determine environment directly
-const getDbEnvironment = (): 'dev' | 'prod' => {
-  const dbEnv = process.env.DB_ENV?.toLowerCase();
-  if (dbEnv !== 'dev' && dbEnv !== 'prod') {
-    console.warn(`Invalid or missing DB_ENV: "${dbEnv}". Defaulting to "dev".`);
-    return 'dev';
-  }
-  return dbEnv as 'dev' | 'prod';
-};
-
-const currentDbEnv = getDbEnvironment();
-const isProdEnvironment = currentDbEnv === 'prod';
-
-const getSeedDatabaseUrl = (): string => {
-  const dbUrl = currentDbEnv === 'prod'
-    ? process.env.DATABASE_URL_PROD
-    : process.env.DATABASE_URL_DEV;
-
-  if (!dbUrl) {
-    throw new Error(`DATABASE_URL_${currentDbEnv.toUpperCase()} is not defined in environment variables for seeding.`);
-  }
-  return dbUrl;
-};
-
 const main = async () => {
-  // Show which database we're seeding
-  console.log(`\n🌱 Seeding ${currentDbEnv.toUpperCase()} database`);
+  // Show which database we're seeding using dbConfig
+  console.log(`\n🌱 Seeding ${dbConfig.isProd ? 'PRODUCTION' : 'DEVELOPMENT'} database`);
   
-  if (isProdEnvironment) {
+  if (dbConfig.isProd) {
     console.warn('\n⚠️  WARNING: You are about to seed the PRODUCTION database!');
     console.warn('This will modify production data. Press Ctrl+C to cancel.\n');
     
@@ -67,7 +43,7 @@ const main = async () => {
     await new Promise(resolve => setTimeout(resolve, 5000));
   }
   
-  const databaseUrlForSeed = getSeedDatabaseUrl();
+  const databaseUrlForSeed = dbConfig.url;
 
   console.log(`\n🌱 Attempting to seed database using URL: ${databaseUrlForSeed}`);
 
@@ -76,7 +52,11 @@ const main = async () => {
 
   console.log('Connected to database.');
 
-  const dataPath = path.resolve(__dirname, '../../../../data/data.json');
+  // Determine data path based on environment
+  const devDataPath = path.resolve(__dirname, '../../__tests__/test-data-5-25.json');
+  const prodDataPath = path.resolve(__dirname, '../../../../data/data.json');
+  
+  const dataPath = dbConfig.isDev ? devDataPath : prodDataPath;
   
   console.log(`Reading data from: ${dataPath}`);
 
@@ -93,6 +73,16 @@ const main = async () => {
   console.log(`Found ${jsonData.length} records to process.`);
 
   const commentsToInsert: NewComment[] = [];
+
+  const processDuplicateOf = (dupString: string | undefined): string[] | undefined => {
+    if (dupString === undefined || dupString === null) {
+        return undefined; 
+    }
+    if (dupString.trim() === '') {
+        return [];
+    }
+    return dupString.split(',').map(s => s.trim()).filter(s => s.length > 0);
+  };
 
   for (const item of jsonData) {
     // Validate the stance value is a valid enum value if present
@@ -123,7 +113,10 @@ const main = async () => {
       postedDate: item.postedDate ? new Date(item.postedDate) : null,
       receivedDate: item.receivedDate ? new Date(item.receivedDate) : null,
       occurrenceNumber: item.occurrence_number,
-      duplicateOf: item.duplicate_of,
+      duplicateOf: processDuplicateOf(item.duplicate_of),
+      clusterId: item.cluster_id,
+      pcaX: item.pca_x,
+      pcaY: item.pca_y,
     };
     commentsToInsert.push(newComment);
   }
@@ -151,7 +144,10 @@ const main = async () => {
             postedDate: sql`excluded.posted_date`,
             receivedDate: sql`excluded.received_date`,
             occurrenceNumber: sql`excluded.occurrence_number`,
-            duplicateOf: sql`excluded.duplicate_of`
+            duplicateOf: sql`excluded.duplicate_of`,
+            clusterId: sql`excluded.cluster_id`,
+            pcaX: sql`excluded.pca_x`,
+            pcaY: sql`excluded.pca_y`
           } 
         });
         console.log(`Upserted chunk ${i / chunkSize + 1} of ${Math.ceil(commentsToInsert.length / chunkSize)} for comments`);
