@@ -1,4 +1,8 @@
 # Environment
+
+!data/data.json
+data/attachments
+data/temp*/
 .env
 myenv/
 venv/
@@ -9,7 +13,6 @@ __pycache__/
 
 # Data and results
 results/
-data/
 analyzed_comments/
 comments.json
 *.json
