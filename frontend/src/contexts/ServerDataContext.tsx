@@ -11,7 +11,20 @@ import {
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { SortingState } from "@/components/ServerCommentTable/DataTable";
-import { getPaginatedComments, getCommentStatistics, parseUrlToQueryOptions } from "@/lib/actions/comments";
+import { 
+  getPaginatedComments, 
+  getCommentStatistics, 
+  parseUrlToQueryOptions,
+  getStanceTimeSeries
+} from "@/lib/actions/comments";
+import { StanceData } from "@/components/StanceOverTime/types";
+
+// Define the structure for stance time series data
+interface StanceChartData {
+  posted_date: StanceData[];
+  received_date: StanceData[];
+  error?: string;
+}
 
 interface ServerDataContextProps {
   // Data
@@ -25,6 +38,9 @@ interface ServerDataContextProps {
     against: number;
     neutral: number;
   };
+
+  // Stance Time Series Data
+  stanceTimeSeriesData: StanceChartData | null;
 
   // State
   loading: boolean;
@@ -120,6 +136,7 @@ export function ServerDataContextProvider({
     against: 0,
     neutral: 0
   });
+  const [stanceTimeSeriesData, setStanceTimeSeriesData] = useState<StanceChartData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -149,10 +166,18 @@ export function ServerDataContextProvider({
       options.page = currentPage;
       options.pageSize = pageSize;
       
-      // Fetch data and stats in parallel
-      const [dataResponse, statsResponse] = await Promise.all([
+      // Fetch data, stats, and stance time series in parallel
+      const defaultOptionsForStanceChart = {
+        filters: {},
+        search: undefined,
+        searchFields: undefined,
+      };
+
+      const [dataResponse, statsResponse, stancePostedResponse, stanceReceivedResponse] = await Promise.all([
         getPaginatedComments(options),
-        getCommentStatistics(options)
+        getCommentStatistics(options),
+        getStanceTimeSeries(defaultOptionsForStanceChart, 'postedDate'),
+        getStanceTimeSeries(defaultOptionsForStanceChart, 'receivedDate')
       ]);
 
       if (dataResponse.success && dataResponse.data) {
@@ -169,6 +194,15 @@ export function ServerDataContextProvider({
       } else {
         console.error("Error fetching stats:", statsResponse.error);
       }
+
+      // Process and set stance time series data
+      const newStanceData: StanceChartData = {
+        posted_date: stancePostedResponse.success ? stancePostedResponse.data! : [],
+        received_date: stanceReceivedResponse.success ? stanceReceivedResponse.data! : [],
+        error: stancePostedResponse.error || stanceReceivedResponse.error || undefined,
+      };
+      setStanceTimeSeriesData(newStanceData);
+
     } catch (err) {
       console.error("Exception in fetchData:", err);
       setError("An unexpected error occurred");
@@ -380,6 +414,9 @@ export function ServerDataContextProvider({
     
     // Statistics
     stats,
+
+    // Stance Time Series Data
+    stanceTimeSeriesData,
 
     // State
     loading,

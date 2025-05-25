@@ -1,11 +1,12 @@
 'use server';
 
 import { db, connectDb } from '@/lib/db';
-import { Comment } from '@/lib/db/schema';
-import { QueryOptions, buildCommentsQuery, buildStatsQueries } from '../queryBuilder';
+import { Comment} from '@/lib/db/schema';
+import { QueryOptions, buildCommentsQuery, buildStatsQueries, buildTimeSeriesQuery } from '../queryBuilder';
 import { getCachedData } from '../cache';
 import { unstable_cache } from 'next/cache';
 import { cacheConfig } from '../cache-config';
+import { StanceData, TimeSeriesResponse } from '@/lib/types/timeSeries';
 
 // Response types
 export interface CommentsPaginatedResponse {
@@ -186,100 +187,108 @@ export async function getPaginatedComments(
 }
 
 /**
- * Fetches ALL comments based on provided query options for time series analysis.
- * Manages pagination internally to retrieve all matching records.
- * TODO: This almost certainly needs to be totally refactored...
+ * Fetches time series data aggregated by date and stance
  */
-export async function getAllCommentsForTimeSeries(
-  options: QueryOptions
-): Promise<CommentsPaginatedResponse> { // Reusing response type, but 'total' will be total fetched.
-  
-  // Core function that fetches all comments by looping through pages
-  const fetchAllCommentsLoop = async () => {
+export async function getStanceTimeSeries(
+  options: QueryOptions,
+  dateField: 'postedDate' | 'receivedDate' = 'postedDate'
+): Promise<TimeSeriesResponse> {
+  const fetchTimeSeries = async () => {
     try {
       const connection = await connectDb();
       if (!connection.success) {
-        throw new Error("Failed to connect to database for time series");
+        throw new Error("Failed to connect to database");
       }
 
-      let allFetchedComments: Comment[] = [];
-      let currentPage = 1;
-      const internalPageSize = 500; // Sensible page size for internal looping
-      let hasMoreData = true;
+      // Build the time series query
+      const query = await buildTimeSeriesQuery(options, dateField);
 
-      // Clone options and remove any pre-existing pagination for internal loop
-      const loopOptions = { ...options };
-      delete loopOptions.page;
-      delete loopOptions.pageSize;
+      // Execute the query
+      const result = await query;
+      
+      // Transform the flat results into the StanceData format
+      const groupedByDate = new Map<string, StanceData>();
+      
+      for (const row of result as Array<{ date: string | Date | null; stance: string | null; count: number }>) {
+        let dateObject: Date;
 
-      while (hasMoreData) {
-        const currentOptions: QueryOptions = {
-          ...loopOptions,
-          page: currentPage,
-          pageSize: internalPageSize,
-        };
-
-        const queryResult = await buildCommentsQuery(currentOptions);
-        // We only need the data query for looping, not the count query for each page.
-        const result = await db.execute(queryResult.query);
-        const newComments = result.rows as Comment[];
-
-        if (newComments.length > 0) {
-          allFetchedComments = allFetchedComments.concat(newComments);
-          if (newComments.length < internalPageSize) {
-            hasMoreData = false; // Last page fetched
-          } else {
-            currentPage++;
+        if (row.date instanceof Date) {
+          dateObject = row.date;
+        } else if (typeof row.date === 'string') {
+          dateObject = new Date(row.date);
+          // Check if parsing the string resulted in a valid Date
+          if (isNaN(dateObject.getTime())) {
+            console.warn(`Skipping row due to unparsable date string: '${row.date}'`, row);
+            continue; // Skip this row if date string is invalid
           }
+        } else if (row.date === null || typeof row.date === 'undefined') {
+          // This condition was previously handled by the general check, 
+          // but it's good to be explicit. The user saw logs for this.
+          console.warn("Skipping row with null or undefined date:", row);
+          continue; // Skip this row if date is null or undefined
         } else {
-          hasMoreData = false; // No more data
+          // Handle any other unexpected types for row.date
+          console.warn(`Skipping row with unexpected date type: ${typeof row.date}`, row);
+          continue; // Skip this row
+        }
+        
+        // At this point, dateObject should be a valid Date object
+        const dateStr = dateObject.toISOString().split('T')[0];
+        
+        if (!groupedByDate.has(dateStr)) {
+          groupedByDate.set(dateStr, {
+            date: dateStr,
+            For: 0,
+            Against: 0,
+            'Neutral/Unclear': 0,
+          });
+        }
+        
+        const dayData = groupedByDate.get(dateStr)!;
+        const stance = row.stance || 'Neutral/Unclear';
+        
+        if (stance === 'For' || stance === 'Against' || stance === 'Neutral/Unclear') {
+          dayData[stance] = row.count;
         }
       }
 
+      // Convert to array and sort by date
+      const timeSeriesData = Array.from(groupedByDate.values())
+        .sort((a, b) => a.date.localeCompare(b.date));
+
       return {
         success: true,
-        data: allFetchedComments,
-        total: allFetchedComments.length, // Total fetched comments
+        data: timeSeriesData,
       };
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error("Error fetching all comments for time series:", errorMessage);
+      console.error("Error fetching time series:", errorMessage);
       return { 
         success: false, 
-        error: `Failed to fetch all comments: ${errorMessage}` 
+        error: `Failed to fetch time series: ${errorMessage}` 
       };
     }
   };
 
-  // Determine cache key based on options (excluding pagination as it's handled internally)
-  const cacheKeyOptions = { ...options };
-  delete cacheKeyOptions.page;
-  delete cacheKeyOptions.pageSize;
-
-  const cacheKey = `all-comments-timeseries-${JSON.stringify(cacheKeyOptions)}`;
-  
   // Check if we should skip caching
   const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
   
   if (shouldSkipCache) {
-    console.log("[getAllCommentsForTimeSeries] Skipping cache in development.");
-    return fetchAllCommentsLoop();
+    return fetchTimeSeries();
   }
 
-  // Use Next.js unstable_cache for production or when cache is enabled
-  const getCachedAllComments = unstable_cache(
-    fetchAllCommentsLoop,
-    [cacheKey], // Cache key array
+  // Use Next.js unstable_cache for production
+  const getCachedTimeSeries = unstable_cache(
+    fetchTimeSeries,
+    [`time-series-${dateField}-${JSON.stringify(options)}`],
     {
-      revalidate: 86400, // 24 hours, matching your page revalidation
-      tags: ['comments-timeseries', 'comments'] // Specific tag for this type of data
+      revalidate: 86400, // 24 hours
+      tags: ['time-series', 'comments']
     }
   );
   
-  console.log(`[getAllCommentsForTimeSeries] Using cache key: ${cacheKey}`);
-  return getCachedAllComments();
+  return getCachedTimeSeries();
 }
-
 /**
  * Fetches statistics based on current filters
  */
