@@ -13,11 +13,10 @@ interface TooltipData {
   comments?: Array<{ id: string; title: string; stance: string }>;
 }
 
-export default function SimpleSVGChart({ data, className = "" }: ChartProps) {
+export default function SimpleSVGChart({ data }: ChartProps) {
   const router = useRouter();
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
   const [tooltipPinned, setTooltipPinned] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 800, height: 320 });
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
