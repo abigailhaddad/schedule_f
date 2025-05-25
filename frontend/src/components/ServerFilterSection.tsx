@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
 import FilterModal from './FilterModal';
 import { useServerDataContext } from '@/contexts/ServerDataContext';
+import Card from '@/components/ui/Card';
 
 export default function ServerFilterSection() {
   // Get filters and setFilters from the context
@@ -174,25 +175,25 @@ export default function ServerFilterSection() {
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-      <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-indigo-500 to-indigo-600 flex justify-between items-center">
-        <h5 className="text-lg font-bold text-white flex items-center">
-          <span className="mr-2">{hasActiveFilters ? '🔍' : '⚙️'}</span>
-          {hasActiveFilters ? 'Active Filters' : 'Filters'}
-        </h5>
-        {hasActiveFilters && (
-          <button 
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-3 py-1 rounded transition-colors"
-            onClick={clearAllFilters}
-          >
-            Clear All
-          </button>
-        )}
-      </div>
-      <div className="p-4">
-        <div className={`flex flex-wrap mb-4 ${
-          hasActiveFilters ? '' : 'hidden'
-        }`}>
+    <Card collapsible={true} initiallyCollapsed={false}>
+      <Card.Header className="bg-gradient-to-r from-indigo-500 to-indigo-600">
+        <div className="flex justify-between items-center w-full">
+          <h5 className="text-lg font-bold text-white flex items-center">
+            <span className="mr-2">{hasActiveFilters ? '🔍' : '⚙️'}</span>
+            {hasActiveFilters ? 'Active Filters' : 'Filters'}
+          </h5>
+          {hasActiveFilters && (
+            <button 
+              className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-3 py-1 rounded transition-colors"
+              onClick={clearAllFilters}
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+      </Card.Header>
+      <Card.Body className="p-4">
+        <div className={`flex flex-wrap mb-4 ${hasActiveFilters ? '' : 'hidden'}`}>
           {renderFilterTags()}
         </div>
         
@@ -202,7 +203,7 @@ export default function ServerFilterSection() {
           <h6 className="font-medium text-gray-700 mb-2">Filter Options</h6>
           {renderFilterButtons()}
         </div>
-      </div>
+      </Card.Body>
       
       {/* Filter Modal - only render when showFilterModal is true */}
       {activeField && (
@@ -217,6 +218,6 @@ export default function ServerFilterSection() {
           isOpen={showFilterModal}
         />
       )}
-    </div>
+    </Card>
   );
 }
