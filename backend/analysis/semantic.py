@@ -300,6 +300,37 @@ def create_report(cluster_analysis: Dict, disagreement_analysis: Dict, output_di
     
     print(f"✅ Report saved to: {report_path}")
 
+def update_data_with_clusters(input_file: str, processed_comments: List[Dict], cluster_labels: np.ndarray):
+    """Update the original data.json file with cluster IDs"""
+    try:
+        # Load the original data
+        with open(input_file, 'r') as f:
+            original_data = json.load(f)
+        
+        # Create a mapping from comment ID to cluster ID
+        cluster_mapping = {}
+        for i, comment in enumerate(processed_comments):
+            comment_id = comment.get('id')
+            if comment_id:
+                cluster_mapping[comment_id] = int(cluster_labels[i])
+        
+        # Update the original data with cluster IDs
+        updated_count = 0
+        for item in original_data:
+            comment_id = item.get('id')
+            if comment_id in cluster_mapping:
+                item['cluster_id'] = cluster_mapping[comment_id]
+                updated_count += 1
+        
+        # Save the updated data back to the file
+        with open(input_file, 'w') as f:
+            json.dump(original_data, f, indent=2)
+        
+        print(f"✅ Updated {updated_count} comments with cluster IDs in {input_file}")
+        
+    except Exception as e:
+        print(f"❌ Error updating data.json with cluster IDs: {e}")
+
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(description='Streamlined semantic clustering on comment text only')
@@ -353,6 +384,9 @@ def main():
     
     # Create report
     create_report(cluster_analysis, disagreement_analysis, output_dir)
+    
+    # Update original data.json with cluster IDs
+    update_data_with_clusters(input_file, processed_comments, cluster_labels)
     
     print(f"\n✅ Clustering complete!")
     print(f"📊 {len(processed_comments):,} comments grouped into {args.n_clusters} clusters")

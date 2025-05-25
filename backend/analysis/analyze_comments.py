@@ -14,6 +14,7 @@ Key fixes:
 """
 
 import os
+import sys
 import json
 import glob
 import argparse
@@ -705,8 +706,8 @@ def format_results_for_output(results, original_comments):
                     "stance": result.get("analysis", {}).get("stance", ""),
                     "key_quote": result.get("analysis", {}).get("key_quote", ""),
                     "rationale": result.get("analysis", {}).get("rationale", ""),
-                    "postedDate": original_comments.get(comment_id, {}).get('postedDate', ''),
-                    "receivedDate": original_comments.get(comment_id, {}).get('receivedDate', ''),
+                    "posted_date": original_comments.get(comment_id, {}).get('postedDate', ''),
+                    "received_date": original_comments.get(comment_id, {}).get('receivedDate', ''),
                     "occurrence_number": result.get("occurrence_number", 1),
                     "duplicate_of": result.get("duplicate_of", "")
                 }
@@ -735,8 +736,8 @@ def format_results_for_output(results, original_comments):
                     "key_quote": "",
                     "rationale": "",
                     "themes": "",
-                    "postedDate": original_comments.get(comment_id, {}).get('postedDate', ''),
-                    "receivedDate": original_comments.get(comment_id, {}).get('receivedDate', ''),
+                    "posted_date": original_comments.get(comment_id, {}).get('postedDate', ''),
+                    "received_date": original_comments.get(comment_id, {}).get('receivedDate', ''),
                     "occurrence_number": result.get("occurrence_number", 1),
                     "duplicate_of": result.get("duplicate_of", "")
                 }
@@ -983,8 +984,11 @@ def analyze_comments(input_file, output_file=None, top_n=None, model="gpt-4o-min
     comments_to_process = [c for c in comments_data if c.get('id') not in already_processed]
     logger.info(f"Processing {len(comments_to_process)} of {len(comments_data)} comments")
     
-    # Process in batches with progress bar
-    with tqdm(total=len(comments_to_process), desc="Analyzing comments") as pbar:
+    # Process in batches with progress bar  
+    sys.stdout.flush()  # Ensure any previous output is flushed
+    with tqdm(total=len(comments_to_process), desc="Analyzing comments", 
+              file=sys.stdout, disable=False, dynamic_ncols=True, 
+              miniters=1, mininterval=0.1) as pbar:
         for i in range(0, len(comments_to_process), batch_size):
             # Get current batch
             batch = comments_to_process[i:i+batch_size]
