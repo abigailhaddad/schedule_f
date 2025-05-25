@@ -20,7 +20,8 @@
     "db:push:dev": "DB_ENV=dev drizzle-kit push",
     "db:push:prod": "DB_ENV=prod drizzle-kit push",
     "build:prod": "next build",
-    "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts"
+    "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts",
+    "deploy": "npm run db:use:prod && vercel --prod"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
