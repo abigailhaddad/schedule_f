@@ -4,6 +4,7 @@ import ServerFilterSection from '../ServerFilterSection';
 import ServerCommentTable from '../ServerCommentTable';
 import ServerStatisticsCard from '../ServerStatisticsCard';
 import StanceOverTimeClient from '../StanceOverTime/StanceOverTimeClient';
+import Card from '@/components/ui/Card';
 
 export default function ServerDataState() {
   return (
@@ -28,11 +29,12 @@ export default function ServerDataState() {
       {/* Third row: Data Table */}
       <div className="row">
         <div className="col-12">
-          <div className="card">
-            <div className="card-body table-responsive">
+          <Card collapsible={true} initiallyCollapsed={false}>
+            {/* <Card.Header>Optional: Table Title</Card.Header> */}
+            <Card.Body className="table-responsive">
               <ServerCommentTable />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     </div>

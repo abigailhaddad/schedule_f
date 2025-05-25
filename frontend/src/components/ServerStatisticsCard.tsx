@@ -3,6 +3,7 @@
 
 import { useServerDataContext } from '@/contexts/ServerDataContext';
 import { useState, useEffect } from 'react';
+import Card from '@/components/ui/Card';
 
 export default function ServerStatisticsCard() {
   const { stats, loading } = useServerDataContext();
@@ -51,36 +52,37 @@ export default function ServerStatisticsCard() {
     </div>
   );
 
-  // If it's the initial load sequence and data is currently loading from context
+  // Loading state display
   if (isInitialLoad && loading) {
     return (
-      <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-        <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
+      <Card className="overflow-hidden" collapsible={true} initiallyCollapsed={false}>
+        <Card.Header className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
           <h5 className="text-lg font-bold text-white flex items-center">
             <span className="mr-2">📊</span>
             Statistics Overview
           </h5>
-        </div>
-        <div className="p-6" id="statistics">
+        </Card.Header>
+        <Card.Body className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[...Array(4)].map((_, index) => (
               <StatPlaceholder key={index} />
             ))}
           </div>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     );
   }
   
+  // Main display of statistics
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-      <div className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
+    <Card className="overflow-hidden" collapsible={true} initiallyCollapsed={false}>
+      <Card.Header className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
         <h5 className="text-lg font-bold text-white flex items-center">
           <span className="mr-2">📊</span>
           Statistics Overview
         </h5>
-      </div>
-      <div className="p-6" id="statistics">
+      </Card.Header>
+      <Card.Body className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {statisticsData.map((stat) => {
             const colors = getStatColors(stat.key);
@@ -114,7 +116,7 @@ export default function ServerStatisticsCard() {
             );
           })}
         </div>
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   );
 }
