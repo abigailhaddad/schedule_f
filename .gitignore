@@ -18,6 +18,7 @@ comments.json
 *.json
 !data/**
 data/attachments/
+data/temp*/
 !frontend/package.json
 !frontend/package-lock.json
 !frontend/tsconfig.json
