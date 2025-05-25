@@ -253,6 +253,48 @@ def export_corrected():
     except Exception as e:
         return jsonify({'error': f'Export failed: {str(e)}'}), 500
 
+@app.route('/api/update_original', methods=['POST'])
+def update_original():
+    """Update the original lookup table file with corrections."""
+    try:
+        # Create backup of original file
+        backup_file = f"{data_file_path}.backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        shutil.copy2(data_file_path, backup_file)
+        
+        # Apply corrections to lookup data
+        corrections_applied = 0
+        
+        for entry in lookup_data:
+            lookup_id = entry.get('lookup_id')
+            
+            # Apply correction if it exists
+            if lookup_id in corrections:
+                correction = corrections[lookup_id]
+                entry['stance'] = correction['corrected_stance']
+                entry['corrected'] = True
+                entry['correction_timestamp'] = correction['timestamp']
+                entry['original_stance'] = correction['original_stance']
+                corrections_applied += 1
+        
+        # Save updated lookup table to original file
+        with open(data_file_path, 'w', encoding='utf-8') as f:
+            json.dump(lookup_data, f, indent=2)
+        
+        # Clear corrections since they're now applied
+        corrections.clear()
+        save_corrections()
+        
+        return jsonify({
+            'success': True, 
+            'message': f'Updated original file with {corrections_applied} corrections',
+            'backup_file': backup_file,
+            'corrections_applied': corrections_applied,
+            'total_entries': len(lookup_data)
+        })
+        
+    except Exception as e:
+        return jsonify({'error': f'Update failed: {str(e)}'}), 500
+
 @app.route('/api/stats')
 def get_stats():
     """Get statistics about corrections."""
@@ -296,7 +338,7 @@ def main():
     """Main function to run the app."""
     parser = argparse.ArgumentParser(description='Lookup Table Label Correction Interface')
     parser.add_argument('--data', type=str, required=True,
-                        help='Path to the lookup_table_analyzed.json file to review')
+                        help='Path to the analyzed_lookup_table.json file to review')
     parser.add_argument('--port', type=int, default=5000,
                         help='Port to run the web server on (default: 5000)')
     parser.add_argument('--host', type=str, default='127.0.0.1',

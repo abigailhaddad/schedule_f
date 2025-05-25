@@ -60,6 +60,25 @@
             background: #218838;
         }
         
+        .update-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .update-btn:hover {
+            background: #0056b3;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        
         .stats {
             display: flex;
             gap: 20px;
@@ -267,7 +286,10 @@
                 </select>
             </div>
             
-            <button class="export-btn" onclick="exportCorrected()">Export Corrected Table</button>
+            <div class="button-group">
+                <button class="export-btn" onclick="exportCorrected()">Export Corrected Table</button>
+                <button class="update-btn" onclick="updateOriginal()">Update Original File</button>
+            </div>
         </div>
         
         <div class="stats">
@@ -441,6 +463,35 @@
                     console.log('Export details:', data);
                 } else {
                     showAlert(data.error || 'Export failed', 'error');
+                }
+            })
+            .catch(error => {
+                showAlert('Network error: ' + error.message, 'error');
+            });
+        }
+        
+        function updateOriginal() {
+            if (!confirm('This will UPDATE the original lookup table file with your corrections and create a backup. This action cannot be undone. Continue?')) {
+                return;
+            }
+            
+            fetch('/api/update_original', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert(`${data.message}. Backup saved as: ${data.backup_file}`);
+                    console.log('Update details:', data);
+                    // Reload the page to show updated state
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    showAlert(data.error || 'Update failed', 'error');
                 }
             })
             .catch(error => {
