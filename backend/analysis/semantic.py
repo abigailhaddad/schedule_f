@@ -212,7 +212,7 @@ def analyze_clusters(processed_comments: List[Dict], cluster_labels: np.ndarray)
     return cluster_analysis, disagreement_analysis
 
 def create_visualizations(embeddings: np.ndarray, cluster_labels: np.ndarray, 
-                         linkage_matrix: np.ndarray, output_dir: str):
+                         linkage_matrix: np.ndarray, output_dir: str) -> np.ndarray:
     """Create dendrogram and cluster visualization"""
     print(f"📊 Creating visualizations...")
     
@@ -249,6 +249,9 @@ def create_visualizations(embeddings: np.ndarray, cluster_labels: np.ndarray,
     plt.close()
     
     print(f"✅ Visualizations saved to: {output_dir}")
+    
+    # Return the 2D coordinates for adding to data.json
+    return embeddings_2d
 
 def create_report(cluster_analysis: Dict, disagreement_analysis: Dict, output_dir: str):
     """Create report with keywords and stance disagreements"""
@@ -300,6 +303,47 @@ def create_report(cluster_analysis: Dict, disagreement_analysis: Dict, output_di
     
     print(f"✅ Report saved to: {report_path}")
 
+def update_data_with_clusters(input_file: str, processed_comments: List[Dict], cluster_labels: np.ndarray, pca_coordinates: np.ndarray = None):
+    """Update the original data.json file with cluster IDs"""
+    try:
+        # Load the original data
+        with open(input_file, 'r') as f:
+            original_data = json.load(f)
+        
+        # Create a mapping from comment ID to cluster ID and coordinates
+        cluster_mapping = {}
+        for i, comment in enumerate(processed_comments):
+            comment_id = comment.get('id')
+            if comment_id:
+                mapping_data = {'cluster_id': int(cluster_labels[i])}
+                if pca_coordinates is not None and i < len(pca_coordinates):
+                    mapping_data['pca_x'] = float(pca_coordinates[i, 0])
+                    mapping_data['pca_y'] = float(pca_coordinates[i, 1])
+                cluster_mapping[comment_id] = mapping_data
+        
+        # Update the original data with cluster IDs and coordinates
+        updated_count = 0
+        for item in original_data:
+            comment_id = item.get('id')
+            if comment_id in cluster_mapping:
+                mapping_data = cluster_mapping[comment_id]
+                item['cluster_id'] = mapping_data['cluster_id']
+                if 'pca_x' in mapping_data:
+                    item['pca_x'] = mapping_data['pca_x']
+                    item['pca_y'] = mapping_data['pca_y']
+                updated_count += 1
+        
+        # Save the updated data back to the file
+        with open(input_file, 'w') as f:
+            json.dump(original_data, f, indent=2)
+        
+        coords_msg = " and PCA coordinates" if pca_coordinates is not None else ""
+        print(f"✅ Updated {updated_count} comments with cluster IDs{coords_msg} in {input_file}")
+        
+    except Exception as e:
+        coords_msg = " and PCA coordinates" if pca_coordinates is not None else ""
+        print(f"❌ Error updating data.json with cluster IDs{coords_msg}: {e}")
+
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(description='Streamlined semantic clustering on comment text only')
@@ -349,10 +393,13 @@ def main():
     cluster_analysis, disagreement_analysis = analyze_clusters(processed_comments, cluster_labels)
     
     # Create visualizations (dendrogram and cluster plot)
-    create_visualizations(embeddings, cluster_labels, linkage_matrix, output_dir)
+    pca_coordinates = create_visualizations(embeddings, cluster_labels, linkage_matrix, output_dir)
     
     # Create report
     create_report(cluster_analysis, disagreement_analysis, output_dir)
+    
+    # Update original data.json with cluster IDs and PCA coordinates
+    update_data_with_clusters(input_file, processed_comments, cluster_labels, pca_coordinates)
     
     print(f"\n✅ Clustering complete!")
     print(f"📊 {len(processed_comments):,} comments grouped into {args.n_clusters} clusters")
