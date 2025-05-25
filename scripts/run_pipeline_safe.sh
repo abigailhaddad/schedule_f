@@ -1,132 +1,197 @@
 #!/bin/bash
 
 SESSION_NAME="schedule_f_analysis"
-PYTHON_SCRIPT="../backend/pipeline.py"  # Default to main pipeline
-BASE_RESULTS_DIR="results"
-VENV_PATH="../myenv/bin/activate"  # adjust path if needed
+BASE_RESULTS_DIR="../results"
+VENV_PATH="../myenv/bin/activate"
 
-# Parse arguments (supports both positional and flag-style)
-SPECIFIC_OUTPUT_DIR=""
-TRUNCATE_CHARS=""
-LIMIT_CHARS=""
-USE_RESUME=false
-CSV_FILE=""
+echo "🚀 Schedule F Comment Analysis Pipeline"
+echo "======================================"
+echo ""
 
-# Process arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --resume)
-            USE_RESUME=true
-            PYTHON_SCRIPT="../backend/resume_pipeline.py"
-            echo "Using resume pipeline (incremental updates)"
-            shift
-            ;;
-        --csv)
-            CSV_FILE="$2"
-            echo "Using CSV file: $CSV_FILE"
-            shift 2
-            ;;
-        --output_dir)
-            SPECIFIC_OUTPUT_DIR="$2"
-            echo "Using output directory: $SPECIFIC_OUTPUT_DIR"
-            shift 2
-            ;;
-        --truncate)
-            if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
-                TRUNCATE_CHARS="--truncate $2"
-                echo "Will truncate comments to $2 characters for analysis"
-                shift 2
-            else
-                echo "Error: --truncate requires a numeric value"
-                exit 1
-            fi
-            ;;
-        --limit)
-            if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
-                LIMIT_CHARS="--limit $2"
-                echo "Will limit processing to $2 comments (only for legacy support)"
-                shift 2
-            else
-                echo "Error: --limit requires a numeric value"
-                exit 1
-            fi
-            ;;
-        --help|-h)
-            echo "Usage: $0 [options]"
-            echo ""
-            echo "Options:"
-            echo "  --resume                Use resume pipeline for incremental updates"
-            echo "  --csv FILE             CSV file to process"
-            echo "  --output_dir DIR       Output directory"
-            echo "  --truncate NUM         Truncate text to NUM characters"
-            echo "  --help, -h             Show this help"
-            echo ""
-            echo "Examples:"
-            echo "  $0 --csv comments.csv --output_dir results --truncate 500"
-            echo "  $0 --resume --csv new_comments.csv --output_dir results --truncate 500"
-            exit 0
-            ;;
-        *)
-            # Backward compatibility: treat as CSV file if it exists
-            if [ -f "$1" ] && [ -z "$CSV_FILE" ]; then
-                CSV_FILE="$1"
-                echo "Using CSV file: $CSV_FILE"
-            # Otherwise check if it's a numeric value for backward compatibility
-            elif [ -z "$TRUNCATE_CHARS" ] && [ "$1" -eq "$1" ] 2>/dev/null; then
-                TRUNCATE_CHARS="--truncate $1"
-                echo "Will truncate comments to $1 characters for analysis"
-            else
-                echo "Error: Unknown argument: $1"
-                echo "Use --help for usage information"
-                exit 1
-            fi
-            shift
-            ;;
-    esac
-done
+# Function to prompt for yes/no input
+ask_yes_no() {
+    local prompt="$1"
+    local default="$2"
+    local response
+    
+    while true; do
+        if [ "$default" = "y" ]; then
+            echo -n "$prompt [Y/n]: "
+        else
+            echo -n "$prompt [y/N]: "
+        fi
+        read response
+        
+        # Use default if empty
+        if [ -z "$response" ]; then
+            response="$default"
+        fi
+        
+        case "$response" in
+            [Yy]|[Yy][Ee][Ss]) return 0 ;;
+            [Nn]|[Nn][Oo]) return 1 ;;
+            *) echo "Please answer yes or no." ;;
+        esac
+    done
+}
 
-# Set up default values if not specified
-if [ -z "$CSV_FILE" ]; then
-    if [ -f "comments.csv" ]; then
-        CSV_FILE="comments.csv"
-        echo "Found comments.csv file, will use this as input"
+# Function to prompt for input with default
+ask_input() {
+    local prompt="$1"
+    local default="$2"
+    local response
+    
+    if [ -n "$default" ]; then
+        echo -n "$prompt [$default]: "
     else
-        echo "Error: No CSV file specified and comments.csv not found"
-        echo "Use --csv FILE or --help for usage information"
+        echo -n "$prompt: "
+    fi
+    read response
+    
+    if [ -z "$response" ] && [ -n "$default" ]; then
+        response="$default"
+    fi
+    
+    echo "$response"
+}
+
+# Ask about pipeline mode
+echo "1. Pipeline Mode"
+echo "=================="
+if ask_yes_no "Are you resuming from existing files (vs starting fresh)" "n"; then
+    USE_RESUME=true
+    PYTHON_SCRIPT="../backend/resume_pipeline.py"
+    echo "✓ Using resume pipeline"
+    echo ""
+    
+    # Ask about existing files
+    echo "2. Existing Files (for resume mode)"
+    echo "==================================="
+    RAW_DATA_FILE=$(ask_input "Raw data file path" "data/raw_data.json")
+    LOOKUP_TABLE_FILE=$(ask_input "Lookup table file path" "data/lookup_table.json")
+    
+    # Validate files exist
+    if [ ! -f "../$RAW_DATA_FILE" ]; then
+        echo "Error: Raw data file not found: ../$RAW_DATA_FILE"
+        exit 1
+    fi
+    if [ ! -f "../$LOOKUP_TABLE_FILE" ]; then
+        echo "Error: Lookup table file not found: ../$LOOKUP_TABLE_FILE"
+        exit 1
+    fi
+    
+    RESUME_ARGS="--raw_data $RAW_DATA_FILE --lookup_table $LOOKUP_TABLE_FILE"
+else
+    USE_RESUME=false
+    PYTHON_SCRIPT="../backend/pipeline.py"
+    echo "✓ Using fresh pipeline"
+    RESUME_ARGS=""
+fi
+
+echo ""
+
+# Ask about CSV file
+echo "3. Input Data"
+echo "============="
+CSV_FILE=$(ask_input "CSV file path" "comments.csv")
+
+# Validate CSV exists
+if [ ! -f "../$CSV_FILE" ]; then
+    echo "Error: CSV file not found: ../$CSV_FILE"
+    exit 1
+fi
+
+echo ""
+
+# Ask about output directory
+echo "4. Output Directory"
+echo "==================="
+if ask_yes_no "Use timestamped output directory" "y"; then
+    TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+    OUTPUT_DIR="$BASE_RESULTS_DIR/results_$TIMESTAMP"
+else
+    OUTPUT_DIR=$(ask_input "Custom output directory" "$BASE_RESULTS_DIR/custom")
+fi
+
+echo ""
+
+# Ask about truncation
+echo "5. Text Processing"
+echo "=================="
+TRUNCATE_ARGS=""
+if ask_yes_no "Truncate text for analysis" "n"; then
+    TRUNCATE_CHARS=$(ask_input "Truncation length (characters)" "1000")
+    if [[ "$TRUNCATE_CHARS" =~ ^[0-9]+$ ]]; then
+        TRUNCATE_ARGS="--truncate $TRUNCATE_CHARS"
+    else
+        echo "Error: Truncation length must be a number"
         exit 1
     fi
 fi
 
-if [ -z "$SPECIFIC_OUTPUT_DIR" ]; then
-    # Create timestamped results directory
-    TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-    SPECIFIC_OUTPUT_DIR="$BASE_RESULTS_DIR/results_$TIMESTAMP"
-    echo "Using timestamped output directory: $SPECIFIC_OUTPUT_DIR"
+echo ""
+
+# Ask about analysis steps
+echo "6. Processing Steps"
+echo "==================="
+SKIP_ARGS=""
+if ask_yes_no "Skip LLM analysis (data processing only)" "n"; then
+    SKIP_ARGS="$SKIP_ARGS --skip_analysis"
 fi
 
-# Create output directory
-mkdir -p "$SPECIFIC_OUTPUT_DIR"
+if ask_yes_no "Skip clustering analysis" "n"; then
+    SKIP_ARGS="$SKIP_ARGS --skip_clustering"
+fi
 
-# Build pipeline arguments
-PIPELINE_ARGS="--csv $CSV_FILE --output_dir $SPECIFIC_OUTPUT_DIR $TRUNCATE_CHARS"
+if [ "$USE_RESUME" = true ] && ask_yes_no "Run quote verification" "n"; then
+    SKIP_ARGS="$SKIP_ARGS --verify_quotes"
+fi
 
 echo ""
-echo "🔧 Pipeline configuration:"
+
+# Create output directory
+mkdir -p "$OUTPUT_DIR"
+
+# Build pipeline arguments
+PIPELINE_ARGS="--csv $CSV_FILE --output_dir $OUTPUT_DIR $RESUME_ARGS $TRUNCATE_ARGS $SKIP_ARGS"
+
+echo "🔧 Final Configuration"
+echo "======================"
 echo "   Script: $PYTHON_SCRIPT"
-echo "   CSV file: $CSV_FILE"
-echo "   Output directory: $SPECIFIC_OUTPUT_DIR"
-if [ -n "$TRUNCATE_CHARS" ]; then
-    echo "   Truncation: ${TRUNCATE_CHARS#--truncate } characters"
-fi
+echo "   CSV file: ../$CSV_FILE"
+echo "   Output directory: $OUTPUT_DIR"
 if [ "$USE_RESUME" = true ]; then
+    echo "   Raw data: ../$RAW_DATA_FILE"
+    echo "   Lookup table: ../$LOOKUP_TABLE_FILE"
     echo "   Mode: Resume (incremental updates)"
 else
     echo "   Mode: Fresh analysis"
 fi
+if [ -n "$TRUNCATE_ARGS" ]; then
+    echo "   Truncation: ${TRUNCATE_ARGS#--truncate } characters"
+fi
+if [[ "$SKIP_ARGS" == *"--skip_analysis"* ]]; then
+    echo "   LLM Analysis: SKIPPED"
+fi
+if [[ "$SKIP_ARGS" == *"--skip_clustering"* ]]; then
+    echo "   Clustering: SKIPPED"
+fi
+if [[ "$SKIP_ARGS" == *"--verify_quotes"* ]]; then
+    echo "   Quote Verification: ENABLED"
+fi
+echo ""
+
+# Final confirmation
+if ! ask_yes_no "Start pipeline with these settings" "y"; then
+    echo "Cancelled."
+    exit 0
+fi
+
 echo ""
 
 # Kill existing session if it exists
 if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+    echo "🔄 Killing existing tmux session..."
     tmux kill-session -t "$SESSION_NAME"
 fi
 
@@ -144,15 +209,16 @@ echo 'Pipeline args: $PIPELINE_ARGS'
 
 export PYTHONPATH=\$PYTHONPATH:\$(pwd)
 
-# Run Python with unbuffered output - let pipeline handle all prompting
-python -u $PYTHON_SCRIPT $PIPELINE_ARGS | tee $SPECIFIC_OUTPUT_DIR/pipeline.log
+# Run Python with unbuffered output
+python -u $PYTHON_SCRIPT $PIPELINE_ARGS | tee $OUTPUT_DIR/pipeline.log
 
-echo '✅ Analysis finished. Log saved to $SPECIFIC_OUTPUT_DIR/pipeline.log'
+echo '✅ Analysis finished. Log saved to $OUTPUT_DIR/pipeline.log'
+echo '📁 Results saved to: $OUTPUT_DIR'
 " C-m
 
 echo ""
 echo "🚀 Analysis started in tmux session: $SESSION_NAME"
-echo "📺 To view logs: tail -f $SPECIFIC_OUTPUT_DIR/pipeline.log"
+echo "📺 To view logs: tail -f $OUTPUT_DIR/pipeline.log"
 echo "📺 To view session: tmux attach -t $SESSION_NAME"
 echo "🧼 To stop: tmux kill-session -t $SESSION_NAME"
-echo "📁 Results will be saved to: $SPECIFIC_OUTPUT_DIR"
+echo "📁 Results will be saved to: $OUTPUT_DIR"
