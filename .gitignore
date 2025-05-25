@@ -1,4 +1,7 @@
 # Environment
+
+!data/data.json
+
 .env
 myenv/
 venv/
