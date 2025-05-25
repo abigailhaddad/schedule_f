@@ -1,5 +1,5 @@
 // lib/db/schema.ts
-import { pgTable, text, timestamp, varchar, boolean, pgEnum, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, varchar, boolean, pgEnum, integer, doublePrecision } from 'drizzle-orm/pg-core';
 
 export const stanceEnum = pgEnum('stance', ['For', 'Against', 'Neutral/Unclear']);
 
@@ -20,7 +20,10 @@ export const comments = pgTable('comments', {
   postedDate: timestamp('posted_date'),
   receivedDate: timestamp('received_date'),
   occurrenceNumber: integer('occurrence_number'),
-  duplicateOf: varchar('duplicate_of'),
+  duplicateOf: varchar('duplicate_of').array(),
+  clusterId: integer('cluster_id'),
+  pcaX: doublePrecision('pca_x'),
+  pcaY: doublePrecision('pca_y'),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
