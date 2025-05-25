@@ -1,0 +1,20 @@
+2025-05-25 19:18:17,285 - INFO - 🚀 Starting Schedule F analysis pipeline...
+2025-05-25 19:18:17,285 - INFO - 📁 CSV file: comments.csv
+2025-05-25 19:18:17,285 - INFO - 📁 Output directory: test_output
+2025-05-25 19:18:17,285 - INFO - 🎯 Truncation: None
+2025-05-25 19:18:17,285 - INFO - 🤖 Model: gpt-4o-mini
+2025-05-25 19:18:17,285 - INFO - 
+=== STEP 1: Fetching Comments from CSV ===
+2025-05-25 19:18:17,285 - ERROR - ❌ Pipeline failed: attempted relative import with no known parent package
+2025-05-25 19:18:27,002 - INFO - 🚀 Starting Schedule F analysis pipeline...
+2025-05-25 19:18:27,002 - INFO - 📁 CSV file: comments.csv
+2025-05-25 19:18:27,002 - INFO - 📁 Output directory: test_output
+2025-05-25 19:18:27,002 - INFO - 🎯 Truncation: None
+2025-05-25 19:18:27,002 - INFO - 🤖 Model: gpt-4o-mini
+2025-05-25 19:18:27,002 - INFO - 
+=== STEP 1: Fetching Comments from CSV ===
+2025-05-25 19:18:27,104 - INFO - Reading comments from comments.csv...
+2025-05-25 19:18:29,063 - INFO - ✅ Raw comments saved to test_output/raw_data.json
+2025-05-25 19:18:29,063 - INFO - 
+=== STEP 2: Creating Deduplicated Lookup Table ===
+2025-05-25 19:18:29,064 - ERROR - ❌ Pipeline failed: cannot import name 'create_lookup_table_from_raw_data' from 'backend.analysis.create_lookup_table' (/Users/abigailhaddad/Documents/repos/regs/backend/analysis/create_lookup_table.py)
