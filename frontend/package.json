@@ -21,7 +21,8 @@
     "db:push:prod": "DB_ENV=prod drizzle-kit push",
     "build:prod": "next build",
     "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts",
-    "deploy": "npm run db:use:prod && vercel --prod"
+    "deploy": "npm run db:use:prod && vercel --prod",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -54,6 +55,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.15",
+    "cypress": "^14.4.0",
     "drizzle-kit": "^0.31.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
