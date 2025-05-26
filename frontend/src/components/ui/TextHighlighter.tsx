@@ -30,6 +30,11 @@ interface TextHighlighterProps {
    * Whether to use smart truncation for search matches
    */
   smartTruncation?: boolean;
+  
+  /**
+   * Whether the viewport is small (< 1280px)
+   */
+  isSmallViewport?: boolean;
 }
 
 /**
@@ -41,11 +46,17 @@ export default function TextHighlighter({
   searchTerm = '',
   highlightType,
   charLimit,
-  smartTruncation = true
+  smartTruncation = true,
+  isSmallViewport = false
 }: TextHighlighterProps) {
   // If no text or empty text, show placeholder
   if (!text || text === '') {
     return <span className="text-gray-400 italic">—</span>;
+  }
+  
+  // Special handling for small viewport with search term - show only search results
+  if (isSmallViewport && searchTerm && searchTerm.trim() !== '') {
+    return <span title={text} className="cursor-help">{createSearchOnlyText(text, searchTerm, highlightType)}</span>;
   }
   
   // If no search term or character limit, just return the text
@@ -101,11 +112,69 @@ function highlightMatches(text: string, searchTerm: string, highlightType?: stri
             {part}
           </span>
         ) : (
-          part
+          <span key={i}>{part}</span>
         )
       )}
     </>
   );
+}
+
+/**
+ * Create text that shows only search matches with context for small viewports
+ */
+function createSearchOnlyText(text: string, searchTerm: string, highlightType?: string) {
+  if (!searchTerm || !text) {
+    return text;
+  }
+  
+  // Find all matches with their positions
+  const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
+  const matches = [];
+  let match;
+  
+  while ((match = regex.exec(text)) !== null) {
+    matches.push({
+      index: match.index,
+      length: match[0].length,
+      text: match[0]
+    });
+    // Prevent infinite loop on zero-length matches
+    if (match.index === regex.lastIndex) {
+      regex.lastIndex++;
+    }
+  }
+  
+  if (matches.length === 0) {
+    // No matches found, show truncated text
+    return `${text.substring(0, 100)}...`;
+  }
+  
+  // Show only the first few matches with context
+  const contextSize = 40; // Characters of context around each match
+  const maxMatches = 2; // Maximum number of matches to show
+  const segments = [];
+  
+  for (let i = 0; i < Math.min(matches.length, maxMatches); i++) {
+    const matchObj = matches[i];
+    const start = Math.max(0, matchObj.index - contextSize);
+    const end = Math.min(text.length, matchObj.index + matchObj.length + contextSize);
+    
+    let segment = text.substring(start, end);
+    
+    // Add ellipsis if we're not at the beginning/end
+    if (start > 0) segment = '...' + segment;
+    if (end < text.length) segment = segment + '...';
+    
+    segments.push(<span key={`match-${i}`}>{highlightMatches(segment, searchTerm, highlightType)}</span>);
+    
+    // Add separator between segments if there are multiple
+    if (i < Math.min(matches.length, maxMatches) - 1) {
+      segments.push(<span key={`sep-${i}`} className="text-gray-500 mx-2 font-bold">•••</span>);
+    }
+  }
+  
+  return <>{segments}</>;
 }
 
 /**
