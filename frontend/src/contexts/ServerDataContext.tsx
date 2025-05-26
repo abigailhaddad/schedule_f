@@ -149,6 +149,38 @@ export function ServerDataContextProvider({
       : undefined
   );
 
+  // Fetch stance time series data separately (with filters)
+  const fetchStanceTimeSeries = async () => {
+    try {
+      // Create options with current filters and search
+      const stanceChartOptions = {
+        filters: filters,
+        search: searchQuery || undefined,
+        searchFields: undefined,
+      };
+
+      const [stancePostedResponse, stanceReceivedResponse] = await Promise.all([
+        getStanceTimeSeries(stanceChartOptions, 'postedDate'),
+        getStanceTimeSeries(stanceChartOptions, 'receivedDate')
+      ]);
+
+      // Process and set stance time series data
+      const newStanceData: StanceChartData = {
+        posted_date: stancePostedResponse.success ? stancePostedResponse.data! : [],
+        received_date: stanceReceivedResponse.success ? stanceReceivedResponse.data! : [],
+        error: stancePostedResponse.error || stanceReceivedResponse.error || undefined,
+      };
+      setStanceTimeSeriesData(newStanceData);
+    } catch (err) {
+      console.error("Error fetching stance time series:", err);
+      setStanceTimeSeriesData({
+        posted_date: [],
+        received_date: [],
+        error: "Failed to fetch time series data"
+      });
+    }
+  };
+
   // Fetch data based on current parameters
   const fetchData = async () => {
     setLoading(true);
@@ -166,18 +198,10 @@ export function ServerDataContextProvider({
       options.page = currentPage;
       options.pageSize = pageSize;
       
-      // Fetch data, stats, and stance time series in parallel
-      const defaultOptionsForStanceChart = {
-        filters: {},
-        search: undefined,
-        searchFields: undefined,
-      };
-
-      const [dataResponse, statsResponse, stancePostedResponse, stanceReceivedResponse] = await Promise.all([
+      // Fetch data and stats in parallel (but not stance time series)
+      const [dataResponse, statsResponse] = await Promise.all([
         getPaginatedComments(options),
         getCommentStatistics(options),
-        getStanceTimeSeries(defaultOptionsForStanceChart, 'postedDate'),
-        getStanceTimeSeries(defaultOptionsForStanceChart, 'receivedDate')
       ]);
 
       if (dataResponse.success && dataResponse.data) {
@@ -195,14 +219,6 @@ export function ServerDataContextProvider({
         console.error("Error fetching stats:", statsResponse.error);
       }
 
-      // Process and set stance time series data
-      const newStanceData: StanceChartData = {
-        posted_date: stancePostedResponse.success ? stancePostedResponse.data! : [],
-        received_date: stanceReceivedResponse.success ? stanceReceivedResponse.data! : [],
-        error: stancePostedResponse.error || stanceReceivedResponse.error || undefined,
-      };
-      setStanceTimeSeriesData(newStanceData);
-
     } catch (err) {
       console.error("Exception in fetchData:", err);
       setError("An unexpected error occurred");
@@ -210,6 +226,18 @@ export function ServerDataContextProvider({
       setLoading(false);
     }
   };
+
+  // Fetch stance time series on initial load
+  useEffect(() => {
+    fetchStanceTimeSeries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only on mount
+
+  // Refetch stance time series when filters or search changes
+  useEffect(() => {
+    fetchStanceTimeSeries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, searchQuery]); // Only when filters or search changes
 
   // Refresh data function that can be called by consumers
   const refreshData = async () => {

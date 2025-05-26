@@ -1,9 +1,9 @@
 'use client';
 
-import ServerFilterSection from '../ServerFilterSection';
-import ServerCommentTable from '../ServerCommentTable';
-import ServerStatisticsCard from '../ServerStatisticsCard';
-import StanceOverTimeClient from '../StanceOverTime/StanceOverTimeClient';
+import ServerFilterSection from './ServerFilterSection';
+import ServerCommentTable from './ServerCommentTable';
+import ServerStatisticsCard from './ServerStatisticsCard';
+import StanceOverTimeClient from './StanceOverTime/StanceOverTimeClient';
 import Card from '@/components/ui/Card';
 
 export default function ServerDataState() {

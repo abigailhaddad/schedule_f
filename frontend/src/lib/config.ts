@@ -63,7 +63,13 @@ export const datasetConfig = {
         key: 'category',
         title: 'Category',
         filter: 'select',
-        visible: true
+        visible: true,
+        badges: {
+          'Agency': 'bg-success',
+          'Citizen': 'bg-info',
+          'Union': 'bg-warning',
+          'Professional Organization': 'bg-danger'
+        }
       },
       {
         key: 'agencyId',

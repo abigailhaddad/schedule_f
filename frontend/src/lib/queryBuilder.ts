@@ -6,10 +6,17 @@ import { db } from './db';
 
 export type FilterMode = 'exact' | 'includes' | 'at_least';
 export type SortDirection = 'asc' | 'desc';
+export type DateFilterMode = 'exact' | 'range' | 'before' | 'after';
 
 export interface FilterValue {
   values: unknown[];
   mode: FilterMode;
+}
+
+export interface DateFilterValue {
+  mode: DateFilterMode;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface SortOption {
@@ -29,11 +36,260 @@ export interface QueryOptions {
 /**
  * Gets the corresponding column from the comments table
  */
-function getColumn(key: string) {
+function getColumn(key: string): SQL | null {
   if (key in comments) {
-    return comments[key as keyof typeof comments];
+    const col = comments[key as keyof typeof comments];
+    // Wrap the column reference in an SQL template so the type is SQL<unknown>
+    return sql`${col}`;
   }
   return null;
+}
+
+/**
+ * Builds SQL condition for stance enum values
+ */
+function buildStanceCondition(column: SQL, value: string): SQL | null {
+  switch (value) {
+    case 'For':
+      return sql`${column} = ${stanceEnum.enumValues[0]}`;
+    case 'Against':
+      return sql`${column} = ${stanceEnum.enumValues[1]}`;
+    case 'Neutral/Unclear':
+      return sql`${column} = ${stanceEnum.enumValues[2]}`;
+    default:
+      return null;
+  }
+}
+
+/**
+ * Builds conditions for stance filters
+ */
+function buildStanceFilterConditions(column: SQL, filterValue: FilterValue): SQL[] {
+  const conditions: SQL[] = [];
+  
+  if (filterValue.mode === 'at_least') {
+    // "Must include all" mode - add each condition individually (AND)
+    filterValue.values.forEach(stanceValue => {
+      const condition = buildStanceCondition(column, String(stanceValue));
+      if (condition) conditions.push(condition);
+    });
+  } else if (filterValue.mode === 'exact' && filterValue.values.length === 1) {
+    // Exact match for single value
+    const condition = buildStanceCondition(column, String(filterValue.values[0]));
+    if (condition) conditions.push(condition);
+  } else {
+    // "includes" mode - any match is sufficient (OR)
+    const stanceConditions: SQL[] = [];
+    filterValue.values.forEach(stanceValue => {
+      const condition = buildStanceCondition(column, String(stanceValue));
+      if (condition) stanceConditions.push(condition);
+    });
+    
+    if (stanceConditions.length > 0) {
+      conditions.push(sql`(${or(...stanceConditions)})`);
+    }
+  }
+  
+  return conditions;
+}
+
+/**
+ * Builds conditions for theme filters
+ */
+function buildThemeFilterConditions(column: SQL, filterValue: FilterValue): SQL[] {
+  const conditions: SQL[] = [];
+  const themeValues = filterValue.values;
+  
+  if (themeValues.length === 0) return conditions;
+  
+  if (filterValue.mode === 'at_least') {
+    // "Must Include At Least" - ALL themes must be present (AND)
+    themeValues.forEach(theme => {
+      conditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+    });
+  } else if (filterValue.mode === 'exact') {
+    // "Exact Match" - exact string match
+    const exactThemes = themeValues.join(',');
+    conditions.push(sql`${column} = ${exactThemes}`);
+  } else {
+    // "Must Include Any" (includes mode) - ANY theme must be present (OR)
+    const themeConditions: SQL[] = [];
+    themeValues.forEach(theme => {
+      themeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+    });
+    
+    if (themeConditions.length > 0) {
+      conditions.push(sql`(${or(...themeConditions)})`);
+    }
+  }
+  
+  return conditions;
+}
+
+/**
+ * Builds conditions for date filters
+ */
+function buildDateFilterConditions(column: SQL, dateValue: DateFilterValue): SQL[] {
+  const conditions: SQL[] = [];
+  
+  if (dateValue.mode === 'exact' && dateValue.startDate) {
+    // For exact date, match the date portion only
+    const date = new Date(dateValue.startDate);
+    const nextDay = new Date(date);
+    nextDay.setDate(nextDay.getDate() + 1);
+    
+    conditions.push(sql`${column} >= ${date.toISOString()} AND ${column} < ${nextDay.toISOString()}`);
+  } else if (dateValue.mode === 'range' && dateValue.startDate && dateValue.endDate) {
+    // For date range
+    const startDate = new Date(dateValue.startDate);
+    const endDate = new Date(dateValue.endDate);
+    endDate.setHours(23, 59, 59, 999); // Include the entire end day
+    
+    conditions.push(sql`${column} >= ${startDate.toISOString()} AND ${column} <= ${endDate.toISOString()}`);
+  } else if (dateValue.mode === 'before' && dateValue.endDate) {
+    // Before a specific date
+    const date = new Date(dateValue.endDate);
+    conditions.push(sql`${column} < ${date.toISOString()}`);
+  } else if (dateValue.mode === 'after' && dateValue.startDate) {
+    // After a specific date
+    const date = new Date(dateValue.startDate);
+    date.setDate(date.getDate() + 1); // Exclusive of the date itself
+    conditions.push(sql`${column} >= ${date.toISOString()}`);
+  }
+  
+  return conditions;
+}
+
+/**
+ * Builds conditions for text filters (with multiple values)
+ */
+function buildTextFilterConditions(column: SQL, values: string[]): SQL[] {
+  const conditions: SQL[] = [];
+  const textConditions: SQL[] = [];
+  
+  values.forEach(textValue => {
+    textConditions.push(sql`${column} ILIKE ${`%${textValue}%`}`);
+  });
+  
+  if (textConditions.length > 0) {
+    conditions.push(sql`(${or(...textConditions)})`);
+  }
+  
+  return conditions;
+}
+
+/**
+ * Determines if a field should use text search (ILIKE) vs exact match
+ */
+function isTextSearchField(key: string): boolean {
+  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale'];
+  return textFields.includes(key);
+}
+
+/**
+ * Builds filter conditions for a single filter
+ */
+function buildSingleFilterCondition(key: string, value: unknown, column: SQL): SQL[] {
+  const conditions: SQL[] = [];
+  
+  // Handle filter objects with values and mode
+  if (
+    value &&
+    typeof value === 'object' &&
+    'values' in value &&
+    'mode' in value && // Ensure 'mode' exists for FilterValue
+    Array.isArray((value as { values: unknown[] }).values) // Check if 'values' is an array
+  ) {
+    const filterValue = value as FilterValue; // This cast is now safer
+    
+    if (filterValue.values.length === 0) return conditions;
+    
+    // Special handling for stance
+    if (key === 'stance') {
+      return buildStanceFilterConditions(column, filterValue);
+    }
+    
+    // Special handling for themes
+    if (key === 'themes') {
+      return buildThemeFilterConditions(column, filterValue);
+    }
+    
+    // General handling for other fields with mode
+    if (filterValue.mode === 'at_least') {
+      // For "must include all" mode - add each condition
+      filterValue.values.forEach(val => {
+        conditions.push(sql`${column} ILIKE ${`%${val}%`}`);
+      });
+    } else if (filterValue.mode === 'exact') {
+      // For exact match mode
+      const exactValue = filterValue.values.join(',');
+      conditions.push(sql`${column} = ${exactValue}`);
+    } else {
+      // For "includes" mode - any match is sufficient
+      const likeConditions: SQL[] = [];
+      filterValue.values.forEach(val => {
+        likeConditions.push(sql`${column} ILIKE ${`%${val}%`}`);
+      });
+      
+      if (likeConditions.length > 0) {
+        conditions.push(sql`(${or(...likeConditions)})`);
+      }
+    }
+  }
+  // Handle date filters
+  else if (value && typeof value === 'object' && 'mode' in value && ('startDate' in value || 'endDate' in value)) {
+    return buildDateFilterConditions(column, value as DateFilterValue);
+  }
+  // Handle array filters
+  else if (Array.isArray(value)) {
+    if (value.length === 0) return conditions;
+    
+    if (key === 'themes') {
+      // For themes field (comma-separated string in database)
+      const themeConditions: SQL[] = [];
+      value.forEach(theme => {
+        if (typeof theme === 'string') {
+          themeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
+        }
+      });
+      
+      if (themeConditions.length > 0) {
+        conditions.push(sql`(${or(...themeConditions)})`);
+      }
+    } else if (key === 'stance') {
+      // Special handling for stance enum in array
+      const stanceConditions: SQL[] = [];
+      value.forEach(stanceValue => {
+        const condition = buildStanceCondition(column, String(stanceValue));
+        if (condition) stanceConditions.push(condition);
+      });
+      
+      if (stanceConditions.length > 0) {
+        conditions.push(sql`(${or(...stanceConditions)})`);
+      }
+    } else if (isTextSearchField(key)) {
+      // For text fields, use ILIKE with OR for partial matches
+      return buildTextFilterConditions(column, value.map(String));
+    } else {
+      // For regular array filters, use IN clause
+      conditions.push(sql`${column} IN (${value})`);
+    }
+  }
+  // Handle simple value filters
+  else {
+    if (key === 'stance') {
+      const condition = buildStanceCondition(column, String(value));
+      if (condition) conditions.push(condition);
+    } else if (isTextSearchField(key)) {
+      // Use ILIKE for text fields to search for partial matches
+      conditions.push(sql`${column} ILIKE ${`%${value}%`}`);
+    } else {
+      // Use exact match for non-text fields
+      conditions.push(sql`${column} = ${value}`);
+    }
+  }
+  
+  return conditions;
 }
 
 /**
@@ -46,187 +302,21 @@ function buildFilterConditions(filters?: Record<string, unknown>): SQL[] {
   
   // Process each filter
   for (const [key, value] of Object.entries(filters)) {
+    // Skip empty values
     if (value === undefined || value === null || value === '') {
       continue;
     }
 
     // Get the column from the comments table
     const column = getColumn(key);
-    if (!column) continue;
+    if (!column) {
+      console.warn(`Column not found for filter key: ${key}`);
+      continue;
+    }
 
-    // Handle different filter types
-    if (value && typeof value === 'object' && 'values' in value && Array.isArray(value.values)) {
-      // Filter objects with values and mode
-      const filterValue = value as FilterValue;
-      
-      if (filterValue.values.length === 0) continue;
-      
-      if (key === 'stance') {
-        // Special handling for stance enum
-        if (filterValue.mode === 'at_least') {
-          // Add each condition individually for "must include all" mode
-          filterValue.values.forEach(stanceValue => {
-            if (stanceValue === 'For') {
-              conditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
-            } else if (stanceValue === 'Against') {
-              conditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
-            } else if (stanceValue === 'Neutral/Unclear') {
-              conditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
-            }
-          });
-        } 
-        else if (filterValue.mode === 'exact' && filterValue.values.length === 1) {
-          const stanceValue = filterValue.values[0];
-          if (stanceValue === 'For') {
-            conditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
-          } else if (stanceValue === 'Against') {
-            conditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
-          } else if (stanceValue === 'Neutral/Unclear') {
-            conditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
-          }
-        } 
-        else {
-          // "includes" mode - any match is sufficient
-          const stanceConditions: SQL[] = [];
-          
-          filterValue.values.forEach(stanceValue => {
-            if (stanceValue === 'For') {
-              stanceConditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
-            } else if (stanceValue === 'Against') {
-              stanceConditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
-            } else if (stanceValue === 'Neutral/Unclear') {
-              stanceConditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
-            }
-          });
-          
-          if (stanceConditions.length > 0) {
-            conditions.push(sql`(${or(...stanceConditions)})`);
-          }
-        }
-      } 
-      else if (key === 'themes') {
-        // Special handling for themes with different modes
-        const themeValues = filterValue.values;
-        
-        if (themeValues.length === 0) continue;
-        
-        if (filterValue.mode === 'at_least') {
-          // "Must Include At Least" - ALL themes must be present (AND)
-          themeValues.forEach(theme => {
-            conditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
-          });
-        } 
-        else if (filterValue.mode === 'exact') {
-          // "Exact Match" - exact string match
-          const exactThemes = themeValues.join(',');
-          conditions.push(sql`${column} = ${exactThemes}`);
-        } 
-        else {
-          // "Must Include Any" (includes mode) - ANY theme must be present (OR)
-          const themeConditions: SQL[] = [];
-          
-          themeValues.forEach(theme => {
-            themeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
-          });
-          
-          if (themeConditions.length > 0) {
-            conditions.push(sql`(${or(...themeConditions)})`);
-          }
-        }
-      }
-      else if (filterValue.mode === 'at_least') {
-        // For "must include all" mode - add each condition
-        filterValue.values.forEach(val => {
-          conditions.push(sql`${column} ILIKE ${`%${val}%`}`);
-        });
-      } 
-      else if (filterValue.mode === 'exact') {
-        // For exact match mode
-        const exactValue = filterValue.values.join(',');
-        conditions.push(sql`${column} = ${exactValue}`);
-      } 
-      else {
-        // For "includes" mode - any match is sufficient
-        const likeConditions: SQL[] = [];
-        
-        filterValue.values.forEach(val => {
-          likeConditions.push(sql`${column} ILIKE ${`%${val}%`}`);
-        });
-        
-        if (likeConditions.length > 0) {
-          conditions.push(sql`(${or(...likeConditions)})`);
-        }
-      }
-    }
-    else if (Array.isArray(value)) {
-      // Handle array filters
-      if (value.length === 0) continue;
-      
-      if (key === 'themes') {
-        // For themes field (comma-separated string in database)
-        // Default to OR (any match) behavior
-        const themeConditions: SQL[] = [];
-        
-        value.forEach(theme => {
-          if (typeof theme === 'string') {
-            themeConditions.push(sql`${column} ILIKE ${`%${theme}%`}`);
-          }
-        });
-        
-        if (themeConditions.length > 0) {
-          conditions.push(sql`(${or(...themeConditions)})`);
-        }
-      } else if (key === 'stance') {
-        // Special handling for stance enum in array
-        const stanceValues = value
-          .map(stanceValue => {
-            if (stanceValue === 'For') return stanceEnum.enumValues[0];
-            if (stanceValue === 'Against') return stanceEnum.enumValues[1];
-            if (stanceValue === 'Neutral/Unclear') return stanceEnum.enumValues[2];
-            return null;
-          })
-          .filter(Boolean);
-        
-        if (stanceValues.length > 0) {
-          conditions.push(sql`${column} IN (${stanceValues})`);
-        }
-      } else if (key === 'comment' || key === 'title' || key === 'keyQuote' || key === 'category' || key === 'rationale') {
-        // For text fields, use ILIKE with OR for partial matches
-        const textConditions: SQL[] = [];
-        
-        value.forEach(textValue => {
-          textConditions.push(sql`${column} ILIKE ${`%${textValue}%`}`);
-        });
-        
-        if (textConditions.length > 0) {
-          conditions.push(sql`(${or(...textConditions)})`);
-        }
-      } else {
-        // For regular array filters, use IN clause
-        conditions.push(sql`${column} IN (${value})`);
-      }
-    }
-    else {
-      // Simple equality filter
-      if (key === 'stance') {
-        if (value === 'For') {
-          conditions.push(sql`${column} = ${stanceEnum.enumValues[0]}`);
-        } else if (value === 'Against') {
-          conditions.push(sql`${column} = ${stanceEnum.enumValues[1]}`);
-        } else if (value === 'Neutral/Unclear') {
-          conditions.push(sql`${column} = ${stanceEnum.enumValues[2]}`);
-        }
-      } else {
-        // Regular fields
-        if (key === 'comment' || key === 'title' || key === 'keyQuote' || key === 'category' || key === 'rationale') {
-          // Use ILIKE for text fields to search for partial matches
-          conditions.push(sql`${column} ILIKE ${`%${value}%`}`);
-        } else {
-          // Use exact match for non-text fields
-          conditions.push(sql`${column} = ${value}`);
-        }
-      }
-    }
+    // Build conditions for this filter
+    const filterConditions = buildSingleFilterCondition(key, value, column);
+    conditions.push(...filterConditions);
   }
   
   return conditions;
@@ -241,36 +331,24 @@ function buildSearchConditions(search?: string, searchFields?: string[]): SQL[] 
   }
   
   const searchValue = search.toLowerCase().trim();
+  const searchConditions: SQL[] = [];
   
-  // If specific search fields are provided, only search in those
-  if (searchFields && searchFields.length > 0) {
-    const searchConditions: SQL[] = [];
-    
-    searchFields.forEach(field => {
-      const column = getColumn(field);
-      if (column) {
-        searchConditions.push(sql`${column} ILIKE ${`%${searchValue}%`}`);
-      }
-    });
-    
-    if (searchConditions.length > 0) {
-      return [sql`(${or(...searchConditions)})`];
+  // Determine which fields to search
+  const fieldsToSearch = searchFields && searchFields.length > 0 
+    ? searchFields 
+    : ['comment', 'title', 'keyQuote', 'themes', 'rationale', 'category'];
+  
+  // Build search conditions for each field
+  fieldsToSearch.forEach(field => {
+    const column = getColumn(field);
+    if (column) {
+      searchConditions.push(sql`${column} ILIKE ${`%${searchValue}%`}`);
     }
-  } else {
-    // If no specific fields, search in all text columns
-    const textColumns = ['comment', 'title', 'keyQuote', 'themes', 'rationale', 'category'] as const;
-    const searchConditions: SQL[] = [];
-    
-    textColumns.forEach(field => {
-      const column = getColumn(field);
-      if (column) {
-        searchConditions.push(sql`${column} ILIKE ${`%${searchValue}%`}`);
-      }
-    });
-    
-    if (searchConditions.length > 0) {
-      return [sql`(${or(...searchConditions)})`];
-    }
+  });
+  
+  // Return combined OR condition if we have any search conditions
+  if (searchConditions.length > 0) {
+    return [sql`(${or(...searchConditions)})`];
   }
   
   return [];
@@ -332,9 +410,11 @@ export async function buildCommentsQuery(options: QueryOptions) {
     countQuery.where(and(...allConditions));
   }
   
-  // Log queries for debugging
-  console.log(query.toSQL());
-  console.log(countQuery.toSQL());
+  // Log queries for debugging in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Main Query:', query.toSQL());
+    console.log('Count Query:', countQuery.toSQL());
+  }
   
   return { query, countQuery };
 }
@@ -397,8 +477,6 @@ export async function buildStatsQueries(options: QueryOptions) {
   };
 }
 
-export { buildFilterConditions, buildSearchConditions };
-
 /**
  * Builds a time series query for comments grouped by date and stance
  */
@@ -436,3 +514,11 @@ export async function buildTimeSeriesQuery(
 
   return baseQuery;
 }
+
+// Export helper functions for testing
+export { 
+  buildFilterConditions, 
+  buildSearchConditions, 
+  buildStanceCondition,
+  isTextSearchField 
+};

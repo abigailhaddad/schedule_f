@@ -8,6 +8,15 @@ import Button from './ui/Button';
 // Define filter mode types
 type FilterMode = 'exact' | 'includes' | 'at_least';
 
+// Define date filter types
+type DateFilterMode = 'exact' | 'range' | 'before' | 'after';
+
+interface DateFilterValue {
+  mode: DateFilterMode;
+  startDate?: string;
+  endDate?: string;
+}
+
 interface FilterModalProps {
   field: Field;
   currentValue: unknown;
@@ -58,6 +67,11 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
   // For filter mode (exact match vs must include)
   const [filterMode, setFilterMode] = useState<FilterMode>('includes');
   
+  // For date filters
+  const [dateFilterMode, setDateFilterMode] = useState<DateFilterMode>('range');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  
   // Initialize filter mode based on current value
   useEffect(() => {
     if (field.key === 'themes' && currentValue && typeof currentValue === 'object' && 'mode' in currentValue) {
@@ -67,6 +81,16 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
       }
     }
   }, [currentValue, field.key]);
+  
+  // Initialize date values based on current value
+  useEffect(() => {
+    if (field.filter === 'date' && currentValue && typeof currentValue === 'object') {
+      const dateValue = currentValue as DateFilterValue;
+      setDateFilterMode(dateValue.mode || 'range');
+      setStartDate(dateValue.startDate || '');
+      setEndDate(dateValue.endDate || '');
+    }
+  }, [currentValue, field.filter]);
   
   // For text filter functionality
   const [textValues, setTextValues] = useState<string[]>([]);
@@ -137,6 +161,94 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
     }
     
     return [];
+  };
+  
+  // Render date filter
+  const renderDateFilter = () => {
+    return (
+      <div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Filter Mode</label>
+          <select
+            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={dateFilterMode}
+            onChange={(e) => setDateFilterMode(e.target.value as DateFilterMode)}
+          >
+            <option value="exact">Exact Date</option>
+            <option value="range">Date Range</option>
+            <option value="before">Before Date</option>
+            <option value="after">After Date</option>
+          </select>
+        </div>
+        
+        {dateFilterMode === 'exact' && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+        )}
+        
+        {dateFilterMode === 'range' && (
+          <>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+              <input
+                type="date"
+                className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+              <input
+                type="date"
+                className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                min={startDate}
+              />
+            </div>
+          </>
+        )}
+        
+        {dateFilterMode === 'before' && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Before Date</label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+        )}
+        
+        {dateFilterMode === 'after' && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">After Date</label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+        )}
+        
+        <div className="text-xs text-gray-500 mt-2">
+          {dateFilterMode === 'exact' && 'Filter for comments on this exact date'}
+          {dateFilterMode === 'range' && 'Filter for comments between these dates (inclusive)'}
+          {dateFilterMode === 'before' && 'Filter for comments before this date (exclusive)'}
+          {dateFilterMode === 'after' && 'Filter for comments after this date (exclusive)'}
+        </div>
+      </div>
+    );
   };
   
   // Render select filter (checkboxes)
@@ -325,6 +437,8 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
         return renderSelectFilter();
       case 'text':
         return renderTextFilter();
+      case 'date':
+        return renderDateFilter();
       default:
         return <p>Unsupported filter type</p>;
     }
@@ -341,8 +455,25 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
       </Button>
       <Button 
         onClick={() => {
-          // For themes with filter mode, we need to pass an object with both values and mode
-          if (field.key === 'themes') {
+          if (field.filter === 'date') {
+            // For date filters, pass the date filter object
+            const dateValue: DateFilterValue = {
+              mode: dateFilterMode,
+              startDate: dateFilterMode === 'exact' || dateFilterMode === 'after' ? startDate : 
+                       dateFilterMode === 'range' ? startDate : undefined,
+              endDate: dateFilterMode === 'exact' ? startDate : // For exact, use startDate as the value
+                      dateFilterMode === 'before' ? endDate :
+                      dateFilterMode === 'range' ? endDate : undefined
+            };
+            
+            // Only apply if at least one date is set
+            if (dateValue.startDate || dateValue.endDate) {
+              onApply(dateValue);
+            } else {
+              onApply(null);
+            }
+          } else if (field.key === 'themes') {
+            // For themes with filter mode, we need to pass an object with both values and mode
             onApply({
               values: value,
               mode: filterMode
@@ -368,4 +499,4 @@ export default function FilterModal({ field, currentValue, onApply, onClose, isO
       {renderFilterContent()}
     </Modal>
   );
-} 
+}
