@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SAMPLE-COMMENT-001",
+    "attributes": {
+      "comment": "I strongly oppose the proposed Schedule F rule. This would undermine the civil service system that has served our country well for generations.",
+      "title": "Opposition to Schedule F",
+      "category": "Public Comment"
+    }
+  },
+  {
+    "id": "SAMPLE-COMMENT-002",
+    "attributes": {
+      "comment": "I support the Schedule F proposal as it will allow agencies to better address performance issues and increase accountability.",
+      "title": "Support for Schedule F",
+      "category": "Public Comment"
+    }
+  },
+  {
+    "id": "SAMPLE-COMMENT-003",
+    "attributes": {
+      "comment": "The proposed rule raises significant concerns about due process rights for federal employees and could lead to politicization of the civil service.",
+      "title": "Concerns about Due Process",
+      "category": "Public Comment"
+    }
+  }
+] 
