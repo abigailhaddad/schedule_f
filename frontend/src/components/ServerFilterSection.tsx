@@ -131,16 +131,36 @@ export default function ServerFilterSection() {
         ));
         //TODO: This date range filter type should be its own interface or type: {mode: 'range', startDate: '2025-05-16', endDate: '2025-05-26'}
         //TODO: It also looks like after date doesn't quite work...
-      } else if (typeof value === 'object' && value !== null && 'startDate' in value && 'endDate' in value) {
-        // Handle date range objects
-        const dateRange = value as { startDate?: string, endDate?: string };
+      } else if (typeof value === 'object' && value !== null && ('startDate' in value || 'endDate' in value)) {
+        // Handle date filter objects with mode
+        const dateFilter = value as { mode?: string, startDate?: string, endDate?: string };
         let dateString = '';
-        if (dateRange.startDate && dateRange.endDate) {
-          dateString = `${new Date(dateRange.startDate).toLocaleDateString()} - ${new Date(dateRange.endDate).toLocaleDateString()}`;
-        } else if (dateRange.startDate) {
-          dateString = `From ${new Date(dateRange.startDate).toLocaleDateString()}`;
-        } else if (dateRange.endDate) {
-          dateString = `Until ${new Date(dateRange.endDate).toLocaleDateString()}`;
+        
+        // Helper function to format date without timezone issues
+        const formatDateSafe = (dateStr: string) => {
+          // Parse as YYYY-MM-DD and create date in local timezone
+          const [year, month, day] = dateStr.split('-').map(Number);
+          const date = new Date(year, month - 1, day); // month is 0-indexed
+          return date.toLocaleDateString();
+        };
+
+        if (dateFilter.mode === 'exact' && dateFilter.startDate) {
+          dateString = formatDateSafe(dateFilter.startDate);
+        } else if (dateFilter.mode === 'range' && dateFilter.startDate && dateFilter.endDate) {
+          dateString = `${formatDateSafe(dateFilter.startDate)} - ${formatDateSafe(dateFilter.endDate)}`;
+        } else if (dateFilter.mode === 'before' && dateFilter.endDate) {
+          dateString = `Before ${formatDateSafe(dateFilter.endDate)}`;
+        } else if (dateFilter.mode === 'after' && dateFilter.startDate) {
+          dateString = `After ${formatDateSafe(dateFilter.startDate)}`;
+        } else {
+          // Fallback for legacy format without mode
+          if (dateFilter.startDate && dateFilter.endDate) {
+            dateString = `${formatDateSafe(dateFilter.startDate)} - ${formatDateSafe(dateFilter.endDate)}`;
+          } else if (dateFilter.startDate) {
+            dateString = `From ${formatDateSafe(dateFilter.startDate)}`;
+          } else if (dateFilter.endDate) {
+            dateString = `Until ${formatDateSafe(dateFilter.endDate)}`;
+          }
         }
 
         return (
