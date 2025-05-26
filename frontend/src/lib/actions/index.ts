@@ -56,7 +56,9 @@ export async function initDatabase(): Promise<{ success: boolean, message: strin
  * Clears all comment-related cache entries
  */
 export async function clearCommentsCache(): Promise<void> {
-  console.log("Clearing comments cache");
+  if (process.env.NODE_ENV === 'development') {
+    console.log("Clearing comments cache");
+  }
   cache.deletePattern(/^comment-/);
   cache.deletePattern(/^comments-/);
   cache.deletePattern(/^stats-/);
