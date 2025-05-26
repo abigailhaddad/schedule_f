@@ -1,0 +1,18 @@
+{
+  "total_comments": 21536,
+  "successfully_analyzed": 21535,
+  "error_count": 1,
+  "completion_rate": 100.0,
+  "stance_distribution": {
+    "For": 1493,
+    "Against": 19727,
+    "Neutral/Unclear": 315
+  },
+  "theme_occurrences": {
+    "Merit-based system concerns": 15257,
+    "Due process/employee rights": 13051,
+    "Politicization concerns": 19091,
+    "Scientific integrity": 3016,
+    "Institutional knowledge loss": 5303
+  }
+}
