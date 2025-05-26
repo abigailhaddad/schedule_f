@@ -55,9 +55,20 @@ export function TableContent({
         return { 
           visibleColumns: 7,
           columnWidth: '160px', // Fixed width per column
-          tableMinWidth: '1120px' // 7 * 160px
+          tableMinWidth: '1360px' // 6 * 160px + 1 * 400px (comment column)
         };
     }
+  };
+
+  const getColumnWidth = (column: Column<Comment>) => {
+    // Make comment column much wider in desktop mode
+    if (screenSize === 'desktop' && column.key === 'comment') {
+      return '400px'; // Much wider than base width (160px * 2.5)
+    }
+    
+    // Use the base width for all other columns
+    const baseConfig = getTableConfig();
+    return baseConfig.columnWidth;
   };
 
   const tableConfig = getTableConfig();
@@ -75,12 +86,14 @@ export function TableContent({
           sorting={sorting} 
           onSort={onSort}
           tableConfig={tableConfig}
+          getColumnWidth={getColumnWidth}
         />
         <TableBody 
           data={data} 
           columns={columns} 
           onRowClick={onRowClick}
           tableConfig={tableConfig}
+          getColumnWidth={getColumnWidth}
         />
       </table>
     </div>
@@ -100,9 +113,10 @@ interface TableHeadProps {
   sorting?: SortingState;
   onSort: (column: string) => void;
   tableConfig: { visibleColumns: number; columnWidth: string; tableMinWidth: string };
+  getColumnWidth: (column: Column<Comment>) => string;
 }
 
-function TableHead({ columns, sorting, onSort, tableConfig }: TableHeadProps) {
+function TableHead({ columns, sorting, onSort, tableConfig, getColumnWidth }: TableHeadProps) {
   return (
     <thead className="bg-gray-50">
       <tr>
@@ -112,7 +126,7 @@ function TableHead({ columns, sorting, onSort, tableConfig }: TableHeadProps) {
             className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${
               column.sortable ? 'cursor-pointer hover:bg-blue-50' : ''
             } ${sorting?.column === column.key ? 'text-blue-700 bg-blue-50' : 'text-gray-700'}`}
-            style={{ width: tableConfig.columnWidth }}
+            style={{ width: getColumnWidth(column) }}
             onClick={column.sortable ? () => onSort(column.key) : undefined}
           >
             <div className="flex items-center justify-between">
@@ -133,9 +147,10 @@ interface TableBodyProps {
   columns: Column<Comment>[];
   onRowClick: (item: Comment) => void;
   tableConfig: { visibleColumns: number; columnWidth: string; tableMinWidth: string };
+  getColumnWidth: (column: Column<Comment>) => string;
 }
 
-function TableBody({ data, columns, onRowClick, tableConfig }: TableBodyProps) {
+function TableBody({ data, columns, onRowClick, tableConfig, getColumnWidth }: TableBodyProps) {
   if (data.length === 0) {
     return (
       <tbody>
@@ -160,7 +175,7 @@ function TableBody({ data, columns, onRowClick, tableConfig }: TableBodyProps) {
             <td 
               key={`${item.id}-${column.key}`} 
               className="px-4 py-3 text-sm break-words"
-              style={{ width: tableConfig.columnWidth }}
+              style={{ width: getColumnWidth(column) }}
             >
               <div className="max-w-full">
                 {column.render(item)}
