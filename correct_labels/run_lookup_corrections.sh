@@ -4,17 +4,22 @@ echo "🏷️  Lookup Table Label Correction Interface"
 echo "==========================================="
 echo ""
 
-# Check if analyzed_lookup_table.json exists in data/
-DATA_FILE="../data/analyzed_lookup_table.json"
-
-if [ ! -f "$DATA_FILE" ]; then
-    echo "❌ Error: $DATA_FILE not found"
+# Determine data file to use
+if [ -n "$1" ]; then
+    DATA_FILE="$1"
+elif [ -f "../data/analyzed_lookup_table.json" ]; then
+    DATA_FILE="../data/analyzed_lookup_table.json"
+elif [ -f "../data/lookup_table.json" ]; then
+    DATA_FILE="../data/lookup_table.json"
+else
+    echo "❌ Error: No lookup table file found"
     echo ""
-    echo "Please ensure you have run the analysis pipeline first to generate:"
+    echo "Please ensure you have one of these files:"
     echo "   data/analyzed_lookup_table.json"
+    echo "   data/lookup_table.json"
     echo ""
-    echo "You can run the pipeline with:"
-    echo "   cd ../scripts && ./run_pipeline_safe.sh"
+    echo "Or specify a file path as an argument:"
+    echo "   ./run_lookup_corrections.sh /path/to/lookup_table.json"
     exit 1
 fi
 

@@ -220,8 +220,23 @@
             color: white;
         }
         
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
         .btn:hover {
             opacity: 0.9;
+        }
+        
+        .correct-indicator {
+            background: #17a2b8;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 10px;
         }
         
         .correction-info {
@@ -284,6 +299,14 @@
                     <option value="min_10" {% if current_count_filter == 'min_10' %}selected{% endif %}>10+ comments</option>
                     <option value="min_20" {% if current_count_filter == 'min_20' %}selected{% endif %}>20+ comments</option>
                 </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>
+                    <input type="checkbox" id="show-correct-filter" onchange="applyFilters()" 
+                           {% if request.args.get('show_correct') == 'true' %}checked{% endif %}>
+                    Show items marked as correct
+                </label>
             </div>
             
             <div class="button-group">
@@ -353,6 +376,17 @@
                 Revert to Original
             </button>
             {% endif %}
+            
+            {% if entry.marked_correct %}
+            <span class="correct-indicator">✓ Marked as Correct</span>
+            <button class="btn btn-secondary" onclick="unmarkCorrect('{{ entry.lookup_id }}')">
+                Unmark as Correct
+            </button>
+            {% else %}
+            <button class="btn btn-success" onclick="markCorrect('{{ entry.lookup_id }}')">
+                Mark as Correct
+            </button>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -362,11 +396,13 @@
             const stance = document.getElementById('stance-filter').value;
             const corrected = document.getElementById('corrected-filter').value;
             const count = document.getElementById('count-filter').value;
+            const showCorrect = document.getElementById('show-correct-filter').checked;
             
             const params = new URLSearchParams();
             if (stance !== 'all') params.set('stance', stance);
             if (corrected !== 'all') params.set('corrected', corrected);
             if (count !== 'all') params.set('count', count);
+            if (showCorrect) params.set('show_correct', 'true');
             
             window.location.search = params.toString();
         }
@@ -438,6 +474,54 @@
                     setTimeout(() => window.location.reload(), 1000);
                 } else {
                     showAlert(data.error || 'Failed to remove correction', 'error');
+                }
+            })
+            .catch(error => {
+                showAlert('Network error: ' + error.message, 'error');
+            });
+        }
+        
+        function markCorrect(lookupId) {
+            fetch('/api/mark_correct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    lookup_id: lookupId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert(data.message);
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showAlert(data.message || 'Failed to mark as correct', 'error');
+                }
+            })
+            .catch(error => {
+                showAlert('Network error: ' + error.message, 'error');
+            });
+        }
+        
+        function unmarkCorrect(lookupId) {
+            fetch('/api/unmark_correct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    lookup_id: lookupId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert(data.message);
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showAlert(data.message || 'Failed to unmark as correct', 'error');
                 }
             })
             .catch(error => {
