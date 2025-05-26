@@ -7,6 +7,16 @@ interface CommentDetailProps {
 }
 
 export default function CommentDetail({ comment }: CommentDetailProps) {
+  const commentWithSnakeCase = comment as Comment & { 
+    posted_date?: Date | string | null; 
+    received_date?: Date | string | null; 
+    key_quote?: string | null;
+    has_attachments?: boolean | null;
+    duplicate_of?: string[] | null;
+    cluster_id?: number | null;
+    pca_x?: number | null;
+    pca_y?: number | null;
+  };
   // Helper function to determine badge type
   const getBadgeType = (value: string): 'success' | 'danger' | 'warning' | 'primary' | 'default' => {
     if (value === 'For') return 'success';
@@ -45,10 +55,11 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
 
   // Helper function to get the actual date value (handles both naming conventions)
   const getDateValue = (type: 'posted' | 'received') => {
+    
     if (type === 'posted') {
-      return comment.postedDate || (comment as any).posted_date;
+      return comment.postedDate || commentWithSnakeCase.posted_date;
     } else {
-      return comment.receivedDate || (comment as any).received_date;
+      return comment.receivedDate || commentWithSnakeCase.received_date;
     }
   };
 
@@ -78,13 +89,13 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
         )}
 
         {/* Duplicate Comments Links */}
-        {comment.duplicateOf && comment.duplicateOf.length > 0 && (
+        {commentWithSnakeCase.duplicate_of && commentWithSnakeCase.duplicate_of.length > 0 && (
           <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
             <h3 className="text-sm font-medium text-yellow-800 mb-2">
               🔗 Related Duplicate Comments
             </h3>
             <div className="flex flex-wrap gap-2">
-              {comment.duplicateOf.map((duplicateId, index) => (
+              {commentWithSnakeCase.duplicate_of.map((duplicateId, index) => (
                 <Link
                   key={index}
                   href={`/comment/${duplicateId}`}
@@ -120,7 +131,7 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
         <h2 id="analysis-heading" className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Analysis</h2>
         
         {/* Key Quote */}
-        {comment.keyQuote && (
+        {commentWithSnakeCase.key_quote && (
           <div 
             className="mb-6"
             aria-labelledby="key-quote-heading"
@@ -129,7 +140,7 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
               <span className="mr-2">💬</span>Key Quote
             </h3>
             <blockquote className="italic bg-blue-50 p-4 rounded-md border-l-4 border-blue-300 text-gray-700">
-              &ldquo;{comment.keyQuote}&rdquo;
+              &ldquo;{commentWithSnakeCase.key_quote}&rdquo;
             </blockquote>
           </div>
         )}
@@ -179,18 +190,6 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
         )}
       </section>
 
-      {/* Debug Section - Remove this after testing */}
-      {process.env.NODE_ENV === 'development' && (
-        <section className="mb-8 p-4 bg-gray-100 rounded-md">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Debug Info (Dev Only)</h3>
-          <div className="text-xs text-gray-500">
-            <p>postedDate: {comment.postedDate ? String(comment.postedDate) : 'null'}</p>
-            <p>receivedDate: {comment.receivedDate ? String(comment.receivedDate) : 'null'}</p>
-            <p>posted_date: {(comment as any).posted_date ? String((comment as any).posted_date) : 'null'}</p>
-            <p>received_date: {(comment as any).received_date ? String((comment as any).received_date) : 'null'}</p>
-          </div>
-        </section>
-      )}
 
       {/* Metadata Section */}
       <section 
@@ -227,40 +226,46 @@ export default function CommentDetail({ comment }: CommentDetailProps) {
               </dd>
             </div>
           )}
-          {getDateValue('posted') && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Posted Date:</dt>
-              <dd className="text-gray-700">
-                <Link 
-                  href={createDateFilterUrl(getDateValue('posted'), 'posted')}
-                  className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center"
-                  title="View all comments posted on this date"
-                >
-                  <time dateTime={new Date(getDateValue('posted')!).toISOString()}>
-                    {new Date(getDateValue('posted')!).toLocaleDateString()}
-                  </time>
-                  <span className="ml-1 text-xs">📅</span>
-                </Link>
-              </dd>
-            </div>
-          )}
-          {getDateValue('received') && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Received Date:</dt>
-              <dd className="text-gray-700">
-                <Link 
-                  href={createDateFilterUrl(getDateValue('received'), 'received')}
-                  className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center"
-                  title="View all comments received on this date"
-                >
-                  <time dateTime={new Date(getDateValue('received')!).toISOString()}>
-                    {new Date(getDateValue('received')!).toLocaleDateString()}
-                  </time>
-                  <span className="ml-1 text-xs">📅</span>
-                </Link>
-              </dd>
-            </div>
-          )}
+          {(() => {
+            const postedDate = getDateValue('posted');
+            return postedDate && (
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Posted Date:</dt>
+                <dd className="text-gray-700">
+                  <Link 
+                    href={createDateFilterUrl(postedDate, 'posted')}
+                    className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center"
+                    title="View all comments posted on this date"
+                  >
+                    <time dateTime={new Date(postedDate).toISOString()}>
+                      {new Date(postedDate).toLocaleDateString()}
+                    </time>
+                    <span className="ml-1 text-xs">📅</span>
+                  </Link>
+                </dd>
+              </div>
+            );
+          })()}
+          {(() => {
+            const receivedDate = getDateValue('received');
+            return receivedDate && (
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Received Date:</dt>
+                <dd className="text-gray-700">
+                  <Link 
+                    href={createDateFilterUrl(receivedDate, 'received')}
+                    className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center"
+                    title="View all comments received on this date"
+                  >
+                    <time dateTime={new Date(receivedDate).toISOString()}>
+                      {new Date(receivedDate).toLocaleDateString()}
+                    </time>
+                    <span className="ml-1 text-xs">📅</span>
+                  </Link>
+                </dd>
+              </div>
+            );
+          })()}
           {comment.clusterId && (
             <div>
               <dt className="text-sm font-medium text-gray-500">Cluster ID:</dt>
