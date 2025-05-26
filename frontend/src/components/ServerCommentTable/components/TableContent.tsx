@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Comment } from '@/lib/db/schema';
 import { Column, SortingState } from '../types';
 
@@ -19,20 +19,68 @@ export function TableContent({
   onRowClick, 
   loading 
 }: TableContentProps) {
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+
+  useEffect(() => {
+    const updateScreenSize = () => {
+      if (window.innerWidth < 768) {
+        setScreenSize('mobile');
+      } else if (window.innerWidth < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener('resize', updateScreenSize);
+  }, []);
+
+  const getTableConfig = () => {
+    switch (screenSize) {
+      case 'mobile':
+        return { 
+          visibleColumns: 3,
+          columnWidth: '200px', // Fixed width per column
+          tableMinWidth: '600px' // 3 * 200px
+        };
+      case 'tablet':
+        return { 
+          visibleColumns: 5,
+          columnWidth: '180px', // Fixed width per column
+          tableMinWidth: '900px' // 5 * 180px
+        };
+      default:
+        return { 
+          visibleColumns: 7,
+          columnWidth: '160px', // Fixed width per column
+          tableMinWidth: '1120px' // 7 * 160px
+        };
+    }
+  };
+
+  const tableConfig = getTableConfig();
+
   return (
-    <div className="flex-1 overflow-x-auto relative">
+    <div className="flex-1 overflow-auto relative" style={{ maxHeight: '60vh', minHeight: '400px' }}>
       {loading && <LoadingOverlay />}
       
-      <table className="min-w-full divide-y divide-gray-200">
+      <table 
+        className="divide-y divide-gray-200" 
+        style={{ minWidth: tableConfig.tableMinWidth }}
+      >
         <TableHead 
           columns={columns} 
           sorting={sorting} 
-          onSort={onSort} 
+          onSort={onSort}
+          tableConfig={tableConfig}
         />
         <TableBody 
           data={data} 
           columns={columns} 
-          onRowClick={onRowClick} 
+          onRowClick={onRowClick}
+          tableConfig={tableConfig}
         />
       </table>
     </div>
@@ -51,9 +99,10 @@ interface TableHeadProps {
   columns: Column<Comment>[];
   sorting?: SortingState;
   onSort: (column: string) => void;
+  tableConfig: { visibleColumns: number; columnWidth: string; tableMinWidth: string };
 }
 
-function TableHead({ columns, sorting, onSort }: TableHeadProps) {
+function TableHead({ columns, sorting, onSort, tableConfig }: TableHeadProps) {
   return (
     <thead className="bg-gray-50">
       <tr>
@@ -63,6 +112,7 @@ function TableHead({ columns, sorting, onSort }: TableHeadProps) {
             className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${
               column.sortable ? 'cursor-pointer hover:bg-blue-50' : ''
             } ${sorting?.column === column.key ? 'text-blue-700 bg-blue-50' : 'text-gray-700'}`}
+            style={{ width: tableConfig.columnWidth }}
             onClick={column.sortable ? () => onSort(column.key) : undefined}
           >
             <div className="flex items-center justify-between">
@@ -82,9 +132,10 @@ interface TableBodyProps {
   data: Comment[];
   columns: Column<Comment>[];
   onRowClick: (item: Comment) => void;
+  tableConfig: { visibleColumns: number; columnWidth: string; tableMinWidth: string };
 }
 
-function TableBody({ data, columns, onRowClick }: TableBodyProps) {
+function TableBody({ data, columns, onRowClick, tableConfig }: TableBodyProps) {
   if (data.length === 0) {
     return (
       <tbody>
@@ -106,8 +157,14 @@ function TableBody({ data, columns, onRowClick }: TableBodyProps) {
           onClick={() => onRowClick(item)}
         >
           {columns.map((column) => (
-            <td key={`${item.id}-${column.key}`} className="px-4 py-3 text-sm">
-              {column.render(item)}
+            <td 
+              key={`${item.id}-${column.key}`} 
+              className="px-4 py-3 text-sm break-words"
+              style={{ width: tableConfig.columnWidth }}
+            >
+              <div className="max-w-full">
+                {column.render(item)}
+              </div>
             </td>
           ))}
         </tr>
