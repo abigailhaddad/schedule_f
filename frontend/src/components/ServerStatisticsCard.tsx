@@ -63,7 +63,7 @@ export default function ServerStatisticsCard() {
           </h5>
         </Card.Header>
         <Card.Body className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {[...Array(4)].map((_, index) => (
               <StatPlaceholder key={index} />
             ))}
@@ -83,7 +83,7 @@ export default function ServerStatisticsCard() {
         </h5>
       </Card.Header>
       <Card.Body className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {statisticsData.map((stat) => {
             const colors = getStatColors(stat.key);
             return (
