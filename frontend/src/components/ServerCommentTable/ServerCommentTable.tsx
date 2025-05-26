@@ -165,6 +165,18 @@ export default function ServerCommentTable() {
           return <MultiLabelField value={value} searchQuery={searchQuery} fieldKey={field.key} />;
         }
         
+        if (field.format === 'date') {
+          if (value instanceof Date) {
+            return <span>{value.toLocaleDateString()}</span>;
+          } else if (typeof value === 'string' && value) {
+            const date = new Date(value);
+            if (!isNaN(date.getTime())) {
+              return <span>{date.toLocaleDateString()}</span>;
+            }
+          }
+          return <span className="text-gray-400 italic">—</span>;
+        }
+        
         if (field.format === 'link' && typeof value === 'string') {
           return <LinkField value={value} />;
         }
@@ -179,6 +191,7 @@ export default function ServerCommentTable() {
             />
           );
         }
+        
         
         // Use StringField for strings with char limit or search highlighting
         if (typeof value === 'string') {

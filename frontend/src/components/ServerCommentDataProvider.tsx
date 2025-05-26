@@ -1,7 +1,7 @@
 // components/ServerCommentDataProvider.tsx
 'use client';
 
-import { ServerDataState } from './states';
+import ServerDataState from './ServerDataState';
 import { ServerDataContextProvider } from '@/contexts/ServerDataContext';
 
 interface ServerCommentDataProviderProps {
