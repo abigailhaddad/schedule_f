@@ -19,15 +19,31 @@ app = Flask(__name__)
 # Global variables to store data
 lookup_data = []
 corrections = {}
+marked_correct = set()  # Set of lookup_ids marked as correct
 data_file_path = None
+correct_status_file = None
 
 def load_data(data_file):
     """Load lookup table data from JSON file."""
-    global lookup_data, data_file_path
+    global lookup_data, data_file_path, correct_status_file, marked_correct
     data_file_path = data_file
+    
+    # Create correct status file path
+    base_name = os.path.splitext(data_file)[0]
+    correct_status_file = f"{base_name}_correct_status.json"
     
     with open(data_file, 'r', encoding='utf-8') as f:
         lookup_data = json.load(f)
+    
+    # Load previously marked correct items
+    if os.path.exists(correct_status_file):
+        try:
+            with open(correct_status_file, 'r', encoding='utf-8') as f:
+                marked_correct = set(json.load(f))
+        except (json.JSONDecodeError, TypeError):
+            marked_correct = set()
+    else:
+        marked_correct = set()
     
     print(f"Loaded {len(lookup_data)} lookup entries from {data_file}")
     
@@ -66,8 +82,8 @@ def save_corrections():
     with open(corrections_file, 'w', encoding='utf-8') as f:
         json.dump(corrections, f, indent=2)
 
-def get_filtered_entries(stance_filter=None, corrected_filter=None, count_filter=None):
-    """Get lookup entries filtered by stance, correction status, and count."""
+def get_filtered_entries(stance_filter=None, corrected_filter=None, count_filter=None, show_correct=False):
+    """Get lookup entries filtered by stance, correction status, count, and correct status."""
     filtered = []
     
     for entry in lookup_data:
@@ -77,6 +93,10 @@ def get_filtered_entries(stance_filter=None, corrected_filter=None, count_filter
             
         original_stance = entry.get('stance', 'Unknown')
         comment_count = entry.get('comment_count', 1)
+        
+        # Hide items marked as correct unless explicitly requested
+        if not show_correct and lookup_id in marked_correct:
+            continue
         
         # Apply count filter
         if count_filter and count_filter != 'all':
@@ -111,6 +131,7 @@ def get_filtered_entries(stance_filter=None, corrected_filter=None, count_filter
         entry_data['is_corrected'] = is_corrected
         entry_data['corrected_stance'] = corrected_stance if is_corrected else None
         entry_data['display_stance'] = corrected_stance if is_corrected else original_stance
+        entry_data['marked_correct'] = lookup_id in marked_correct
         
         # Ensure we have text to display (truncated)
         if not entry_data.get('truncated_text'):
@@ -134,9 +155,10 @@ def index():
     stance_filter = request.args.get('stance', 'all')
     corrected_filter = request.args.get('corrected', 'all')
     count_filter = request.args.get('count', 'all')
+    show_correct = request.args.get('show_correct', 'false').lower() == 'true'
     
-    print(f"Filtering with stance={stance_filter}, corrected={corrected_filter}, count={count_filter}")
-    filtered_entries = get_filtered_entries(stance_filter, corrected_filter, count_filter)
+    print(f"Filtering with stance={stance_filter}, corrected={corrected_filter}, count={count_filter}, show_correct={show_correct}")
+    filtered_entries = get_filtered_entries(stance_filter, corrected_filter, count_filter, show_correct)
     print(f"Found {len(filtered_entries)} filtered entries")
     
     # Get unique stances for filter dropdown
@@ -252,6 +274,50 @@ def export_corrected():
         
     except Exception as e:
         return jsonify({'error': f'Export failed: {str(e)}'}), 500
+
+@app.route('/api/mark_correct', methods=['POST'])
+def mark_correct():
+    """Mark a lookup entry as correct."""
+    try:
+        data = request.get_json()
+        lookup_id = data.get('lookup_id')
+        
+        if not lookup_id:
+            return jsonify({'success': False, 'message': 'lookup_id is required'})
+        
+        # Add to marked correct set
+        marked_correct.add(lookup_id)
+        
+        # Save to file
+        with open(correct_status_file, 'w', encoding='utf-8') as f:
+            json.dump(list(marked_correct), f, indent=2)
+        
+        return jsonify({'success': True, 'message': f'Marked {lookup_id} as correct'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error marking as correct: {str(e)}'})
+
+@app.route('/api/unmark_correct', methods=['POST'])
+def unmark_correct():
+    """Unmark a lookup entry as correct."""
+    try:
+        data = request.get_json()
+        lookup_id = data.get('lookup_id')
+        
+        if not lookup_id:
+            return jsonify({'success': False, 'message': 'lookup_id is required'})
+        
+        # Remove from marked correct set
+        marked_correct.discard(lookup_id)
+        
+        # Save to file
+        with open(correct_status_file, 'w', encoding='utf-8') as f:
+            json.dump(list(marked_correct), f, indent=2)
+        
+        return jsonify({'success': True, 'message': f'Unmarked {lookup_id} as correct'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error unmarking as correct: {str(e)}'})
 
 @app.route('/api/update_original', methods=['POST'])
 def update_original():
