@@ -11,11 +11,11 @@ import {
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { SortingState } from "@/components/ServerCommentTable/types";
-import { 
-  getPaginatedComments, 
-  getCommentStatistics, 
+import {
+  getPaginatedComments,
+  getCommentStatistics,
   parseUrlToQueryOptions,
-  getStanceTimeSeries
+  getStanceTimeSeries,
 } from "@/lib/actions/comments";
 import { StanceData } from "@/components/StanceOverTime/types";
 
@@ -23,6 +23,8 @@ import { StanceData } from "@/components/StanceOverTime/types";
 interface StanceChartData {
   posted_date: StanceData[];
   received_date: StanceData[];
+  posted_date_no_duplicates: StanceData[]; // New
+  received_date_no_duplicates: StanceData[]; // New
   error?: string;
 }
 
@@ -30,7 +32,7 @@ interface ServerDataContextProps {
   // Data
   data: Comment[];
   totalItems: number;
-  
+
   // Statistics
   stats: {
     total: number;
@@ -82,7 +84,9 @@ interface ServerDataContextProviderProps {
   initialPageSize?: number;
 }
 
-const ServerDataContext = createContext<ServerDataContextProps | undefined>(undefined);
+const ServerDataContext = createContext<ServerDataContextProps | undefined>(
+  undefined
+);
 
 /**
  * Provider that fetches data from the server based on URL parameters
@@ -99,9 +103,12 @@ export function ServerDataContextProvider({
 
   // Extract URL parameters
   const urlSort = searchParams.get("sort");
-  const urlSortDirection = searchParams.get("sortDirection") as "asc" | "desc" | null;
+  const urlSortDirection = searchParams.get("sortDirection") as
+    | "asc"
+    | "desc"
+    | null;
   const urlSearch = searchParams.get("search") || "";
-  
+
   // Use page and size from props (which come from route params)
   const currentPage = initialPage;
   const pageSize = initialPageSize;
@@ -134,22 +141,25 @@ export function ServerDataContextProvider({
     total: 0,
     for: 0,
     against: 0,
-    neutral: 0
+    neutral: 0,
   });
-  const [stanceTimeSeriesData, setStanceTimeSeriesData] = useState<StanceChartData | null>(null);
+  const [stanceTimeSeriesData, setStanceTimeSeriesData] =
+    useState<StanceChartData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // UI state
   const [searchQuery, setSearchQuery] = useState(urlSearch);
-  const [filters, setFilters] = useState<Record<string, unknown>>(getInitialFilters());
+  const [filters, setFilters] = useState<Record<string, unknown>>(
+    getInitialFilters()
+  );
   const [sorting, setSorting] = useState<SortingState | undefined>(
     urlSort && urlSortDirection
       ? { column: urlSort, direction: urlSortDirection }
       : undefined
   );
 
-  // Fetch stance time series data separately (with filters)
+  // Update the fetchStanceTimeSeries function
   const fetchStanceTimeSeries = async () => {
     try {
       // Create options with current filters and search
@@ -159,16 +169,39 @@ export function ServerDataContextProvider({
         searchFields: undefined,
       };
 
-      const [stancePostedResponse, stanceReceivedResponse] = await Promise.all([
-        getStanceTimeSeries(stanceChartOptions, 'postedDate'),
-        getStanceTimeSeries(stanceChartOptions, 'receivedDate')
+      // Fetch all four versions in parallel
+      const [
+        stancePostedResponse,
+        stanceReceivedResponse,
+        stancePostedNoDupsResponse,
+        stanceReceivedNoDupsResponse,
+      ] = await Promise.all([
+        getStanceTimeSeries(stanceChartOptions, "postedDate", true),
+        getStanceTimeSeries(stanceChartOptions, "receivedDate", true),
+        getStanceTimeSeries(stanceChartOptions, "postedDate", false),
+        getStanceTimeSeries(stanceChartOptions, "receivedDate", false),
       ]);
 
       // Process and set stance time series data
       const newStanceData: StanceChartData = {
-        posted_date: stancePostedResponse.success ? stancePostedResponse.data! : [],
-        received_date: stanceReceivedResponse.success ? stanceReceivedResponse.data! : [],
-        error: stancePostedResponse.error || stanceReceivedResponse.error || undefined,
+        posted_date: stancePostedResponse.success
+          ? stancePostedResponse.data!
+          : [],
+        received_date: stanceReceivedResponse.success
+          ? stanceReceivedResponse.data!
+          : [],
+        posted_date_no_duplicates: stancePostedNoDupsResponse.success
+          ? stancePostedNoDupsResponse.data!
+          : [],
+        received_date_no_duplicates: stanceReceivedNoDupsResponse.success
+          ? stanceReceivedNoDupsResponse.data!
+          : [],
+        error:
+          stancePostedResponse.error ||
+          stanceReceivedResponse.error ||
+          stancePostedNoDupsResponse.error ||
+          stanceReceivedNoDupsResponse.error ||
+          undefined,
       };
       setStanceTimeSeriesData(newStanceData);
     } catch (err) {
@@ -176,7 +209,9 @@ export function ServerDataContextProvider({
       setStanceTimeSeriesData({
         posted_date: [],
         received_date: [],
-        error: "Failed to fetch time series data"
+        posted_date_no_duplicates: [],
+        received_date_no_duplicates: [],
+        error: "Failed to fetch time series data",
       });
     }
   };
@@ -184,20 +219,20 @@ export function ServerDataContextProvider({
   // Fetch data based on current parameters
   const fetchData = async () => {
     setLoading(true);
-    
+
     try {
       // Create a simple object from search params, to avoid issues with URLSearchParams
       const paramsObj: Record<string, string> = {};
       searchParams.forEach((value, key) => {
         paramsObj[key] = value;
       });
-      
+
       const options = await parseUrlToQueryOptions(paramsObj);
-      
+
       // Override page and pageSize from state since they're no longer in search params
       options.page = currentPage;
       options.pageSize = pageSize;
-      
+
       // Fetch data and stats in parallel (but not stance time series)
       const [dataResponse, statsResponse] = await Promise.all([
         getPaginatedComments(options),
@@ -218,7 +253,6 @@ export function ServerDataContextProvider({
       } else {
         console.error("Error fetching stats:", statsResponse.error);
       }
-
     } catch (err) {
       console.error("Exception in fetchData:", err);
       setError("An unexpected error occurred");
@@ -251,11 +285,13 @@ export function ServerDataContextProvider({
   // Update URL when filters, sorting or search changes
   useEffect(() => {
     const searchChanged = prevSearchQuery.current !== searchQuery;
-    const filtersChanged = JSON.stringify(prevFilters.current) !== JSON.stringify(filters);
-    
+    const filtersChanged =
+      JSON.stringify(prevFilters.current) !== JSON.stringify(filters);
+
     // Determine if we need to navigate to page 1
-    const shouldNavigateToPage1 = (searchChanged || filtersChanged) && currentPage !== 1;
-    
+    const shouldNavigateToPage1 =
+      (searchChanged || filtersChanged) && currentPage !== 1;
+
     // Create a new URLSearchParams object
     const params = new URLSearchParams();
 
@@ -287,7 +323,7 @@ export function ServerDataContextProvider({
     // Build the correct path
     const queryString = params.toString();
     let fullPath: string;
-    
+
     if (shouldNavigateToPage1) {
       // Navigate to page 1 with the new filters/search
       const newPath = `/page/1/size/${pageSize}`;
@@ -299,19 +335,11 @@ export function ServerDataContextProvider({
 
     // Update URL without refreshing page
     router.replace(fullPath, { scroll: false });
-    
+
     // Update refs for next comparison
     prevSearchQuery.current = searchQuery;
     prevFilters.current = filters;
-  }, [
-    searchQuery,
-    sorting,
-    filters,
-    router,
-    pathname,
-    currentPage,
-    pageSize,
-  ]);
+  }, [searchQuery, sorting, filters, router, pathname, currentPage, pageSize]);
 
   // Fetch data when URL parameters change
   useEffect(() => {
@@ -402,7 +430,6 @@ export function ServerDataContextProvider({
     // Build CSV text
     let csv = headers.map((h) => `"${h}"`).join(",") + "\n";
 
-    
     data.forEach((item) => {
       const record = item as Record<string, unknown>;
       const row = headers.map((header) => {
@@ -439,7 +466,7 @@ export function ServerDataContextProvider({
     // Data
     data,
     totalItems,
-    
+
     // Statistics
     stats,
 

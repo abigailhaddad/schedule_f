@@ -1,4 +1,4 @@
-// src/components/StanceOverTime/StanceOverTimeClient.tsx
+// frontend/src/components/StanceOverTime/StanceOverTimeClient.tsx
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import Card from '@/components/ui/Card';
 import LoadingSkeleton from './LoadingSkeleton';
 import { useServerDataContext } from '@/contexts/ServerDataContext';
+import { StanceData } from './types';
 
 // Dynamically import the Nivo chart to avoid SSR issues
 const TimeSeriesChart = dynamic(() => import('./NivoTimeSeriesChart'), {
@@ -17,11 +18,22 @@ export default function StanceOverTimeClient() {
   const { stanceTimeSeriesData, loading: contextLoading } = useServerDataContext();
 
   const [selectedDateType, setSelectedDateType] = useState<'posted_date' | 'received_date'>('posted_date');
+  const [includeDuplicates, setIncludeDuplicates] = useState(true); // New state
 
-  const chartData = useMemo(() => {
+  const chartData = useMemo((): StanceData[] => {
     if (!stanceTimeSeriesData) return [];
-    return stanceTimeSeriesData[selectedDateType] || [];
-  }, [stanceTimeSeriesData, selectedDateType]);
+    
+    // Select the appropriate data based on both toggles
+    if (includeDuplicates) {
+      return selectedDateType === 'posted_date' 
+        ? stanceTimeSeriesData.posted_date 
+        : stanceTimeSeriesData.received_date;
+    } else {
+      return selectedDateType === 'posted_date'
+        ? stanceTimeSeriesData.posted_date_no_duplicates
+        : stanceTimeSeriesData.received_date_no_duplicates;
+    }
+  }, [stanceTimeSeriesData, selectedDateType, includeDuplicates]);
 
   if (contextLoading && !stanceTimeSeriesData) {
     return <LoadingSkeleton />;
@@ -55,19 +67,39 @@ export default function StanceOverTimeClient() {
             <span className="mr-2">📈</span>
             Comments Over Time
           </h5>
-          <select
-            value={selectedDateType}
-            onChange={(e) => setSelectedDateType(e.target.value as 'posted_date' | 'received_date')}
-            className="bg-white bg-opacity-20 text-white text-sm px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-            aria-label="Select the appropriate date that you would like to see for the chart, whether it's the date the comment was posted or the date the comment was received."
-          >
-            <option value="posted_date" className="text-gray-700">By Posted Date</option>
-            <option value="received_date" className="text-gray-700">By Received Date</option>
-          </select>
+          <div className="flex items-center gap-3">
+            {/* Duplicate toggle */}
+            <label className="flex items-center gap-2 text-white text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                checked={includeDuplicates}
+                onChange={(e) => setIncludeDuplicates(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:ring-opacity-50"
+                aria-label="Include duplicate comments in the chart"
+              />
+              <span className="select-none">Include Duplicates</span>
+            </label>
+            
+            {/* Date selector */}
+            <select
+              value={selectedDateType}
+              onChange={(e) => setSelectedDateType(e.target.value as 'posted_date' | 'received_date')}
+              className="bg-white bg-opacity-20 text-white text-sm px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              aria-label="Select the appropriate date that you would like to see for the chart"
+            >
+              <option value="posted_date" className="text-gray-700">By Posted Date</option>
+              <option value="received_date" className="text-gray-700">By Received Date</option>
+            </select>
+          </div>
         </div>
       </Card.Header>
       <Card.Body className="p-4">
         <TimeSeriesChart data={chartData} />
+        {!includeDuplicates && (
+          <p className="text-sm text-gray-500 mt-2 text-center">
+            Showing unique comments only (duplicates excluded)
+          </p>
+        )}
       </Card.Body>
     </Card>
   );
