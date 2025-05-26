@@ -85,7 +85,6 @@ export function TableContent({
           columns={columns} 
           sorting={sorting} 
           onSort={onSort}
-          tableConfig={tableConfig}
           getColumnWidth={getColumnWidth}
         />
         <TableBody 
@@ -112,11 +111,10 @@ interface TableHeadProps {
   columns: Column<Comment>[];
   sorting?: SortingState;
   onSort: (column: string) => void;
-  tableConfig: { visibleColumns: number; columnWidth: string; tableMinWidth: string };
   getColumnWidth: (column: Column<Comment>) => string;
 }
 
-function TableHead({ columns, sorting, onSort, tableConfig, getColumnWidth }: TableHeadProps) {
+function TableHead({ columns, sorting, onSort, getColumnWidth }: TableHeadProps) {
   return (
     <thead className="bg-gray-50">
       <tr>
@@ -150,7 +148,7 @@ interface TableBodyProps {
   getColumnWidth: (column: Column<Comment>) => string;
 }
 
-function TableBody({ data, columns, onRowClick, tableConfig, getColumnWidth }: TableBodyProps) {
+function TableBody({ data, columns, onRowClick,  getColumnWidth }: TableBodyProps) {
   if (data.length === 0) {
     return (
       <tbody>
