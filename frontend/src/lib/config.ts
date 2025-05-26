@@ -32,7 +32,7 @@ export const datasetConfig = {
         }
       },
       { 
-        key: 'keyQuote',       
+        key: 'key_quote',       
         title: 'Key Quote',       
         filter: 'text',
         visible: true,
@@ -101,14 +101,14 @@ export const datasetConfig = {
         }
       },
       { 
-        key: 'postedDate',
+        key: 'posted_date',
         title: 'Posted Date',
         filter: 'date',
         visible: true,
         format: 'date'
       },
       { 
-        key: 'receivedDate',
+        key: 'received_date',
         title: 'Received Date',
         filter: 'date',
         visible: true,
