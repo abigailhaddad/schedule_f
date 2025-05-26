@@ -145,7 +145,7 @@ export default function DataTable<T extends { id: string | number }>({
   };
 
   return (
-    <Card className={`overflow-hidden ${className} relative`}>
+    <Card collapsible={false} initiallyCollapsed={false} className={`overflow-hidden ${className} relative`}>
       {headerContent && (
         <Card.Header className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
           {headerContent}

@@ -4,7 +4,7 @@ import Card from '@/components/ui/Card';
 
 const NoDataMessage = () => {
   return (
-    <Card>
+    <Card collapsible={true} initiallyCollapsed={false}>
       <Card.Header className="bg-gradient-to-r from-indigo-500 to-purple-600">
         <h5 className="text-lg font-bold text-white flex items-center">
           <span className="mr-2">📈</span>
