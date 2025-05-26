@@ -185,13 +185,13 @@ export async function getPaginatedComments(
   
   return getCachedComments();
 }
+// frontend/src/lib/actions/comments.ts
+// Update the getStanceTimeSeries function
 
-/**
- * Fetches time series data aggregated by date and stance
- */
 export async function getStanceTimeSeries(
   options: QueryOptions,
-  dateField: 'postedDate' | 'receivedDate' = 'postedDate'
+  dateField: 'postedDate' | 'receivedDate' = 'postedDate',
+  includeDuplicates: boolean = true // New parameter
 ): Promise<TimeSeriesResponse> {
   const fetchTimeSeries = async () => {
     try {
@@ -200,8 +200,8 @@ export async function getStanceTimeSeries(
         throw new Error("Failed to connect to database");
       }
 
-      // Build the time series query
-      const query = await buildTimeSeriesQuery(options, dateField);
+      // Build the time series query with duplicate filter
+      const query = await buildTimeSeriesQuery(options, dateField, includeDuplicates);
 
       // Execute the query
       const result = await query;
@@ -216,23 +216,18 @@ export async function getStanceTimeSeries(
           dateObject = row.date;
         } else if (typeof row.date === 'string') {
           dateObject = new Date(row.date);
-          // Check if parsing the string resulted in a valid Date
           if (isNaN(dateObject.getTime())) {
             console.warn(`Skipping row due to unparsable date string: '${row.date}'`, row);
-            continue; // Skip this row if date string is invalid
+            continue;
           }
         } else if (row.date === null || typeof row.date === 'undefined') {
-          // This condition was previously handled by the general check, 
-          // but it's good to be explicit. The user saw logs for this.
           console.warn("Skipping row with null or undefined date:", row);
-          continue; // Skip this row if date is null or undefined
+          continue;
         } else {
-          // Handle any other unexpected types for row.date
           console.warn(`Skipping row with unexpected date type: ${typeof row.date}`, row);
-          continue; // Skip this row
+          continue;
         }
         
-        // At this point, dateObject should be a valid Date object
         const dateStr = dateObject.toISOString().split('T')[0];
         
         if (!groupedByDate.has(dateStr)) {
@@ -280,7 +275,7 @@ export async function getStanceTimeSeries(
   // Use Next.js unstable_cache for production
   const getCachedTimeSeries = unstable_cache(
     fetchTimeSeries,
-    [`time-series-${dateField}-${JSON.stringify(options)}`],
+    [`time-series-${dateField}-${includeDuplicates}-${JSON.stringify(options)}`], // Updated cache key
     {
       revalidate: 86400, // 24 hours
       tags: ['time-series', 'comments']
@@ -289,6 +284,8 @@ export async function getStanceTimeSeries(
   
   return getCachedTimeSeries();
 }
+
+
 /**
  * Fetches statistics based on current filters
  */

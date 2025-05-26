@@ -484,18 +484,26 @@ export async function buildStatsQueries(options: QueryOptions) {
     neutralQuery
   };
 }
+// frontend/src/lib/queryBuilder.ts
+// Add this to the existing buildTimeSeriesQuery function
 
-/**
- * Builds a time series query for comments grouped by date and stance
- */
 export async function buildTimeSeriesQuery(
   options: QueryOptions,
-  dateField: 'postedDate' | 'receivedDate' = 'postedDate'
+  dateField: 'postedDate' | 'receivedDate' = 'postedDate',
+  includeDuplicates: boolean = true // New parameter
 ) {
   // Build filter conditions
   const filterConditions = buildFilterConditions(options.filters);
   const searchConditions = buildSearchConditions(options.search, options.searchFields);
   const allConditions = [...filterConditions, ...searchConditions];
+
+  // Add condition to exclude duplicates if requested
+  if (!includeDuplicates) {
+    // Exclude comments where duplicateOf is not null and not empty array
+    allConditions.push(
+      sql`(${comments.duplicateOf} IS NULL OR CARDINALITY(${comments.duplicateOf}) = 0)`
+    );
+  }
 
   // Create the date truncation for grouping by day
   const dateTrunc = sql`DATE_TRUNC('day', ${comments[dateField]})`;
@@ -522,7 +530,6 @@ export async function buildTimeSeriesQuery(
 
   return baseQuery;
 }
-
 // Export helper functions for testing
 export { 
   buildFilterConditions, 
