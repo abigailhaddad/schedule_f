@@ -70,11 +70,11 @@ python -m backend.analysis.analyze_comments --model gpt-4o
 ### Full Pipeline
 
 ```bash
-# Run the complete pipeline (fetch, analyze, index)
-python -m backend.pipeline
+# Run the complete pipeline interactively
+./scripts/run_pipeline_safe.sh
 
-# Skip certain steps
-python -m backend.pipeline --skip_fetch --resume
+# Deploy results to data folder and optionally push to git
+./scripts/deploy_results.sh
 ```
 
 ### Verify Quotes
@@ -121,9 +121,34 @@ This project has three main components:
 The data flows through the pipeline as follows:
 
 1. Fetch comments → `raw_data.json`
-2. Analyze comments → `data.json`
+2. Analyze comments → `lookup_table.json` (deduplicated) + `raw_data.json` (all comments)
 3. Build search index → `search-index.json`
 4. View in frontend
+
+### Lookup Table Architecture
+
+The system uses a deduplication strategy where:
+- **`raw_data.json`**: Contains all individual comments with references to lookup entries
+- **`lookup_table.json`**: Contains unique text patterns with analysis results
+- This reduces redundant analysis by ~27% while maintaining comment-level tracking
+
+### Manual Label Correction
+
+To manually correct analysis labels:
+
+```bash
+# Start the label correction interface
+cd correct_labels
+./run_lookup_corrections.sh
+
+# Or run directly
+python app_lookup.py
+```
+
+The correction interface allows you to:
+- Review and edit analysis labels for lookup table entries
+- Push corrections back to the original lookup table file
+- Automatic backup creation before updates
 
 ## License
 
