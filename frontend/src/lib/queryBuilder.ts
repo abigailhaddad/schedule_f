@@ -37,11 +37,19 @@ export interface QueryOptions {
  * Gets the corresponding column from the comments table
  */
 function getColumn(key: string): SQL | null {
-  if (key in comments) {
-    const col = comments[key as keyof typeof comments];
-    // Wrap the column reference in an SQL template so the type is SQL<unknown>
+  // Convert snake_case key (from URL) to camelCase (for Drizzle schema object)
+  const camelCaseKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+
+  if (camelCaseKey in comments) {
+    const col = comments[camelCaseKey as keyof typeof comments];
     return sql`${col}`;
   }
+  // Fallback to check the original key if no conversion was needed or if it was already camelCase
+  if (key in comments) {
+    const col = comments[key as keyof typeof comments];
+    return sql`${col}`;
+  }
+  console.warn(`Column not found for key: ${key} (tried ${camelCaseKey})`);
   return null;
 }
 

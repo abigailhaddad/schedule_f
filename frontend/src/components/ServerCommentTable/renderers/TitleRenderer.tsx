@@ -1,19 +1,17 @@
-import { Comment } from '@/lib/db/schema';
+// frontend/src/components/ServerCommentTable/renderers/TitleRenderer.tsx
+import React from 'react';
+import { RendererProps } from '../types';
 
-interface TitleFieldProps {
-  value: string;
-  comment: Comment;
-  onRowClick: (comment: Comment) => void;
-}
-
-export default function TitleField({ value, comment, onRowClick }: TitleFieldProps) {
+export function TitleRenderer({ value, comment, onAction }: RendererProps<string>) {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAction?.('click', comment);
+  };
+  
   return (
     <div className="flex items-center">
       <button 
-        onClick={(e) => {
-          e.stopPropagation(); // Prevent row click
-          onRowClick(comment);
-        }}
+        onClick={handleClick}
         className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left cursor-pointer flex items-center"
       >
         <svg 
@@ -40,4 +38,4 @@ export default function TitleField({ value, comment, onRowClick }: TitleFieldPro
       </button>
     </div>
   );
-} 
+}

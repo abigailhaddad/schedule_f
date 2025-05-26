@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Comment } from "@/lib/db/schema";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { SortingState } from "@/components/ServerCommentTable/DataTable";
+import { SortingState } from "@/components/ServerCommentTable/types";
 import { 
   getPaginatedComments, 
   getCommentStatistics, 
@@ -360,7 +360,7 @@ export function ServerDataContextProvider({
 
   // Handle sorting
   const handleSort = (column: string) => {
-    setSorting((prev) => {
+    setSorting((prev: SortingState | undefined) => {
       if (prev?.column === column) {
         return {
           column,
