@@ -36,7 +36,7 @@ export const datasetConfig = {
         title: 'Key Quote',       
         filter: 'text',
         visible: true,
-        charLimit: 200
+        charLimit: 150
       },
       { 
         key: 'themes',       
@@ -50,14 +50,14 @@ export const datasetConfig = {
         title: 'Rationale',
         filter: 'text',
         visible: true,
-        charLimit: 300
+        charLimit: 200
       },
       { 
         key: 'comment',   
         title: 'Comment',   
         filter: 'text', 
         visible: true,
-        charLimit: 800 
+        charLimit: 400
       },
       {
         key: 'category',
