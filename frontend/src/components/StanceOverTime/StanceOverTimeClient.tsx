@@ -59,6 +59,7 @@ export default function StanceOverTimeClient() {
             value={selectedDateType}
             onChange={(e) => setSelectedDateType(e.target.value as 'posted_date' | 'received_date')}
             className="bg-white bg-opacity-20 text-white text-sm px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+            aria-label="Select the appropriate date that you would like to see for the chart, whether it's the date the comment was posted or the date the comment was received."
           >
             <option value="posted_date" className="text-gray-700">By Posted Date</option>
             <option value="received_date" className="text-gray-700">By Received Date</option>

@@ -129,8 +129,38 @@ export default function ServerFilterSection() {
             </button>
           </div>
         ));
+        //TODO: This date range filter type should be its own interface or type: {mode: 'range', startDate: '2025-05-16', endDate: '2025-05-26'}
+        //TODO: It also looks like after date doesn't quite work...
+      } else if (typeof value === 'object' && value !== null && 'startDate' in value && 'endDate' in value) {
+        // Handle date range objects
+        const dateRange = value as { startDate?: string, endDate?: string };
+        let dateString = '';
+        if (dateRange.startDate && dateRange.endDate) {
+          dateString = `${new Date(dateRange.startDate).toLocaleDateString()} - ${new Date(dateRange.endDate).toLocaleDateString()}`;
+        } else if (dateRange.startDate) {
+          dateString = `From ${new Date(dateRange.startDate).toLocaleDateString()}`;
+        } else if (dateRange.endDate) {
+          dateString = `Until ${new Date(dateRange.endDate).toLocaleDateString()}`;
+        }
+
+        return (
+          <div
+            key={key}
+            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+          >
+            <span className="mr-1 font-medium">{field.title}:</span>
+            <span>{dateString}</span>
+            <button
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              onClick={() => handleFilterChange(key, null)}
+              aria-label="Remove filter"
+            >
+              ×
+            </button>
+          </div>
+        );
       } else {
-        // Handle non-array values
+        // Handle other non-array, non-date-range values
         // For stance: "For", this creates a single filter tag "Stance: For"
         return (
           <div 
