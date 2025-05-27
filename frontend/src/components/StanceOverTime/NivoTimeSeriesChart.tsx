@@ -76,7 +76,7 @@ export default function NivoTimeSeriesChart({ data }: NivoTimeSeriesChartProps) 
         sliceTooltip={({ slice }) => (
           <div className="bg-white p-3 shadow-lg rounded-md border">
             <div className="font-semibold mb-2">
-              {new Date(slice.points[0].data.xFormatted).toLocaleDateString()}
+              {new Date(slice.points[0].data.x as string).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
             </div>
             {slice.points.map(point => (
               <div key={point.id} className="flex items-center gap-2 text-sm">
