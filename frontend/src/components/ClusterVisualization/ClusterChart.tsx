@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import {
   ResponsiveScatterPlotCanvas,
   ScatterPlotNodeData,
@@ -227,33 +227,64 @@ function ClusterTooltipOverlay({
   onClose: () => void;
   onNavigate: (id: string) => void;
 }) {
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const [adjustedPosition, setAdjustedPosition] = useState({ x: position.x, y: position.y });
+
+  useEffect(() => {
+    if (tooltipRef.current) {
+      const tooltip = tooltipRef.current;
+      const tooltipRect = tooltip.getBoundingClientRect();
+      const parentRect = tooltip.offsetParent?.getBoundingClientRect();
+      
+      if (parentRect) {
+        let newX = position.x + 10;
+        let newY = position.y + 10;
+        
+        // Check if tooltip would go off the right edge
+        if (newX + tooltipRect.width > parentRect.width - 20) {
+          // Position to the left of the cursor instead
+          newX = position.x - tooltipRect.width - 10;
+        }
+        
+        // Check if tooltip would go off the bottom edge
+        if (newY + tooltipRect.height > parentRect.height - 20) {
+          // Position above the cursor instead
+          newY = position.y - tooltipRect.height - 10;
+        }
+        
+        // Ensure tooltip doesn't go off the left edge
+        if (newX < 10) {
+          newX = 10;
+        }
+        
+        // Ensure tooltip doesn't go off the top edge
+        if (newY < 10) {
+          newY = 10;
+        }
+        
+        setAdjustedPosition({ x: newX, y: newY });
+      }
+    }
+  }, [position]);
+
   const getBadgeType = (stance: string): 'success' | 'danger' | 'warning' => {
     if (stance === 'For') return 'success';
     if (stance === 'Against') return 'danger';
     return 'warning';
   };
 
-  // Calculate tooltip position to keep it within bounds
+  // Use adjusted position for tooltip
   const tooltipStyle: React.CSSProperties = {
     position: 'absolute',
-    left: position.x + 10, // Position 10px to the right of the cursor
-    top: position.y + 10,  // Position 10px below the cursor
+    left: adjustedPosition.x,
+    top: adjustedPosition.y,
     zIndex: 50,
     pointerEvents: 'auto', // Always allow interaction
   };
 
-  // Adjust position if tooltip would go off-screen
-  if (position.x > 400) {
-    tooltipStyle.left = 'auto';
-    tooltipStyle.right = 600 - position.x + 10;
-  }
-  if (position.y < 150) {
-    tooltipStyle.top = position.y + 10;
-    tooltipStyle.transform = 'none';
-  }
-
   return (
     <div 
+      ref={tooltipRef}
       className={`bg-white p-4 rounded-lg shadow-lg border ${
         isFixed ? 'border-blue-400 ring-2 ring-blue-200' : 'border-gray-200'
       } max-w-sm transition-all`}
