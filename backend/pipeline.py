@@ -19,16 +19,28 @@ import logging
 from typing import Optional
 from datetime import datetime
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('pipeline.log'),
-        logging.StreamHandler()
-    ]
-)
+# Initial logger setup (will be reconfigured with file handler in main)
 logger = logging.getLogger(__name__)
+
+def setup_logging(output_dir: str):
+    """Set up logging with file handler in the output directory."""
+    log_file = os.path.join(output_dir, 'pipeline.log')
+    
+    # Clear any existing handlers
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+    
+    # Set up new handlers
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ],
+        force=True  # Override existing configuration
+    )
+    logger.info(f"📝 Logging to: {log_file}")
 
 def main():
     """Main pipeline orchestration function."""
@@ -47,13 +59,15 @@ def main():
                        help='Skip LLM analysis (only create lookup table)')
     parser.add_argument('--skip_clustering', action='store_true',
                        help='Skip clustering (only do data fetching and LLM analysis)')
-    parser.add_argument('--verify_quotes', action='store_true',
-                       help='Run quote verification on analyzed lookup table')
     
     args = parser.parse_args()
     
     # Setup paths
     os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Set up logging with output directory
+    setup_logging(args.output_dir)
+    
     raw_data_path = os.path.join(args.output_dir, 'raw_data.json')
     lookup_table_path = os.path.join(args.output_dir, 'lookup_table.json')
     
@@ -74,19 +88,24 @@ def main():
         
         # Step 2: Create lookup table
         logger.info(f"\n=== STEP 2: Creating Deduplicated Lookup Table ===")
-        from .analysis.create_lookup_table import create_lookup_table_from_raw_data
+        from .analysis.create_lookup_table import create_lookup_table
         
         logger.info(f"Creating lookup table from {raw_data_file}...")
-        lookup_table_file = create_lookup_table_from_raw_data(
-            raw_data_file, 
-            lookup_table_path, 
-            truncation_limit=args.truncate
-        )
-        logger.info(f"✅ Lookup table saved to {lookup_table_file}")
         
-        # Load lookup table to get stats
-        with open(lookup_table_file, 'r') as f:
-            lookup_table = json.load(f)
+        # Load raw data
+        with open(raw_data_file, 'r') as f:
+            raw_data = json.load(f)
+            
+        # Create lookup table
+        lookup_table = create_lookup_table(raw_data, args.truncate)
+        
+        # Save lookup table
+        with open(lookup_table_path, 'w') as f:
+            json.dump(lookup_table, f, indent=2)
+            
+        logger.info(f"✅ Lookup table saved to {lookup_table_path}")
+        
+        # Get stats (lookup_table is already loaded)
         
         total_comments = sum(entry.get('comment_count', 0) for entry in lookup_table)
         unique_texts = len(lookup_table)
@@ -116,12 +135,11 @@ def main():
                 checkpoint_file=f"{lookup_table_path}.checkpoint"
             )
             
-            # Save analyzed lookup table
-            analyzed_path = lookup_table_path.replace('.json', '_analyzed.json')
-            with open(analyzed_path, 'w') as f:
+            # Save analyzed lookup table back to the original file
+            with open(lookup_table_path, 'w') as f:
                 json.dump(analyzed_lookup_table, f, indent=2)
             
-            logger.info(f"✅ Analysis complete, saved to {analyzed_path}")
+            logger.info(f"✅ Analysis complete, saved to {lookup_table_path}")
         else:
             logger.info(f"\n=== STEP 3: Skipping LLM Analysis ===")
         
@@ -144,7 +162,7 @@ def main():
             clustering_cmd = [
                 sys.executable, 
                 semantic_script,
-                '--input', analyzed_path,
+                '--input', lookup_table_path,
                 '--n_clusters', str(n_clusters)
             ]
             
@@ -161,18 +179,18 @@ def main():
         else:
             logger.info(f"\n=== STEP 4: Skipping Clustering ===")
         
-        # Step 5: Quote verification (optional)
-        if args.verify_quotes:
+        # Step 5: Quote verification (always run if analysis was performed)
+        if not args.skip_analysis and unique_texts > 0:
             logger.info(f"\n=== STEP 5: Quote Verification ===")
             
             # Import and run quote verification
             from .analysis.verify_lookup_quotes import verify_lookup_quotes
             
-            # Use the analyzed path
-            verification_output = analyzed_path.replace('.json', '_quote_verification.json')
+            # Use the lookup table path for verification
+            verification_output = lookup_table_path.replace('.json', '_quote_verification.json')
             
-            logger.info(f"Verifying quotes in {analyzed_path}...")
-            verification_results = verify_lookup_quotes(analyzed_path, verification_output)
+            logger.info(f"Verifying quotes in {lookup_table_path}...")
+            verification_results = verify_lookup_quotes(lookup_table_path, verification_output)
             
             if verification_results:
                 logger.info(f"✅ Quote verification complete")
@@ -180,27 +198,63 @@ def main():
                 logger.info(f"   Exact matches: {verification_results.get('exact_match_rate', 0)}%")
                 logger.info(f"   Quotes not found: {verification_results.get('quotes_not_found', 0)} ({round(verification_results.get('quotes_not_found', 0) / max(1, verification_results.get('entries_with_quotes', 1)) * 100, 1)}%)")
                 logger.info(f"   Results saved to: {verification_output}")
+                logger.info(f"   Text report: {verification_output.replace('.json', '.txt')}")
             else:
                 logger.error("❌ Quote verification failed")
+        
+        # Step 6: Create merged data.json
+        logger.info(f"\n=== STEP 6: Creating Merged data.json ===")
+        from .utils.merge_lookup_to_raw import merge_lookup_to_raw
+        
+        # Use the clustered file if clustering was done, otherwise use the base lookup table
+        if not args.skip_clustering and unique_texts >= 2:
+            lookup_for_merge = lookup_table_path.replace('.json', '_clustered.json')
         else:
-            logger.info(f"\n=== STEP 5: Skipping Quote Verification ===")
+            lookup_for_merge = lookup_table_path
+            
+        output_data_path = os.path.join(args.output_dir, 'data.json')
+        merge_lookup_to_raw(raw_data_path, lookup_for_merge, output_data_path)
+        logger.info(f"✅ Created merged data.json")
+        
+        # Step 7: Validate output
+        logger.info(f"\n=== STEP 7: Validating Pipeline Output ===")
+        from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
+        
+        validation_results = validate_pipeline_output(
+            csv_file=args.csv,
+            raw_data_file=raw_data_path,
+            data_file=output_data_path,
+            lookup_table_file=lookup_table_path
+        )
+        
+        # Print validation summary
+        print_validation_summary(validation_results)
+        
+        if not validation_results['valid']:
+            logger.error("❌ Pipeline validation failed! Check errors above.")
         
         # Final summary
-        logger.info(f"\n🎉 Pipeline complete!")
-        logger.info(f"📊 Final stats:")
+        logger.info(f"\n{'='*60}")
+        logger.info(f"🎉 PIPELINE COMPLETE!")
+        logger.info(f"{'='*60}")
+        logger.info(f"\n📊 Final stats:")
         logger.info(f"   Total comments processed: {total_comments:,}")
         logger.info(f"   Unique text patterns: {unique_texts:,}")
-        logger.info(f"   API calls saved: ~{total_comments - unique_texts:,} ({dedup_efficiency}%)")
-        logger.info(f"📁 Output files in {args.output_dir}:")
+        logger.info(f"   Deduplication efficiency: {dedup_efficiency}%")
+        logger.info(f"   API calls saved: ~{total_comments - unique_texts:,}")
+        
+        logger.info(f"\n📁 Output files in {args.output_dir}:")
         logger.info(f"   - raw_data.json (original comments + attachments)")
-        logger.info(f"   - lookup_table.json (deduplicated patterns)")
+        logger.info(f"   - lookup_table.json (deduplicated patterns with analysis)")
+        logger.info(f"   - data.json (merged data for frontend)")
         if not args.skip_analysis:
-            logger.info(f"   - lookup_table_analyzed.json (with LLM analysis)")
+            logger.info(f"   - lookup_table_quote_verification.json")
+            logger.info(f"   - lookup_table_quote_verification.txt")
         if not args.skip_clustering and unique_texts >= 2:
-            logger.info(f"   - lookup_table_analyzed_clustered.json (with clustering)")
-            logger.info(f"   - clustering_*/")
-        if args.verify_quotes:
-            logger.info(f"   - lookup_table_analyzed_quote_verification.json")
+            logger.info(f"   - lookup_table_clustered.json (with clustering)")
+            logger.info(f"   - cluster_report.txt")
+            logger.info(f"   - clusters_visualization.png")
+            logger.info(f"   - dendrogram.png")
         
     except Exception as e:
         logger.error(f"❌ Pipeline failed: {e}")

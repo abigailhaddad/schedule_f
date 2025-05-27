@@ -114,13 +114,14 @@ def find_quote_in_text(quote: str, full_text: str) -> Tuple[bool, Optional[str],
     
     return False, None, None
 
-def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = None) -> Dict:
+def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = None, text_report_file: Optional[str] = None) -> Dict:
     """
     Verify quotes in analyzed lookup table and generate a report.
     
     Args:
         lookup_table_file: Path to the analyzed lookup table file (lookup_table_analyzed.json)
-        output_file: Path to save verification results
+        output_file: Path to save verification results (JSON)
+        text_report_file: Path to save human-readable text report
         
     Returns:
         Dictionary with verification results
@@ -180,7 +181,7 @@ def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = No
                 "comment_count": entry.get("comment_count", 0),
                 "comment_ids": entry.get("comment_ids", []),
                 "quote": quote,
-                "truncated_text": truncated_text[:200] + "..." if len(truncated_text) > 200 else truncated_text,
+                "truncated_text": truncated_text,  # Store full truncated text
                 "match_info": match_text,
                 "match_type": "similar"
             })
@@ -192,7 +193,7 @@ def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = No
                 "comment_count": entry.get("comment_count", 0),
                 "comment_ids": entry.get("comment_ids", []),
                 "quote": quote,
-                "truncated_text": truncated_text[:200] + "..." if len(truncated_text) > 200 else truncated_text,
+                "truncated_text": truncated_text,  # Store full truncated text
                 "match_info": "Not found in truncated text",
                 "match_type": "not_found"
             })
@@ -227,11 +228,79 @@ def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = No
             if problem['match_type'] == 'not_found':
                 print(f"   Text sample: {problem['truncated_text']}")
     
-    # Save results
+    # Save JSON results
     if output_file:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"\nDetailed verification results saved to {output_file}")
+    
+    # Generate and save text report
+    if text_report_file:
+        with open(text_report_file, 'w', encoding='utf-8') as f:
+            # Write header
+            f.write("QUOTE VERIFICATION REPORT\n")
+            f.write("=" * 80 + "\n\n")
+            
+            # Write summary statistics
+            f.write("SUMMARY\n")
+            f.write("-" * 40 + "\n")
+            f.write(f"Total lookup entries: {results['total_lookup_entries']}\n")
+            f.write(f"Total comments represented: {results['total_comments_represented']}\n")
+            f.write(f"Lookup entries with quotes: {results['entries_with_quotes']}\n")
+            f.write(f"Quotes found (exact): {results['quotes_found_exact']} ({results.get('exact_match_rate', 0)}%)\n")
+            f.write(f"Quotes found (similar): {results['quotes_found_similar']} ({round(results['quotes_found_similar']/total_quotes*100, 1) if total_quotes > 0 else 0}%)\n")
+            f.write(f"Quotes NOT found: {results['quotes_not_found']} ({unverified_percentage}%)\n")
+            f.write(f"Overall verification rate: {results['verification_rate']}%\n")
+            f.write("\n")
+            
+            # Write problematic quotes section
+            if results["problematic_quotes"]:
+                not_found_quotes = [q for q in results["problematic_quotes"] if q['match_type'] == 'not_found']
+                similar_quotes = [q for q in results["problematic_quotes"] if q['match_type'] == 'similar']
+                
+                # Section for quotes not found
+                if not_found_quotes:
+                    f.write(f"\nQUOTES NOT FOUND ({len(not_found_quotes)} entries)\n")
+                    f.write("=" * 80 + "\n\n")
+                    
+                    for i, problem in enumerate(not_found_quotes, 1):
+                        f.write(f"{i}. Lookup ID: {problem['lookup_id']}\n")
+                        f.write(f"   Represents {problem['comment_count']} comment(s)\n")
+                        f.write(f"   Comment IDs: {', '.join(problem['comment_ids'][:5])}{'...' if len(problem['comment_ids']) > 5 else ''}\n")
+                        f.write(f"\n")
+                        f.write(f"   QUOTE: \"{problem['quote']}\"\n")
+                        f.write(f"\n")
+                        f.write(f"   TRUNCATED TEXT ({len(problem['truncated_text'])} characters):\n")
+                        # Word wrap the text for readability
+                        full_text = problem['truncated_text']
+                        wrapped_lines = []
+                        words = full_text.split()
+                        current_line = "   "
+                        for word in words:
+                            if len(current_line) + len(word) + 1 > 80:
+                                wrapped_lines.append(current_line)
+                                current_line = "   " + word
+                            else:
+                                current_line += " " + word if current_line != "   " else word
+                        if current_line.strip():
+                            wrapped_lines.append(current_line)
+                        f.write('\n'.join(wrapped_lines))
+                        f.write("\n")
+                        f.write("-" * 80 + "\n\n")
+                
+                # Section for similar quotes (not exact matches)
+                if similar_quotes:
+                    f.write(f"\nQUOTES WITH SIMILAR MATCHES ({len(similar_quotes)} entries)\n")
+                    f.write("=" * 80 + "\n\n")
+                    
+                    for i, problem in enumerate(similar_quotes, 1):
+                        f.write(f"{i}. Lookup ID: {problem['lookup_id']}\n")
+                        f.write(f"   Represents {problem['comment_count']} comment(s)\n")
+                        f.write(f"   QUOTE: \"{problem['quote']}\"\n")
+                        f.write(f"   MATCH INFO: {problem['match_info']}\n")
+                        f.write("-" * 40 + "\n\n")
+        
+        print(f"Text report saved to {text_report_file}")
     
     return results
 
@@ -250,15 +319,18 @@ def main():
         print(f"Error: Input file {args.input} does not exist")
         return 1
     
-    # Set default output file if not provided
+    # Set default output files if not provided
     if args.output is None:
         output_dir = os.path.dirname(args.input)
         output_file = os.path.join(output_dir, "lookup_quote_verification.json")
     else:
         output_file = args.output
     
+    # Generate text report path based on JSON output path
+    text_report_file = output_file.replace('.json', '.txt') if output_file.endswith('.json') else output_file + '.txt'
+    
     # Verify quotes
-    verify_lookup_quotes(args.input, output_file)
+    verify_lookup_quotes(args.input, output_file, text_report_file)
     return 0
 
 if __name__ == "__main__":

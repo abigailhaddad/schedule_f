@@ -30,7 +30,6 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('analyze_lookup_table.log'),
         logging.StreamHandler()
     ]
 )
