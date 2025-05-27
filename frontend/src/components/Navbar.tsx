@@ -117,7 +117,7 @@ export default function Navbar() {
               </div>
             </div>
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center">
+            <div className="hidden md:flex items-center space-x-4">
               {subtitle && (
                 <Link
                   href="https://github.com/your-repo"
@@ -138,6 +138,13 @@ export default function Navbar() {
                   {subtitle}
                 </Link>
               )}
+              {/* Add Clusters link to desktop navigation */}
+              <Link
+                href="/clusters"
+                className="flex items-center px-3 py-1.5 rounded hover:bg-white/10 transition-colors"
+              >
+                Clusters
+              </Link>
             </div>
             {/* Mobile Menu Button - Only show if we have a subtitle */}
             {subtitle && (

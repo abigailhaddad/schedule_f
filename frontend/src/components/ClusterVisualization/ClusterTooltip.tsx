@@ -15,7 +15,7 @@ export default function ClusterTooltip({ point }: ClusterTooltipProps) {
   };
 
   return (
-    <div className="absolute z-50 pointer-events-none bg-white p-4 rounded-lg shadow-lg border border-gray-200 max-w-sm"
+    <div className="absolute z-50 bg-white p-4 rounded-lg shadow-lg border border-gray-200 max-w-sm"
          style={{
            left: '50%',
            top: '50%',
@@ -41,7 +41,7 @@ export default function ClusterTooltip({ point }: ClusterTooltipProps) {
         {point.keyQuote && (
           <div className="mt-2">
             <p className="text-gray-600 text-xs">Key Quote:</p>
-            <p className="italic text-gray-700 line-clamp-2">"{point.keyQuote}"</p>
+            <p className="italic text-gray-700 line-clamp-2">&quot;{point.keyQuote}&quot;</p>
           </div>
         )}
         
