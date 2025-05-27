@@ -29,7 +29,7 @@ export default function ClusterControls({
         >
           <option value="">All Clusters</option>
           {clusters.sort((a, b) => a - b).map(clusterId => (
-            <option key={clusterId} value={clusterId}>
+            <option key={`cluster-option-${clusterId}`} value={clusterId}>
               Cluster {clusterId}
             </option>
           ))}
