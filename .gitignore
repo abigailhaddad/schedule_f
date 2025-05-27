@@ -23,6 +23,11 @@ data/temp*/
 !frontend/package-lock.json
 !frontend/tsconfig.json
 
+# Log files (should be in timestamped results folders)
+*.log
+pipeline.log
+resume_pipeline.log
+
 
 # OS specific
 .DS_Store
