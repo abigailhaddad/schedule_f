@@ -74,19 +74,24 @@ def main():
         
         # Step 2: Create lookup table
         logger.info(f"\n=== STEP 2: Creating Deduplicated Lookup Table ===")
-        from .analysis.create_lookup_table import create_lookup_table_from_raw_data
+        from .analysis.create_lookup_table import create_lookup_table
         
         logger.info(f"Creating lookup table from {raw_data_file}...")
-        lookup_table_file = create_lookup_table_from_raw_data(
-            raw_data_file, 
-            lookup_table_path, 
-            truncation_limit=args.truncate
-        )
-        logger.info(f"✅ Lookup table saved to {lookup_table_file}")
         
-        # Load lookup table to get stats
-        with open(lookup_table_file, 'r') as f:
-            lookup_table = json.load(f)
+        # Load raw data
+        with open(raw_data_file, 'r') as f:
+            raw_data = json.load(f)
+            
+        # Create lookup table
+        lookup_table = create_lookup_table(raw_data, args.truncate)
+        
+        # Save lookup table
+        with open(lookup_table_path, 'w') as f:
+            json.dump(lookup_table, f, indent=2)
+            
+        logger.info(f"✅ Lookup table saved to {lookup_table_path}")
+        
+        # Get stats (lookup_table is already loaded)
         
         total_comments = sum(entry.get('comment_count', 0) for entry in lookup_table)
         unique_texts = len(lookup_table)
