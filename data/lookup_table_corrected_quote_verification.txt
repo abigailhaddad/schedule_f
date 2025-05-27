@@ -3,16 +3,16 @@ QUOTE VERIFICATION REPORT
 
 SUMMARY
 ----------------------------------------
-Total lookup entries: 17562
-Total comments represented: 23799
-Lookup entries with quotes: 17548
-Quotes found (exact): 14344 (81.7%)
-Quotes found (similar): 1451 (8.3%)
-Quotes NOT found: 1753 (10.0%)
-Overall verification rate: 90.0%
+Total lookup entries: 17803
+Total comments represented: 24046
+Lookup entries with quotes: 17789
+Quotes found (exact): 14564 (81.9%)
+Quotes found (similar): 1468 (8.3%)
+Quotes NOT found: 1757 (9.9%)
+Overall verification rate: 90.1%
 
 
-QUOTES NOT FOUND (1753 entries)
+QUOTES NOT FOUND (1757 entries)
 ================================================================================
 
 1. Lookup ID: lookup_008913
@@ -39160,8 +39160,121 @@ QUOTES NOT FOUND (1753 entries)
    Raton FL 33431
 --------------------------------------------------------------------------------
 
+1754. Lookup ID: lookup_017610
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24113
 
-QUOTES WITH SIMILAR MATCHES (1451 entries)
+   QUOTE: "I voice my disapproval of Schedule F. This proposal, along with the many other efforts by this administration, will disenfranchise Americans and divest in healthcare and the future wellbeing of all Americans and all other citizens of this Earth."
+
+   TRUNCATED TEXT (1147 characters):
+   I have first-hand experience from taking care of patients in other countries
+   that have substandard healthcare systems. When the health-systems leadership
+   changes following each new presidential election, this erases institutional
+   experience and memory, and much-needed progress slows to a crawl. As I have
+   experienced elsewhere, you can expect political appointees to hold the
+   interests of the few over the great needs of the many. Unqualified appointees
+   are placed in leadership positions. Patients and the general public suffer,
+   not the politicians. As a private citizen and an NIH-funded
+   physician-researcher, I voice my disapproval of Schedule F. Where
+   accountability needs to be improved, it is public servants who need to be
+   accountable to the citizens of the USA, not to the Trump administration. This
+   proposal, along with the many other efforts by this administration, will
+   disenfranchise Americans and divest in healthcare and the future wellbeing of
+   all Americans and all other citizens of this Earth. I am strongly opposed to
+   the politicalization of the NIH, NSF, and other research and science-focused
+   organizations and institutes.
+--------------------------------------------------------------------------------
+
+1755. Lookup ID: lookup_017690
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24194
+
+   QUOTE: "This will make political loyalty more important than experience, skill and knowledge. This means that American citizens will be at risk of injury or death should incompetent replacements or people too scared to speak out for fear of being fired."
+
+   TRUNCATED TEXT (4177 characters):
+   5/22/2025 Office of Personnel Management 1900 E Street, N.W. Washington, DC
+   20415 Re: “Improving Performance, Accountability and Responsiveness in the
+   Civil Service,ˮ Proposed Rule, 90 Fed. Reg. 17182. Docket ID. OPM. 2025. 0004
+   Dear Office of Personnel Management: Anonymous submit(s) these comments
+   regarding Office of Personnel Managementʼs (OPM) Proposed Rule “Improving
+   Performance, Accountability and Responsiveness in the Civil Service,ˮ 90 Fed.
+   Reg. 17182 April 23, 2025. I write to express opposition to the Proposed
+   Rule. As a worker (associate) at a federal facility (commenting under my own
+   personal capacity by rights granted by the First Amendment of the United
+   States constitution) I have experienced firsthand the “efficiency” of this
+   administration. Changes that waste time and work hours (the 5-things email)
+   and changes to procurement that make buying equipment and supplies many times
+   more expensive and time-consuming. These changes cripple the federal work
+   force and do nothing to save tax dollars or improve the output of the
+   government for the benefit of the country. As such I am highly skeptical of
+   any policy made to change federal rules proposed by the Trump administration.
+   The proposed plan will make it easier to fire federal employees who are
+   disloyal to the president by creating the “schedule policy/career” label that
+   removed the right to fight terminations (schedule F). This fundamentally
+   wrong as federal employees are not beholden to the whims of the president and
+   have every under the constitution to oppose illegal or dangerous acts
+   perpetrated by the government. Additionally, all federal workers make the
+   following oath: “I, ___, do solemnly swear (or affirm) that I will support
+   and defend the Constitution of the United States against all enemies, foreign
+   and domestic; that I will bear true faith and allegiance to the same; that I
+   take this obligation freely, without any mental reservation or purpose of
+   evasion; and that I will well and faithfully discharge the duties of the
+   office on which I am about to enter. So help me God.” This oath it made to
+   the constitution NOT to any administration or president. This will make
+   political loyalty more important that experience, skill and knowledge. This
+   means that American citizens will be at risk of injury or death should
+   incompetent replacements or people to scared to speak out for fear of being
+   fired. I choose to work at a federal facility to do scientific research on
+   behalf of the United States people and its industry. National labs have some
+   of the best facilities and smartest people on earth. The opportunity to
+   contribute to this was a dream come true. My future plans had included
+   becoming a federal employee at a national lab for the long term. However,
+   this plan has now been derailed, and this policy makes the prospect of
+   working for the federal government extremely unappealing. I am not alone in
+   feeling this and the USA will lose many talented scientists should this
+   policy be enacted. In addition this policy relies on faulty data that do not
+   adequately justify the changes for example, the policy references federal
+   employee surveys asking about perceptions of poor performance and misconduct
+   (ii. Proposed Regulations Are Necessary To Strengthen Democracy and Promote a
+   Nonpartisan Civil Service), and cites a poll
+   (https://www.federalregister.gov/documents/2025/04/23/2025-06904/improving-performance-accountability-and-responsiveness-in-the-civil-service#p-264)
+   and anecdotal cases
+   (https://www.federalregister.gov/documents/2025/04/23/2025-06904/improving-performance-accountability-and-responsiveness-in-the-civil-service#p-276)
+   as evidence of widespread “resistance” to Administration priorities. Contrary
+   to what OPM claims, we expect these policies will lead to poor performance
+   that is protected by political loyalty and to an increase in politically
+   motivated and retaliatory firings under the guise of rooting out
+   partisanship. In conclusion I make this comment to highlight the problems in
+   making the government more loyalty based and the failures of the rule to cite
+   accurate evidence to support the changes. Thank you
+--------------------------------------------------------------------------------
+
+1756. Lookup ID: lookup_017720
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24225
+
+   QUOTE: "The proposed rule undermines the merit-based system that has been the foundation of our civil service, allowing for the removal of employees without due process and opening the door to political favoritism."
+
+   TRUNCATED TEXT (87 characters):
+   Agency name: OPM Docket ID: OPM-2025-0004 RIN: 3206-AO80 Comment in the
+   attached file.
+--------------------------------------------------------------------------------
+
+1757. Lookup ID: lookup_017791
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24300
+
+   QUOTE: "NIH program officers should not have any political favor or disfavor. There is no legitimate reason to change their jobs into political positions."
+
+   TRUNCATED TEXT (254 characters):
+   NIH program officers should not be political appointees. The public deserves
+   the best scientific work at NIH- program officers should not have any
+   political favor or disfavor. There is no legitimate reason to change their
+   jobs into political positions.
+--------------------------------------------------------------------------------
+
+
+QUOTES WITH SIMILAR MATCHES (1468 entries)
 ================================================================================
 
 1. Lookup ID: lookup_015715
@@ -47868,5 +47981,107 @@ QUOTES WITH SIMILAR MATCHES (1451 entries)
    Represents 1 comment(s)
    QUOTE: "It could lead to politicization of science (including NIH) whereby scientists and administrators are appointed based on political affiliations or beliefs rather than expertise and merit."
    MATCH INFO: Found similar (not exact):  reasons: it could lead to politicization of science (including nih) whereby scientists and administrators are appointed based on political affiliations or beliefs rather than expertise and merit. furthermo
+----------------------------------------
+
+1452. Lookup ID: lookup_017567
+   Represents 1 comment(s)
+   QUOTE: "Making this change will create a workplace in which dedicated public servants are fired for not being seen as loyal to Donald Trump rather than the constitution."
+   MATCH INFO: Found partial match in sentence 3: making this change will create a workplace in which dedicated public servants are fired for not being seen as loyal to donald trump rather then the constitution
+----------------------------------------
+
+1453. Lookup ID: lookup_017581
+   Represents 1 comment(s)
+   QUOTE: "This rule should not be allowed to go into effect. There's a good reason civil servants are immune from being fired at the whim of a president."
+   MATCH INFO: Found similar (not exact): this rule should not be allowed to go into effect. there's a good reason civil servants are immune from being fired at the whim of a president. their ind
+----------------------------------------
+
+1454. Lookup ID: lookup_017613
+   Represents 1 comment(s)
+   QUOTE: "I oppose the proposed rule entitled 'Improving Performance, Accountability and Responsiveness in the Civil Service,' because it undermines the principles of merit-based employment and could lead to politicization, loss of trust and expertise, decreased morale, and disruption of agency operations."
+   MATCH INFO: Found partial match in sentence 1: i oppose the proposed rule entitled “improving performance, accountability and responsiveness in the civil service,” because it undermines the principles of merit-based employment and could lead to politicization, loss of trust and expertise, decreased morale, and disruption of agency operations
+----------------------------------------
+
+1455. Lookup ID: lookup_017614
+   Represents 1 comment(s)
+   QUOTE: "This is a terrible idea and one that allows this horrible administration to arbitrarily fire employees without cause."
+   MATCH INFO: Found partial match in sentence 2: this is a terrible idea and ine that allows this horrible administration to arbitrarily fire employees without cause
+----------------------------------------
+
+1456. Lookup ID: lookup_017619
+   Represents 1 comment(s)
+   QUOTE: "To have these positions change into Schedule F would result in a few things: (1) Position vacancies - why take the job if you are told what to do vice letting data inform you what to do?"
+   MATCH INFO: Found similar (not exact): uch more. to have these positions change into schedule f would result in a few things: (1) position vacancies - why take the job if you are told what to do vice letting data inform you what to do? (2) bad p
+----------------------------------------
+
+1457. Lookup ID: lookup_017665
+   Represents 1 comment(s)
+   QUOTE: "Changing their positions to 'political' appointees removes any objectivity from a field that mandates that data driven discoveries must be peer reviewed by other experts in order to improve the lives of millions."
+   MATCH INFO: Found partial match in sentence 3: changing their positions to "political" appointees removes any objectivity from a field that mandates that data driven discoveries must be peer reviewed by other experts in order to improve the lives of millions
+----------------------------------------
+
+1458. Lookup ID: lookup_017684
+   Represents 1 comment(s)
+   QUOTE: "The proposed rule paves the way for political interference with biomedical research management and could severely compromise the scientific integrity of federal spending on biomedical research."
+   MATCH INFO: Found partial match in sentence 2: the proposed rule paves the way for political interference with biomedical research management and could severely compromise the scientific integrity of federal spending on biomedical research and importantly, undermine well-established processes to ensure that decisions concerning funding are made based on rigor evaluation by scientific leaders of the highest quality research that promotes public well being
+----------------------------------------
+
+1459. Lookup ID: lookup_017694
+   Represents 1 comment(s)
+   QUOTE: "This regulation does nothing to increase the quality of the Federal workforce in the short or long term. It in fact targets the experts and knowledge base across huge swaths of the government and disincentivizes employees from aspiring to pursue a career of high level public service."
+   MATCH INFO: Found similar (not exact): ong term. this regulation does nothing to increase the quality of the federal workforce in the short or long term. it in fact targets the experts and knowledge base across huge swaths of the government and disincentivizes employees from aspiring to pursue a career of high level public service. there is 
+----------------------------------------
+
+1460. Lookup ID: lookup_017698
+   Represents 1 comment(s)
+   QUOTE: "Reclassifying career civil servants serving in positions of 'confidential, policy-determining, policy-making, or policy advocating character,' threatens the ability of these professionals to conduct their work in an independent, objective manner without fear of retribution."
+   MATCH INFO: Found partial match in sentence 7: reclassifying career civil servants serving in positions of "confidential, policy-determining, policy-making, or policy advocating character,” threatens the ability of these professionals to conduct their work in an independent, objective manner without fear of retribution
+----------------------------------------
+
+1461. Lookup ID: lookup_017700
+   Represents 1 comment(s)
+   QUOTE: "They deserve more gratitude, not less security, for their service."
+   MATCH INFO: Found similar (not exact):  work and they deserve more gratitude, not less security, for their service. there are
+----------------------------------------
+
+1462. Lookup ID: lookup_017719
+   Represents 1 comment(s)
+   QUOTE: "I strongly oppose this change. There is good reason these positions were established the way they were, and not a good cause to change it."
+   MATCH INFO: Found similar (not exact): ut cause. i strongly oppose this change. there is good reason these positions were established the way they were, and not a good cause to change it.
+----------------------------------------
+
+1463. Lookup ID: lookup_017734
+   Represents 1 comment(s)
+   QUOTE: "I shouldn't have to explain to anybody with a high school education, let alone a college education, why allowing anybody to have the power to replace actual scientists with anybody he wants is disastrous to our continued health and prosperity, as well as whatever we can salvage of our international reputation."
+   MATCH INFO: Found partial match in sentence 1: i shouldn't have to explain to anybody with a high school education, let alone a college education, why allowing anybody to have the power to replace actual scientists with anybody he wants is disastrous to our continued health and prosperity, as well as whatever we can salavge of our international reputation
+----------------------------------------
+
+1464. Lookup ID: lookup_017738
+   Represents 1 comment(s)
+   QUOTE: "Politically-driven science is what this regulation amounts to, and is an oxymoron."
+   MATCH INFO: Found similar (not exact): . second, politically-driven science is what this regulation amounts to, and is an oxymoron. a revolvi
+----------------------------------------
+
+1465. Lookup ID: lookup_017740
+   Represents 1 comment(s)
+   QUOTE: "This proposed regulation will result in the loss of American scientific leadership. It must not move forward."
+   MATCH INFO: Found similar (not exact): progress. this proposed regulation will result in the loss of american scientific leadership. it must not move forward.
+----------------------------------------
+
+1466. Lookup ID: lookup_017742
+   Represents 1 comment(s)
+   QUOTE: "This is a very dangerous and political move to bring in loyalists and replace those who have experience in the dept."
+   MATCH INFO: Found similar (not exact): mployees. this is a very dangerous and political move to bring in loyalists and replace those who have experience in the dept. more chao
+----------------------------------------
+
+1467. Lookup ID: lookup_017780
+   Represents 1 comment(s)
+   QUOTE: "It seems quite strange for federal scientists to be in a position to be jettisoned at the whim of someone in the Executive Branch."
+   MATCH INFO: Found similar (not exact): ectfully, it seems quite strange for federal scientists to be in a position to be jettisoned at the whim of someone in the executive branch. it seems 
+----------------------------------------
+
+1468. Lookup ID: lookup_017784
+   Represents 1 comment(s)
+   QUOTE: "This change would further politicize scientific research in this country."
+   MATCH INFO: Found similar (not exact): sparency, this change would further politicize scientific research in this country. nih progr
 ----------------------------------------
 
