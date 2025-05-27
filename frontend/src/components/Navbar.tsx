@@ -204,6 +204,15 @@ export default function Navbar() {
                   GitHub Repo
                 </Link>
               </div>
+              <div className="flex flex-col space-y-3">
+                <Link
+                  href="/clusters"
+                  className="flex items-center py-2 px-3 rounded-md hover:bg-white/10 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Clusters
+                </Link>
+              </div>
             </div>
           )}
         </div>
