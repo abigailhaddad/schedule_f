@@ -4,16 +4,12 @@ interface ClusterControlsProps {
   clusters: number[];
   selectedCluster: number | null;
   onClusterSelect: (cluster: number | null) => void;
-  showStanceColors: boolean;
-  onStanceColorsToggle: (show: boolean) => void;
 }
 
 export default function ClusterControls({
   clusters,
   selectedCluster,
   onClusterSelect,
-  showStanceColors,
-  onStanceColorsToggle,
 }: ClusterControlsProps) {
   return (
     <div className="mb-4 flex flex-wrap gap-4 items-center">
@@ -35,16 +31,6 @@ export default function ClusterControls({
           ))}
         </select>
       </div>
-
-      <label className="flex items-center gap-2 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={showStanceColors}
-          onChange={(e) => onStanceColorsToggle(e.target.checked)}
-          className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-        />
-        <span className="text-sm font-medium text-gray-700">Color by Stance</span>
-      </label>
     </div>
   );
 }

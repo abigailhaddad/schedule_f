@@ -2,10 +2,9 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { ClusterData, ClusterPoint } from "@/lib/actions/clusters";
+import { ClusterData } from "@/lib/actions/clusters";
 import Card from "@/components/ui/Card";
 import ClusterControls from "./ClusterControls";
-import { useRouter } from "next/navigation";
 
 // Dynamically import the chart to avoid SSR issues
 const ClusterChart = dynamic(() => import("./ClusterChart"), {
@@ -24,14 +23,11 @@ interface ClusterVisualizationProps {
 export default function ClusterVisualization({
   data,
 }: ClusterVisualizationProps) {
-  const router = useRouter();
   const [selectedCluster, setSelectedCluster] = useState<number | null>(null);
-  const [hoveredPoint, setHoveredPoint] = useState<ClusterPoint | null>(null);
-  const [showStanceColors, setShowStanceColors] = useState(false);
 
-  const handlePointClick = (point: ClusterPoint) => {
-    router.push(`/comment/${point.id}`);
-  };
+  // const handlePointClick = (point: ClusterPoint) => { // No longer needed here if chart handles its own nav
+  //   router.push(`/comment/${point.id}`);
+  // };
 
   // Memoize chart data transformation
   const chartData = useMemo(() => {
@@ -79,17 +75,13 @@ export default function ClusterVisualization({
             clusters={Array.from(data.clusters.keys())}
             selectedCluster={selectedCluster}
             onClusterSelect={setSelectedCluster}
-            showStanceColors={showStanceColors}
-            onStanceColorsToggle={setShowStanceColors}
           />
 
           <div className="relative">
             <ClusterChart
               data={filteredData}
               bounds={data.bounds}
-              showStanceColors={showStanceColors}
-              onPointClick={handlePointClick}
-              onPointHover={setHoveredPoint}
+              // onPointClick={handlePointClick} // Removed
             />
           </div>
         </Card.Body>
