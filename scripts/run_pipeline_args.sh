@@ -199,13 +199,39 @@ echo ""
 show_progress() {
     # Get the last meaningful line from the log (skip empty lines and certain patterns)
     if [ -f "$OUTPUT_DIR/pipeline.log" ]; then
-        local last_line=$(tail -n 20 "$OUTPUT_DIR/pipeline.log" | grep -E "^[0-9]{4}-|^Reading|^Saved|^✅|^📊|^🔄|^⚠️|^Creating|^Fetching|^=== STEP" | tail -n 1)
-        if [ -n "$last_line" ]; then
-            # Truncate long lines and add ellipsis if needed
-            if [ ${#last_line} -gt 80 ]; then
-                last_line="${last_line:0:77}..."
+        # Look for key progress indicators
+        local new_comments=$(grep -E "New to fetch: [0-9]+" "$OUTPUT_DIR/pipeline.log" | tail -1 | grep -oE "[0-9]+" | tail -1)
+        local processing_batch=$(grep -E "Processing batch [0-9]+" "$OUTPUT_DIR/pipeline.log" | tail -1)
+        local current_step=$(grep -E "=== STEP [0-9]+" "$OUTPUT_DIR/pipeline.log" | tail -1)
+        
+        # Build status line
+        local status_line=""
+        if [ -n "$current_step" ]; then
+            status_line="$current_step"
+        fi
+        
+        if [ -n "$new_comments" ] && [ "$new_comments" -gt 0 ]; then
+            status_line="$status_line | New comments: $new_comments"
+        fi
+        
+        if [ -n "$processing_batch" ]; then
+            status_line="$status_line | $processing_batch"
+        fi
+        
+        # If no specific status, show last meaningful line
+        if [ -z "$status_line" ]; then
+            local last_line=$(tail -n 20 "$OUTPUT_DIR/pipeline.log" | grep -E "^[0-9]{4}-|^Reading|^Saved|^✅|^📊|^🔄|^⚠️|^Creating|^Fetching|^=== STEP" | tail -n 1)
+            if [ -n "$last_line" ]; then
+                status_line="$last_line"
             fi
-            printf "\r\033[K📊 %s" "$last_line"
+        fi
+        
+        if [ -n "$status_line" ]; then
+            # Truncate long lines and add ellipsis if needed
+            if [ ${#status_line} -gt 100 ]; then
+                status_line="${status_line:0:97}..."
+            fi
+            printf "\r\033[K📊 %s" "$status_line"
         fi
     fi
 }
@@ -319,6 +345,19 @@ show_results() {
         if grep -q "Deduplication efficiency:" "$OUTPUT_DIR/pipeline.log" 2>/dev/null; then
             DEDUP_EFFICIENCY=$(grep "Deduplication efficiency:" "$OUTPUT_DIR/pipeline.log" | grep -oE '[0-9.]+%' | tail -1)
             echo "📈 Deduplication efficiency: $DEDUP_EFFICIENCY"
+        fi
+    fi
+    
+    # Show validation results
+    if grep -q "VALIDATION PASSED" "$OUTPUT_DIR/pipeline.log" 2>/dev/null; then
+        echo "✅ Validation: PASSED"
+    elif grep -q "VALIDATION FAILED" "$OUTPUT_DIR/pipeline.log" 2>/dev/null; then
+        echo "❌ Validation: FAILED"
+        # Show validation errors
+        VALIDATION_ERRORS=$(grep -A10 "❌ Errors" "$OUTPUT_DIR/pipeline.log" | grep "   - " | head -3)
+        if [ -n "$VALIDATION_ERRORS" ]; then
+            echo "   Validation errors:"
+            echo "$VALIDATION_ERRORS"
         fi
     fi
     

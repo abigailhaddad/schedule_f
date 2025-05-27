@@ -478,6 +478,11 @@ def main():
         # Step 2: Find new comment IDs (compare CSV with input raw data)
         new_comment_ids = find_new_comment_ids(args.csv, input_raw_data_path)
         
+        # Initialize counters for summary
+        added_to_existing = 0
+        new_entries_created = 0
+        unanalyzed_count = 0
+        
         # Copy existing files to output directory first
         logger.info(f"\n=== Preparing output directory ===")
         if os.path.exists(input_raw_data_path):
@@ -706,11 +711,56 @@ def main():
             else:
                 logger.error("❌ Quote verification failed")
         
-        # Final summary
-        logger.info(f"\n🎉 Resume pipeline complete!")
+        # Step 8: Create merged data.json
+        logger.info(f"\n=== STEP 6: Creating Merged data.json ===")
+        from backend.utils.merge_lookup_to_raw import merge_lookup_to_raw
+        
+        # Use the clustered file if clustering was done, otherwise use the base lookup table
+        if not args.skip_clustering and n_entries >= 2:
+            lookup_for_merge = output_lookup_table_path.replace('.json', '_clustered.json')
+        else:
+            lookup_for_merge = output_lookup_table_path
+            
+        output_data_path = os.path.join(args.output_dir, 'data.json')
+        merge_lookup_to_raw(output_raw_data_path, lookup_for_merge, output_data_path)
+        logger.info(f"✅ Created merged data.json")
+        
+        # Step 9: Validate output
+        logger.info(f"\n=== STEP 7: Validating Pipeline Output ===")
+        from backend.utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
+        
+        validation_results = validate_pipeline_output(
+            csv_file=args.csv,
+            raw_data_file=output_raw_data_path,
+            data_file=output_data_path,
+            lookup_table_file=output_lookup_table_path
+        )
+        
+        # Print validation summary
+        print_validation_summary(validation_results)
+        
+        if not validation_results['valid']:
+            logger.error("❌ Pipeline validation failed! Check errors above.")
+        
+        # Final summary with better visibility
+        logger.info(f"\n{'='*60}")
+        logger.info(f"🎉 RESUME PIPELINE COMPLETE!")
+        logger.info(f"{'='*60}")
+        
+        # Show what was processed
+        logger.info(f"\n📊 Processing Summary:")
+        logger.info(f"   New comments fetched: {len(new_comment_ids):,}")
+        if new_comment_ids:
+            logger.info(f"   New unique patterns: {new_entries_created:,}")
+            logger.info(f"   Comments added to existing patterns: {added_to_existing:,}")
+        
+        if not args.skip_analysis and unanalyzed_count > 0:
+            logger.info(f"   Entries analyzed: {unanalyzed_count:,}")
+        
         logger.info(f"\n📁 Output files in {args.output_dir}:")
         logger.info(f"   - {os.path.basename(output_raw_data_path)} (raw comment data)")
         logger.info(f"   - {os.path.basename(output_lookup_table_path)} (deduplicated patterns with analysis)")
+        logger.info(f"   - data.json (merged data for frontend)")
         if not args.skip_analysis:
             logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.json'))}")
             logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.txt'))}")
