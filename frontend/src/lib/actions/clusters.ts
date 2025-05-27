@@ -40,6 +40,28 @@ export interface ClusterDataResponse {
 const MAX_POINTS_PER_CLUSTER = 50; // Limit points per cluster for performance
 const MAX_TOTAL_POINTS = 500; // Maximum total points to render for smooth interaction
 
+// Define an interface for the raw data returned by the database query
+interface RawClusterPointRow {
+  id: string;
+  title: string | null; // Title can be null from DB
+  stance: string | null;
+  clusterId: number | null; // Nullable from DB before filtering
+  pcaX: number | null;      // Nullable from DB before filtering
+  pcaY: number | null;      // Nullable from DB before filtering
+  keyQuote: string | null;
+  themes: string | null;
+  // Allow for potential snake_case versions from direct SQL execution
+  cluster_id?: number | null;
+  pca_x?: number | null;
+  pca_y?: number | null;
+  key_quote?: string | null;
+  // Allow for potential all-lowercase versions
+  clusterid?: number | null;
+  pcax?: number | null;
+  pcay?: number | null;
+  keyquote?: string | null;
+}
+
 export async function getClusterData(sampleData: boolean = true): Promise<ClusterDataResponse> {
   const fetchClusterData = async () => {
     try {
@@ -64,7 +86,7 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
       // Determine if we need to sample
       const shouldSample = sampleData && totalPointsCount > MAX_TOTAL_POINTS;
       
-      let result: any[];
+      let result: RawClusterPointRow[]; // Use the defined interface
       
       if (shouldSample) {
         // Use a more efficient sampling strategy
@@ -101,7 +123,7 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
         `);
         
         // Extract rows from QueryResult
-        result = queryResult.rows as any[];
+        result = queryResult.rows as unknown as RawClusterPointRow[]; // Assert via unknown for raw SQL
       } else {
         // Fetch all data if under the limit
         result = await db
@@ -124,15 +146,15 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
       const clusters = new Map<number, ClusterPoint[]>();
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
-      result.forEach((row: any) => {
+      result.forEach((row: RawClusterPointRow) => {
         const point: ClusterPoint = {
           id: row.id,
           title: row.title || 'Untitled',
           stance: row.stance,
-          clusterId: row.cluster_id || row.clusterId || row.clusterid,
-          pcaX: row.pca_x || row.pcaX || row.pcax,
-          pcaY: row.pca_y || row.pcaY || row.pcay,
-          keyQuote: row.key_quote || row.keyQuote || row.keyquote,
+          clusterId: (row.cluster_id || row.clusterId || row.clusterid)!,
+          pcaX: (row.pca_x || row.pcaX || row.pcax)!,
+          pcaY: (row.pca_y || row.pcaY || row.pcay)!,
+          keyQuote: (row.key_quote || row.keyQuote || row.keyquote) || null,
           themes: row.themes,
         };
 
