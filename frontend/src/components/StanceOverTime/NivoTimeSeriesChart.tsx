@@ -36,7 +36,7 @@ export default function NivoTimeSeriesChart({ data }: NivoTimeSeriesChartProps) 
     <div style={{ height: 400 }}>
       <ResponsiveLine
         data={chartData}
-        margin={{ top: 20, right: 20, bottom: 60, left: 60 }}
+        margin={{ top: 20, right: 20, bottom: 60, left: 100 }}
         xScale={{ 
           type: 'time',
           format: '%Y-%m-%d',
@@ -98,8 +98,8 @@ export default function NivoTimeSeriesChart({ data }: NivoTimeSeriesChartProps) 
             translateX: 0,
             translateY: -10,
             itemsSpacing: 20,
-            itemDirection: 'left-to-right',
-            itemWidth: 100,
+            itemDirection: 'bottom-to-top',
+            itemWidth: 80,
             itemHeight: 20,
             itemOpacity: 0.75,
             symbolSize: 12,
