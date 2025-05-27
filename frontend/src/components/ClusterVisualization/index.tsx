@@ -17,7 +17,9 @@ const ClusterChart = dynamic(() => import("./ClusterChart"), {
 });
 
 interface ClusterVisualizationProps {
-  data: ClusterData;
+  data: Omit<ClusterData, 'clusters'> & {
+    clusters: Array<[number, import("@/lib/actions/clusters").ClusterPoint[]]>;
+  };
 }
 
 export default function ClusterVisualization({
@@ -31,7 +33,7 @@ export default function ClusterVisualization({
 
   // Memoize chart data transformation
   const chartData = useMemo(() => {
-    return Array.from(data.clusters.entries()).map(([clusterId, points]) => ({
+    return data.clusters.map(([clusterId, points]) => ({
       id: `Cluster ${clusterId}`,
       data: points.map((point) => ({
         x: point.pcaX,
@@ -49,10 +51,7 @@ export default function ClusterVisualization({
 
   // Calculate total points for performance info
   const totalPoints = useMemo(() => {
-    return Array.from(data.clusters.values()).reduce(
-      (sum, points) => sum + points.length,
-      0
-    );
+    return data.clusters.reduce((sum, [, points]) => sum + points.length, 0);
   }, [data.clusters]);
 
   return (
@@ -72,7 +71,7 @@ export default function ClusterVisualization({
         </Card.Header>
         <Card.Body className="p-4">
           <ClusterControls
-            clusters={Array.from(data.clusters.keys())}
+            clusters={data.clusters.map(([clusterId]) => clusterId)}
             selectedCluster={selectedCluster}
             onClusterSelect={setSelectedCluster}
           />
@@ -94,39 +93,37 @@ export default function ClusterVisualization({
         </Card.Header>
         <Card.Body className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {Array.from(data.clusters.entries())
-              .sort(([a], [b]) => a - b)
-              .map(([clusterId, points]) => {
-                const stanceCounts = points.reduce((acc, point) => {
-                  const stance = point.stance || "Neutral/Unclear";
-                  acc[stance] = (acc[stance] || 0) + 1;
-                  return acc;
-                }, {} as Record<string, number>);
+            {data.clusters.map(([clusterId, points]) => {
+              const stanceCounts = points.reduce((acc, point) => {
+                const stance = point.stance || "Neutral/Unclear";
+                acc[stance] = (acc[stance] || 0) + 1;
+                return acc;
+              }, {} as Record<string, number>);
 
-                return (
-                  <div
-                    key={`cluster-stat-${clusterId}`}
-                    className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow"
-                  >
-                    <h4 className="font-semibold text-gray-700">
-                      Cluster {clusterId}
-                    </h4>
-                    <p className="text-2xl font-bold text-blue-600">
-                      {points.length}
-                    </p>
-                    <p className="text-sm text-gray-500 mb-2">comments</p>
+              return (
+                <div
+                  key={`cluster-stat-${clusterId}`}
+                  className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow"
+                >
+                  <h4 className="font-semibold text-gray-700">
+                    Cluster {clusterId}
+                  </h4>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {points.length}
+                  </p>
+                  <p className="text-sm text-gray-500 mb-2">comments</p>
 
-                    <div className="space-y-1 text-xs">
-                      {Object.entries(stanceCounts).map(([stance, count]) => (
-                        <div key={stance} className="flex justify-between">
-                          <span className="text-gray-600">{stance}:</span>
-                          <span className="font-medium">{count}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="space-y-1 text-xs">
+                    {Object.entries(stanceCounts).map(([stance, count]) => (
+                      <div key={stance} className="flex justify-between">
+                        <span className="text-gray-600">{stance}:</span>
+                        <span className="font-medium">{count}</span>
+                      </div>
+                    ))}
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
           </div>
         </Card.Body>
       </Card>

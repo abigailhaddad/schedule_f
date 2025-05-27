@@ -60,11 +60,11 @@ export default function ClusterChart({
     "#f97316", "#ef4444", "#dc2626", "#b91c1c", "#991b1b",
   ];
 
-//   const stanceColors = {
-//     For: "#10b981",
-//     Against: "#ef4444",
-//     "Neutral/Unclear": "#64748b",
-//   };
+  // const stanceColors = { // This was commented out by user, ensuring it's fully gone or remains commented
+  //   For: "#10b981",
+  //   Against: "#ef4444",
+  //   "Neutral/Unclear": "#64748b",
+  // };
 
   // Define a more specific type for the Nivo node object for colors
   type NivoColorNode = { serieId: string | number; data?: { stance?: string | null } };
