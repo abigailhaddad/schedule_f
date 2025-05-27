@@ -10,8 +10,17 @@ export const metadata: Metadata = {
 
 export const revalidate = 86400; // 24 hours
 
-export default async function ClustersPage() {
-  const clusterResponse = await getClusterData();
+// Allow users to control sampling via URL parameter
+export default async function ClustersPage({
+  searchParams
+}: {
+  searchParams: Promise<{ full?: string }>
+}) {
+  // Check if user wants full data (no sampling)
+  const { full } = await searchParams;
+  const showFullData = full === 'true';
+  
+  const clusterResponse = await getClusterData(!showFullData); // sample by default
 
   if (!clusterResponse.success || !clusterResponse.data) {
     return (
@@ -38,7 +47,36 @@ export default async function ClustersPage() {
       <Navbar />
       <div className="pt-24 pb-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8">Comment Cluster Analysis</h1>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold">Comment Cluster Analysis</h1>
+            
+            {clusterResponse.data.isSampled && (
+              <div className="text-sm text-gray-600 bg-yellow-50 px-4 py-2 rounded-lg border border-yellow-200">
+                <span className="font-medium">Performance Mode:</span> Showing {clusterResponse.data.sampledPoints} of {clusterResponse.data.totalPoints} points
+                {' '}
+                <a 
+                  href="/clusters?full=true" 
+                  className="text-blue-600 hover:underline ml-2"
+                >
+                  Load all points
+                </a>
+              </div>
+            )}
+            
+            {!clusterResponse.data.isSampled && clusterResponse.data.totalPoints > 1000 && (
+              <div className="text-sm text-gray-600">
+                <span className="font-medium">Full Dataset:</span> {clusterResponse.data.totalPoints} points
+                {' '}
+                <a 
+                  href="/clusters" 
+                  className="text-blue-600 hover:underline ml-2"
+                >
+                  Use performance mode
+                </a>
+              </div>
+            )}
+          </div>
+          
           <ClusterVisualization data={clusterResponse.data} />
         </div>
       </div>
