@@ -42,6 +42,13 @@ export default async function ClustersPage({
     );
   }
 
+  // Convert Map to a serializable array of [key, value] pairs
+  const serializableClusters = Array.from(clusterResponse.data.clusters.entries());
+  const displayData = {
+    ...clusterResponse.data,
+    clusters: serializableClusters,
+  };
+
   return (
     <main className="min-h-screen bg-gray-50">
       <Navbar />
@@ -77,7 +84,7 @@ export default async function ClustersPage({
             )}
           </div>
           
-          <ClusterVisualization data={clusterResponse.data} />
+          <ClusterVisualization data={displayData} />
         </div>
       </div>
     </main>
