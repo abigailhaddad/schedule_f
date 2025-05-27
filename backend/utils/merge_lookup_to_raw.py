@@ -54,12 +54,16 @@ def create_lookup_mapping(lookup_data: List[Dict]) -> Dict[str, Dict]:
         for comment_id in comment_ids:
             if comment_id in mapping:
                 duplicate_ids.append(comment_id)
-                logger.warning(f"Comment ID {comment_id} appears in multiple lookup entries")
+                logger.warning(f"Comment ID {comment_id} appears in multiple lookup entries - keeping first occurrence")
+                # Skip adding this duplicate - keep the first occurrence
+                continue
             mapping[comment_id] = lookup_info
     
     if duplicate_ids:
-        logger.error(f"Found {len(set(duplicate_ids))} comment IDs that appear in multiple lookup entries")
-        raise ValueError(f"Duplicate comment IDs found in lookup table: {list(set(duplicate_ids))[:10]}")
+        unique_duplicates = list(set(duplicate_ids))
+        logger.warning(f"Found {len(unique_duplicates)} comment IDs that appear in multiple lookup entries")
+        logger.warning(f"Duplicate IDs: {unique_duplicates[:10]}{'...' if len(unique_duplicates) > 10 else ''}")
+        logger.warning("Kept only the first occurrence of each duplicate")
     
     logger.info(f"Created mapping for {len(mapping)} comments")
     return mapping

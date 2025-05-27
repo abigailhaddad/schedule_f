@@ -224,8 +224,13 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
     try:
         # Use existing fetch logic to get comments with attachments
         logger.info(f"Fetching comments from filtered CSV...")
-        # Note: read_comments_from_csv creates its own raw_data.json file in the output_dir
-        raw_data_file_from_csv = read_comments_from_csv(temp_csv, output_dir, limit=len(new_comment_ids))
+        
+        # Create a temporary directory for the fetch operation
+        temp_output_dir = os.path.join(output_dir, 'temp_fetch')
+        os.makedirs(temp_output_dir, exist_ok=True)
+        
+        # Fetch new comments to a temporary file
+        raw_data_file_from_csv = read_comments_from_csv(temp_csv, temp_output_dir, limit=len(new_comment_ids))
         
         # Load the generated raw data
         with open(raw_data_file_from_csv, 'r') as f:
@@ -235,14 +240,20 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
         if os.path.exists(raw_data_file):
             with open(raw_data_file, 'r') as f:
                 existing_raw_data = json.load(f)
+            logger.info(f"Loaded {len(existing_raw_data):,} existing comments from {raw_data_file}")
         else:
             existing_raw_data = []
+            logger.info(f"No existing raw_data.json found at {raw_data_file}, creating new file")
         
         existing_raw_data.extend(new_raw_data)
         
-        # Save updated raw_data
+        # Save updated raw_data back to the original location
         with open(raw_data_file, 'w') as f:
             json.dump(existing_raw_data, f, indent=2)
+        
+        # Clean up temporary files
+        os.remove(raw_data_file_from_csv)
+        os.rmdir(temp_output_dir)
         
         logger.info(f"✅ Appended {len(new_raw_data):,} new comments to raw_data")
         logger.info(f"✅ Total comments in raw_data: {len(existing_raw_data):,}")
@@ -298,7 +309,18 @@ def update_lookup_table_with_new_comments(new_comment_ids: Set[str], raw_data_fi
     # Process each new comment
     added_to_existing = 0
     new_entries_created = 0
-    next_lookup_id = len(lookup_table) + 1
+    
+    # Find the highest existing lookup ID to avoid conflicts
+    max_id = 0
+    for entry in lookup_table:
+        lookup_id = entry.get('lookup_id', 'lookup_000000')
+        # Extract number from lookup_XXXXXX format
+        try:
+            id_num = int(lookup_id.split('_')[1])
+            max_id = max(max_id, id_num)
+        except (IndexError, ValueError):
+            continue
+    next_lookup_id = max_id + 1
     
     for comment_data in new_comments:
         try:
@@ -330,17 +352,12 @@ def update_lookup_table_with_new_comments(new_comment_ids: Set[str], raw_data_fi
                     'text_source': text_result['text_source'],
                     'comment_ids': [comment_id],
                     'comment_count': 1,
-                    'full_text_length': len(text_result['full_text']),
-                    'truncated_text_length': len(truncated_text),
-                    # LLM analysis fields (to be filled later)
+                    # Analysis fields (to be filled later or preserved)
                     'stance': None,
                     'key_quote': None,
                     'rationale': None,
                     'themes': None,
-                    # Clustering fields (to be filled later)
-                    'cluster_id': None,
-                    'pca_x': None,
-                    'pca_y': None
+                    'corrected': False  # New entries haven't been manually corrected
                 }
                 
                 lookup_table.append(new_entry)
@@ -404,38 +421,142 @@ def main():
     
     args = parser.parse_args()
     
-    # Setup paths (don't double-nest output directory)
-    raw_data_path = args.raw_data if os.path.isabs(args.raw_data) else os.path.join(args.output_dir, args.raw_data)
-    lookup_table_path = args.lookup_table if os.path.isabs(args.lookup_table) else os.path.join(args.output_dir, args.lookup_table)
+    # Setup paths
+    # Input paths - where to read existing data from
+    input_raw_data_path = args.raw_data
+    input_lookup_table_path = args.lookup_table
+    
+    # Output paths - where to save updated data
+    output_raw_data_path = os.path.join(args.output_dir, os.path.basename(args.raw_data))
+    output_lookup_table_path = os.path.join(args.output_dir, os.path.basename(args.lookup_table))
     
     logger.info(f"🚀 Starting resume-aware pipeline...")
     logger.info(f"📁 CSV file: {args.csv}")
-    logger.info(f"📁 Raw data: {raw_data_path}")
-    logger.info(f"📁 Lookup table: {lookup_table_path}")
+    logger.info(f"📁 Input raw data: {input_raw_data_path}")
+    logger.info(f"📁 Input lookup table: {input_lookup_table_path}")
     logger.info(f"📁 Output directory: {args.output_dir}")
+    
+    # Validate input files exist
+    if not os.path.exists(input_raw_data_path):
+        logger.error(f"❌ Input raw data file not found: {input_raw_data_path}")
+        raise FileNotFoundError(f"Raw data file not found: {input_raw_data_path}")
+    
+    if not os.path.exists(input_lookup_table_path):
+        logger.error(f"❌ Input lookup table file not found: {input_lookup_table_path}")
+        raise FileNotFoundError(f"Lookup table file not found: {input_lookup_table_path}")
+    
+    # Show initial stats
+    logger.info(f"\n📊 Initial data check:")
+    with open(input_raw_data_path, 'r') as f:
+        existing_raw_data = json.load(f)
+    logger.info(f"   Existing raw_data.json: {len(existing_raw_data):,} comments")
+    
+    with open(input_lookup_table_path, 'r') as f:
+        existing_lookup = json.load(f)
+    logger.info(f"   Existing lookup table: {len(existing_lookup):,} entries")
+    
+    # Create output directory
+    os.makedirs(args.output_dir, exist_ok=True)
     
     try:
         # Step 1: Validate truncation consistency
-        validated_truncation = validate_truncation_consistency(lookup_table_path, args.truncate)
+        validated_truncation = validate_truncation_consistency(input_lookup_table_path, args.truncate)
         
-        # Step 2: Find new comment IDs
-        new_comment_ids = find_new_comment_ids(args.csv, raw_data_path)
+        # Step 2: Find new comment IDs (compare CSV with input raw data)
+        new_comment_ids = find_new_comment_ids(args.csv, input_raw_data_path)
         
-        # Step 3: Fetch and append new comments with attachments
+        # Copy existing files to output directory first
+        logger.info(f"\n=== Preparing output directory ===")
+        if os.path.exists(input_raw_data_path):
+            import shutil
+            shutil.copy2(input_raw_data_path, output_raw_data_path)
+            logger.info(f"✅ Copied raw_data.json to output directory")
+        
+        if os.path.exists(input_lookup_table_path):
+            import shutil
+            shutil.copy2(input_lookup_table_path, output_lookup_table_path)
+            logger.info(f"✅ Copied lookup table to output directory")
+        
+        # Fetch and append new comments with attachments
         if new_comment_ids:
-            logger.info(f"\n=== STEP 1: Fetching New Comments ===")
-            fetch_and_append_new_comments(new_comment_ids, args.csv, raw_data_path, args.output_dir)
+            logger.info(f"\n=== STEP 1: Fetching {len(new_comment_ids):,} New Comments ===")
+            fetch_and_append_new_comments(new_comment_ids, args.csv, output_raw_data_path, args.output_dir)
         else:
             logger.info(f"\n=== STEP 1: No New Comments to Fetch ===")
+            logger.info(f"   All comments from CSV already exist in raw_data.json")
         
-        # Step 4: Update lookup table with new comments
-        logger.info(f"\n=== STEP 2: Updating Lookup Table ===")
-        update_lookup_table_with_new_comments(new_comment_ids, raw_data_path, 
-                                            lookup_table_path, validated_truncation)
+        # Recreate lookup table from complete raw data
+        logger.info(f"\n=== STEP 2: Recreating Lookup Table ===")
         
-        # Step 5: Run LLM analysis on unanalyzed entries
+        # Import the same function used by the main pipeline
+        from .analysis.create_lookup_table import create_lookup_table
+        
+        # Load the complete raw data
+        with open(output_raw_data_path, 'r') as f:
+            complete_raw_data = json.load(f)
+        
+        logger.info(f"Creating lookup table from {len(complete_raw_data)} total comments...")
+        
+        # Create lookup table using the same logic as the main pipeline
+        new_lookup_table = create_lookup_table(complete_raw_data, validated_truncation)
+        
+        # Preserve analysis fields from existing entries
+        if os.path.exists(input_lookup_table_path):
+            with open(input_lookup_table_path, 'r') as f:
+                old_lookup_table = json.load(f)
+            
+            # Create mapping of truncated_text to all analysis fields
+            analysis_map = {}
+            for entry in old_lookup_table:
+                analysis_map[entry['truncated_text']] = {
+                    'stance': entry.get('stance'),
+                    'key_quote': entry.get('key_quote'),
+                    'rationale': entry.get('rationale'),
+                    'themes': entry.get('themes'),
+                    'corrected': entry.get('corrected', False)
+                }
+            
+            # Apply existing analysis to matching entries in new table
+            preserved_count = 0
+            for entry in new_lookup_table:
+                if entry['truncated_text'] in analysis_map:
+                    old_analysis = analysis_map[entry['truncated_text']]
+                    entry.update(old_analysis)
+                    preserved_count += 1
+                    logger.debug(f"Preserved analysis for {entry['lookup_id']}")
+                else:
+                    # New entry, set defaults
+                    entry['stance'] = None
+                    entry['key_quote'] = None
+                    entry['rationale'] = None
+                    entry['themes'] = None
+                    entry['corrected'] = False
+            
+            logger.info(f"   Preserved analysis from {preserved_count} existing entries")
+        else:
+            # No existing lookup table, all entries need analysis
+            for entry in new_lookup_table:
+                entry['stance'] = None
+                entry['key_quote'] = None
+                entry['rationale'] = None
+                entry['themes'] = None
+                entry['corrected'] = False
+        
+        # Save the new lookup table
+        with open(output_lookup_table_path, 'w') as f:
+            json.dump(new_lookup_table, f, indent=2)
+        
+        logger.info(f"✅ Lookup table saved with {len(new_lookup_table)} entries")
+        
+        # Report on new entries
+        if new_comment_ids:
+            new_entries = sum(1 for entry in new_lookup_table 
+                            if any(cid in new_comment_ids for cid in entry.get('comment_ids', [])))
+            logger.info(f"   Including {new_entries} entries with new comments")
+        
+        # Step 6: Run LLM analysis on unanalyzed entries
         if not args.skip_analysis:
-            unanalyzed_count = count_unanalyzed_entries(lookup_table_path)
+            unanalyzed_count = count_unanalyzed_entries(output_lookup_table_path)
             if unanalyzed_count > 0:
                 logger.info(f"\n=== STEP 3: LLM Analysis ({unanalyzed_count} entries) ===")
                 
@@ -443,7 +564,7 @@ def main():
                 analyzer = CommentAnalyzer(model=args.model)
                 
                 # Load lookup table
-                with open(lookup_table_path, 'r') as f:
+                with open(output_lookup_table_path, 'r') as f:
                     lookup_table = json.load(f)
                 
                 # Analyze unanalyzed entries
@@ -452,21 +573,21 @@ def main():
                     analyzer=analyzer,
                     batch_size=5,
                     use_parallel=True,
-                    checkpoint_file=f"{lookup_table_path}.checkpoint"
+                    checkpoint_file=f"{output_lookup_table_path}.checkpoint"
                 )
                 
                 # Save analyzed lookup table
-                analyzed_path = lookup_table_path.replace('.json', '_analyzed.json')
+                analyzed_path = output_lookup_table_path.replace('.json', '_analyzed.json')
                 with open(analyzed_path, 'w') as f:
                     json.dump(analyzed_lookup_table, f, indent=2)
                 
                 logger.info(f"✅ Analysis complete, saved to {analyzed_path}")
             else:
                 logger.info(f"\n=== STEP 3: No LLM Analysis Needed ===")
-                analyzed_path = lookup_table_path
+                analyzed_path = output_lookup_table_path
         else:
             logger.info(f"\n=== STEP 3: Skipping LLM Analysis ===")
-            analyzed_path = lookup_table_path
+            analyzed_path = output_lookup_table_path
         
         # Step 6: Run clustering
         if not args.skip_clustering:
