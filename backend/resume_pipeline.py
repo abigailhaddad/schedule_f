@@ -28,16 +28,28 @@ from backend.fetch.fetch_comments import read_comments_from_csv
 from backend.analysis.create_lookup_table import normalize_text_for_dedup, extract_and_combine_text
 from backend.analysis.analyze_lookup_table import analyze_lookup_table_batch, CommentAnalyzer
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('resume_pipeline.log'),
-        logging.StreamHandler()
-    ]
-)
+# Initial logger setup (will be reconfigured with file handler in main)
 logger = logging.getLogger(__name__)
+
+def setup_logging(output_dir: str):
+    """Set up logging with file handler in the output directory."""
+    log_file = os.path.join(output_dir, 'resume_pipeline.log')
+    
+    # Clear any existing handlers
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+    
+    # Set up new handlers
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ],
+        force=True  # Override existing configuration
+    )
+    logger.info(f"📝 Logging to: {log_file}")
 
 def validate_truncation_consistency(lookup_table_file: str, requested_truncation: Optional[int]) -> int:
     """
@@ -416,8 +428,6 @@ def main():
                        help='Skip LLM analysis (only update data)')
     parser.add_argument('--skip_clustering', action='store_true',
                        help='Skip clustering (only do data update and LLM analysis)')
-    parser.add_argument('--verify_quotes', action='store_true',
-                       help='Run quote verification on analyzed lookup table')
     
     args = parser.parse_args()
     
@@ -457,6 +467,9 @@ def main():
     
     # Create output directory
     os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Set up logging with output directory
+    setup_logging(args.output_dir)
     
     try:
         # Step 1: Validate truncation consistency
@@ -613,25 +626,23 @@ def main():
                     checkpoint_file=f"{output_lookup_table_path}.checkpoint"
                 )
                 
-                # Save analyzed lookup table
-                analyzed_path = output_lookup_table_path.replace('.json', '_analyzed.json')
-                with open(analyzed_path, 'w') as f:
+                # Save analyzed lookup table back to the original file
+                with open(output_lookup_table_path, 'w') as f:
                     json.dump(analyzed_lookup_table, f, indent=2)
                 
-                logger.info(f"✅ Analysis complete, saved to {analyzed_path}")
+                logger.info(f"✅ Analysis complete, saved to {output_lookup_table_path}")
             else:
                 logger.info(f"\n=== STEP 3: No LLM Analysis Needed ===")
-                analyzed_path = output_lookup_table_path
         else:
             logger.info(f"\n=== STEP 3: Skipping LLM Analysis ===")
-            analyzed_path = output_lookup_table_path
         
         # Step 6: Run clustering
+        n_entries = 0  # Initialize for use in final summary
         if not args.skip_clustering:
             logger.info(f"\n=== STEP 4: Semantic Clustering ===")
             
             # Check how many entries we have for clustering
-            with open(analyzed_path, 'r') as f:
+            with open(output_lookup_table_path, 'r') as f:
                 lookup_table = json.load(f)
             
             n_entries = len(lookup_table)
@@ -656,7 +667,7 @@ def main():
                 clustering_cmd = [
                     sys.executable, 
                     semantic_script,
-                    '--input', analyzed_path,
+                    '--input', output_lookup_table_path,
                     '--n_clusters', str(n_clusters)
                 ]
                 
@@ -671,18 +682,19 @@ def main():
         else:
             logger.info(f"\n=== STEP 4: Skipping Clustering ===")
         
-        # Step 7: Quote verification (optional)
-        if args.verify_quotes:
+        # Step 7: Quote verification (always run if analysis was performed)
+        if not args.skip_analysis:
             logger.info(f"\n=== STEP 5: Quote Verification ===")
             
             # Import and run quote verification
             from backend.analysis.verify_lookup_quotes import verify_lookup_quotes
             
-            # Use the analyzed path (with or without clustering)
-            verification_output = analyzed_path.replace('.json', '_quote_verification.json')
+            # Use the lookup table path
+            verification_output = output_lookup_table_path.replace('.json', '_quote_verification.json')
+            text_report_output = output_lookup_table_path.replace('.json', '_quote_verification.txt')
             
-            logger.info(f"Verifying quotes in {analyzed_path}...")
-            verification_results = verify_lookup_quotes(analyzed_path, verification_output)
+            logger.info(f"Verifying quotes in {output_lookup_table_path}...")
+            verification_results = verify_lookup_quotes(output_lookup_table_path, verification_output, text_report_output)
             
             if verification_results:
                 logger.info(f"✅ Quote verification complete")
@@ -690,12 +702,23 @@ def main():
                 logger.info(f"   Exact matches: {verification_results.get('exact_match_rate', 0)}%")
                 logger.info(f"   Quotes not found: {verification_results.get('quotes_not_found', 0)} ({round(verification_results.get('quotes_not_found', 0) / max(1, verification_results.get('entries_with_quotes', 1)) * 100, 1)}%)")
                 logger.info(f"   Results saved to: {verification_output}")
+                logger.info(f"   Text report: {verification_output.replace('.json', '.txt')}")
             else:
                 logger.error("❌ Quote verification failed")
-        else:
-            logger.info(f"\n=== STEP 5: Skipping Quote Verification ===")
         
+        # Final summary
         logger.info(f"\n🎉 Resume pipeline complete!")
+        logger.info(f"\n📁 Output files in {args.output_dir}:")
+        logger.info(f"   - {os.path.basename(output_raw_data_path)} (raw comment data)")
+        logger.info(f"   - {os.path.basename(output_lookup_table_path)} (deduplicated patterns with analysis)")
+        if not args.skip_analysis:
+            logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.json'))}")
+            logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.txt'))}")
+        if not args.skip_clustering and n_entries >= 2:
+            logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_clustered.json'))} (with clustering)")
+            logger.info(f"   - cluster_report.txt")
+            logger.info(f"   - clusters_visualization.png")
+            logger.info(f"   - dendrogram.png")
         
     except Exception as e:
         logger.error(f"❌ Pipeline failed: {e}")
