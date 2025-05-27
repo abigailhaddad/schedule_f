@@ -5,45 +5,72 @@ import { config } from 'dotenv';
 
 // Load current environment
 config();
+config({ path: path.resolve(process.cwd(), '.env.local') });
 
 const envPath = path.resolve(process.cwd(), '.env');
+const envLocalPath = path.resolve(process.cwd(), '.env.local');
 
 // Get the target environment from command line
 const targetEnv = process.argv[2]?.toLowerCase();
 
-if (targetEnv !== 'dev' && targetEnv !== 'prod') {
-  console.error('❌ Please specify "dev" or "prod" as an argument');
-  console.log('Usage: npm run db:switch dev   OR   npm run db:switch prod');
+if (targetEnv !== 'local' && targetEnv !== 'preprod' && targetEnv !== 'prod') {
+  console.error('❌ Please specify "local", "preprod", or "prod" as an argument');
+  console.log('Usage: npm run db:use:local   OR   npm run db:use:preprod   OR   npm run db:use:prod');
   process.exit(1);
 }
 
-// Read the current .env file
+// Determine which file to update based on environment
+const fileToUpdate = targetEnv === 'local' ? envLocalPath : envPath;
+
+// Read the current file
 let envContent = '';
 try {
-  envContent = fs.readFileSync(envPath, 'utf8');
+  envContent = fs.readFileSync(fileToUpdate, 'utf8');
 } catch (error) {
-  console.error('❌ Could not read .env file:', error);
-  process.exit(1);
+  // If .env.local doesn't exist and we're switching to local, create it
+  if (targetEnv === 'local' && !fs.existsSync(envLocalPath)) {
+    envContent = `DATABASE_URL_LOCAL=postgresql://postgres:localdevpassword@localhost:5432/schedule_f_dev\nDB_ENV=local\n`;
+  } else {
+    console.error(`❌ Could not read ${fileToUpdate}:`, error);
+    process.exit(1);
+  }
 }
 
-// Update the DB_ENV line
-const updatedContent = envContent.replace(
-  /^DB_ENV=.*/m,
-  `DB_ENV=${targetEnv}`
-);
+// Update or add the DB_ENV line
+if (envContent.includes('DB_ENV=')) {
+  envContent = envContent.replace(/^DB_ENV=.*/m, `DB_ENV=${targetEnv}`);
+} else {
+  envContent += `\nDB_ENV=${targetEnv}\n`;
+}
 
-// Write back to .env
+// Write back to the appropriate file
 try {
-  fs.writeFileSync(envPath, updatedContent);
+  fs.writeFileSync(fileToUpdate, envContent);
   console.log(`✅ Switched to ${targetEnv.toUpperCase()} database`);
   console.log(`🗄️  DB_ENV is now set to: ${targetEnv}`);
   
-  // Show a warning for production
+  // Show appropriate warnings
   if (targetEnv === 'prod') {
     console.warn('\n⚠️  WARNING: You are now using the PRODUCTION database!');
     console.warn('Be careful with any operations that modify data.\n');
+  } else if (targetEnv === 'preprod') {
+    console.log('\n📋 You are now using the PRE-PRODUCTION database');
+    console.log('This is your staging environment for testing before production.\n');
+  } else if (targetEnv === 'local') {
+    console.log('\n🏠 You are now using the LOCAL database');
+    console.log('This is your Docker PostgreSQL instance for development.\n');
+    
+    // Check if Docker is running
+    try {
+      const { isContainerRunning } = require('./docker-utils');
+      if (!isContainerRunning()) {
+        console.log('💡 Tip: Start your local database with: npm run docker:start');
+      }
+    } catch {
+      // docker-utils might not exist yet
+    }
   }
 } catch (error) {
-  console.error('❌ Could not update .env file:', error);
+  console.error(`❌ Could not update ${fileToUpdate}:`, error);
   process.exit(1);
 }

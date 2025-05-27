@@ -2,16 +2,28 @@
 import { config } from 'dotenv';
 import path from 'path';
 
-// Load environment variables
+// Load environment variables from both files
 config({ path: path.resolve(process.cwd(), '.env') });
+config({ path: path.resolve(process.cwd(), '.env.local') });
 
 async function updateData() {
-  console.log('Starting data update process...');
+  const dbEnv = process.env.DB_ENV || 'local';
+  console.log(`📊 Starting data update process for ${dbEnv.toUpperCase()} environment...`);
+  
+  // Safety check
+  if (dbEnv === 'prod') {
+    console.warn('\n⚠️  WARNING: You are about to update PRODUCTION data!');
+    console.warn('Press Ctrl+C within 5 seconds to cancel...\n');
+    await new Promise(resolve => setTimeout(resolve, 5000));
+  }
   
   try {
     // 1. Run your data update logic here
-    // For example, run the seed script:
-    // await import('../src/lib/db/seed');
+    console.log('Running database seed...');
+    
+    // Dynamic import of seed script with proper environment
+    process.env.DB_ENV = dbEnv;
+    await import('../src/lib/db/seed');
     
     console.log('Data update completed successfully');
     
@@ -19,7 +31,7 @@ async function updateData() {
     const deploymentUrl = process.env.DEPLOYMENT_URL || 'http://localhost:3000';
     const revalidationToken = process.env.REVALIDATION_TOKEN;
     
-    if (deploymentUrl) {
+    if (deploymentUrl && dbEnv === 'prod') {
       console.log('Triggering page revalidation...');
       
       const response = await fetch(`${deploymentUrl}/api/revalidate`, {
@@ -38,12 +50,16 @@ async function updateData() {
       }
     }
     
-    // 3. Update the LAST_DATA_UPDATE in your .env file
-    // Note: In production, you might want to use a different approach
-    // like updating an environment variable in your deployment platform
+    // 3. Update the LAST_DATA_UPDATE
+    const timestamp = new Date().toISOString();
     console.log(`
+✅ Data update complete!
+
 Remember to update LAST_DATA_UPDATE in your .env file:
-LAST_DATA_UPDATE=${new Date().toISOString()}
+LAST_DATA_UPDATE=${timestamp}
+
+Environment: ${dbEnv.toUpperCase()}
+Timestamp: ${timestamp}
     `);
     
   } catch (error) {

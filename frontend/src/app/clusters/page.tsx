@@ -8,8 +8,17 @@ export const metadata: Metadata = {
   description: 'Visualization of comment clusters using PCA analysis',
 };
 
-export const revalidate = 86400; // 24 hours
+// export const dynamic = 'force-static';
 
+// export const revalidate = 86400; // 24 hours
+
+// Pre-generate both sampled and full versions at build time
+export async function generateStaticParams() {
+  return [
+    { full: undefined }, // Default (sampled) version
+    { full: 'true' },    // Full data version
+  ];
+}
 // Allow users to control sampling via URL parameter
 export default async function ClustersPage({
   searchParams
