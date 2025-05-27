@@ -202,21 +202,59 @@ def main():
             else:
                 logger.error("❌ Quote verification failed")
         
+        # Step 6: Create merged data.json
+        logger.info(f"\n=== STEP 6: Creating Merged data.json ===")
+        from .utils.merge_lookup_to_raw import merge_lookup_to_raw
+        
+        # Use the clustered file if clustering was done, otherwise use the base lookup table
+        if not args.skip_clustering and unique_texts >= 2:
+            lookup_for_merge = lookup_table_path.replace('.json', '_clustered.json')
+        else:
+            lookup_for_merge = lookup_table_path
+            
+        output_data_path = os.path.join(args.output_dir, 'data.json')
+        merge_lookup_to_raw(raw_data_path, lookup_for_merge, output_data_path)
+        logger.info(f"✅ Created merged data.json")
+        
+        # Step 7: Validate output
+        logger.info(f"\n=== STEP 7: Validating Pipeline Output ===")
+        from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
+        
+        validation_results = validate_pipeline_output(
+            csv_file=args.csv,
+            raw_data_file=raw_data_path,
+            data_file=output_data_path,
+            lookup_table_file=lookup_table_path
+        )
+        
+        # Print validation summary
+        print_validation_summary(validation_results)
+        
+        if not validation_results['valid']:
+            logger.error("❌ Pipeline validation failed! Check errors above.")
+        
         # Final summary
-        logger.info(f"\n🎉 Pipeline complete!")
-        logger.info(f"📊 Final stats:")
+        logger.info(f"\n{'='*60}")
+        logger.info(f"🎉 PIPELINE COMPLETE!")
+        logger.info(f"{'='*60}")
+        logger.info(f"\n📊 Final stats:")
         logger.info(f"   Total comments processed: {total_comments:,}")
         logger.info(f"   Unique text patterns: {unique_texts:,}")
-        logger.info(f"   API calls saved: ~{total_comments - unique_texts:,} ({dedup_efficiency}%)")
-        logger.info(f"📁 Output files in {args.output_dir}:")
+        logger.info(f"   Deduplication efficiency: {dedup_efficiency}%")
+        logger.info(f"   API calls saved: ~{total_comments - unique_texts:,}")
+        
+        logger.info(f"\n📁 Output files in {args.output_dir}:")
         logger.info(f"   - raw_data.json (original comments + attachments)")
         logger.info(f"   - lookup_table.json (deduplicated patterns with analysis)")
+        logger.info(f"   - data.json (merged data for frontend)")
         if not args.skip_analysis:
             logger.info(f"   - lookup_table_quote_verification.json")
             logger.info(f"   - lookup_table_quote_verification.txt")
         if not args.skip_clustering and unique_texts >= 2:
             logger.info(f"   - lookup_table_clustered.json (with clustering)")
-            logger.info(f"   - clustering_*/")
+            logger.info(f"   - cluster_report.txt")
+            logger.info(f"   - clusters_visualization.png")
+            logger.info(f"   - dendrogram.png")
         
     except Exception as e:
         logger.error(f"❌ Pipeline failed: {e}")
