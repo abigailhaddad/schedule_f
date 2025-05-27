@@ -2,12 +2,10 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 import {
-  ResponsiveScatterPlotCanvas,
-  ScatterPlotNodeData,
+  ResponsiveScatterPlotCanvas
 } from "@nivo/scatterplot";
 import { ClusterPoint } from "@/lib/actions/clusters";
-
-type ClusterDatum = ClusterPoint & { x: number; y: number };
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface ClusterChartProps {
   data: Array<{
@@ -23,23 +21,36 @@ interface ClusterChartProps {
     minY: number;
     maxY: number;
   };
-  showStanceColors: boolean;
-  onPointClick: (point: ClusterPoint) => void;
-  onPointHover: (point: ClusterPoint | null) => void;
 }
 
 export default function ClusterChart({
   data,
   bounds,
-  showStanceColors,
-  onPointClick,
-  onPointHover,
 }: ClusterChartProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const chartRef = useRef<HTMLDivElement>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [hoveredPoint, setHoveredPoint] = useState<ClusterPoint | null>(null);
   const [clickedPoint, setClickedPoint] = useState<ClusterPoint | null>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Check for pinned comment ID in URL on mount
+  useEffect(() => {
+    const pinnedId = searchParams.get('pinned');
+    if (pinnedId) {
+      // Find the point with this ID in the data
+      for (const series of data) {
+        const point = series.data.find(p => p.id === pinnedId);
+        if (point) {
+          setClickedPoint(point);
+          // Set initial position to center of chart (will be adjusted by mouse move)
+          setTooltipPosition({ x: 300, y: 300 });
+          break;
+        }
+      }
+    }
+  }, [searchParams, data]);
 
   // Color schemes
   const clusterColors = [
@@ -49,20 +60,29 @@ export default function ClusterChart({
     "#f97316", "#ef4444", "#dc2626", "#b91c1c", "#991b1b",
   ];
 
-  const stanceColors = {
-    For: "#10b981",
-    Against: "#ef4444",
-    "Neutral/Unclear": "#64748b",
-  };
+//   const stanceColors = {
+//     For: "#10b981",
+//     Against: "#ef4444",
+//     "Neutral/Unclear": "#64748b",
+//   };
 
-  const getNodeColor = (param: any) => {
-    const node = param as { serieId: string | number; data?: { stance?: string | null } };
+  // Define a more specific type for the Nivo node object for colors
+  type NivoColorNode = { serieId: string | number; data?: { stance?: string | null } };
+
+  const getNodeColor = (param: NivoColorNode) => {
+    // When showStanceColors is true, color by stance -- THIS LOGIC IS CURRENTLY NOT ACTIVE
+    // if (showStanceColors) { // showStanceColors is not a prop anymore
+    //   if (param.data) {
+    //     const stance = param.data.stance || "Neutral/Unclear";
+    //     return stanceColors[stance as keyof typeof stanceColors] || stanceColors["Neutral/Unclear"];
+    //   }
+    //   if (typeof param.serieId === 'string' && param.serieId in stanceColors) {
+    //     return stanceColors[param.serieId as keyof typeof stanceColors];
+    //   }
+    // }
     
-    if (showStanceColors && node.data?.stance) {
-      return stanceColors[node.data.stance as keyof typeof stanceColors] || "#64748b";
-    }
-    
-    const clusterIndex = parseInt(String(node.serieId).replace("Cluster ", "")) % clusterColors.length;
+    // Default: color by cluster
+    const clusterIndex = parseInt(String(param.serieId).replace("Cluster ", "")) % clusterColors.length;
     return clusterColors[clusterIndex];
   };
 
@@ -87,15 +107,13 @@ export default function ClusterChart({
 
     if (point) {
       setHoveredPoint(point);
-      onPointHover(point);
     } else {
       // Add a delay before hiding tooltip to allow clicking
       hoverTimeoutRef.current = setTimeout(() => {
         setHoveredPoint(null);
-        onPointHover(null);
       }, 100); // Reduced delay for better responsiveness
     }
-  }, [onPointHover, clickedPoint]);
+  }, [clickedPoint]);
 
   const handlePointClick = useCallback((point: ClusterPoint) => {
     // If clicking the same point, toggle it off
@@ -172,8 +190,8 @@ export default function ClusterChart({
         enableGridY={false}
         // Disable Nivo's built-in tooltip
         tooltip={() => null}
-        // Disable legends for better performance
-        legends={showStanceColors ? [
+        // Show cluster legends
+        legends={[
           {
             anchor: "top-right",
             direction: "column",
@@ -187,8 +205,13 @@ export default function ClusterChart({
             itemOpacity: 0.75,
             symbolSize: 12,
             symbolShape: "circle",
+            data: data.map((series) => ({
+              id: series.id,
+              label: series.id,
+              color: clusterColors[parseInt(series.id.replace('Cluster ', '')) % clusterColors.length]
+            }))
           },
-        ] : []}
+        ]}
       />
       
       {/* Show tooltip for either hovered or clicked point */}
@@ -201,7 +224,17 @@ export default function ClusterChart({
             setClickedPoint(null);
             setHoveredPoint(null);
           }}
-          onNavigate={(id) => onPointClick({ ...clickedPoint || hoveredPoint!, id })}
+          onNavigate={(id) => {
+            const currentPath = window.location.pathname; // Base path e.g. /clusters
+            const currentSearchParams = new URLSearchParams(window.location.search);
+            
+            // Remove existing 'pinned' param if any, then add new one
+            currentSearchParams.delete('pinned');
+            currentSearchParams.set('pinned', id);
+            
+            const returnUrl = encodeURIComponent(`${currentPath}?${currentSearchParams.toString()}`);
+            router.push(`/comment/${id}?returnUrl=${returnUrl}`);
+          }}
         />
       )}
       
@@ -266,12 +299,6 @@ function ClusterTooltipOverlay({
       }
     }
   }, [position]);
-
-  const getBadgeType = (stance: string): 'success' | 'danger' | 'warning' => {
-    if (stance === 'For') return 'success';
-    if (stance === 'Against') return 'danger';
-    return 'warning';
-  };
 
   // Use adjusted position for tooltip
   const tooltipStyle: React.CSSProperties = {
