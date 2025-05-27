@@ -1,8 +1,19 @@
 #!/bin/bash
 
-echo "📦 Deploy Results to Git"
-echo "========================"
+# Deploy Results to Git - Simplified version that only handles git operations
+# Assumes copy_latest_data.sh has already been run to update the data folder
+
+echo "📤 Deploy Data to Git"
+echo "===================="
 echo ""
+
+# Get project root directory (parent of scripts)
+PROJECT_ROOT="$(dirname "$(dirname "$0")")"
+cd "$PROJECT_ROOT"
+
+# Configuration
+DATA_BRANCH="data"  # The branch where we want to push data files
+DEFAULT_COMMIT_MSG="Update data files - $(date '+%Y-%m-%d %H:%M')"
 
 # Function to prompt for yes/no input
 ask_yes_no() {
@@ -18,7 +29,6 @@ ask_yes_no() {
         fi
         read response
         
-        # Use default if empty
         if [ -z "$response" ]; then
             response="$default"
         fi
@@ -51,136 +61,213 @@ ask_input() {
     echo "$response"
 }
 
-# Ask about source directory
-echo "1. Source Results"
-echo "================="
-echo "Available results directories:"
-ls -la ../results/ 2>/dev/null | grep "^d" | grep "results_" | awk '{print "   " $9}' || echo "   No results directories found"
-echo ""
-
-SOURCE_DIR=$(ask_input "Source results directory (relative to project root)" "results/$(ls ../results/ 2>/dev/null | grep 'results_' | sort -r | head -n 1)")
-
-# Validate source directory
-if [ ! -d "../$SOURCE_DIR" ]; then
-    echo "Error: Source directory not found: ../$SOURCE_DIR"
+# Check if we're in a git repo
+if [ ! -d ".git" ]; then
+    echo "❌ Error: Not in a git repository"
     exit 1
 fi
 
-echo ""
-
-# Ask about cleaning data folder first
-echo "2. Data Folder"
-echo "=============="
-CLEAN_DATA_FIRST=false
-if ask_yes_no "Clear data/ folder first (removes everything)" "y"; then
-    CLEAN_DATA_FIRST=true
+# Check if data folder exists and has content
+if [ ! -d "data" ] || [ -z "$(ls -A data 2>/dev/null)" ]; then
+    echo "❌ Error: data/ folder is empty or doesn't exist"
+    echo "   Run copy_latest_data.sh first to populate the data folder"
+    exit 1
 fi
 
+# Show current git status
+echo "📊 Current Git Status"
+echo "===================="
+CURRENT_BRANCH=$(git branch --show-current)
+echo "Current branch: $CURRENT_BRANCH"
 echo ""
 
-# Ask about git operations
-echo "3. Git Operations"
-echo "================="
-PUSH_TO_GIT=false
-if ask_yes_no "Push to schedule_f repo data branch" "n"; then
-    PUSH_TO_GIT=true
-    
-    # Ask for commit message
-    COMMIT_MSG=$(ask_input "Commit message" "Update data files - $(date '+%Y-%m-%d %H:%M')")
+# Check if there are uncommitted changes in data/
+if ! git diff --quiet data/ || ! git diff --cached --quiet data/; then
+    echo "📝 Uncommitted changes in data/:"
+    git status -s data/ | head -10
+    if [ $(git status -s data/ | wc -l) -gt 10 ]; then
+        echo "... and $(($(git status -s data/ | wc -l) - 10)) more files"
+    fi
+else
+    echo "✅ No uncommitted changes in data/"
 fi
-
 echo ""
 
-# Show configuration
+# Ask for commit message
+COMMIT_MSG=$(ask_input "Commit message" "$DEFAULT_COMMIT_MSG")
+echo ""
+
+# Ask which branch to push to
+echo "📌 Target Branch"
+echo "================"
+echo "Available options:"
+echo "  1) Push to data branch (recommended)"
+echo "  2) Push to current branch ($CURRENT_BRANCH)"
+echo ""
+read -p "Select option [1]: " branch_choice
+branch_choice=${branch_choice:-1}
+
+case "$branch_choice" in
+    1)
+        TARGET_BRANCH="$DATA_BRANCH"
+        USE_DATA_BRANCH=true
+        ;;
+    2)
+        TARGET_BRANCH="$CURRENT_BRANCH"
+        USE_DATA_BRANCH=false
+        ;;
+    *)
+        echo "Invalid selection, using data branch"
+        TARGET_BRANCH="$DATA_BRANCH"
+        USE_DATA_BRANCH=true
+        ;;
+esac
+
+echo ""
 echo "🔧 Configuration"
 echo "================"
-echo "   Source: ../$SOURCE_DIR"
-echo "   Target: data/ folder"
-if [ "$CLEAN_DATA_FIRST" = true ]; then
-    echo "   Clean data folder: YES (removes everything)"
-else
-    echo "   Clean data folder: NO (merge with existing)"
-fi
-if [ "$PUSH_TO_GIT" = true ]; then
-    echo "   Git push: YES to schedule_f/data branch"
-    echo "   Commit message: \"$COMMIT_MSG\""
-else
-    echo "   Git push: NO"
-fi
+echo "   Source branch: $CURRENT_BRANCH"
+echo "   Target branch: $TARGET_BRANCH"
+echo "   Commit message: \"$COMMIT_MSG\""
 echo ""
 
 # Final confirmation
-if ! ask_yes_no "Proceed with deployment" "y"; then
-    echo "Cancelled."
+if ! ask_yes_no "Proceed with git operations" "y"; then
+    echo "❌ Cancelled"
     exit 0
 fi
 
 echo ""
-echo "🚀 Starting deployment..."
-
-# Step 1: Clean data folder if requested
-if [ "$CLEAN_DATA_FIRST" = true ]; then
-    echo "🧹 Cleaning data/ folder..."
-    cd ..
-    rm -rf data/*
-    cd scripts
-    echo "✅ Data folder cleaned"
-fi
-
-# Step 2: Copy results to data folder
-echo "📋 Copying results from $SOURCE_DIR to data/..."
-cd ..
-cp -r $SOURCE_DIR/* data/ 2>/dev/null || true
-echo "✅ Files copied"
-
-# Show what was copied
-echo ""
-echo "📁 Files now in data/:"
-ls -la data/
+echo "🚀 Starting git operations..."
 echo ""
 
-# Step 3: Git operations if requested
-if [ "$PUSH_TO_GIT" = true ]; then
-    echo "📤 Pushing to schedule_f repo data branch..."
+# Save current branch name for later
+ORIGINAL_BRANCH="$CURRENT_BRANCH"
+
+# If using data branch, we need to handle branch switching
+if [ "$USE_DATA_BRANCH" = true ]; then
+    echo "📋 Preparing data branch..."
     
-    # Check if we're in a git repo
-    if [ ! -d ".git" ]; then
-        echo "Error: Not in a git repository"
+    # Check if data branch exists locally
+    if git show-ref --verify --quiet refs/heads/$DATA_BRANCH; then
+        echo "✅ Data branch exists locally"
+    else
+        # Check if it exists on remote
+        if git ls-remote --heads schedule_f $DATA_BRANCH | grep -q $DATA_BRANCH; then
+            echo "📥 Creating local data branch from schedule_f/$DATA_BRANCH..."
+            git branch $DATA_BRANCH schedule_f/$DATA_BRANCH
+        else
+            echo "🆕 Creating new data branch..."
+            git branch $DATA_BRANCH
+        fi
+    fi
+    
+    # Stash any uncommitted changes (not in data/)
+    echo "📦 Stashing any uncommitted changes..."
+    STASH_OUTPUT=$(git stash push -m "deploy_results temporary stash" -- . ':!data/')
+    STASHED=false
+    if [[ "$STASH_OUTPUT" != *"No local changes to save"* ]]; then
+        STASHED=true
+        echo "✅ Changes stashed"
+    else
+        echo "ℹ️  No changes to stash"
+    fi
+    
+    # Switch to data branch
+    echo "🔄 Switching to $DATA_BRANCH branch..."
+    git checkout $DATA_BRANCH
+    
+    # Update data branch to be current with the original branch
+    echo "🔄 Updating $DATA_BRANCH to match $ORIGINAL_BRANCH..."
+    git merge $ORIGINAL_BRANCH --no-edit -m "Merge $ORIGINAL_BRANCH into $DATA_BRANCH"
+    
+    if [ $? -ne 0 ]; then
+        echo "❌ Error: Merge failed. Please resolve conflicts manually."
+        echo "   After resolving, you can run this script again."
+        # Switch back to original branch
+        git checkout $ORIGINAL_BRANCH
+        # Restore stash if we stashed
+        if [ "$STASHED" = true ]; then
+            git stash pop
+        fi
         exit 1
     fi
+fi
+
+# Add all changes in data/
+echo "📝 Staging data/ changes..."
+git add data/
+
+# Check if there are changes to commit
+if git diff --staged --quiet; then
+    echo "⚠️  No changes to commit"
     
-    # Check current branch and repo
-    CURRENT_REPO=$(git remote -v | grep origin | head -n 1 | awk '{print $2}')
-    CURRENT_BRANCH=$(git branch --show-current)
-    
-    echo "Current repo: $CURRENT_REPO"
-    echo "Current branch: $CURRENT_BRANCH"
-    
-    # Add data files to git
-    echo "Adding data files to git..."
-    git add data/
-    
-    # Check if there are changes to commit
-    if git diff --staged --quiet; then
-        echo "⚠️  No changes to commit"
-    else
-        # Commit changes
-        echo "Committing changes..."
-        git commit -m "$COMMIT_MSG"
+    # If we switched branches, switch back
+    if [ "$USE_DATA_BRANCH" = true ]; then
+        echo "🔄 Switching back to $ORIGINAL_BRANCH..."
+        git checkout $ORIGINAL_BRANCH
         
-        # Push to current branch (assuming it's set up correctly)
-        echo "Pushing to origin..."
-        git push origin $CURRENT_BRANCH
-        
-        echo "✅ Successfully pushed to git"
+        # Restore stash if we stashed
+        if [ "$STASHED" = true ]; then
+            echo "📦 Restoring stashed changes..."
+            git stash pop
+        fi
     fi
-else
-    echo "ℹ️  Skipping git operations"
+    
+    echo "✅ Done (no changes to deploy)"
+    exit 0
+fi
+
+# Commit changes
+echo "💾 Committing changes..."
+git commit -m "$COMMIT_MSG"
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Commit failed"
+    
+    # If we switched branches, switch back
+    if [ "$USE_DATA_BRANCH" = true ]; then
+        git checkout $ORIGINAL_BRANCH
+        if [ "$STASHED" = true ]; then
+            git stash pop
+        fi
+    fi
+    exit 1
+fi
+
+# Push to remote
+echo "📤 Pushing to schedule_f/$TARGET_BRANCH..."
+git push schedule_f $TARGET_BRANCH
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Push failed"
+    echo "   You may need to pull first or resolve conflicts"
+    
+    # If we switched branches, switch back
+    if [ "$USE_DATA_BRANCH" = true ]; then
+        git checkout $ORIGINAL_BRANCH
+        if [ "$STASHED" = true ]; then
+            git stash pop
+        fi
+    fi
+    exit 1
+fi
+
+echo "✅ Successfully pushed to schedule_f/$TARGET_BRANCH"
+
+# If we used data branch, switch back to original branch
+if [ "$USE_DATA_BRANCH" = true ]; then
+    echo "🔄 Switching back to $ORIGINAL_BRANCH..."
+    git checkout $ORIGINAL_BRANCH
+    
+    # Restore stash if we stashed
+    if [ "$STASHED" = true ]; then
+        echo "📦 Restoring stashed changes..."
+        git stash pop
+    fi
 fi
 
 echo ""
 echo "🎉 Deployment complete!"
-echo "📁 Data files are now in the data/ folder"
-if [ "$PUSH_TO_GIT" = true ]; then
-    echo "📤 Changes have been pushed to git"
-fi
+echo "📤 Data has been pushed to: schedule_f/$TARGET_BRANCH"
+echo "🌐 View on GitHub: $(git remote get-url schedule_f | sed 's/\.git$//' | sed 's/git@github.com:/https:\/\/github.com\//')/tree/$TARGET_BRANCH"
