@@ -26,6 +26,8 @@ import { db } from '../db';
 import { comments } from '../db/schema';
 import { sql } from 'drizzle-orm';
 
+export { getClusterData } from './clusters';
+export type { ClusterData, ClusterPoint, ClusterDataResponse } from './clusters';
 /**
  * Initializes and tests database connection
  */
