@@ -67,7 +67,7 @@ export default function ClusterChart({
   };
 
   const handleMouseMove = useCallback((event: React.MouseEvent) => {
-    if (chartRef.current && (hoveredPoint || clickedPoint)) {
+    if (chartRef.current && hoveredPoint && !clickedPoint) {
       const rect = chartRef.current.getBoundingClientRect();
       setTooltipPosition({
         x: event.clientX - rect.left,
@@ -236,11 +236,10 @@ function ClusterTooltipOverlay({
   // Calculate tooltip position to keep it within bounds
   const tooltipStyle: React.CSSProperties = {
     position: 'absolute',
-    left: position.x + 10,
-    top: position.y - 10,
-    transform: 'translateY(-100%)',
+    left: position.x + 10, // Position 10px to the right of the cursor
+    top: position.y + 10,  // Position 10px below the cursor
     zIndex: 50,
-    pointerEvents: isFixed ? 'auto' : 'none',
+    pointerEvents: 'auto', // Always allow interaction
   };
 
   // Adjust position if tooltip would go off-screen

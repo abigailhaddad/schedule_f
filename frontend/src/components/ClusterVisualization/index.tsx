@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import dynamic from 'next/dynamic';
-import { ClusterData, ClusterPoint } from '@/lib/actions/clusters';
-import Card from '@/components/ui/Card';
-import ClusterControls from './ClusterControls';
-import { useRouter } from 'next/navigation';
+import { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
+import { ClusterData, ClusterPoint } from "@/lib/actions/clusters";
+import Card from "@/components/ui/Card";
+import ClusterControls from "./ClusterControls";
+import { useRouter } from "next/navigation";
 
 // Dynamically import the chart to avoid SSR issues
-const ClusterChart = dynamic(() => import('./ClusterChart'), {
+const ClusterChart = dynamic(() => import("./ClusterChart"), {
   ssr: false,
   loading: () => (
     <div className="h-[600px] flex items-center justify-center">
@@ -21,7 +21,9 @@ interface ClusterVisualizationProps {
   data: ClusterData;
 }
 
-export default function ClusterVisualization({ data }: ClusterVisualizationProps) {
+export default function ClusterVisualization({
+  data,
+}: ClusterVisualizationProps) {
   const router = useRouter();
   const [selectedCluster, setSelectedCluster] = useState<number | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<ClusterPoint | null>(null);
@@ -35,7 +37,7 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
   const chartData = useMemo(() => {
     return Array.from(data.clusters.entries()).map(([clusterId, points]) => ({
       id: `Cluster ${clusterId}`,
-      data: points.map(point => ({
+      data: points.map((point) => ({
         x: point.pcaX,
         y: point.pcaY,
         ...point,
@@ -45,13 +47,16 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
 
   const filteredData = useMemo(() => {
     return selectedCluster !== null
-      ? chartData.filter(series => series.id === `Cluster ${selectedCluster}`)
+      ? chartData.filter((series) => series.id === `Cluster ${selectedCluster}`)
       : chartData;
   }, [chartData, selectedCluster]);
 
   // Calculate total points for performance info
   const totalPoints = useMemo(() => {
-    return Array.from(data.clusters.values()).reduce((sum, points) => sum + points.length, 0);
+    return Array.from(data.clusters.values()).reduce(
+      (sum, points) => sum + points.length,
+      0
+    );
   }, [data.clusters]);
 
   return (
@@ -77,7 +82,7 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
             showStanceColors={showStanceColors}
             onStanceColorsToggle={setShowStanceColors}
           />
-          
+
           <div className="relative">
             <ClusterChart
               data={filteredData}
@@ -101,17 +106,24 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
               .sort(([a], [b]) => a - b)
               .map(([clusterId, points]) => {
                 const stanceCounts = points.reduce((acc, point) => {
-                  const stance = point.stance || 'Neutral/Unclear';
+                  const stance = point.stance || "Neutral/Unclear";
                   acc[stance] = (acc[stance] || 0) + 1;
                   return acc;
                 }, {} as Record<string, number>);
 
                 return (
-                  <div key={clusterId} className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-gray-700">Cluster {clusterId}</h4>
-                    <p className="text-2xl font-bold text-blue-600">{points.length}</p>
+                  <div
+                    key={`cluster-stat-${clusterId}`}
+                    className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow"
+                  >
+                    <h4 className="font-semibold text-gray-700">
+                      Cluster {clusterId}
+                    </h4>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {points.length}
+                    </p>
                     <p className="text-sm text-gray-500 mb-2">comments</p>
-                    
+
                     <div className="space-y-1 text-xs">
                       {Object.entries(stanceCounts).map(([stance, count]) => (
                         <div key={stance} className="flex justify-between">
