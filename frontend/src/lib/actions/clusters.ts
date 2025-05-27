@@ -1,3 +1,4 @@
+// Export the functions
 'use server';
 
 import { db, connectDb } from '@/lib/db';
@@ -25,6 +26,9 @@ export interface ClusterData {
     minY: number;
     maxY: number;
   };
+  isSampled: boolean;
+  totalPoints: number;
+  sampledPoints: number;
 }
 
 export interface ClusterDataResponse {
@@ -33,7 +37,10 @@ export interface ClusterDataResponse {
   error?: string;
 }
 
-export async function getClusterData(): Promise<ClusterDataResponse> {
+const MAX_POINTS_PER_CLUSTER = 50; // Limit points per cluster for performance
+const MAX_TOTAL_POINTS = 500; // Maximum total points to render for smooth interaction
+
+export async function getClusterData(sampleData: boolean = true): Promise<ClusterDataResponse> {
   const fetchClusterData = async () => {
     try {
       const connection = await connectDb();
@@ -41,35 +48,91 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
         throw new Error("Failed to connect to database");
       }
 
-      // Fetch all comments with cluster data
-      const result = await db
+      // First, get cluster statistics
+      const clusterStats = await db
         .select({
-          id: comments.id,
-          title: comments.title,
-          stance: comments.stance,
           clusterId: comments.clusterId,
-          pcaX: comments.pcaX,
-          pcaY: comments.pcaY,
-          keyQuote: comments.keyQuote,
-          themes: comments.themes,
+          count: sql<number>`COUNT(*)`.mapWith(Number),
         })
         .from(comments)
-        .where(sql`${comments.clusterId} IS NOT NULL AND ${comments.pcaX} IS NOT NULL AND ${comments.pcaY} IS NOT NULL`)
+        .where(sql`${comments.clusterId} IS NOT NULL`)
+        .groupBy(comments.clusterId)
         .execute();
+
+      const totalPointsCount = clusterStats.reduce((sum, stat) => sum + stat.count, 0);
+      
+      // Determine if we need to sample
+      const shouldSample = sampleData && totalPointsCount > MAX_TOTAL_POINTS;
+      
+      let result: any[];
+      
+      if (shouldSample) {
+        // Use a more efficient sampling strategy
+        // Sample proportionally from each cluster
+        const samplingRatio = MAX_TOTAL_POINTS / totalPointsCount;
+        
+        // Build a UNION query to sample from each cluster
+        const clusterQueries = clusterStats.map((stat) => {
+          const sampleSize = Math.max(1, Math.floor(stat.count * samplingRatio));
+          const limitedSize = Math.min(sampleSize, MAX_POINTS_PER_CLUSTER);
+          
+          return sql`
+            (SELECT 
+              ${comments.id},
+              ${comments.title},
+              ${comments.stance},
+              ${comments.clusterId},
+              ${comments.pcaX},
+              ${comments.pcaY},
+              ${comments.keyQuote},
+              ${comments.themes}
+            FROM ${comments}
+            WHERE ${comments.clusterId} = ${stat.clusterId}
+              AND ${comments.pcaX} IS NOT NULL 
+              AND ${comments.pcaY} IS NOT NULL
+            ORDER BY RANDOM()
+            LIMIT ${limitedSize})
+          `;
+        });
+        
+        // Combine all cluster queries
+        const queryResult = await db.execute(sql`
+          ${sql.join(clusterQueries, sql` UNION ALL `)}
+        `);
+        
+        // Extract rows from QueryResult
+        result = queryResult.rows as any[];
+      } else {
+        // Fetch all data if under the limit
+        result = await db
+          .select({
+            id: comments.id,
+            title: comments.title,
+            stance: comments.stance,
+            clusterId: comments.clusterId,
+            pcaX: comments.pcaX,
+            pcaY: comments.pcaY,
+            keyQuote: comments.keyQuote,
+            themes: comments.themes,
+          })
+          .from(comments)
+          .where(sql`${comments.clusterId} IS NOT NULL AND ${comments.pcaX} IS NOT NULL AND ${comments.pcaY} IS NOT NULL`)
+          .execute();
+      }
 
       // Group by cluster ID
       const clusters = new Map<number, ClusterPoint[]>();
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
-      result.forEach(row => {
+      result.forEach((row: any) => {
         const point: ClusterPoint = {
           id: row.id,
           title: row.title || 'Untitled',
           stance: row.stance,
-          clusterId: row.clusterId!,
-          pcaX: row.pcaX!,
-          pcaY: row.pcaY!,
-          keyQuote: row.keyQuote,
+          clusterId: row.cluster_id || row.clusterId || row.clusterid,
+          pcaX: row.pca_x || row.pcaX || row.pcax,
+          pcaY: row.pca_y || row.pcaY || row.pcay,
+          keyQuote: row.key_quote || row.keyQuote || row.keyquote,
           themes: row.themes,
         };
 
@@ -89,7 +152,10 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
         success: true,
         data: {
           clusters,
-          bounds: { minX, maxX, minY, maxY }
+          bounds: { minX, maxX, minY, maxY },
+          isSampled: shouldSample,
+          totalPoints: totalPointsCount,
+          sampledPoints: result.length,
         }
       };
     } catch (error) {
@@ -111,7 +177,7 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
 
   const getCachedClusterData = unstable_cache(
     fetchClusterData,
-    ['cluster-data'],
+    [`cluster-data-${sampleData}`],
     {
       revalidate: 86400, // 24 hours
       tags: ['clusters']
@@ -120,3 +186,72 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
   
   return getCachedClusterData();
 }
+
+// Get basic cluster statistics without loading all points
+export async function getClusterStats(): Promise<{
+  success: boolean;
+  stats?: {
+    totalClusters: number;
+    totalPoints: number;
+    clusterSizes: { clusterId: number; size: number }[];
+  };
+  error?: string;
+}> {
+  const fetchStats = async () => {
+    try {
+      const connection = await connectDb();
+      if (!connection.success) {
+        throw new Error("Failed to connect to database");
+      }
+
+      const result = await db
+        .select({
+          clusterId: comments.clusterId,
+          count: sql<number>`COUNT(*)`.mapWith(Number),
+        })
+        .from(comments)
+        .where(sql`${comments.clusterId} IS NOT NULL`)
+        .groupBy(comments.clusterId)
+        .execute();
+
+      const totalPoints = result.reduce((sum, row) => sum + row.count, 0);
+      const clusterSizes = result.map(row => ({
+        clusterId: row.clusterId!,
+        size: row.count,
+      }));
+
+      return {
+        success: true,
+        stats: {
+          totalClusters: result.length,
+          totalPoints,
+          clusterSizes,
+        }
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return {
+        success: false,
+        error: `Failed to fetch cluster stats: ${errorMessage}`
+      };
+    }
+  };
+
+  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  
+  if (shouldSkipCache) {
+    return fetchStats();
+  }
+
+  const getCachedStats = unstable_cache(
+    fetchStats,
+    ['cluster-stats'],
+    {
+      revalidate: 86400,
+      tags: ['clusters']
+    }
+  );
+  
+  return getCachedStats();
+}
+
