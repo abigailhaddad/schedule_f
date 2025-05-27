@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { ClusterData, ClusterPoint } from '@/lib/actions/clusters';
 import Card from '@/components/ui/Card';
 import ClusterControls from './ClusterControls';
-import ClusterTooltip from './ClusterTooltip';
 import { useRouter } from 'next/navigation';
 
 // Dynamically import the chart to avoid SSR issues
@@ -32,28 +31,43 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
     router.push(`/comment/${point.id}`);
   };
 
-  // Convert Map to array for chart
-  const chartData = Array.from(data.clusters.entries()).map(([clusterId, points]) => ({
-    id: `Cluster ${clusterId}`,
-    data: points.map(point => ({
-      x: point.pcaX,
-      y: point.pcaY,
-      ...point,
-    })),
-  }));
+  // Memoize chart data transformation
+  const chartData = useMemo(() => {
+    return Array.from(data.clusters.entries()).map(([clusterId, points]) => ({
+      id: `Cluster ${clusterId}`,
+      data: points.map(point => ({
+        x: point.pcaX,
+        y: point.pcaY,
+        ...point,
+      })),
+    }));
+  }, [data.clusters]);
 
-  const filteredData = selectedCluster !== null
-    ? chartData.filter(series => series.id === `Cluster ${selectedCluster}`)
-    : chartData;
+  const filteredData = useMemo(() => {
+    return selectedCluster !== null
+      ? chartData.filter(series => series.id === `Cluster ${selectedCluster}`)
+      : chartData;
+  }, [chartData, selectedCluster]);
+
+  // Calculate total points for performance info
+  const totalPoints = useMemo(() => {
+    return Array.from(data.clusters.values()).reduce((sum, points) => sum + points.length, 0);
+  }, [data.clusters]);
 
   return (
     <div className="space-y-6">
       <Card collapsible={false}>
         <Card.Header className="bg-gradient-to-r from-purple-500 to-pink-500">
-          <h2 className="text-lg font-bold text-white flex items-center">
-            <span className="mr-2">🔮</span>
-            Cluster Visualization
-          </h2>
+          <div className="flex justify-between items-center w-full">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <span className="mr-2">🔮</span>
+              Cluster Visualization
+            </h2>
+            <span className="text-sm text-white/80">
+              {totalPoints} total points
+              {data.isSampled && ` (showing ${data.sampledPoints} sampled)`}
+            </span>
+          </div>
         </Card.Header>
         <Card.Body className="p-4">
           <ClusterControls
@@ -72,10 +86,6 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
               onPointClick={handlePointClick}
               onPointHover={setHoveredPoint}
             />
-            
-            {hoveredPoint && (
-              <ClusterTooltip point={hoveredPoint} />
-            )}
           </div>
         </Card.Body>
       </Card>
@@ -87,13 +97,32 @@ export default function ClusterVisualization({ data }: ClusterVisualizationProps
         </Card.Header>
         <Card.Body className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {Array.from(data.clusters.entries()).map(([clusterId, points]) => (
-              <div key={clusterId} className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-gray-700">Cluster {clusterId}</h4>
-                <p className="text-2xl font-bold text-blue-600">{points.length}</p>
-                <p className="text-sm text-gray-500">comments</p>
-              </div>
-            ))}
+            {Array.from(data.clusters.entries())
+              .sort(([a], [b]) => a - b)
+              .map(([clusterId, points]) => {
+                const stanceCounts = points.reduce((acc, point) => {
+                  const stance = point.stance || 'Neutral/Unclear';
+                  acc[stance] = (acc[stance] || 0) + 1;
+                  return acc;
+                }, {} as Record<string, number>);
+
+                return (
+                  <div key={clusterId} className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow">
+                    <h4 className="font-semibold text-gray-700">Cluster {clusterId}</h4>
+                    <p className="text-2xl font-bold text-blue-600">{points.length}</p>
+                    <p className="text-sm text-gray-500 mb-2">comments</p>
+                    
+                    <div className="space-y-1 text-xs">
+                      {Object.entries(stanceCounts).map(([stance, count]) => (
+                        <div key={stance} className="flex justify-between">
+                          <span className="text-gray-600">{stance}:</span>
+                          <span className="font-medium">{count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         </Card.Body>
       </Card>
