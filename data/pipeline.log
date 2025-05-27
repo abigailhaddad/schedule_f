@@ -1,0 +1,238 @@
+/Users/abigailhaddad/Documents/repos/regs/myenv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+2025-05-27 00:21:35,892 - INFO - HTTP Request: GET https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json "HTTP/1.1 200 OK"
+2025-05-27 00:21:36,302 - INFO - 🚀 Starting resume-aware pipeline...
+2025-05-27 00:21:36,302 - INFO - 📁 CSV file: comments.csv
+2025-05-27 00:21:36,302 - INFO - 📁 Raw data: results/results_20250527_002133/raw_data.json
+2025-05-27 00:21:36,302 - INFO - 📁 Lookup table: results/results_20250527_002133/lookup_table_corrected.json
+2025-05-27 00:21:36,302 - INFO - 📁 Output directory: results/results_20250527_002133
+2025-05-27 00:21:36,302 - INFO - 🔍 Validating truncation consistency...
+2025-05-27 00:21:36,354 - INFO - ✅ No truncation needed (existing max: 0 chars)
+2025-05-27 00:21:36,359 - INFO - 📖 Loading comment IDs from CSV: comments.csv
+2025-05-27 00:21:36,611 - INFO - ✅ Found 21,548 comment IDs in CSV
+2025-05-27 00:21:36,611 - INFO - 📖 Loading comment IDs from raw_data: results/results_20250527_002133/raw_data.json
+2025-05-27 00:21:36,728 - INFO - ✅ Found 21,536 comment IDs in raw_data
+2025-05-27 00:21:36,737 - INFO - 📊 Comment ID analysis:
+2025-05-27 00:21:36,737 - INFO -    CSV file: 21,548 comments
+2025-05-27 00:21:36,737 - INFO -    Raw data: 21,536 comments
+2025-05-27 00:21:36,737 - INFO -    New to fetch: 12 comments
+2025-05-27 00:21:36,739 - INFO - 
+=== STEP 1: Fetching New Comments ===
+2025-05-27 00:21:36,739 - INFO - 🔄 Fetching 12 new comments with attachments...
+/Users/abigailhaddad/Documents/repos/regs/backend/resume_pipeline.py:177: DtypeWarning: Columns (7,10,11,21,30,38,56,57) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(csv_file, on_bad_lines='skip')
+2025-05-27 00:21:36,936 - INFO - 📊 Filtering CSV:
+2025-05-27 00:21:36,936 - INFO -    Total rows in CSV: 21548
+2025-05-27 00:21:36,936 - INFO -    Using column: Document ID
+2025-05-27 00:21:36,936 - INFO -    New comment IDs to find: 12
+2025-05-27 00:21:36,936 - INFO -    Matching rows found: 12
+2025-05-27 00:21:36,938 - INFO - Fetching comments from filtered CSV...
+2025-05-27 00:21:36,942 - INFO - ✅ Appended 11 new comments to raw_data
+2025-05-27 00:21:36,942 - INFO - ✅ Total comments in raw_data: 22
+2025-05-27 00:21:36,944 - INFO - 
+=== STEP 2: Updating Lookup Table ===
+2025-05-27 00:21:36,944 - INFO - 🔄 Updating lookup table with 12 new comments...
+2025-05-27 00:21:37,033 - INFO - Loaded existing lookup table with 15674 entries
+2025-05-27 00:21:37,033 - INFO - Processing 22 new comments for lookup table
+2025-05-27 00:21:37,521 - INFO - ✅ Lookup table updated:
+2025-05-27 00:21:37,521 - INFO -    Added to existing patterns: 11
+2025-05-27 00:21:37,521 - INFO -    New patterns created: 11
+2025-05-27 00:21:37,521 - INFO -    Total lookup entries: 15685
+2025-05-27 00:21:37,584 - INFO - 
+=== STEP 3: LLM Analysis (11 entries) ===
+2025-05-27 00:21:37,630 - INFO - Starting analysis of 15685 lookup entries
+2025-05-27 00:21:37,630 - INFO - Already analyzed: 15674
+2025-05-27 00:21:37,630 - INFO - Remaining to analyze: 11
+2025-05-27 00:21:37,630 - INFO - Processing batch 82: entries 406-410 (3 unanalyzed)
+[92m00:21:37 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:37,637 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:37 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:37,638 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:37 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:37,638 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:39,851 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:39 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:39,867 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:39 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:39,868 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:39 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:39,868 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:39 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:39,869 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:39,917 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:39 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:39,923 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:39 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:39,924 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:39 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:39,925 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:41,487 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:41 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:41,489 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:41 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:41,490 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:41 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:41,491 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:41,492 - INFO - Processing batch 83: entries 411-415 (5 unanalyzed)
+[92m00:21:41 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:41,498 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:41 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:41,503 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:41 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:41,508 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:41 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:41,511 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:41 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:41,514 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:42,989 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-27 00:21:42,990 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:42 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:42,993 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:42 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:42,994 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:42 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:42,995 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:43,000 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,000 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,001 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,014 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:43,018 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,018 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,020 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,331 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:43,335 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,335 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,337 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,533 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:43,536 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,536 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:43 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,538 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:43,538 - INFO - Processing batch 84: entries 416-420 (3 unanalyzed)
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:43,542 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:43,549 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+[92m00:21:43 - LiteLLM:INFO[0m: utils.py:2904 - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:43,554 - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-05-27 00:21:45,480 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:45 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:45,481 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,481 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,482 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,507 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:45 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:45,511 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,511 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,512 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,531 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[92m00:21:45 - LiteLLM:INFO[0m: utils.py:1211 - Wrapper: Completed Call, calling success_handler
+2025-05-27 00:21:45,532 - INFO - Wrapper: Completed Call, calling success_handler
+[92m00:21:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,533 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+[92m00:21:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,534 - INFO - selected model name for cost calculation: openai/gpt-4o-mini-2024-07-18
+2025-05-27 00:21:45,741 - INFO - Checkpoint saved to results/results_20250527_002133/lookup_table_corrected.json.checkpoint
+2025-05-27 00:21:45,742 - INFO - Analysis complete! 15685/15685 entries analyzed
+2025-05-27 00:21:45,914 - INFO - ✅ Analysis complete, saved to results/results_20250527_002133/lookup_table_corrected_analyzed.json
+2025-05-27 00:21:45,914 - INFO - 
+=== STEP 4: Semantic Clustering ===
+2025-05-27 00:21:46,014 - INFO - Clustering 15685 entries into 15 clusters
+2025-05-27 00:30:18,342 - INFO - ✅ Clustering complete
+2025-05-27 00:30:18,342 - INFO - 🚀 Starting semantic clustering on deduplicated lookup table...
+📁 Input: results/results_20250527_002133/lookup_table_corrected_analyzed.json
+📁 Output: results/results_20250527_002133/clustering_20250527_002149
+🎯 Number of clusters: 15
+📖 Loading analyzed lookup table from results/results_20250527_002133/lookup_table_corrected_analyzed.json...
+✅ Loaded 15,685 lookup entries
+✅ Processed 15,684 entries with valid text
+📊 Analysis status:
+   Analyzed entries: 15,684/15,684 (100.0%)
+   Total comments represented: 21,557
+📊 Stance distribution:
+   Against: 19,858 (92.1%)
+   For: 1,484 (6.9%)
+   Neutral/Unclear: 215 (1.0%)
+🤖 Loading model: sentence-transformers/all-mpnet-base-v2
+🔄 Creating embeddings for 15,684 unique texts...
+✅ Created embeddings with shape: (15684, 768)
+🌳 Performing hierarchical clustering with 15 clusters...
+✅ Clustering complete. Cluster distribution:
+  Cluster 0: 1,159 unique texts (7.4%)
+  Cluster 1: 458 unique texts (2.9%)
+  Cluster 2: 1,765 unique texts (11.3%)
+  Cluster 3: 1,134 unique texts (7.2%)
+  Cluster 4: 1,410 unique texts (9.0%)
+  Cluster 5: 816 unique texts (5.2%)
+  Cluster 6: 957 unique texts (6.1%)
+  Cluster 7: 1,016 unique texts (6.5%)
+  Cluster 8: 1,028 unique texts (6.6%)
+  Cluster 9: 1,169 unique texts (7.5%)
+  Cluster 10: 904 unique texts (5.8%)
+  Cluster 11: 2,134 unique texts (13.6%)
+  Cluster 12: 711 unique texts (4.5%)
+  Cluster 13: 624 unique texts (4.0%)
+  Cluster 14: 399 unique texts (2.5%)
+📊 Analyzing cluster contents and stance disagreements...
+📊 Creating visualizations...
+  Creating PCA visualization...
+✅ Visualizations saved to: results/results_20250527_002133/clustering_20250527_002149
+📝 Creating cluster report...
+✅ Report saved to: results/results_20250527_002133/clustering_20250527_002149/cluster_report.txt
+✅ Updated 15684 entries with cluster IDs and PCA coordinates
+✅ Clustered lookup table saved to results/results_20250527_002133/lookup_table_corrected_analyzed_clustered.json
+
+✅ Clustering complete!
+📊 15,684 unique texts clustered into 15 clusters
+📊 Representing 21,557 total comments
+🚀 Efficiency: Clustered 15,684 texts instead of 21,557 comments
+⚡ Speed improvement: ~1.4x faster
+📁 Output files:
+   - results/results_20250527_002133/clustering_20250527_002149/dendrogram.png
+   - results/results_20250527_002133/clustering_20250527_002149/clusters_visualization.png
+   - results/results_20250527_002133/clustering_20250527_002149/cluster_report.txt
+   - results/results_20250527_002133/lookup_table_corrected_analyzed_clustered.json
+
+2025-05-27 00:30:18,342 - INFO - 
+=== STEP 5: Skipping Quote Verification ===
+2025-05-27 00:30:18,342 - INFO - 
+🎉 Resume pipeline complete!
+Reading comments from CSV file: results/results_20250527_002133/new_comments_temp.csv
+Saved 11 comments to results/results_20250527_002133/raw_data.json

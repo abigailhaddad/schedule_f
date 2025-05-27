@@ -1,63 +1,111 @@
 #!/bin/bash
-# Copy latest data files to frontend for testing
+# Copy all files from the latest timestamped results folder to the data folder
 
 # Get project root directory
 PROJECT_ROOT="$(dirname "$(dirname "$0")")"
-RESULTS_DIR="$PROJECT_ROOT/data/results"
-FRONTEND_DATA_DIR="$PROJECT_ROOT/frontend/public/data"
+RESULTS_DIR="$PROJECT_ROOT/results"
+DATA_DIR="$PROJECT_ROOT/data"
 
-# Create frontend data directory if it doesn't exist
-mkdir -p "$FRONTEND_DATA_DIR"
+echo "📋 Copy Latest Results to Data Folder"
+echo "===================================="
+echo ""
 
-# Find most recent results directory
-if [ -d "$RESULTS_DIR" ]; then
-  LATEST_DIR=$(find "$RESULTS_DIR" -type d -name "results_*" | sort -r | head -n 1)
-  
-  if [ -n "$LATEST_DIR" ]; then
-    echo "Found latest results directory: $LATEST_DIR"
+# Check if results directory exists
+if [ ! -d "$RESULTS_DIR" ]; then
+    echo "❌ Error: No results directory found at $RESULTS_DIR"
+    exit 1
+fi
+
+# Find the latest timestamped results folder
+LATEST_DIR=$(ls -dt "$RESULTS_DIR"/results_* 2>/dev/null | head -1)
+
+if [ -z "$LATEST_DIR" ]; then
+    echo "❌ Error: No timestamped results folders found in $RESULTS_DIR"
+    exit 1
+fi
+
+echo "📁 Latest results folder: $LATEST_DIR"
+echo ""
+
+# List files in the latest results folder
+echo "📄 Files to copy:"
+ls -la "$LATEST_DIR" | grep -v "^d" | grep -v "^total" | awk '{print "   - " $9}'
+echo ""
+
+# Ask for confirmation
+read -p "⚠️  This will DELETE everything in the data/ folder and replace it. Continue? [y/N]: " confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "❌ Cancelled"
+    exit 0
+fi
+
+echo ""
+echo "🗑️  Clearing data folder..."
+
+# Create data directory if it doesn't exist
+mkdir -p "$DATA_DIR"
+
+# Remove all files in data folder (but keep the folder itself)
+find "$DATA_DIR" -mindepth 1 -delete 2>/dev/null || rm -rf "$DATA_DIR"/*
+
+echo "📦 Copying all files from $LATEST_DIR to $DATA_DIR..."
+
+# Copy all files from latest results to data folder
+cp -r "$LATEST_DIR"/* "$DATA_DIR/" 2>/dev/null
+
+# Check what was copied
+echo ""
+echo "✅ Files copied to data/:"
+ls -la "$DATA_DIR" | grep -v "^d" | grep -v "^total" | awk '{print "   - " $9}'
+
+# Show file counts
+echo ""
+echo "📊 Summary:"
+echo "   JSON files: $(find "$DATA_DIR" -name "*.json" -type f | wc -l | tr -d ' ')"
+echo "   Log files: $(find "$DATA_DIR" -name "*.log" -type f | wc -l | tr -d ' ')"
+echo "   Other files: $(find "$DATA_DIR" -type f ! -name "*.json" ! -name "*.log" | wc -l | tr -d ' ')"
+
+# Special handling for key files
+echo ""
+if [ -f "$DATA_DIR/raw_data.json" ]; then
+    COMMENT_COUNT=$(python -c "import json; print(len(json.load(open('$DATA_DIR/raw_data.json'))))" 2>/dev/null || echo "?")
+    echo "✅ raw_data.json: $COMMENT_COUNT comments"
+fi
+
+if [ -f "$DATA_DIR/lookup_table.json" ]; then
+    LOOKUP_COUNT=$(python -c "import json; print(len(json.load(open('$DATA_DIR/lookup_table.json'))))" 2>/dev/null || echo "?")
+    echo "✅ lookup_table.json: $LOOKUP_COUNT entries"
+fi
+
+if [ -f "$DATA_DIR/analyzed_lookup_table.json" ]; then
+    echo "✅ analyzed_lookup_table.json: found"
+fi
+
+# Run merge_lookup_to_raw script if both required files exist
+echo ""
+if [ -f "$DATA_DIR/raw_data.json" ] && [ -f "$DATA_DIR/lookup_table_corrected.json" ]; then
+    echo "🔄 Running merge_lookup_to_raw.py to create data.json..."
+    cd "$PROJECT_ROOT"
+    python backend/utils/merge_lookup_to_raw.py
     
-    # Check for data.json
-    DATA_JSON="$LATEST_DIR/data.json"
-    if [ -f "$DATA_JSON" ]; then
-      echo "Copying $DATA_JSON to frontend"
-      cp "$DATA_JSON" "$FRONTEND_DATA_DIR/data.json"
-      echo "Copied to $FRONTEND_DATA_DIR/data.json"
+    if [ $? -eq 0 ]; then
+        echo "✅ Successfully created merged data.json"
+        if [ -f "$DATA_DIR/data.json" ]; then
+            MERGED_COUNT=$(python -c "import json; print(len(json.load(open('$DATA_DIR/data.json'))))" 2>/dev/null || echo "?")
+            echo "   Merged data.json: $MERGED_COUNT comments"
+        fi
     else
-      echo "Warning: data.json not found in $LATEST_DIR"
+        echo "❌ Error running merge_lookup_to_raw.py"
     fi
-    
-    # Check for search-index.json in frontend/public
-    SEARCH_INDEX="$PROJECT_ROOT/frontend/public/search-index.json"
-    if [ -f "$SEARCH_INDEX" ]; then
-      echo "Copying search-index.json to frontend data directory"
-      cp "$SEARCH_INDEX" "$FRONTEND_DATA_DIR/search-index.json"
-      echo "Copied to $FRONTEND_DATA_DIR/search-index.json"
-    else
-      echo "Warning: search-index.json not found"
-    fi
-  else
-    echo "No results directories found in $RESULTS_DIR"
-  fi
+elif [ -f "$DATA_DIR/raw_data.json" ] && [ -f "$DATA_DIR/lookup_table.json" ]; then
+    echo "⚠️  Note: Found lookup_table.json but not lookup_table_corrected.json"
+    echo "   The merge script requires lookup_table_corrected.json"
+    echo "   If you have corrections, create lookup_table_corrected.json first"
 else
-  echo "Results directory not found: $RESULTS_DIR"
+    echo "ℹ️  Skipping merge - required files not found:"
+    echo "   Need: raw_data.json and lookup_table_corrected.json"
 fi
 
-# Also look in processed directory for analyzed comments
-PROCESSED_DIR="$PROJECT_ROOT/data/processed"
-if [ -d "$PROCESSED_DIR" ]; then
-  LATEST_ANALYSIS=$(find "$PROCESSED_DIR" -name "comment_analysis_*.json" | sort -r | head -n 1)
-  
-  if [ -n "$LATEST_ANALYSIS" ] && [ ! -f "$FRONTEND_DATA_DIR/data.json" ]; then
-    echo "No data.json found in results, but found analysis file: $LATEST_ANALYSIS"
-    echo "Copying to frontend"
-    cp "$LATEST_ANALYSIS" "$FRONTEND_DATA_DIR/data.json"
-    echo "Copied to $FRONTEND_DATA_DIR/data.json"
-    
-    # Run build_search_index script to create search index
-    echo "Building search index from $LATEST_ANALYSIS"
-    "$PROJECT_ROOT/scripts/build_search_index.sh" "$LATEST_ANALYSIS"
-  fi
-fi
-
-echo "Done!"
-exit 0 
+echo ""
+echo "✨ Done! The data/ folder now contains all files from:"
+echo "   $LATEST_DIR" 

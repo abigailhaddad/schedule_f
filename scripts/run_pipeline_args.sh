@@ -102,14 +102,14 @@ if [ "$USE_RESUME" = true ]; then
         exit 1
     fi
     
-    # Copy files to output directory for resume pipeline
+    # Create output directory but DON'T copy files
+    # The resume pipeline will handle reading from source and writing complete files to output
     TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
     OUTPUT_DIR="results/results_$TIMESTAMP"
     mkdir -p "$OUTPUT_DIR"
-    cp "$RAW_DATA_FILE" "$OUTPUT_DIR/raw_data.json"
-    cp "$LOOKUP_TABLE_FILE" "$OUTPUT_DIR/lookup_table_corrected.json"
     
-    RESUME_ARGS="--raw_data raw_data.json --lookup_table lookup_table_corrected.json"
+    # Pass the original file paths, not the output directory paths
+    RESUME_ARGS="--raw_data $RAW_DATA_FILE --lookup_table $LOOKUP_TABLE_FILE"
 else
     PYTHON_SCRIPT="backend.pipeline"
     PIPELINE_MODE="Fresh analysis"
