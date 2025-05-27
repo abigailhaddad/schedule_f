@@ -485,72 +485,109 @@ def main():
             logger.info(f"\n=== STEP 1: No New Comments to Fetch ===")
             logger.info(f"   All comments from CSV already exist in raw_data.json")
         
-        # Recreate lookup table from complete raw data
-        logger.info(f"\n=== STEP 2: Recreating Lookup Table ===")
+        # Update lookup table with new comments
+        logger.info(f"\n=== STEP 2: Updating Lookup Table ===")
         
-        # Import the same function used by the main pipeline
-        from .analysis.create_lookup_table import create_lookup_table
+        # Load the existing lookup table that was copied
+        with open(output_lookup_table_path, 'r') as f:
+            lookup_table = json.load(f)
+        logger.info(f"   Starting with {len(lookup_table)} existing entries")
         
-        # Load the complete raw data
-        with open(output_raw_data_path, 'r') as f:
-            complete_raw_data = json.load(f)
-        
-        logger.info(f"Creating lookup table from {len(complete_raw_data)} total comments...")
-        
-        # Create lookup table using the same logic as the main pipeline
-        new_lookup_table = create_lookup_table(complete_raw_data, validated_truncation)
-        
-        # Preserve analysis fields from existing entries
-        if os.path.exists(input_lookup_table_path):
-            with open(input_lookup_table_path, 'r') as f:
-                old_lookup_table = json.load(f)
+        # Only process new comments if any were fetched
+        if new_comment_ids:
+            # Import necessary functions
+            from .analysis.create_lookup_table import extract_and_combine_text, normalize_text_for_dedup
             
-            # Create mapping of truncated_text to all analysis fields
-            analysis_map = {}
-            for entry in old_lookup_table:
-                analysis_map[entry['truncated_text']] = {
-                    'stance': entry.get('stance'),
-                    'key_quote': entry.get('key_quote'),
-                    'rationale': entry.get('rationale'),
-                    'themes': entry.get('themes'),
-                    'corrected': entry.get('corrected', False)
-                }
+            # Load the complete raw data to get the new comments
+            with open(output_raw_data_path, 'r') as f:
+                complete_raw_data = json.load(f)
             
-            # Apply existing analysis to matching entries in new table
-            preserved_count = 0
-            for entry in new_lookup_table:
-                if entry['truncated_text'] in analysis_map:
-                    old_analysis = analysis_map[entry['truncated_text']]
-                    entry.update(old_analysis)
-                    preserved_count += 1
-                    logger.debug(f"Preserved analysis for {entry['lookup_id']}")
-                else:
-                    # New entry, set defaults
-                    entry['stance'] = None
-                    entry['key_quote'] = None
-                    entry['rationale'] = None
-                    entry['themes'] = None
-                    entry['corrected'] = False
+            # Get just the new comments
+            new_comments = [c for c in complete_raw_data if c.get('id') in new_comment_ids]
+            logger.info(f"   Processing {len(new_comments)} new comments")
             
-            logger.info(f"   Preserved analysis from {preserved_count} existing entries")
-        else:
-            # No existing lookup table, all entries need analysis
-            for entry in new_lookup_table:
-                entry['stance'] = None
-                entry['key_quote'] = None
-                entry['rationale'] = None
-                entry['themes'] = None
-                entry['corrected'] = False
+            # Create mapping of normalized text to existing lookup entries
+            existing_text_map = {}
+            for i, entry in enumerate(lookup_table):
+                normalized = normalize_text_for_dedup(entry['truncated_text'])
+                existing_text_map[normalized] = i
+            
+            # Process each new comment
+            added_to_existing = 0
+            new_entries_created = 0
+            
+            # Find the highest existing lookup ID
+            max_id = 0
+            for entry in lookup_table:
+                lookup_id = entry.get('lookup_id', 'lookup_000000')
+                try:
+                    id_num = int(lookup_id.split('_')[1])
+                    max_id = max(max_id, id_num)
+                except (IndexError, ValueError):
+                    continue
+            next_lookup_id = max_id + 1
+            
+            for comment_data in new_comments:
+                try:
+                    comment_id = comment_data['id']
+                    
+                    # Extract and normalize text
+                    text_result = extract_and_combine_text(comment_data, validated_truncation)
+                    truncated_text = text_result['truncated_text']
+                    
+                    if not truncated_text.strip():
+                        logger.warning(f"Comment {comment_id} has empty text, skipping")
+                        continue
+                    
+                    normalized_text = normalize_text_for_dedup(truncated_text)
+                    
+                    # Check if this text pattern already exists
+                    if normalized_text in existing_text_map:
+                        # Add to existing entry
+                        existing_idx = existing_text_map[normalized_text]
+                        if comment_id not in lookup_table[existing_idx]['comment_ids']:
+                            lookup_table[existing_idx]['comment_ids'].append(comment_id)
+                            lookup_table[existing_idx]['comment_count'] += 1
+                            added_to_existing += 1
+                    else:
+                        # Create new lookup entry
+                        new_entry = {
+                            'lookup_id': f"lookup_{next_lookup_id:06d}",
+                            'truncated_text': truncated_text,
+                            'text_source': text_result['text_source'],
+                            'comment_ids': [comment_id],
+                            'comment_count': 1,
+                            'stance': None,
+                            'key_quote': None,
+                            'rationale': None,
+                            'themes': None,
+                            'corrected': False
+                        }
+                        
+                        lookup_table.append(new_entry)
+                        existing_text_map[normalized_text] = len(lookup_table) - 1
+                        new_entries_created += 1
+                        next_lookup_id += 1
+                        
+                except Exception as e:
+                    logger.error(f"Error processing comment {comment_data.get('id', 'unknown')}: {e}")
+                    continue
+            
+            logger.info(f"   Added to existing entries: {added_to_existing}")
+            logger.info(f"   New entries created: {new_entries_created}")
         
-        # Save the new lookup table
+        # Sort lookup table by comment count (most common first)
+        lookup_table.sort(key=lambda x: (-x['comment_count'], x['lookup_id']))
+        
+        # Save the updated lookup table
         with open(output_lookup_table_path, 'w') as f:
-            json.dump(new_lookup_table, f, indent=2)
+            json.dump(lookup_table, f, indent=2)
         
-        logger.info(f"✅ Lookup table saved with {len(new_lookup_table)} entries")
+        logger.info(f"✅ Lookup table saved with {len(lookup_table)} entries")
         
         # Report on new entries
         if new_comment_ids:
-            new_entries = sum(1 for entry in new_lookup_table 
+            new_entries = sum(1 for entry in lookup_table 
                             if any(cid in new_comment_ids for cid in entry.get('comment_ids', [])))
             logger.info(f"   Including {new_entries} entries with new comments")
         
@@ -565,11 +602,11 @@ def main():
                 
                 # Load lookup table
                 with open(output_lookup_table_path, 'r') as f:
-                    lookup_table = json.load(f)
+                    lookup_table_to_analyze = json.load(f)
                 
                 # Analyze unanalyzed entries
                 analyzed_lookup_table = analyze_lookup_table_batch(
-                    lookup_table=lookup_table,
+                    lookup_table=lookup_table_to_analyze,
                     analyzer=analyzer,
                     batch_size=5,
                     use_parallel=True,
