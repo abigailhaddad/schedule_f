@@ -4,6 +4,7 @@ import { datasetConfig } from '@/lib/config'
 import { Metadata } from 'next'
 import { Analytics } from "@vercel/analytics/next"
 import DatabaseStatus from '@/components/DatabaseStatus'
+import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
   title: datasetConfig.title,
@@ -29,6 +30,8 @@ export default function RootLayout({
     <html lang="en">
       <title>&quot;Schedule F&quot; Analysis</title>
       <body className="bg-light font-sans">
+        <Navbar />
+        <div className="h-36 sm:h-32 md:h-40 lg:h-28 xl:h-28" />
         {children}
         {process.env.NODE_ENV === 'development' && <DatabaseStatus />}
         <Analytics />

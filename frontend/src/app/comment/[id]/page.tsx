@@ -1,5 +1,4 @@
 import { getCommentById } from '@/lib/actions/comments';
-import Navbar from '@/components/Navbar';
 import CommentDetail from '@/components/CommentDetail';
 import BackButton from '@/components/BackButton';
 import { notFound } from 'next/navigation';
@@ -28,8 +27,7 @@ export default async function CommentPage({ params, searchParams }: PageProps) {
   
   return (
     <main className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="pt-28 pb-12">
+      <div className="pb-12">
         <div className="container mx-auto px-4 md:px-6">
           <BackButton returnUrl={lastUrl} />
           <CommentDetail comment={result.data} />
