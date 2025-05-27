@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { getClusterData } from '@/lib/actions/clusters';
 import ClusterVisualization from '@/components/ClusterVisualization';
-import Navbar from '@/components/Navbar';
 
 export const metadata: Metadata = {
   title: 'Comment Clusters - Schedule F Analysis',
@@ -34,7 +33,6 @@ export default async function ClustersPage({
   if (!clusterResponse.success || !clusterResponse.data) {
     return (
       <main className="min-h-screen bg-gray-50">
-        <Navbar />
         <div className="pt-24 pb-12">
           <div className="container mx-auto px-4">
             <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
@@ -60,8 +58,7 @@ export default async function ClustersPage({
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="pt-24 pb-12">
+      <div className="pb-12">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Comment Cluster Analysis</h1>
