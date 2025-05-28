@@ -147,23 +147,21 @@ def main():
         if not args.skip_clustering and unique_texts >= 2:
             logger.info(f"\n=== STEP 4: Semantic Clustering ===")
             
-            # Ensure we don't request more clusters than entries
-            n_clusters = min(args.n_clusters, unique_texts)
-            logger.info(f"Clustering {unique_texts} entries into {n_clusters} clusters")
+            logger.info(f"Running hierarchical clustering on {unique_texts} entries")
             
             # Import and run clustering
             import sys
             import subprocess
             
-            # Get absolute path to the semantic_lookup script
+            # Get absolute path to the hierarchical_clustering script
             script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            semantic_script = os.path.join(script_dir, 'backend', 'analysis', 'semantic_lookup.py')
+            clustering_script = os.path.join(script_dir, 'backend', 'analysis', 'hierarchical_clustering.py')
             
             clustering_cmd = [
                 sys.executable, 
-                semantic_script,
+                clustering_script,
                 '--input', lookup_table_path,
-                '--n_clusters', str(n_clusters)
+                '--output_dir', args.output_dir
             ]
             
             result = subprocess.run(clustering_cmd, capture_output=True, text=True)
