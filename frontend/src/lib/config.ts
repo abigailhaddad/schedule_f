@@ -72,17 +72,29 @@ export const datasetConfig = {
         }
       },
       {
-        key: 'agencyId',
-        title: 'Agency ID',
-        filter: 'text',
-        visible: false
+        key: 'commentCount',
+        title: 'Duplicates',
+        filter: 'select',
+        visible: true,
+        badges: {
+          '1': 'bg-gray-100',
+          '2-10': 'bg-blue-100',
+          '11-50': 'bg-purple-100',
+          '50+': 'bg-red-100'
+        }
       },
+      // {
+      //   key: 'agencyId',
+      //   title: 'Agency ID',
+      //   filter: 'text',
+      //   visible: false
+      // },
       { 
         key: 'link',        
         title: 'Source Link',        
         filter: 'text',
         format: 'link',
-        visible: true 
+        visible: false
       },
       { 
         key: 'id',           
