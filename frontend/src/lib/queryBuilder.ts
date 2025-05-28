@@ -1,7 +1,8 @@
+// lib/queryBuilder.ts
 'use server';
 
-import { and, or, SQL, sql } from 'drizzle-orm';
-import { comments, stanceEnum } from './db/schema';
+import { and, or, SQL, sql, eq } from 'drizzle-orm';
+import { comments, stanceEnum, lookupTable } from './db/schema';
 import { db } from './db';
 
 export type FilterMode = 'exact' | 'includes' | 'at_least';
@@ -190,7 +191,7 @@ function buildTextFilterConditions(column: SQL, values: string[]): SQL[] {
  * Determines if a field should use text search (ILIKE) vs exact match
  */
 function isTextSearchField(key: string): boolean {
-  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale'];
+  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale', 'key_quote'];
   return textFields.includes(key);
 }
 
@@ -344,7 +345,7 @@ function buildSearchConditions(search?: string, searchFields?: string[]): SQL[] 
   // Determine which fields to search
   const fieldsToSearch = searchFields && searchFields.length > 0 
     ? searchFields 
-    : ['comment', 'title', 'keyQuote', 'themes', 'rationale', 'category'];
+    : ['comment', 'title', 'keyQuote', 'key_quote', 'themes', 'rationale', 'category'];
   
   // Build search conditions for each field
   fieldsToSearch.forEach(field => {
@@ -484,24 +485,57 @@ export async function buildStatsQueries(options: QueryOptions) {
     neutralQuery
   };
 }
-// frontend/src/lib/queryBuilder.ts
-// Add this to the existing buildTimeSeriesQuery function
 
+/**
+ * Build a query to fetch related comments through the lookup table
+ */
+export async function buildRelatedCommentsQuery(lookupId: string) {
+  // First get the lookup table entry
+  const lookupEntry = await db
+    .select()
+    .from(lookupTable)
+    .where(eq(lookupTable.lookupId, lookupId))
+    .limit(1);
+  
+  if (!lookupEntry.length) {
+    return { relatedComments: [] };
+  }
+  
+  const commentIds = lookupEntry[0].commentIds;
+  
+  // Fetch all comments with those IDs
+  const relatedComments = await db
+    .select()
+    .from(comments)
+    .where(sql`${comments.id} = ANY(${commentIds})`);
+  
+  return { relatedComments };
+}
+
+/**
+ * Build time series query with duplicate handling through lookup table
+ */
 export async function buildTimeSeriesQuery(
   options: QueryOptions,
   dateField: 'postedDate' | 'receivedDate' = 'postedDate',
-  includeDuplicates: boolean = true // New parameter
+  includeDuplicates: boolean = true
 ) {
   // Build filter conditions
   const filterConditions = buildFilterConditions(options.filters);
   const searchConditions = buildSearchConditions(options.search, options.searchFields);
   const allConditions = [...filterConditions, ...searchConditions];
 
-  // Add condition to exclude duplicates if requested
+  // Add condition to only include primary comments (first in each lookup group) if excluding duplicates
   if (!includeDuplicates) {
-    // Exclude comments where duplicateOf is not null and not empty array
+    // We need to only include comments that are the first in their lookup group
+    // This requires a subquery or window function
     allConditions.push(
-      sql`(${comments.duplicateOf} IS NULL OR CARDINALITY(${comments.duplicateOf}) = 0)`
+      sql`${comments.id} IN (
+        SELECT DISTINCT ON (${lookupTable.lookupId}) ${comments.id}
+        FROM ${comments}
+        LEFT JOIN ${lookupTable} ON ${comments.lookupId} = ${lookupTable.lookupId}
+        ORDER BY ${lookupTable.lookupId}, ${comments.id}
+      )`
     );
   }
 
@@ -530,6 +564,7 @@ export async function buildTimeSeriesQuery(
 
   return baseQuery;
 }
+
 // Export helper functions for testing
 export { 
   buildFilterConditions, 
