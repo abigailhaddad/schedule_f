@@ -191,8 +191,8 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
   };
 
   // Use caching in production
-  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
-  
+  //const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  const shouldSkipCache = false;
   if (shouldSkipCache) {
     return fetchClusterData();
   }
