@@ -73,7 +73,7 @@ EXPECTED_FIELDS_SCHEMA = {
     'rationale': {'type': str, 'required': False, 'nullable': True},
     'themes': {'type': (list, str), 'required': False, 'nullable': True},  # Can be list or string
     'corrected': {'type': bool, 'required': False, 'nullable': True},
-    'cluster_id': {'type': str, 'required': False, 'nullable': True},
+    'cluster_id': {'type': (str, int), 'required': False, 'nullable': True},
     'pca_x': {'type': float, 'required': False, 'nullable': True},
     'pca_y': {'type': float, 'required': False, 'nullable': True}
 }
