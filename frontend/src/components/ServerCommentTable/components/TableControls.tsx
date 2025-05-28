@@ -33,13 +33,13 @@ export function TableControls({
         
         <div className="flex flex-wrap items-center gap-2">
           <SearchBar value={searchValue} onChange={onSearchChange} />
+          <ExportButton onClick={onExport} />
           <ColumnVisibilityMenu 
             visibleColumns={columnVisibility.visibleColumns}
             onToggle={columnVisibility.toggleColumn}
             isOpen={columnVisibility.showMenu}
             onToggleMenu={() => columnVisibility.setShowMenu(!columnVisibility.showMenu)}
           />
-          <ExportButton onClick={onExport} />
         </div>
       </div>
     </div>

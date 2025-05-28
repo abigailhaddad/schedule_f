@@ -67,7 +67,7 @@ export default function StanceOverTimeClient() {
             <span className="mr-2">📈</span>
             Comments Over Time
           </h5>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col md:flex-row items-end md:items-center gap-3">
             {/* Duplicate toggle */}
             <label className="flex items-center gap-2 text-white text-sm cursor-pointer">
               <input
