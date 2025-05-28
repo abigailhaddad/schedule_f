@@ -32,7 +32,9 @@ from typing import List, Dict, Any, Optional, Tuple
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
-from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.metrics import silhouette_score
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+from scipy.spatial.distance import pdist
 
 def strip_html_tags(text):
     """Remove HTML tags from text"""
@@ -137,6 +139,50 @@ def create_embeddings(texts: List[str], model_name: str = "sentence-transformers
     print(f"✅ Created embeddings with shape: {embeddings.shape}")
     return embeddings
 
+def find_optimal_clusters(embeddings: np.ndarray, min_clusters: int = 3, max_clusters: int = 15) -> int:
+    """Find optimal number of clusters using silhouette score with smart search"""
+    print(f"🔍 Finding optimal number of clusters...")
+    
+    # First, do a coarse search with larger steps
+    coarse_range = [3, 5, 8, 12, 15, 20]
+    coarse_scores = {}
+    
+    print("  Stage 1: Coarse search...")
+    for n_clusters in coarse_range:
+        if n_clusters >= len(embeddings):
+            break
+        clustering = AgglomerativeClustering(n_clusters=n_clusters, linkage='ward')
+        cluster_labels = clustering.fit_predict(embeddings)
+        score = silhouette_score(embeddings, cluster_labels)
+        coarse_scores[n_clusters] = score
+        print(f"    {n_clusters} clusters: silhouette score = {score:.3f}")
+    
+    # Find the best region from coarse search
+    best_coarse = max(coarse_scores.keys(), key=lambda k: coarse_scores[k])
+    
+    # Do a fine search around the best coarse result
+    fine_min = max(2, best_coarse - 3)
+    fine_max = min(best_coarse + 3, len(embeddings) - 1)
+    
+    print(f"\n  Stage 2: Fine search around {best_coarse} clusters...")
+    fine_scores = {}
+    
+    for n_clusters in range(fine_min, fine_max + 1):
+        if n_clusters in coarse_scores:
+            fine_scores[n_clusters] = coarse_scores[n_clusters]
+        else:
+            clustering = AgglomerativeClustering(n_clusters=n_clusters, linkage='ward')
+            cluster_labels = clustering.fit_predict(embeddings)
+            score = silhouette_score(embeddings, cluster_labels)
+            fine_scores[n_clusters] = score
+            print(f"    {n_clusters} clusters: silhouette score = {score:.3f}")
+    
+    # Find optimal from fine search
+    optimal_clusters = max(fine_scores.keys(), key=lambda k: fine_scores[k])
+    
+    print(f"\n✅ Optimal number of clusters: {optimal_clusters} (silhouette score: {fine_scores[optimal_clusters]:.3f})")
+    return optimal_clusters
+
 def perform_clustering(embeddings: np.ndarray, n_clusters: int) -> Tuple[np.ndarray, Any]:
     """Perform hierarchical clustering"""
     print(f"🌳 Performing hierarchical clustering with {n_clusters} clusters...")
@@ -153,6 +199,85 @@ def perform_clustering(embeddings: np.ndarray, n_clusters: int) -> Tuple[np.ndar
         print(f"  Cluster {cluster_id}: {count:,} unique texts ({count/len(cluster_labels)*100:.1f}%)")
     
     return cluster_labels, linkage_matrix
+
+def extract_subclusters_from_dendrogram(linkage_matrix: np.ndarray, n_main_clusters: int, 
+                                       gap_threshold: float = 1.5) -> Tuple[np.ndarray, np.ndarray]:
+    """Extract natural subclusters by finding gaps in the dendrogram
+    
+    Args:
+        linkage_matrix: The hierarchical clustering linkage matrix
+        n_main_clusters: Number of main clusters
+        gap_threshold: Ratio to identify significant gaps (default: 1.5 = 50% increase)
+    """
+    print(f"🌿 Extracting natural subclusters from dendrogram...")
+    
+    # Get main clusters
+    main_clusters = fcluster(linkage_matrix, n_main_clusters, criterion='maxclust') - 1  # 0-indexed
+    
+    # Analyze the dendrogram to find natural breaks
+    distances = linkage_matrix[:, 2]
+    
+    # Calculate the rate of change in distances
+    distance_diffs = np.diff(distances)
+    distance_ratios = distances[1:] / distances[:-1]
+    
+    # Find significant gaps (where distance increases by more than threshold)
+    significant_gaps = np.where(distance_ratios > gap_threshold)[0]
+    
+    # Find the gap that gives us a reasonable number of clusters (between main clusters and too many)
+    main_cluster_height = distances[len(distances) - n_main_clusters]
+    
+    # Look for the most significant gap that would give us more than main clusters
+    best_gap_idx = None
+    best_gap_ratio = 0
+    
+    for gap_idx in significant_gaps:
+        if gap_idx > len(distances) - 50:  # Don't create too many clusters
+            n_clusters_at_gap = len(distances) - gap_idx
+            if n_clusters_at_gap > n_main_clusters:
+                gap_ratio = distance_ratios[gap_idx]
+                if gap_ratio > best_gap_ratio:
+                    best_gap_ratio = gap_ratio
+                    best_gap_idx = gap_idx
+    
+    # If we found a good gap, use it; otherwise fall back to a reasonable default
+    if best_gap_idx is not None:
+        n_fine_clusters = len(distances) - best_gap_idx
+        print(f"  Found natural gap at height {distances[best_gap_idx]:.3f} (ratio: {best_gap_ratio:.2f})")
+    else:
+        # Fall back to sqrt of data size as a reasonable number
+        n_fine_clusters = min(int(np.sqrt(len(distances))), n_main_clusters * 5)
+        print(f"  No significant gaps found, using {n_fine_clusters} clusters")
+    
+    # Get fine clusters
+    fine_clusters = fcluster(linkage_matrix, n_fine_clusters, criterion='maxclust') - 1  # 0-indexed
+    print(f"  Total natural clusters: {len(np.unique(fine_clusters))}")
+    
+    # Create subcluster labels within each main cluster
+    subcluster_labels = np.zeros_like(main_clusters)
+    total_subclusters = 0
+    
+    for main_id in np.unique(main_clusters):
+        main_mask = main_clusters == main_id
+        fine_in_main = fine_clusters[main_mask]
+        
+        # Remap fine cluster IDs to subcluster IDs (0, 1, 2, ...)
+        unique_fine = np.unique(fine_in_main)
+        for sub_id, fine_id in enumerate(unique_fine):
+            subcluster_labels[main_mask & (fine_clusters == fine_id)] = sub_id
+        
+        total_subclusters += len(unique_fine)
+        print(f"  Cluster {main_id}: {len(unique_fine)} natural subclusters")
+        for sub_id in range(min(len(unique_fine), 10)):  # Show max 10 subclusters
+            count = np.sum((main_clusters == main_id) & (subcluster_labels == sub_id))
+            if sub_id < 26:  # Only use a-z
+                print(f"    Subcluster {main_id}{chr(97+sub_id)}: {count} texts")
+            else:
+                print(f"    Subcluster {main_id}{sub_id}: {count} texts (numeric label)")
+        if len(unique_fine) > 10:
+            print(f"    ... and {len(unique_fine) - 10} more subclusters")
+    
+    return main_clusters, subcluster_labels
 
 def analyze_clusters(processed_entries: List[Dict], cluster_labels: np.ndarray) -> Tuple[Dict, Dict]:
     """Analyze cluster contents and find stance disagreements"""
@@ -344,7 +469,8 @@ def create_report(cluster_analysis: Dict, disagreement_analysis: Dict, output_di
     print(f"✅ Report saved to: {report_path}")
 
 def update_lookup_table_with_clusters(input_file: str, processed_entries: List[Dict], 
-                                    cluster_labels: np.ndarray, pca_coordinates: np.ndarray = None) -> str:
+                                    cluster_labels: np.ndarray, pca_coordinates: np.ndarray = None,
+                                    subcluster_labels: np.ndarray = None) -> str:
     """Update the lookup table with cluster IDs and PCA coordinates"""
     try:
         # Load the original lookup table
@@ -356,7 +482,13 @@ def update_lookup_table_with_clusters(input_file: str, processed_entries: List[D
         for i, entry in enumerate(processed_entries):
             lookup_id = entry.get('lookup_id')
             if lookup_id and i < len(cluster_labels):
-                mapping_data = {'cluster_id': int(cluster_labels[i])}
+                # If we have subclusters, use combined format like "0a", otherwise just the number
+                if subcluster_labels is not None and i < len(subcluster_labels):
+                    cluster_id = f"{int(cluster_labels[i])}{chr(97+int(subcluster_labels[i]))}"
+                else:
+                    cluster_id = int(cluster_labels[i])
+                
+                mapping_data = {'cluster_id': cluster_id}
                 if pca_coordinates is not None and i < len(pca_coordinates):
                     mapping_data['pca_x'] = float(pca_coordinates[i, 0])
                     mapping_data['pca_y'] = float(pca_coordinates[i, 1])
@@ -374,16 +506,17 @@ def update_lookup_table_with_clusters(input_file: str, processed_entries: List[D
                     entry['pca_y'] = mapping_data['pca_y']
                 updated_count += 1
         
-        # Save the updated lookup table
-        output_file = input_file.replace('.json', '_clustered.json')
-        with open(output_file, 'w') as f:
+        # Save the updated lookup table back to the original file
+        # This ensures cluster_id is added to the main lookup table
+        with open(input_file, 'w') as f:
             json.dump(original_lookup_table, f, indent=2)
         
         coords_msg = " and PCA coordinates" if pca_coordinates is not None else ""
-        print(f"✅ Updated {updated_count} entries with cluster IDs{coords_msg}")
-        print(f"✅ Clustered lookup table saved to {output_file}")
+        subcluster_msg = " (with subclusters)" if subcluster_labels is not None else ""
+        print(f"✅ Updated {updated_count} entries with cluster IDs{subcluster_msg}{coords_msg}")
+        print(f"✅ Updated lookup table: {input_file}")
         
-        return output_file
+        return input_file
         
     except Exception as e:
         print(f"❌ Error updating lookup table with cluster data: {e}")
@@ -393,7 +526,11 @@ def main():
     """Main function"""
     parser = argparse.ArgumentParser(description='Semantic clustering on deduplicated lookup table')
     parser.add_argument('--input', type=str, help='Path to analyzed_lookup_table.json file')
-    parser.add_argument('--n_clusters', type=int, default=15, help='Number of clusters (default: 15)')
+    parser.add_argument('--n_clusters', type=int, default=None, help='Number of clusters (default: auto-detect)')
+    parser.add_argument('--auto_clusters', action='store_true', help='Automatically find optimal number of clusters')
+    parser.add_argument('--subclusters', action='store_true', help='Extract natural subclusters from dendrogram')
+    parser.add_argument('--gap_threshold', type=float, default=1.5, 
+                       help='Ratio to identify significant gaps in dendrogram (default: 1.5 = 50% increase)')
     parser.add_argument('--model', type=str, default='sentence-transformers/all-mpnet-base-v2',
                        help='Sentence transformer model to use')
     parser.add_argument('--output_dir', type=str, help='Output directory')
@@ -419,7 +556,6 @@ def main():
     print(f"🚀 Starting semantic clustering on deduplicated lookup table...")
     print(f"📁 Input: {input_file}")
     print(f"📁 Output: {output_dir}")
-    print(f"🎯 Number of clusters: {args.n_clusters}")
     
     # Load lookup table
     processed_entries, comment_texts, lookup_ids = load_lookup_table(input_file)
@@ -431,8 +567,24 @@ def main():
     # Create embeddings from unique texts only
     embeddings = create_embeddings(comment_texts, args.model)
     
+    # Determine number of clusters
+    if args.n_clusters is None or args.auto_clusters:
+        n_clusters = find_optimal_clusters(embeddings)
+    else:
+        n_clusters = args.n_clusters
+        print(f"🎯 Using specified number of clusters: {n_clusters}")
+    
     # Perform clustering
-    cluster_labels, linkage_matrix = perform_clustering(embeddings, args.n_clusters)
+    cluster_labels, linkage_matrix = perform_clustering(embeddings, n_clusters)
+    
+    # Extract subclusters if requested
+    subcluster_labels = None
+    if args.subclusters:
+        main_clusters, subcluster_labels = extract_subclusters_from_dendrogram(
+            linkage_matrix, n_clusters, args.gap_threshold
+        )
+        # For analysis, we'll use the main clusters
+        cluster_labels = main_clusters
     
     # Analyze clusters
     cluster_analysis, disagreement_analysis = analyze_clusters(processed_entries, cluster_labels)
@@ -444,13 +596,13 @@ def main():
     create_report(cluster_analysis, disagreement_analysis, output_dir)
     
     # Update lookup table with cluster data and PCA coordinates
-    clustered_file = update_lookup_table_with_clusters(input_file, processed_entries, cluster_labels, pca_coordinates)
+    clustered_file = update_lookup_table_with_clusters(input_file, processed_entries, cluster_labels, pca_coordinates, subcluster_labels)
     
     # Calculate efficiency stats
     total_original_comments = sum(entry.get('comment_count', 0) for entry in processed_entries)
     
     print(f"\n✅ Clustering complete!")
-    print(f"📊 {len(processed_entries):,} unique texts clustered into {args.n_clusters} clusters")
+    print(f"📊 {len(processed_entries):,} unique texts clustered into {n_clusters} clusters")
     print(f"📊 Representing {total_original_comments:,} total comments")
     print(f"🚀 Efficiency: Clustered {len(processed_entries):,} texts instead of {total_original_comments:,} comments")
     print(f"⚡ Speed improvement: ~{total_original_comments/len(processed_entries):.1f}x faster")

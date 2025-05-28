@@ -3,16 +3,16 @@ QUOTE VERIFICATION REPORT
 
 SUMMARY
 ----------------------------------------
-Total lookup entries: 17803
-Total comments represented: 24046
-Lookup entries with quotes: 17789
-Quotes found (exact): 14564 (81.9%)
-Quotes found (similar): 1468 (8.3%)
-Quotes NOT found: 1757 (9.9%)
-Overall verification rate: 90.1%
+Total lookup entries: 18104
+Total comments represented: 24356
+Lookup entries with quotes: 18090
+Quotes found (exact): 14834 (82.0%)
+Quotes found (similar): 1496 (8.3%)
+Quotes NOT found: 1760 (9.7%)
+Overall verification rate: 90.3%
 
 
-QUOTES NOT FOUND (1757 entries)
+QUOTES NOT FOUND (1760 entries)
 ================================================================================
 
 1. Lookup ID: lookup_008913
@@ -39273,8 +39273,80 @@ QUOTES NOT FOUND (1757 entries)
    jobs into political positions.
 --------------------------------------------------------------------------------
 
+1758. Lookup ID: lookup_017804
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24322
 
-QUOTES WITH SIMILAR MATCHES (1468 entries)
+   QUOTE: ""'Improving Performance, Accountability and Responsiveness in the Civil Service' will do the opposite of what it claims. It will hollow out our workforce of independent, competent civil servants.""
+
+   TRUNCATED TEXT (2505 characters):
+   While this rule is presented as a way to improve accountability and limit
+   partisan or personal preferences from interfering with the official duties of
+   Federal employees, it will in practice likely have the exact opposite effect.
+   It will remove protections for Federal employees who offer accurate analyses
+   that may not match with the political agenda of the administration and create
+   a political class not accountable to experts in the fields that influence
+   their policies. Politicians should not be able to dictate what constitutes
+   good science or accurate data analysis, and they shouldn't be able to dismiss
+   anyone who disagrees with them to install sycophants more concerned with
+   advancing agendas than skillfully performing their jobs. Further, creating a
+   revolving door of Federal employees who stay or go based on who is in the
+   White House will seriously undermine the overall quality of the civil service
+   workforce and the skill and efficiency with which they deliver outcomes to
+   the public. How do we know this will happen in practice? It already has.
+   Probational Federal employees have been fired "for cause" when all previous
+   performance reviews have been stellar. Grants have been terminated for
+   "misalignment" with administration priorities in a manner that suggests
+   nobody read past the title of the grant (or even the title of the grant
+   program). Funding choices that represented the will of Congress and were
+   determined by expert groups evaluators trained in the area they were
+   evaluating and through a merit-based review of proposals have been reversed
+   by nonscientists who do not seem to be doing much more than a key-word search
+   for terms that offend the current administration. We need Federal employees
+   who are experts in their areas and independent from political influence, and
+   we need to allow them to do their jobs with independence, under the many
+   systems that already exist for holding them accountable. "Improving
+   Performance, Accountability and Responsiveness in the Civil Service" will do
+   the opposite of what it claims. It will hollow out our workforce of
+   independent, competent civil servants. It will substitute policy for good
+   science. It will set us back decades, making us less competitive, less
+   nimble, and less able to attract and retain good Federal employees. It will
+   take us from the envy of the work in scientific research capacity and
+   breakthroughs to unable to compete with other countries who maintain
+   independent civil servants. No to "Schedule F"!
+--------------------------------------------------------------------------------
+
+1759. Lookup ID: lookup_017928
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24448
+
+   QUOTE: "This proposal is utter nonsense. It is an insult to every civil servant working today."
+
+   TRUNCATED TEXT (85 characters):
+   This proposal is utter nonsense.It is an insult to every civil servant
+   working today.
+--------------------------------------------------------------------------------
+
+1760. Lookup ID: lookup_018089
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-24615
+
+   QUOTE: "I particularly object to the proposed reclassification of 'evaluators of grant applications' - this takes actual expertise (shock!), and cannot be done by partisan hacks."
+
+   TRUNCATED TEXT (683 characters):
+   Classifying all these federal workers as policymakers is a clear power grab
+   to make them subject to presidential appointment and removal, thus rendering
+   the federal government just a bunch of yes-men and yes-women to the executive
+   branch. I particularly object to the proposed reclassification of "evaluators
+   of grant applications" - this takes actual expertise (shock!), and cannot be
+   done by partisan hacks. Please consider that the future of the country is at
+   stake. We're getting rid of vaccines, a measles epidemic is exploding, we're
+   exporting all our talent abroad, etc. The US is really at risk of losing its
+   edge. Please maintain our standards of excellence. Do not do this.
+--------------------------------------------------------------------------------
+
+
+QUOTES WITH SIMILAR MATCHES (1496 entries)
 ================================================================================
 
 1. Lookup ID: lookup_015715
@@ -48083,5 +48155,173 @@ QUOTES WITH SIMILAR MATCHES (1468 entries)
    Represents 1 comment(s)
    QUOTE: "This change would further politicize scientific research in this country."
    MATCH INFO: Found similar (not exact): sparency, this change would further politicize scientific research in this country. nih progr
+----------------------------------------
+
+1469. Lookup ID: lookup_017810
+   Represents 1 comment(s)
+   QUOTE: "I reject the proposal to reclassify federal employees into 'at-will' employees, evading the due process protections outlined in Chapter 75 of Title 5 of the United States Code."
+   MATCH INFO: Found partial match in sentence 1: i reject the proposal to reclassify federal employees into “at-will" employees, evading the due process protections outlined in chapter 75 of title 5 of the united states code
+----------------------------------------
+
+1470. Lookup ID: lookup_017842
+   Represents 1 comment(s)
+   QUOTE: "The Schedule F proposal will result in the loss of essential expertise from each replacement of career civil servants."
+   MATCH INFO: Found similar (not exact): ifically, the schedule f proposal will result in the loss of essential expertise from each replacement of career civil servants. professio
+----------------------------------------
+
+1471. Lookup ID: lookup_017852
+   Represents 1 comment(s)
+   QUOTE: "OPM’s proposal would reverse nearly 140 years of progress toward a professional, non‑partisan civil service."
+   MATCH INFO: Found similar (not exact): onclusion opm’s proposal would reverse nearly 140 years of progress toward a professional, non‑partisan civil service. for the s
+----------------------------------------
+
+1472. Lookup ID: lookup_017862
+   Represents 1 comment(s)
+   QUOTE: "The American Federation of Government Employees called it 'the most profound undermining of the civil service in our lifetimes.'"
+   MATCH INFO: Found partial match in sentence 4: the american federation of government employees called it “the most profound undermining of the civil service in our lifetimes
+----------------------------------------
+
+1473. Lookup ID: lookup_017870
+   Represents 1 comment(s)
+   QUOTE: "For these reasons, I urge OPM to withdraw the proposed rule in its entirety. Maintaining an expert, non-partisan scientific workforce is essential to safeguarding public health, sustaining economic growth, and preserving public trust in government."
+   MATCH INFO: Found similar (not exact): progress. for these reasons, i urge opm to withdraw the proposed rule in its entirety. maintaining an expert, non-partisan scientific workforce is essential to safeguarding public health, sustaining economic growth, and preserving public trust in government. respectfu
+----------------------------------------
+
+1474. Lookup ID: lookup_017889
+   Represents 1 comment(s)
+   QUOTE: "I strongly urge rejection of the proposed rule, which is a transparent attempt to deprive workers of job protections and leave them vulnerable to the vengeful whims of a mercurial president."
+   MATCH INFO: Found partial match in sentence 1: i strongly urge rejection of the proposed rule, which is a transparent attempt to deprive workers of job protections and leave them vulnerable to the vengeful whims of a mercurial president who is in no way concerned about the welfare of americans or the nation
+----------------------------------------
+
+1475. Lookup ID: lookup_017890
+   Represents 1 comment(s)
+   QUOTE: "American excellence is built on our long history of nonpartisan support for scientific inquiry and research, which benefits all of us, regardless of political party, as well as the rest of the world."
+   MATCH INFO: Found similar (not exact): officers. american excellence is built on our long history of nonpartisan support for scientific inquiry and research, which benefits all of us, regardless of political party, as well as the rest of the world. it is wel
+----------------------------------------
+
+1476. Lookup ID: lookup_017897
+   Represents 1 comment(s)
+   QUOTE: "I recognize the abuse that reclassification of civil servants to, for all intents and purposes, 'at will' status would invite."
+   MATCH INFO: Found partial match in sentence 2: however, i recognize the abuse that reclassification of civil servants to, for all intents and purposes, “at will” status would invite
+----------------------------------------
+
+1477. Lookup ID: lookup_017914
+   Represents 1 comment(s)
+   QUOTE: "please leave the system of choosing real scientists and doctors to be the heads of these institutes to run the actual work they are doing towards improving American health."
+   MATCH INFO: Found partial match in sentence 9: in closing, already enough damage has been done at the highest levles of leadership - please leave the system of choosing real scientsts and doctrs to be the heads of these institutes to run the actual work they are doing towards imoroving american health
+----------------------------------------
+
+1478. Lookup ID: lookup_017924
+   Represents 1 comment(s)
+   QUOTE: "I believe the reclassification of the career civil service employees such as NIH... would politicize the NIH, reduce public trust in Federally-funded science, and reduce our ability to identify future cures for diseases that impact all Americans, regardless of political ideology."
+   MATCH INFO: Found partial match in sentence 1: office of personnel management, docket id: opm-2025-0004 i believe the reclassification of the career civil service employees such as nih who participate in the development of funding announcements and oversee the review of grant applications, to schedule f would politicize the nih, reduce public trust in federally-funded science, and reduce our ability to identify future cures for diseases that impact all americans, regardless of political ideology
+----------------------------------------
+
+1479. Lookup ID: lookup_017927
+   Represents 1 comment(s)
+   QUOTE: "This change would negatively impact the nonpartisan aspect of federal government employment, making agency operations unstable, ineffective, and result in the loss of requisite institutional knowledge."
+   MATCH INFO: Found similar (not exact):  applies. this change would negatively impact the nonpartisan aspect of federal government employment, making agency operations unstable, ineffective, and result in the loss of requisite institutional knowledge.
+----------------------------------------
+
+1480. Lookup ID: lookup_017943
+   Represents 1 comment(s)
+   QUOTE: "I urge this committee to reject Schedule F. It has no place in a well-functioning government. It does, however, serve the interest of an authoritarian government."
+   MATCH INFO: Found similar (not exact): n the us. i urge this committee to reject schedule f. it has no place in a well-functioning government. it does, however, serve the interest of an authoritarian government. we americ
+----------------------------------------
+
+1481. Lookup ID: lookup_017946
+   Represents 1 comment(s)
+   QUOTE: "Please see my attached, uploaded comments. Thank you!"
+   MATCH INFO: Found similar (not exact): please see my attached, uploaded comments. thank you!
+----------------------------------------
+
+1482. Lookup ID: lookup_017950
+   Represents 1 comment(s)
+   QUOTE: "This policy is clearly aimed at interfering with usual governmental functions and with overt politicalization of government jobs."
+   MATCH INFO: Found partial match in sentence 5: " the policy is clearly aimed at interfering with usual governmental functions and with overt politicalization of government jobs
+----------------------------------------
+
+1483. Lookup ID: lookup_017961
+   Represents 1 comment(s)
+   QUOTE: "Our government bureaucracy should be hired and fired based on their skills, and definitely not their political affiliation, which will lead to corruption and incompetency and inability to get things done for the people of the united states."
+   MATCH INFO: Found partial match in sentence 2: our government bureaucracy should be hired and fired based on their skills, and definitely not their political affiliation, which will lead to corruption and incompetency and inability to get things done for the people of the united states (as seen by our current administration’s actions) keep our agencies and their leaders insulated from political disruption so they can do their job
+----------------------------------------
+
+1484. Lookup ID: lookup_017979
+   Represents 1 comment(s)
+   QUOTE: "This plan would dramatically politicize the work of research and science by reclassifying tens of thousands of government jobs as 'policymaking positions,' subjecting them to presidential appointment."
+   MATCH INFO: Found partial match in sentence 2: this plan would dramatically politicize the work of research and science by reclassifying tens of thousands of government jobs as “policymaking positions," subjecting them to presidential appointment
+----------------------------------------
+
+1485. Lookup ID: lookup_017983
+   Represents 1 comment(s)
+   QUOTE: "This is a very dangerous precedent to set with increasing politicization of institutions that should NOT be politicized, not to mention interruption of longer-term planning and replacement of true experts with political favorites."
+   MATCH INFO: Found partial match in sentence 2: this is a very dangerous precedent to set with increasing politicization of institutions that should not be politicized, not to mention interruption of longer-term planning and replacement of true experts with political favorites (as we have already seen in the currently politically appointed roles) particularly as it relates to scientific review, introducing politics into this realm will severely jeopardize the process of identifying applications worthy of funding due to scientific merit as opposed to someone's personal or political beliefs and lead to junk science that does not improve and may hurt human health and progress
+----------------------------------------
+
+1486. Lookup ID: lookup_017988
+   Represents 1 comment(s)
+   QUOTE: "Implementing Schedule F would introduce harmful political instability, leading to: Erosion of the merit-based grant review process at NIH, including NEI; Undermining of evidence-based policymaking in health and science; Disruption of career pathways for young scientists in public service; Loss of experienced staff and institutional knowledge at federal agencies."
+   MATCH INFO: Found similar (not exact):  process. implementing schedule f would introduce harmful political instability, leading to: erosion of the merit-based grant review process at nih, including nei; undermining of evidence-based policymaking in health and science; disruption of career pathways for young scientists in public service; loss of experienced staff and institutional knowledge at federal agencies. scientifi
+----------------------------------------
+
+1487. Lookup ID: lookup_017990
+   Represents 1 comment(s)
+   QUOTE: "Changing from the selection of qualified scientific personnel to partisan, political appointees without the appropriate scientific/medical/institutional experience will significantly degrade the ability of the NIH to identify new research priority areas, create grant funding announcements, conduct grant reviews, and decide which grants to fund based on their scientific merit, rather than their alignment with a political agenda."
+   MATCH INFO: Found partial match in sentence 4: changing from the selection of qualified scientific personnell to partisan, political appointees without the appropriate scientific/medical/institutional experience will significantly degrade the ability of the nih to identify new research priority areas, create grant funding announcements, conduct grant reviews, and decide which grants to fund based on their scientific merit, rather than their alignment with a political agenda
+----------------------------------------
+
+1488. Lookup ID: lookup_018013
+   Represents 1 comment(s)
+   QUOTE: "I am deeply concerned about this proposed rule and its potential to threaten the integrity of federal grants aimed at supporting scientific discovery, biomedical research, and clinical trials."
+   MATCH INFO: Found partial match in sentence 5: i am deeply concerned about this proposed rule and its potential to threaten the integrity of federal grants aimed at supporting scientific discovery, biomedical research, and clinical trials this rule appears to be a direct attempt to implement a tool that would systematically impose political influence over the grant making and grant awarding process
+----------------------------------------
+
+1489. Lookup ID: lookup_018032
+   Represents 1 comment(s)
+   QUOTE: "The naked aim of the Proposed Rule is to strip job protections away from civil servants and allow an administration wedded to the 'unitary executive' theory immediate control of their employment and the ability to punish these servants for perceived inadequate loyalty."
+   MATCH INFO: Found partial match in sentence 3: the naked aim of the proposed rule is to strip job protections away from civil servants and allow an administration wedded to the "unitary executive" theory immediate control of their employment and the ability to punish these servants for perceived inadequate loyalty
+----------------------------------------
+
+1490. Lookup ID: lookup_018058
+   Represents 1 comment(s)
+   QUOTE: "I do not believe that the directors at NIH and other research and medical facing positions should be changed to politically appointed ones."
+   MATCH INFO: Found partial match in sentence 2: as a scientist and citizen, i do not believe that the s directors at nih and other research and medical facing positions should be changed to politically appointed ones
+----------------------------------------
+
+1491. Lookup ID: lookup_018062
+   Represents 1 comment(s)
+   QUOTE: "I believe the reclassification of the career civil service employees such as NIH... would politicize the NIH, reduce public trust in Federally-funded science, and reduce our ability to identify future cures for diseases that impact all Americans, regardless of political ideology."
+   MATCH INFO: Found partial match in sentence 1: office of personnel management 5 cfr parts 210, 212, 213, 302, 432, 451, and 752 [docket id: opm-2025-0004] rin 3206-ao80 i believe the reclassification of the career civil service employees such as nih , who participate in the development of funding announcements and oversee the the review of grant applications, as schedule f, would politicize the nih, reduce public trust in federally-funded science, and reduce our ability to identify future cures for diseases that impact all americans, regardless of political ideology
+----------------------------------------
+
+1492. Lookup ID: lookup_018069
+   Represents 1 comment(s)
+   QUOTE: "scientists should not be political appointees. Please reject this."
+   MATCH INFO: Found similar (not exact): no no no. scientists should not be political appointees. please reject this. we need s
+----------------------------------------
+
+1493. Lookup ID: lookup_018074
+   Represents 1 comment(s)
+   QUOTE: "The proposed rule's mechanism—at-will employment for career 'policy-influencing' positions—poses a significant risk to the integrity, impartiality, and effectiveness of the federal civil service, thereby undermining the public's trust and negatively impacting everyday Americans."
+   MATCH INFO: Found partial match in sentence 25: in conclusion, while the stated aim is to increase accountability, the proposed rule's mechanism-at-will employment for career "policy-influencing" positions-poses a significant risk to the integrity, impartiality, and effectiveness of the federal civil service, thereby undermining the public's trust and negatively impacting everyday americans
+----------------------------------------
+
+1494. Lookup ID: lookup_018076
+   Represents 1 comment(s)
+   QUOTE: "The proposed Schedule F changes will gut the independence of our leading science administrators, most of whom are world renowned scientists."
+   MATCH INFO: Found similar (not exact):  the nih. the proposed schedule f changes will gut the independence of our leading science administrators, most of whom are world renowned scientists. if you wa
+----------------------------------------
+
+1495. Lookup ID: lookup_018081
+   Represents 1 comment(s)
+   QUOTE: "We need politics out of medicine and it's related research. The NIH is one our country's most valuable institutions and changing it for political reasons is dangerous."
+   MATCH INFO: Found similar (not exact):  the nih. we need politics out of medicine and it's related research. the nih is one our country's most valuable institutions and changing it for political reasons is dangerous. our count
+----------------------------------------
+
+1496. Lookup ID: lookup_018082
+   Represents 1 comment(s)
+   QUOTE: "This proposed new regulation would inject political interference into the research grant assessment and award process and destroy the scientific integrity of the federal grant award process."
+   MATCH INFO: Found partial match in sentence 3: this proposed new regulation would inject political interference into the research grant assessment and award process and destroy the scientific integrity of the federal grant award process and thereby devastate the most successful biomedical research program in the world and prevent the development of new cures and treatments for cancers and other diseases that adversely affect the health of americans
 ----------------------------------------
 
