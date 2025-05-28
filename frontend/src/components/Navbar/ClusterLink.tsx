@@ -8,7 +8,7 @@ type ClusterLinkProps = {
 };
 
 const ClusterLink: React.FC<ClusterLinkProps> = ({ className = "", onClick, tabIndex }) => (
-  (false && <Link
+  <Link
     href="/clusters"
     className={`flex items-center bg-white/20 px-3 py-1.5 rounded hover:bg-white/30 transition-colors ${className}`}
     onClick={onClick}
@@ -35,7 +35,7 @@ const ClusterLink: React.FC<ClusterLinkProps> = ({ className = "", onClick, tabI
       <line x1="19" y1="5" x2="19" y2="19" />
     </svg>
     Clusters
-  </Link>)
+  </Link>
 );
 
 export default ClusterLink; 
