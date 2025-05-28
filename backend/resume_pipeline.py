@@ -715,11 +715,8 @@ def main():
         logger.info(f"\n=== STEP 6: Creating Merged data.json ===")
         from backend.utils.merge_lookup_to_raw import merge_lookup_to_raw
         
-        # Use the clustered file if clustering was done, otherwise use the base lookup table
-        if not args.skip_clustering and n_entries >= 2:
-            lookup_for_merge = output_lookup_table_path.replace('.json', '_clustered.json')
-        else:
-            lookup_for_merge = output_lookup_table_path
+        # Always use the base lookup table (clustering updates it in place)
+        lookup_for_merge = output_lookup_table_path
             
         output_data_path = os.path.join(args.output_dir, 'data.json')
         merge_lookup_to_raw(output_raw_data_path, lookup_for_merge, output_data_path)
@@ -765,7 +762,6 @@ def main():
             logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.json'))}")
             logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.txt'))}")
         if not args.skip_clustering and n_entries >= 2:
-            logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_clustered.json'))} (with clustering)")
             logger.info(f"   - cluster_report.txt")
             logger.info(f"   - clusters_visualization.png")
             logger.info(f"   - dendrogram.png")

@@ -7,10 +7,8 @@ echo ""
 # Determine data file to use
 if [ -n "$1" ]; then
     DATA_FILE="$1"
-elif [ -f "../data/analyzed_lookup_table.json" ]; then
-    DATA_FILE="../data/analyzed_lookup_table.json"
-elif [ -f "../data/lookup_table.json" ]; then
-    DATA_FILE="../data/lookup_table.json"
+elif [ -f "../data/lookup_table_corrected.json" ]; then
+    DATA_FILE="../data/lookup_table_corrected.json"
 else
     echo "❌ Error: No lookup table file found"
     echo ""
