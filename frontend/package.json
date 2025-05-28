@@ -6,18 +6,15 @@
     "dev": "npm run db:ensure:local && DB_ENV=local next dev",
     "dev:no-docker": "DB_ENV=preprod next dev",
     "dev:dangerously_use_prod_db": "DB_ENV=prod next dev",
-    
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
     "db:switch": "tsx scripts/switch-db.ts",
-    
     "db:use:local": "tsx scripts/switch-db.ts local",
-    "db:use:preprod": "tsx scripts/switch-db.ts preprod", 
+    "db:use:preprod": "tsx scripts/switch-db.ts preprod",
     "db:use:prod": "tsx scripts/switch-db.ts prod",
-
     "db:ensure:local": "tsx scripts/ensure-local-db.ts",
     "docker:start": "tsx scripts/ensure-local-db.ts",
     "docker:stop": "tsx scripts/docker-stop.ts",
@@ -25,22 +22,17 @@
     "docker:reset": "npm run docker:clean && docker volume rm schedule-f-postgres-data",
     "docker:status": "docker ps --filter name=schedule-f-postgres",
     "db:status": "tsx scripts/db-status.ts",
-
     "db:seed:local": "npm run db:ensure:local && DB_ENV=local tsx src/lib/db/seed.ts",
     "db:seed:preprod": "DB_ENV=preprod tsx src/lib/db/seed.ts",
     "db:seed:prod": "DB_ENV=prod tsx src/lib/db/seed.ts",
-
     "db:migrate:local": "npm run db:ensure:local && DB_ENV=local drizzle-kit migrate",
     "db:migrate:preprod": "DB_ENV=preprod drizzle-kit migrate",
     "db:migrate:prod": "DB_ENV=prod drizzle-kit migrate",
-
     "db:push:local": "npm run db:ensure:local && DB_ENV=local drizzle-kit push",
     "db:push:preprod": "DB_ENV=preprod drizzle-kit push",
     "db:push:prod": "DB_ENV=prod drizzle-kit push",
-
     "studio": "npm run db:ensure:local && DB_ENV=local drizzle-kit studio",
     "studio:preprod": "DB_ENV=preprod drizzle-kit studio",
-
     "build:prod": "next build",
     "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts",
     "deploy": "npm run db:use:prod && vercel --prod",
@@ -55,6 +47,7 @@
     "@prisma/client": "^6.8.2",
     "@vercel/analytics": "^1.5.0",
     "axios": "^1.9.0",
+    "d3": "^7.9.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "minisearch": "^7.1.2",
@@ -73,6 +66,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/d3": "^7.4.3",
     "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/pg": "^8.10.9",
