@@ -6,18 +6,6 @@ export const metadata: Metadata = {
   title: 'Comment Clusters - Schedule F Analysis',
   description: 'Visualization of comment clusters using PCA analysis',
 };
-
-// export const dynamic = 'force-static';
-
-// export const revalidate = 86400; // 24 hours
-
-// Pre-generate both sampled and full versions at build time
-export async function generateStaticParams() {
-  return [
-    { full: undefined }, // Default (sampled) version
-    { full: 'true' },    // Full data version
-  ];
-}
 // Allow users to control sampling via URL parameter
 export default async function ClustersPage() {
   // Check if user wants full data (no sampling)
@@ -42,8 +30,6 @@ export default async function ClustersPage() {
     );
   }
 
-  // Convert Map to a serializable array of [key, value] pairs
-  const serializableClusters = Array.from(clusterResponse.data.clusters.entries());
   const displayData = clusterResponse.data;
 
   return (
