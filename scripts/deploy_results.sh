@@ -187,9 +187,9 @@ if [ "$USE_DATA_BRANCH" = true ]; then
         fi
     fi
     
-    # Stash any uncommitted changes (not in data/)
+    # Stash ALL uncommitted changes (including data/)
     echo "📦 Stashing any uncommitted changes..."
-    STASH_OUTPUT=$(git stash push -m "deploy_results temporary stash" -- . ':!data/')
+    STASH_OUTPUT=$(git stash push -m "deploy_results temporary stash")
     STASHED=false
     if [[ "$STASH_OUTPUT" != *"No local changes to save"* ]]; then
         STASHED=true
@@ -216,6 +216,12 @@ if [ "$USE_DATA_BRANCH" = true ]; then
             git stash pop
         fi
         exit 1
+    fi
+    
+    # Restore stashed changes so we can commit them
+    if [ "$STASHED" = true ]; then
+        echo "📦 Restoring stashed changes..."
+        git stash pop
     fi
 fi
 
