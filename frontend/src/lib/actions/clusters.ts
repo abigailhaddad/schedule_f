@@ -19,7 +19,7 @@ export interface ClusterPoint {
 }
 
 export interface ClusterData {
-  clusters: Map<number, ClusterPoint[]>;
+  clusters: Array<[number, ClusterPoint[]]>; // Changed from Map to Array
   bounds: {
     minX: number;
     maxX: number;
@@ -62,7 +62,7 @@ interface RawClusterPointRow {
   keyquote?: string | null;
 }
 
-export async function getClusterData(sampleData: boolean = true): Promise<ClusterDataResponse> {
+export async function getClusterData(sampleData: boolean = false): Promise<ClusterDataResponse> {
   const fetchClusterData = async () => {
     try {
       const connection = await connectDb();
@@ -142,8 +142,8 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
           .execute();
       }
 
-      // Group by cluster ID
-      const clusters = new Map<number, ClusterPoint[]>();
+      // Group by cluster ID using a Map internally
+      const clustersMap = new Map<number, ClusterPoint[]>();
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
       result.forEach((row: RawClusterPointRow) => {
@@ -158,10 +158,10 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
           themes: row.themes,
         };
 
-        if (!clusters.has(point.clusterId)) {
-          clusters.set(point.clusterId, []);
+        if (!clustersMap.has(point.clusterId)) {
+          clustersMap.set(point.clusterId, []);
         }
-        clusters.get(point.clusterId)!.push(point);
+        clustersMap.get(point.clusterId)!.push(point);
 
         // Update bounds
         minX = Math.min(minX, point.pcaX);
@@ -170,10 +170,13 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
         maxY = Math.max(maxY, point.pcaY);
       });
 
+      // Convert Map to Array for serialization
+      const clustersArray = Array.from(clustersMap.entries());
+
       return {
         success: true,
         data: {
-          clusters,
+          clusters: clustersArray,
           bounds: { minX, maxX, minY, maxY },
           isSampled: shouldSample,
           totalPoints: totalPointsCount,
@@ -191,8 +194,8 @@ export async function getClusterData(sampleData: boolean = true): Promise<Cluste
   };
 
   // Use caching in production
-  //const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
-  const shouldSkipCache = false;
+  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  
   if (shouldSkipCache) {
     return fetchClusterData();
   }
@@ -276,4 +279,3 @@ export async function getClusterStats(): Promise<{
   
   return getCachedStats();
 }
-
