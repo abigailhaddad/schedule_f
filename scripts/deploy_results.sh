@@ -91,6 +91,31 @@ if ! git diff --quiet data/ || ! git diff --cached --quiet data/; then
 else
     echo "✅ No uncommitted changes in data/"
 fi
+
+# Check if comments.csv has changes
+if ! git diff --quiet comments.csv || ! git diff --cached --quiet comments.csv; then
+    echo "📝 Uncommitted changes in comments.csv"
+fi
+
+# Check for other changes
+OTHER_CHANGES=$(git status -s | grep -v "^.. data/" | grep -v "^.. comments.csv" | wc -l)
+if [ "$OTHER_CHANGES" -gt 0 ]; then
+    echo ""
+    echo "📝 Other uncommitted changes:"
+    git status -s | grep -v "^.. data/" | grep -v "^.. comments.csv" | head -10
+    if [ "$OTHER_CHANGES" -gt 10 ]; then
+        echo "... and $(($OTHER_CHANGES - 10)) more files"
+    fi
+    
+    echo ""
+    if ask_yes_no "Would you like to include these other changes in the commit" "n"; then
+        INCLUDE_OTHER_CHANGES=true
+    else
+        INCLUDE_OTHER_CHANGES=false
+    fi
+else
+    INCLUDE_OTHER_CHANGES=false
+fi
 echo ""
 
 # Ask for commit message
@@ -162,9 +187,9 @@ if [ "$USE_DATA_BRANCH" = true ]; then
         fi
     fi
     
-    # Stash any uncommitted changes (not in data/)
+    # Stash ALL uncommitted changes (including data/)
     echo "📦 Stashing any uncommitted changes..."
-    STASH_OUTPUT=$(git stash push -m "deploy_results temporary stash" -- . ':!data/')
+    STASH_OUTPUT=$(git stash push -m "deploy_results temporary stash")
     STASHED=false
     if [[ "$STASH_OUTPUT" != *"No local changes to save"* ]]; then
         STASHED=true
@@ -192,11 +217,25 @@ if [ "$USE_DATA_BRANCH" = true ]; then
         fi
         exit 1
     fi
+    
+    # Restore stashed changes so we can commit them
+    if [ "$STASHED" = true ]; then
+        echo "📦 Restoring stashed changes..."
+        git stash pop
+    fi
 fi
 
-# Add all changes in data/
-echo "📝 Staging data/ changes..."
+# Stage files
+echo "📝 Staging files..."
 git add data/
+git add comments.csv
+
+# Add other changes if requested
+if [ "$INCLUDE_OTHER_CHANGES" = true ]; then
+    echo "📝 Staging other changes..."
+    # Add all other modified files (not untracked)
+    git add -u
+fi
 
 # Check if there are changes to commit
 if git diff --staged --quiet; then
