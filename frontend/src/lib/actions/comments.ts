@@ -2,7 +2,7 @@
 
 import { db, connectDb } from '@/lib/db';
 import { Comment} from '@/lib/db/schema';
-import { QueryOptions, buildCommentsQuery, buildStatsQueries, buildTimeSeriesQuery } from '../queryBuilder';
+import { QueryOptions, buildCommentsQuery, buildStatsQueries, buildTimeSeriesQuery, buildRelatedCommentsQuery } from '../queryBuilder';
 import { getCachedData } from '../cache';
 import { unstable_cache } from 'next/cache';
 import { cacheConfig } from '../cache-config';
@@ -399,6 +399,47 @@ export async function getCommentById(
         return { 
           success: false, 
           error: `Failed to fetch comment: ${errorMessage}` 
+        };
+      }
+    }
+  );
+}
+
+
+/**
+ * Fetches related comments through the lookup table
+ */
+export async function getRelatedComments(
+  lookupId: string
+): Promise<{ success: boolean; data?: Comment[]; error?: string }> {
+  const cacheKey = `related-comments-${lookupId}`;
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      try {
+        const connection = await connectDb();
+        if (!connection.success) {
+          throw new Error("Failed to connect to database");
+        }
+
+        // Get the related comments through the lookup table
+        const result = await buildRelatedCommentsQuery(lookupId);
+
+        if (!result.relatedComments || result.relatedComments.length === 0) {
+          return { success: true, data: [] };
+        }
+
+        return {
+          success: true,
+          data: result.relatedComments as Comment[]
+        };
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Error fetching related comments:", errorMessage);
+        return { 
+          success: false, 
+          error: `Failed to fetch related comments: ${errorMessage}` 
         };
       }
     }
