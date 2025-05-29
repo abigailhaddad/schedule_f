@@ -1,0 +1,541 @@
+{
+  "total_lookup_entries": 480,
+  "entries_with_quotes": 480,
+  "quotes_found_exact": 432,
+  "quotes_found_similar": 42,
+  "quotes_not_found": 6,
+  "verification_rate": 98.8,
+  "total_comments_represented": 500,
+  "problematic_quotes": [
+    {
+      "lookup_id": "lookup_000125",
+      "comment_count": 2,
+      "comment_ids": [
+        "OPM-2025-0004-0127",
+        "OPM-2025-0004-0128"
+      ],
+      "quote": "This rule would dangerously politicize the career civil service, subverting the merit principles codified in the Civil Service Reform Act of 1978 (CSRA) and undermining constitutional protections that guard against arbitrary and politically motivated employment actions.",
+      "truncated_text": "I write in strong opposition to the proposed rule titled *\"Restoring Accountability to Policy-Influencing Positions Within the Federal Workforce\"* (Docket ID: OPM-2025-0004-0001). Far from promoting accountability, this rule would dangerously politicize the career civil service, subverting the merit principles codified in the **Civil Service Reform Act of 1978 (CSRA)** and undermining constitutional protections that guard against arbitrary and politically motivated employment actions.\n\nThis proposed rule directly conflicts with the core mandates of the **CSRA (5 U.S.C. \u00a7\u00a7 1101 et seq.)**, which enshrines merit system principles as the bedrock of federal employment. Section 2301(b)(8) of the CSRA specifically provides that \u201cemployees should be protected against arbitrary action, personal favoritism, or coercion for partisan political purposes.\u201d The Schedule F framework contemplated by this rule would strip due process protections from potentially thousands of career civil...",
+      "match_info": "Found partial match in sentence 2: far from promoting accountability, this rule would dangerously politicize the career civil service, subverting the merit principles codified in the **civil service reform act of 1978 (csra)** and undermining constitutional protections that guard against arbitrary and politically motivated employment actions",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000008",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0009"
+      ],
+      "quote": "This proposal, by stripping numerous civil servants of their tenure protections, blatantly violates that rule.",
+      "truncated_text": "\u202c\n\u202d The\u202c\u202d CSRA\u202c\u202d bars\u202c\u202d expanding\u202c\u202d the\u202c\u202d confidential\u202c\u202d and\u202c\u202d policymaking\u202c\u202d designation\u202c\u202d beyond\u202c\u202d political\u202c\n\u202d appointees.\u202c Federal\u202c\u202d civil\u202c\u202d servants,\u202c\u202d once\u202c\u202d granted\u202c\u202d CSRA\u202c\u202d protections,\u202c\u202d may\u202c\u202d not\u202c\u202d be\u202c\u202d fired\u202c\u202d (or\u202c\n\u202d otherwise\u202c\u202d deprived\u202c\u202d of\u202c\u202d their\u202c\u202d CSRA\u202c\u202d rights)\u202c\u202d without\u202c\u202d procedures\u202c\u202d closely\u202c\u202d tracking\u202c\u202d those\u202c\u202d the\u202c\n\u202d CSRA\u202c\u202d requires.\u202c\u202d This proposal,\u202c\u202d by\u202c\u202d stripping numerous\u202c\u202d civil\u202c\u202d servants\u202c\u202d of\u202c\u202d their\u202c\u202d tenure\u202c\n\u202d protections, blatantly violates that rule.\u202c",
+      "match_info": "Not found in truncated text",
+      "match_type": "not_found"
+    },
+    {
+      "lookup_id": "lookup_000015",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0016"
+      ],
+      "quote": "Converting scientific positions into political appointees makes no more sense that hiring firefighters, waiters, or plumbers because of their favorite color - it's irrelevant and can have only one possible effect on science: it will hinder progress and waste money.",
+      "truncated_text": "Converting scientific positions into political appointees makes no more sense that hiring firefighters, waiters, or plumbers because of their favorite color - it's irrelevant and can have only one possible effect on science: it will hinder progress and waste money (because appointees will spend tax dollars on poorly-conceived, outdated, impossible, or already-addressed scientific directions). The US is a world-leader in science - everyone agrees that we lead the way in nearly all domains. That dominance is due to continued, long term smart investment in science and scientists. Political appointees in this domain would constitute a shockingly wasteful and partisan change. Because science touches all our lives in terms of medicine, business, policy, agriculture, policing, technology, weather, immigration, the economy, and so much more, this will quite literally eventually cost lives. Political appointees do not belong at the NSF.",
+      "match_info": "Found partial match in sentence 1: converting scientific positions into political appointees makes no more sense that hiring firefighters, waiters, or plumbers because of their favorite color - it's irrelevant and can have only one possible effect on science: it will hinder progress and waste money (because appointees will spend tax dollars on poorly-conceived, outdated, impossible, or already-addressed scientific directions)",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000023",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0024"
+      ],
+      "quote": "I am writing to express significant concerns regarding the section of the proposed rule that designates employees with 'substantive participation and discretionary authority in agency grantmaking' as potentially occupying 'policymaking positions' that could be reclassified under Schedule Policy/Career.",
+      "truncated_text": "Comment on Proposed Rule: \"Improving Performance, Accountability and Responsiveness in the Civil Service\" (Docket Number: RIN 3206-AO72)\n\nIntroduction\n\nI am submitting this comment as an academic physician-scientist with more than a decade of experience conducting NIH-funded research at Massachusetts General Hospital with appointments at Harvard Medical School and Harvard T.H. Chan School of Public Health. As a researcher with extensive experience in the NIH grant system, I am writing to express significant concerns regarding the section of the proposed rule that designates employees with \"substantive participation and discretionary authority in agency grantmaking\" as potentially occupying \"policymaking positions\" that could be reclassified under Schedule Policy/Career.\n\nSpecific Concerns with the Proposed Rule\n\nThe proposed rule identifies grant-making as \"an important form of policymaking\" and suggests that employees with \"substantive discretionary role in how federal funding gets...",
+      "match_info": "Found partial match in sentence 4: as a researcher with extensive experience in the nih grant system, i am writing to express significant concerns regarding the section of the proposed rule that designates employees with \"substantive participation and discretionary authority in agency grantmaking\" as potentially occupying \"policymaking positions\" that could be reclassified under schedule policy/career",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000046",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0048"
+      ],
+      "quote": "The proposed rule incorrectly considers positions 'held accountable for the success of one or more specific programs or projects' as having a policy-making or policy-determining nexus.",
+      "truncated_text": "The proposed rule encompasses far more than the policy determining and policy-making roles it intends to target. The proposed rule incorrectly considers positions \u201cheld accountable for the success of one or more specific programs or projects\u201d as having a policy-making or policy-determining nexus. While some projects and programs may be of a policy-influencing nature, the proposed test that a project or program lead is merely held accountable for the project or program success is insufficient to determine a policy nexus. For example, a project that installs new telecom equipment in an office building would be a project with no policy-making or policy-determining nexus, but under the pay for performance principles established for federal employees, the project manager would be held accountable for the cost, schedule and performance of the project.\n\nUnder the proposed rule, such employees would be considered for Schedule Policy/Career, despite not having a policy-influencing nexus. The...",
+      "match_info": "Found partial match in sentence 2: the proposed rule incorrectly considers positions \u201cheld accountable for the success of one or more specific programs or projects\u201d as having a policy-making or policy-determining nexus",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000053",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0055"
+      ],
+      "quote": "I oppose this action. Trump and this regime are targeting civil servants and the services they provide to all Americans.",
+      "truncated_text": "I oppose this action.  Trump and this regime are targeting civil servants and the services they provide to all Americans. They want government to work only for the rich, or not at all. This is not about efficiency,  but another way to hurt our institutions and people for the gain of their cronies. Do not reclassify federal employees.",
+      "match_info": "Found similar (not exact): i oppose this action. trump and this regime are targeting civil servants and the services they provide to all americans. they want",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000075",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0077"
+      ],
+      "quote": "Schedule F undermines the Pendleton Civil Service Reform Act of 1883 by increasing risk for politically-motivated hiring and firing and interfering with decision making based on merit.",
+      "truncated_text": "Schedule F undermines the Pendleton Civil Service Reform Act of 1883 by\nincreasing risk for politically-motivated hiring and firing and interfering with decision making based on merit. It also\ncompromises integrity by not supporting merit system principles and threatens civil service independence. The rule violates congressional intent, such as protections that shield employees in the Whistleblower Protection Act. The rule has many legal and ethical challenges that interfere with America's democratic principles.",
+      "match_info": "Found similar (not exact): schedule f undermines the pendleton civil service reform act of 1883 by increasing risk for politically-motivated hiring and firing and interfering with decision making based on merit. it also c",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000100",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0102"
+      ],
+      "quote": "The 'Security Policy/Career' rule is an attack on the nonpartisan civil service... it could lead to highly qualified employees being replaced by political cronies and family members of politicians.",
+      "truncated_text": "Office of Personnel Management - Docket ID: OPM-2025-0004\n\nThe \"Security Policy/Career\" rule is an attack on the nonpartisan civil service is a threat not only to these workers' livelihoods, but also to the fair and impartial delivery of government services to the American people since it could lead to highly qualified employees being replaced by political cronies and family members of politicians.  \n\nOur country deserves a competent, nonpartisan civilian workforce that holds the trust of the American people. I strongly oppose this rule.",
+      "match_info": "Found partial match in sentence 1: office of personnel management - docket id: opm-2025-0004 the \"security policy/career\" rule is an attack on the nonpartisan civil service is a threat not only to these workers' livelihoods, but also to the fair and impartial delivery of government services to the american people since it could lead to highly qualified employees being replaced by political cronies and family members of politicians",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000112",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0114"
+      ],
+      "quote": "I write in strong opposition to the 'Schedule F' classification as it threatens the merit-based civil service system that the nonpartisan federal workforce has been built upon for over a hundred years.",
+      "truncated_text": "I write in strong opposition to the \"Schedule F\" classification as it threatens the merit-based civil service system that the nonpartisan federal workforce has been built upon for over a hundred years. The Pendleton Civil Service Reform Act of 1883 was specifically enacted to make the move from a spoils system to the current merit-based practice we have today. Reclassifying employees as Schedule F opens the door to politically motivated career actions, which flies in the face of the principles of a nonpartisan federal workforce. Specifically, I reference 5 U.S.C. \u00a7 2301(b)(8), which requires federal employment decisions to be based on MERIT and be free from political influence. Given this administration's emphasis on merit-based hiring, Schedule F seems antithetical to its own priorities.\n\nAdditionally, the broad criteria used for the classification of an employee under Schedule F would also violate due process protections for career federal employees guaranteed by 5 U.S.C. \u00a7 7513....",
+      "match_info": "Found partial match in sentence 1: i write in strong opposition to the \"schedule f\" classification as it threatens the merit-based civil service system that the nonpartisan federal workforce has been built upon for over a hundred years",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000116",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0118"
+      ],
+      "quote": "I am opposed to the proposed rule that would reclassify 50,000 federal workers. This appears to me to be an underhanded way to retaliate against federal employees for purely political reasons.",
+      "truncated_text": "Office of Personnel Management. Docket ID:OPM-2025-0004\n\nI am opposed to the proposed rule that would reclassify 50,000 federal workers.  This appears to me to be an underhanded way to retaliate against federal employees for purely political reasons. Our federal employees  generally work very hard and deserve our support. I do not feel there is merit in this proposed new rule and urge the Office of Personnel Mangement NOT to adopt this proposed reclassification.",
+      "match_info": "Found similar (not exact): 2025-0004 i am opposed to the proposed rule that would reclassify 50,000 federal workers. this appears to me to be an underhanded way to retaliate against federal employees for purely political reasons. our feder",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000117",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0119"
+      ],
+      "quote": "The proposed rule has nothing to do with increasing career employee accountability: There has been no evidence provided that there is problem with accountability.",
+      "truncated_text": "Please see the attached letter.\n\n--- ATTACHMENT CONTENT ---\nBonney, Allenberg, O'Reilly & Eddy, P.C. ATTORNEYS AND COUNSELORS AT LAW Neil C. Bonney 4854 HAYGOOD ROAD, SUITE 200 Charles H: Allenberg VIRGINIA BEACH, VIRGINIA 23455 Amber M: Young PHONE: (757) 460-3477 Sandra J. Hurd Allison B. Eddy FAX: (757) 460-5387 Paralegals Cameron Bonney Evans BAOFEDLAWcom April 25, 2025 Allen Brooks Acting Deputy Associate Director U.S. Office of Personnel Management Accountability and Workforce Relations U.S. Office of Personnel Management RE: Amendments to Regulations in Title 5, Code of Federal Regulations Proposed Rule: 5 CFR Parts 210,.212,213,302, 432,451 and 752 Docket Number: OPM-2025-0004 RIN 3206-A080 Dear Director Brooks, Please accept this letter as my comment 0 the proposed rule identified above The proposed rule has nothing to do with increasing career employee accountability: There has been no evidence provided that there is problem with   accountability:  Presumably,...",
+      "match_info": "Found partial match in sentence 12: 212,213,302, 432,451 and 752 docket number: opm-2025-0004 rin 3206-a080 dear director brooks, please accept this letter as my comment 0 the proposed rule identified above the proposed rule has nothing to do with increasing career employee accountability: there has been no evidence provided that there is problem with accountability: presumably,",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000131",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0134"
+      ],
+      "quote": "Title 5 3132 states that: Senior Executive Service position' means any position in an agency which is in GS-16, 17, or 18 of the General Schedule or in level IV or V of the Executive Schedule or an equivalent position, which is not required to be filled by an appointment by the President by and with the advice and consent of the Senate, and in which an employee--",
+      "truncated_text": "Title 5 3132 states that:\n\n Senior Executive Service position' means any position in an agency which is in\nGS-16, 17, or 18 of the General Schedule or in level IV or V of the Executive\nSchedule\nor an equivalent position, which is not required to be filled by an appointment by the\nPresident by and with the advice and consent of the Senate, and in which an\nemployee--\n,\n\"(A) directs the work of an organizational unit;\n\"(B) is held accountable for the success of one or more specific programs or projects;\n\"(C) monitors progress toward organizational goals and periodically evaluates and\nmakes appropriate adjustments to such goals;\n\"(D) supervises the work of employees other than personal assistants; or\n\"(E) otherwise exercises important policy-making, policy-determining, or other\nexecutive functions; \n\nThe Director may, by rule, designate a number of career reserved positions\nwhich is less than the number required by paragraph (1) of this subsection only if the\nDirector determines such...",
+      "match_info": "Found similar (not exact): title 5 3132 states that: senior executive service position' means any position in an agency which is in gs-16, 17, or 18 of the general schedule or in level iv or v of the executive schedule or an equivalent position, which is not required to be filled by an appointment by the president by and with the advice and consent of the senate, and in which an employee-- , \"(a) di",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000144",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0147"
+      ],
+      "quote": "Removing agency employees who have expertise and historical knowledge about their agencies should not be subject to removal at the whim of the Executive.",
+      "truncated_text": "I am a retired Federal employee after 35 years of service. I am afraid that Schedule F will not be used to promote career employee accountability, but instead will be used to bypass the accepted practice and experience that exists in all Federal Agencies. Removing employees for poor performance or misconduct should be allowed, but removing agency employees who have expertise and historical knowledge about their agencies should not be subject to removal at the whim of the Executive. How is it justified that the proposed positions be excepted from adverse action procedures or appeals. These employees should have access to due process at all times. These actions will likely be considered to be unconstitutional.",
+      "match_info": "Found similar (not exact): owed, but removing agency employees who have expertise and historical knowledge about their agencies should not be subject to removal at the whim of the executive. how is it",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000156",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0160"
+      ],
+      "quote": "Deciding on grants should be based on scientific attributes and possible benefits. Those who make those decisions must have deep scientific knowledge to understand the work.",
+      "truncated_text": "Deciding on grants should be based on scientific attributes and possible benefits.  Those who make those decisions must have deep scientific knowledge to understand the work.  Political appointees will not have the required educational background to make fiduciary responsible decisions.  Not only that, safety and health must be prioritized.",
+      "match_info": "Found similar (not exact): deciding on grants should be based on scientific attributes and possible benefits. those who make those decisions must have deep scientific knowledge to understand the work. political",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000170",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0174"
+      ],
+      "quote": "At-will employment makes it far too easy to inject partisan politics and loyalty tests into the process.",
+      "truncated_text": "This rule reclasses federal policy roles\u2014making it easy to fire civil servants without cause. The description alleges that these positions will continue to be nonpartisan, but at-will employment makes it far too easy to inject partisan politics and loyalty tests into the process. \nMy family members who are civil servants have loyally served across multiple administrations, bringing their decades of experience and perspective to the work-- this is the stability we need in government, not the random destruction of the civil service at a whim every 4-8 years. \n\nThis is merely Schedule F 2.0\u2014revived from Trump\u2019s 2020 executive order, only broader. \n\nWe need career officials who follow facts, not party lines. Any other approach creates wasted effort and talent. This affects everything from public health to disaster response to justice.\n\nThere are existing mechanisms in place for performance plans and firing employees who are truly not able to perform in their roles. \n\nThis isn\u2019t about...",
+      "match_info": "Found similar (not exact): isan, but at-will employment makes it far too easy to inject partisan politics and loyalty tests into the process. my family",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000175",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0179"
+      ],
+      "quote": "Civil servants serve the Constitution- NOT the President. Removing civil sevants for following the Constitution is blantant attenpt at a power grab.",
+      "truncated_text": "The regulation makes clear that thes positions will become partisan postions despite the language. Civil servants serve the Constitution- NOT the President.  The President has checks on the office's authority. Removing civil sevants for following the Constitution is blantant attenpt at a power grab.",
+      "match_info": "Not found in truncated text",
+      "match_type": "not_found"
+    },
+    {
+      "lookup_id": "lookup_000176",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0180"
+      ],
+      "quote": "A government that requires people to be 'yes men/women' is not a free democratic government, it is a dictatorship.",
+      "truncated_text": "RIN 3206-AO80.\nI am against this change in how federal employees are classified. This is just an excuse to fire more federal employees. It should not be legal to change how an employee is classified after they have already been hired. Furthermore, a federal employee should not be required to agree with the current administration. This would set the government up to have a bunch of employees be fired with every administrative change. Just because a person does or does not agree with the administration does not necessarily mean they can\u2019t do their job. The U.S. government has operated for over two hundred years with people of different beliefs and values working in various agencies. A government that requires people to be \u201cyes men/women\u201d is not a free democratic government, it is a dictatorship. This potential new policy change on employee classification should NOT be made.",
+      "match_info": "Found partial match in sentence 11: a government that requires people to be \u201cyes men/women\u201d is not a free democratic government, it is a dictatorship",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000182",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0186"
+      ],
+      "quote": "This proposed rule is alarming and detrimental to the operation of our country.",
+      "truncated_text": "As a civil servant this proposed rule is alarming and detrimental to the operation of our country. With political appointees, there is no need to create this schedule of personnel unless the goal is to create a more partisan civil service. Further, by moving career positions into this new schedule, critical roles that subject matter experts fill (at a far reduced rate than they could get in the private sector) would cease being attractive to leading experts. This will create an overall drain that will put the US behind for decades. Additionally, this rule can create high turnover in positions and subject areas that have historically seen stability. This will lead to repeated loss of agency institutional knowledge which is critical to maintain from one administration to the next to keep the country running smoothly.\n\nHow does this rule protect institutional knowledge at the agencies?\nWhat protections are in place to prevent high turnover in positions that will be rescheduled and no...",
+      "match_info": "Found similar (not exact): l servant this proposed rule is alarming and detrimental to the operation of our country. with poli",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000184",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0188"
+      ],
+      "quote": "I don\u2019t believe in altering the rules in order to fire government workers with the knowledge base and experience to do the job.",
+      "truncated_text": "To the Office of Personnel Management re: Docket ID: OPM-2025-0004\u201d or \u201cRIN 3206-AO80\u201d \n\nI don\u2019t believe in altering the rules  in order to fire government workers with the knowledge base and experience to do the job. It is just more chaos created by the newly elected and is very short-sighted. \n\nWe are all so fed up. As an Independent voter, I can see little reason to ever elect a Republican again unless there appears to be somebody in charge.",
+      "match_info": "Found similar (not exact): 206-ao80\u201d i don\u2019t believe in altering the rules in order to fire government workers with the knowledge base and experience to do the job. it is jus",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000193",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0197"
+      ],
+      "quote": "The creation of a 'Schedule Policy/Career' designation for policy-influencing positions, making them at-will and removing standard adverse action procedures and appeal processes, would fundamentally undermine the principles of a nonpartisan and merit-based civil service.",
+      "truncated_text": "Office of Personnel Management Proposed Rule \"Improving Performance, Accountability and Responsiveness in the Civil Service\" - Docket OPM-2025-0004\n\nI am commenting to express my strong and continued opposition to the proposed rule \"Improving Performance, Accountability and Responsiveness in the Civil Service\" as published in the Federal Register (90 FR 17182), Docket OPM-2025-0004.\n\nThe creation of a \"Schedule Policy/Career\" designation for policy-influencing positions, making them at-will and removing standard adverse action procedures and appeal processes, would fundamentally undermine the principles of a nonpartisan and merit-based civil service. This proposed change appears to inject political considerations into personnel decisions, creating an environment where career employees in critical roles could be removed for reasons other than poor performance or misconduct, specifically for perceived disloyalty to an administration's policy directives. This politicization would erode...",
+      "match_info": "Found partial match in sentence 2: the creation of a \"schedule policy/career\" designation for policy-influencing positions, making them at-will and removing standard adverse action procedures and appeal processes, would fundamentally undermine the principles of a nonpartisan and merit-based civil service",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000204",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0208"
+      ],
+      "quote": "\"Failure to do so is grounds for dismissal.\"",
+      "truncated_text": "This order states Schedule Policy/Career employees:\n\n\"are required to faithfully implement administration policies to the best of their ability, consistent with their constitutional oath and the vesting of executive authority solely in the President. Failure to do so is grounds for dismissal.\"\n\nIt also states that:\n\n\"the President will make the final decision about which positions go into Schedule Policy/Career.\"\n\nAnd \"guidance about positions agencies should consider in their Schedule Policy/Career positions\" includes those with:\n\n\"Substantive participation and discretionary authority in agency grantmaking, such as the substantive exercise of discretion in the drafting of funding opportunity announcements, evaluation of grant applications, or recommending or selecting grant recipients. Grantmaking is an important form of policymaking, so employees with a substantive discretionary role in how federal funding gets allocated may occupy policymaking positions.\"\n\nThis indicates that all...",
+      "match_info": "Not found in truncated text",
+      "match_type": "not_found"
+    },
+    {
+      "lookup_id": "lookup_000206",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0210"
+      ],
+      "quote": "I strongly oppose this rulemaking. Despite OPM\u2019s assurances to the contrary, I fear that officials in the current administration, or in a future administration, will exploit Schedule Policy/Career to facilitate 'mass head-count reductions in the federal bureaucracy.'",
+      "truncated_text": "As explained in the attached comment, I am one of the 50,000 federal employees who will be affected by this initiative and strongly oppose it.\n\n--- ATTACHMENT CONTENT ---\nApril 23, 2025\nOffice of Personnel Management\n1900 E Street NW\nWashington, DC 20415-1000\nRe: RIN 3206-AO80, \u201cImproving Performance, Accountability and Responsiveness in the Civil\nService\u201d\nDear OPM,\nI am a career regulatory analyst in the \u201cOffice of Policy\u201d of a federal agency with over 10 years\nof experience in my current position. As one of the 50,000 federal employees who could lose my\njob as a consequence of Schedule Policy/Career, I strongly oppose this rulemaking. Despite\nOPM\u2019s assurances to the contrary, I fear that officials in the current administration, or in a future\nadministration, will exploit Schedule Policy/Career to facilitate \u201cmass head-count reductions in\nthe federal bureaucracy.\u201d1\nGiven my experience, I am under no illusions that anything I say will persuade OPM to abandon\nits implementation of...",
+      "match_info": "Found partial match in sentence 4: despite opm\u2019s assurances to the contrary, i fear that officials in the current administration, or in a future administration, will exploit schedule policy/career to facilitate \u201cmass head-count reductions in the federal bureaucracy",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000213",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0217"
+      ],
+      "quote": "This regulation politicizes the bureaucracy, and promotes viewing career members of the federal government as 'loyalists' rather than experts.",
+      "truncated_text": "This regulation is extremely concerning to me, and I am not in favor of it. It politicizes the bureaucracy, and promotes viewing career members of the federal government as \u201cloyalists\u201d rather than experts. This regulation will open the door wide to terminating expert employees on a political basis, and not on a basis of qualifications or time served. Please do not allow this regulation to come to pass.",
+      "match_info": "Not found in truncated text",
+      "match_type": "not_found"
+    },
+    {
+      "lookup_id": "lookup_000218",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0222"
+      ],
+      "quote": "I oppose this because it violates the clearly established laws on which this country is founded. It specifically violates the \u201cCivil Service Reform Act\u201d (CSRA). I have severe concerns about the disregard it poses toward \u201cdue process.\u201d",
+      "truncated_text": "I oppose this because it violates the clearly established laws on which this country is founded. It specifically violates the \u201cCivil Service Reform Act\u201d (CSRA). I have severe concerns about the disregard it poses toward\u00a0\u201cdue process.\u201d",
+      "match_info": "Found similar (not exact): i oppose this because it violates the clearly established laws on which this country is founded. it specifically violates the \u201ccivil service reform act\u201d (csra). i have severe concerns about the disregard it poses toward \u201cdue process.\u201d",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000220",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0225"
+      ],
+      "quote": "DO NOT CLASSIFY ALL SSA EMPLOYEES UNDER SCHEDULE F. THIS WILL HAVE A CRITICAL IMPACT ON SERVICES.",
+      "truncated_text": "Do not classify ALL SSA EMPLOYEES UNDER SCHEDULE F.  THIS WILL HAVE A CRITICAL IMPACT ON SERVICES.  THIS ADMINISTRATION SAID THEY WOULD NOT TOUCH SSA - KEEP YOUR PROMISES",
+      "match_info": "Found similar (not exact): do not classify all ssa employees under schedule f. this will have a critical impact on services. this admi",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000224",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0230"
+      ],
+      "quote": "Stripping these protections en masse violates the Fifth Amendment\u2019s guarantee that no person shall be deprived of \u201clife, liberty, or property, without due process of law.\u201d",
+      "truncated_text": "I appreciate the opportunity to comment on the Office of Personnel Management\u2019s proposed rule (Docket OPM-2025-0004; RIN 3206-AO80) to create a new \u201cSchedule Policy/Career\u201d excepted-service category for policy-influencing positions. I strongly oppose the retroactive application of this rule to current incumbents and instead urge OPM to limit any reclassification to positions as they become vacant and to new hires going forward.\n\nCareer employees have accumulated a property interest in their civil-service status, including pre-removal notice, hearing rights, and MSPB appeals under Chapters 43 and 75 of Title 5, U.S. Code. Stripping these protections en masse violates the Fifth Amendment\u2019s guarantee that no person shall be deprived of \u201clife, liberty, or property, without due process of law,\u201d and the Supreme Court has recognized that significant employment-related entitlements constitute such property interests. Retaining protections for incumbents while applying Schedule Policy/Career...",
+      "match_info": "Found partial match in sentence 6: stripping these protections en masse violates the fifth amendment\u2019s guarantee that no person shall be deprived of \u201clife, liberty, or property, without due process of law,\u201d and the supreme court has recognized that significant employment-related entitlements constitute such property interests",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000226",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0232"
+      ],
+      "quote": "I strongly object to this politicization of government positions that have until now been filled on the basis of expertise and experience.",
+      "truncated_text": "I strongly object  to this politicization of government positions that have until now been filled on the basis of expertise and experience. An independent civil service ensures service to the people and public good.",
+      "match_info": "Found similar (not exact): i strongly object to this politicization of government positions that have until now been filled on the basis of expertise and experience. an indepe",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000246",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0253"
+      ],
+      "quote": "This would basically return the Civil Service to a spoils system of patronage jobs, that will reward political favoritism over merit which is what we have now and what should remain.",
+      "truncated_text": "All \u201cmanagement officials\u201d would be moved from the \u201ccompetitive service\u201d to the \u201cexcepted service\u201d and therefore make them \u201cfire-able at will\u201d. This would basically return the Civil Service to a  spoils system of patronage jobs, that will reward political favoritism over merit which is what we have now and what should remain. I strongly disagree with this regulation change",
+      "match_info": "Found similar (not exact): at will\u201d. this would basically return the civil service to a spoils system of patronage jobs, that will reward political favoritism over merit which is what we have now and what should remain. i strongl",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000261",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0268"
+      ],
+      "quote": "This proposed rule is a thinly veiled attempt to harm the nonpartisan status of the federal employees to which the rule applies.",
+      "truncated_text": "It seems obvious that this proposed rule is a thinly veiled attempt to harm the nonpartisan status of the federal employees to which the rule applies. There have never been documented and obvious cases of employee malfeasance or poor performance that did not lead to the relevant employee's ouster. The only way the regulation's proposed purpose makes sense is if you consider an employee's failure to hew to a particular ideological bent as an example of \"poor performance\". Also, this regulation subverts the idea of our government operating as a meritocracy, rather than as a patronage-based system. Plus, it will decimate the institutional knowledge that having secure, long-serving federal employees fostered over the years. As a result, allowing this regulation to stand will do nothing to improve the functionality of our government, while doing grievous and potentially irreversible harm in the process. In other words, it's a terrible idea that any thoughtful American should roundly...",
+      "match_info": "Found similar (not exact): ious that this proposed rule is a thinly veiled attempt to harm the nonpartisan status of the federal employees to which the rule applies. there hav",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000274",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0282"
+      ],
+      "quote": "This proposed rule targets specifically those who deal with grants and will severely diminish these civil servant's abilities to create and award grants based on the scientific merits.",
+      "truncated_text": "This will not make civil servants more accountable or responsible. This proposed rule targets specifically those who deal with grants and will severely diminsh these civil servant's abilities to create and awards grants based on the scientific merits. Policy should be informed by good science and science should not be driven by policy goals. This will allow the President or agency heads to fire anyone who disagrees with scientific consensus or for not following party dogma.",
+      "match_info": "Found partial match in sentence 2: this proposed rule targets specifically those who deal with grants and will severely diminsh these civil servant's abilities to create and awards grants based on the scientific merits",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000286",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0297"
+      ],
+      "quote": "But changing the status of government employees just so that they can be fired for no reason at all is hurtful to our entire society -- our health and safety and security.",
+      "truncated_text": "Do not change Schedule F employees' status. Those who choose to serve our country by using their skills, talents and education by going into government service as opposed to the private sector where they could earn considerably more money should not be penalized. But my opposition to this proposed change is not merely about the individual harm to government employees who might unfairly lose their jobs. No, I am more concerned about the deleterious impact on all of us. Government employees often have specialized and institutional knowledge that is irreplaceable, or at least is very costly to replace. Of course, people should be fired for cause for instance if they've broken regulations or laws or acted unconstitutionally. But changing the the status of government employees just so that they can be fired for no reason at all is hurtful to our entire society -- our health and safety and security.",
+      "match_info": "Found partial match in sentence 7: but changing the the status of government employees just so that they can be fired for no reason at all is hurtful to our entire society -- our health and safety and security",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000291",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0302"
+      ],
+      "quote": "The proposed rule seeks to expand 'political appointee' to include career employees, stripping them of the protections they have enjoyed since 1978.",
+      "truncated_text": "During the 19th Century, federal employment was rife with corruption; employees obtained or retained their jobs based not on merit or competence, but on their political affiliation. The Civil Service Reform Act of 1978 (CSRA) established the current merit-based system in the federal workforce, outlining protections and expectations for a federal employee, while also defining exceptions, such as the historically and realistically miniscule group of political employees. The proposed rule seeks to expand \"political appointee\" to include career employees, stripping them of the protections they have enjoyed since 1978. I am concerned that this rule will inevitably lead to federal employment populated by people retained exclusively for their loyalty or connections to individuals rather than to the mission of supporting all Americans through the government made by the People and for the People. Furthermore, the CSRA does not extend to the President the power to strip career employees of...",
+      "match_info": "Found partial match in sentence 3: the proposed rule seeks to expand \"political appointee\" to include career employees, stripping them of the protections they have enjoyed since 1978",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000309",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0321"
+      ],
+      "quote": "Removing the protections that civil servants and civil society have benefited from for over a century, will only bring back the patronage system, that the modern civil service protections were intended to address.",
+      "truncated_text": "I completely and wholeheartedly oppose this proposal.\n\nRemoving the protections that civil servants and civil society have benefited from for over a century, will only bring back the patronage system, that the modern civil service protections were intended to address, ie the real problems of the patronage system.\n\nUnless cronyism, incompetence, and policy implementation that changes completely with every swing in the elected leadership is the goal, this is a deeply stupid and shortsighted proposal.",
+      "match_info": "Found partial match in sentence 2: removing the protections that civil servants and civil society have benefited from for over a century, will only bring back the patronage system, that the modern civil service protections were intended to address, ie the real problems of the patronage system",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000332",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0345"
+      ],
+      "quote": "If scientific positions are classified as 'policy-influencing,' scientists could be more vulnerable to removal for disagreeing with or challenging political agendas.",
+      "truncated_text": "I have several concern regarding the rule for the functioning of Science in the US as follows:\n1. Potential for Political Interference: If scientific positions are classified as \"policy-influencing,\" scientists could be more vulnerable to removal for disagreeing with or challenging political agendas. This could lead to scientists tailoring their findings or recommendations to align with the administration's views, rather than presenting objective, evidence-based conclusions.\n\n2. Decreased Scientific Integrity: The fear of reprisal could discourage scientists from conducting or publishing research that contradicts the prevailing political narrative. This could undermine scientific integrity and lead to the suppression or manipulation of scientific information.\n\n3. Loss of Expertise and Institutional Knowledge: Frequent turnover in scientific positions due to at-will employment could result in a loss of expertise and institutional knowledge within government agencies. This could hinder...",
+      "match_info": "Found partial match in sentence 2: potential for political interference: if scientific positions are classified as \"policy-influencing,\" scientists could be more vulnerable to removal for disagreeing with or challenging political agendas",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000350",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0363"
+      ],
+      "quote": "The proposed 'Schedule F' classification poses a significant threat to this enduring foundation.",
+      "truncated_text": "A bedrock principle of our republic is a professional and nonpartisan civil service, a system carefully constructed on merit since the passage of the Pendleton Act in 1883. The proposed \"Schedule F\" classification poses a significant threat to this enduring foundation. By potentially allowing the reclassification and dismissal without cause of a broad spectrum of career civil servants, particularly those engaged in crucial policy formulation and analysis, this initiative opens a dangerous pathway for political considerations to unduly influence hiring and firing decisions. This directly contravenes the spirit and letter of 5 U.S.C. \u00a7 2301(b)(8), which clearly mandates that federal employment decisions must be rooted in merit-based principles, shielded from the vagaries of political influence.\n\nFurthermore, the imprecise and expansive criteria for inclusion under \"Schedule F\" raise serious concerns regarding the fundamental due process protections currently afforded to career federal...",
+      "match_info": "Not found in truncated text",
+      "match_type": "not_found"
+    },
+    {
+      "lookup_id": "lookup_000352",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0365"
+      ],
+      "quote": "The function of government duties should be independent and impartial, not partisan appointees who would put loyalty to a person above their loyalty to the Constitution.",
+      "truncated_text": "I oppose. The function of government duties should be independent and impartial, not partisan appointees who would put loyalty to a person above their loyalty to the Constitution and change over every time a new administration is sworn in.",
+      "match_info": "Found partial match in sentence 2: the function of government duties should be independent and impartial, not partisan appointees who would put loyalty to a person above their loyalty to the constitution and change over every time a new administration is sworn in",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000364",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0377"
+      ],
+      "quote": "This proposed rule would significantly disrupt the functioning and effectiveness of the federal government in several critical ways: Compromising the Merit System and Operational Continuity: The proposed changes undermine foundational merit principles while threatening the professional, non-partisan civil service that ensures continuity across administrations.",
+      "truncated_text": "I am writing to express my strongest opposition to the Office of Personnel Management's proposed rule implementing Executive Order 14171, which would create a new \"Schedule Policy/Career\" in the excepted service and remove procedural protections and appeal rights for employees designated as occupying \"policy-influencing\" positions.\n\nThis proposed rule would significantly disrupt the functioning and effectiveness of the federal government in several critical ways:\n1.\tCompromising the Merit System and Operational Continuity: The proposed changes undermine foundational merit principles while threatening the professional, non-partisan civil service that ensures continuity across administrations. Career civil servants with institutional knowledge are essential for maintaining operations during transitions of power.\n2.\tCreating Workforce Instability and Loss of Expertise: At-will employment for \"policy-influencing\" positions would lead to increased turnover and loss of specialized...",
+      "match_info": "Not found in truncated text",
+      "match_type": "not_found"
+    },
+    {
+      "lookup_id": "lookup_000373",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0387"
+      ],
+      "quote": "Politicizing the civil service only makes sense if you plan to ensure the 'other side' will never be in power again.",
+      "truncated_text": "Policies swing wildly with each administration, but work gets done because the civil servants are not beholden to a particular party. Politicizing the civil service only makes sense if you plan to ensure the \"other side\" will never be in power again.",
+      "match_info": "Found partial match in sentence 2: politicizing the civil service only makes sense if you plan to ensure the \"other side\" will never be in power again",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000376",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0390"
+      ],
+      "quote": "Moving away from merit system to \u201cschedule f\u201d would have the following consequences: Increased Political Patronage: Hiring could be based on political loyalty rather than qualifications, leading to cronyism and favoritism.",
+      "truncated_text": "Moving away from merit system to \u201cschedule f\u201d would have the following consequences: \nIncreased Political Patronage: Hiring could be based on political loyalty rather than qualifications, leading to cronyism and favoritism.\nReduced Efficiency and Competence: Without a merit-based system, unqualified individuals might fill roles, lowering overall productivity and performance.\nDecreased Morale: Career civil servants may feel demotivated if promotions and job security are not based on performance or merit.\nIncreased Corruption Risks: A system without merit protections is more susceptible to unethical practices and corruption.\nLack of Continuity: Frequent personnel changes with political shifts could lead to a lack of institutional knowledge and disruption in services.\nPublic Distrust: The perception of an unfair or politicized hiring system can reduce public confidence in government institutions.\n\nWe would moving backwards to early 1900s approach with this policy change.",
+      "match_info": "Found similar (not exact): moving away from merit system to \u201cschedule f\u201d would have the following consequences: increased political patronage: hiring could be based on political loyalty rather than qualifications, leading to cronyism and favoritism. reduced e",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000378",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0392"
+      ],
+      "quote": "A professionalized bureaucracy, insulated from the interests of individual politicians, was a hard-won reform that was critical to ending vote-buying and machine politics in the US.",
+      "truncated_text": "Absolutely not. A professionalized bureaucracy, insulated from the interests of individual politicians, was a hard-won reform that was critical to ending vote-buying and machine politics in the US, and everywhere it has been implemented. Eliminating those reforms will fundamentally alter our entire political system, sending us back to the turn of the 20th century. Additionally, suddenly increasing bureaucratic turnover, as this rule will almost certainly do, erases institutional memory and reduces the quality of people willing to work for the government. The resulting uncertainty and inefficiency is terrible for business and economic growth.",
+      "match_info": "Found partial match in sentence 2: a professionalized bureaucracy, insulated from the interests of individual politicians, was a hard-won reform that was critical to ending vote-buying and machine politics in the us, and everywhere it has been implemented",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000379",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0393"
+      ],
+      "quote": "Reclassifying tens of thousands of government jobs as 'policymaking positions' would be dangerous for the future of science in America.",
+      "truncated_text": "Reclassifying tens of thousands of government jobs as \u201cpolicymaking positions\" would be dangerous for the future of science in America. The Trump administration has so far done a terrible job at appointing people with actual experience and qualifications in their fields. For example, RFK Jr, Pete Hegseth, Tulsi Gabbard, Matt Gaetz, etc. Trump appointees in the field of science would likely also be unqualified (lacking degrees in basic science, publications, leadership, editorial work, speaking appointments, teaching, lab research, or mentorship.) For any other job this would be considered unacceptable but it is especially dangerous in science, a field that pushes humanity forward by providing lifesaving care and world-enriching discoveries. \n\n-A concerned American citizen and neuroscience staff at Princeton University",
+      "match_info": "Found partial match in sentence 1: reclassifying tens of thousands of government jobs as \u201cpolicymaking positions\" would be dangerous for the future of science in america",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000402",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0416"
+      ],
+      "quote": "This proposed rule which would allow termination of civil service employees for 'subverting Presidential directives' renders the entire concept of that oath null and void and hands the entire Machinery of government into the hands of one person.",
+      "truncated_text": "Career civil servants swear on oath to \"Defend the Constitution against all enemies,  both foreign and domestic.\"  This proposed rule which would allow termination of civil service employees for \"subverting Presidential directives\" renders the entire concept of that oath null and void and hands the entire Machinery of government into the hands of one person.  I don't even have words for how dangerous to our democracy this is, even in a theoretical discussion like this comment section",
+      "match_info": "Found partial match in sentence 2: \" this proposed rule which would allow termination of civil service employees for \"subverting presidential directives\" renders the entire concept of that oath null and void and hands the entire machinery of government into the hands of one person",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000423",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0439"
+      ],
+      "quote": "The proposal to make these \"at-will positions excepted from adverse action procedures or appeals\" is highly un-American; the American civil service has a long and proud tradition of hiring excellent patriotic workers...",
+      "truncated_text": "I oppose this proposed rule in the strongest of terms. The proposal to make these \"at-will positions excepted from adverse action procedures or appeals\" is highly un-American; the American civil service has a long and proud tradition of hiring excellent patriotic workers (30% of them veterans: https://ourpublicservice.org/blog/public-servants-twice-over-veterans-in-the-federal-workforce/) who are highly engaged experts. Making their employment \"at-will\" flies in the face of the trust that Americans place in their government to engage in a calm, dedicated, and clear process to evaluate government employees. Any provision to \"will allow agencies to quickly remove employees from critical positions who engage in misconduct, perform poorly, or undermine the democratic process by intentionally subverting Presidential directives.\" is antithetical to the proper apolitical and expert functioning of government service and puts the civil service at risk for being warped and subverted for...",
+      "match_info": "Found partial match in sentence 2: the proposal to make these \"at-will positions excepted from adverse action procedures or appeals\" is highly un-american; the american civil service has a long and proud tradition of hiring excellent patriotic workers (30% of them veterans: https://ourpublicservice",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000428",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0445"
+      ],
+      "quote": "I strongly oppose this. I\u2019ve already seen middle management begin to shirk duties of our actual jobs and instead focus on doing what they *think DOGE and administration members would want to see...",
+      "truncated_text": "I strongly oppose this. I\u2019ve already seen middle management begin to shirk duties of our actual jobs and instead focus on doing what they *think DOGE and administration members would want to see, whether that be a part of our mission duties or resubmits, or even legal, or not.  Stability and being responsible to our mission requires we not turn our federal work force into a spoils system where leadership only aims to please the flavor of the day and not do the good work we do.",
+      "match_info": "Found partial match in sentence 2: i\u2019ve already seen middle management begin to shirk duties of our actual jobs and instead focus on doing what they *think doge and administration members would want to see, whether that be a part of our mission duties or resubmits, or even legal, or not",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000446",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0464"
+      ],
+      "quote": "Employees would be able to be terminated just because they do not fall in line with current administration viewpoints, opinions and beliefs.",
+      "truncated_text": "I am against this proposed rule. Employees would be able to be terminated juat becauae they do not fall in line with current administration viewpoints, opinions and beliefs. Leave the Employees as Competitive Employees.   This is unfair to public servants and citizens.",
+      "match_info": "Found partial match in sentence 2: employees would be able to be terminated juat becauae they do not fall in line with current administration viewpoints, opinions and beliefs",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000449",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0467"
+      ],
+      "quote": "Allowing civil servants, particularly those involved in informing policy and analysis to be reclassified goes against a long standing tradition of separating the persistent civil service and the incumbent administration.",
+      "truncated_text": "I am strongly opposed to this regulation. Allowing civil servants,particularly those involved in informing policy and analysis to be reclassified goes against a long standing tradition of separating the persistent civil service and the incumbent administration. Over 150 years ago we learned this lesson resulting in the Pendleton civil service reform act. Our civil servants are professionals that serve the nation, regardless of administration. To compromise that also compromises our nations efficacy, continuity of service, and institutional knowledge that allows one of the largest and greatest nations on earth to function properly.",
+      "match_info": "Found partial match in sentence 2: allowing civil servants,particularly those involved in informing policy and analysis to be reclassified goes against a long standing tradition of separating the persistent civil service and the incumbent administration",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000461",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0481"
+      ],
+      "quote": "This seems like a move by a totalitarian wannabe dictator to install yes people that are more loyal to him than the nation or the law.",
+      "truncated_text": "This seems like a move by a totalitarian wannabe dicator to install yes people that are more loyal to him then the nation or the law. This should be opposedas it reeks of just a method to replace folks with cronies",
+      "match_info": "Found partial match in sentence 1: this seems like a move by a totalitarian wannabe dicator to install yes people that are more loyal to him then the nation or the law",
+      "match_type": "similar"
+    },
+    {
+      "lookup_id": "lookup_000465",
+      "comment_count": 1,
+      "comment_ids": [
+        "OPM-2025-0004-0486"
+      ],
+      "quote": "the rule would remove these positions from the procedural protections of 5 U.S.C. chapters 43 and 75, thereby significantly affecting the due process rights of thousands of federal employees.",
+      "truncated_text": "I write to respectfully request that the Office of Personnel Management (OPM) extend the public comment period for the above-referenced proposed rule for an additional 30 days, for a total of at least 60 days.\n\nThe proposed rule seeks to fundamentally restructure the accountability framework for career civil servants in policy-influencing roles by creating a new \u201cSchedule Policy/Career\u201d in the excepted service. The rule would remove these positions from the procedural protections of 5 U.S.C. chapters 43 and 75, thereby significantly affecting the due process rights of thousands of federal employees. Given the substantial implications of these changes\u2014for employee rights, agency operations, and the merit-based foundations of the civil service\u2014it is critical that stakeholders have adequate time to analyze the proposal and submit meaningful comments.\n\nExecutive Order 12866 (Regulatory Planning and Review) requires that significant regulatory actions allow \u201cno less than 60 days\u201d for...",
+      "match_info": "Found similar (not exact):  service. the rule would remove these positions from the procedural protections of 5 u.s.c. chapters 43 and 75, thereby significantly affecting the due process rights of thousands of federal employees. given the",
+      "match_type": "similar"
+    }
+  ],
+  "exact_match_rate": 90.0
+}
