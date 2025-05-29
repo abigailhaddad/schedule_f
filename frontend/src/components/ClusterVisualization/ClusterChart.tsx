@@ -9,6 +9,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 // import d3 from 'd3'; // d3 import seems unused
 import ClusterTooltipOverlay from './ClusterTooltipOverlay';
 
+// Base colors for parent clusters - moved outside component to ensure it's always available
+const baseColors = [
+  "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
+  "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
+  "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
+];
+
 interface ClusterChartProps {
   data: Array<{
     id: string; // This is the clusterId string
@@ -46,8 +53,9 @@ export default function ClusterChart({
     // First, identify parent clusters and assign base colors
     (data || []).forEach(series => {
       if (series && series.id && typeof series.id === 'string' && series.id.length > 0) {
-        // Extract parent cluster (everything except last character)
-        const parentCluster = series.id.slice(0, -1);
+        // Extract the numeric part at the beginning (parent cluster)
+        const match = series.id.match(/^(\d+)/);
+        const parentCluster = match ? match[1] : series.id;
         if (!parentMapping.has(parentCluster)) {
           parentMapping.set(parentCluster, nextParentIndex++);
         }
@@ -57,13 +65,25 @@ export default function ClusterChart({
     // Then, assign colors to sub-clusters based on their parent
     (data || []).forEach(series => {
       if (series && series.id && typeof series.id === 'string' && series.id.length > 0 && !mapping.has(series.id)) {
-        const parentCluster = series.id.slice(0, -1);
+        const match = series.id.match(/^(\d+)(.*)/);
+        const parentCluster = match ? match[1] : series.id;
+        const subPart = match ? match[2] : '';
         const parentIndex = parentMapping.get(parentCluster) || 0;
-        const subClusterLetter = series.id.slice(-1);
-        // Create variation based on the last character (a=0, b=1, c=2, etc.)
-        const variation = subClusterLetter.charCodeAt(0) - 'a'.charCodeAt(0);
-        // Combine parent index with variation for unique but related colors
-        mapping.set(series.id, parentIndex * 10 + variation);
+        
+        if (subPart) {
+          // Create variation based on the sub-part (could be 'a', 'b', 'aa', 'ab', etc.)
+          let variation = 0;
+          for (let i = 0; i < subPart.length; i++) {
+            variation += (subPart.charCodeAt(i) - 'a'.charCodeAt(0)) * Math.pow(26, subPart.length - 1 - i);
+          }
+          // Limit variation to prevent running out of distinguishable colors
+          variation = Math.min(variation, 15);
+          // Combine parent index with variation for unique but related colors
+          mapping.set(series.id, parentIndex * 20 + variation);
+        } else {
+          // For simple clusters without sub-clusters, just use the parent index
+          mapping.set(series.id, parentIndex * 20);
+        }
       }
     });
     return mapping;
@@ -84,13 +104,6 @@ export default function ClusterChart({
       }
     }
   }, [searchParams, data]);
-
-  // Base colors for parent clusters
-  const baseColors = [
-    "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
-    "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
-    "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
-  ];
 
   // const stanceColors = { // This was commented out by user, ensuring it's fully gone or remains commented
   //   For: "#10b981",
@@ -145,13 +158,31 @@ export default function ClusterChart({
     }
   }, []);
 
+  const handleMouseLeave = useCallback(() => {
+    if (!clickedPoint) {
+      handlePointHover(null);
+    }
+  }, [clickedPoint, handlePointHover]);
+
+  const handleMouseEnter = useCallback((node: any) => {
+    if (node.data && !clickedPoint) {
+      handlePointHover(node.data as ClusterPoint);
+    }
+  }, [clickedPoint, handlePointHover]);
+
+  const handleClick = useCallback((node: any) => {
+    if (node.data) {
+      handlePointClick(node.data as ClusterPoint);
+    }
+  }, [handlePointClick]);
+
   return (
     <div 
       ref={chartRef}
       className="bg-white rounded-lg relative"
       style={{ height: '600px' }}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => !clickedPoint && handlePointHover(null)}
+      onMouseLeave={handleMouseLeave}
       onClick={handleChartClick}
     >
       <ResponsiveScatterPlotCanvas
@@ -195,13 +226,18 @@ export default function ClusterChart({
           }
           
           const colorIndex = clusterIdToColorIndex.get(serieId);
-          if (colorIndex !== undefined) {
-            const parentIndex = Math.floor(colorIndex / 10);
-            const variation = colorIndex % 10;
+          if (colorIndex !== undefined && baseColors && baseColors.length > 0) {
+            const parentIndex = Math.floor(colorIndex / 20);
+            const variation = colorIndex % 20;
             const baseColor = baseColors[parentIndex % baseColors.length];
             
-            // Create shade variations
-            const shadeMultiplier = 1 - (variation * 0.15);
+            // Additional safety check
+            if (!baseColor || typeof baseColor !== 'string' || baseColor.length !== 7) {
+              return baseColors[0] || '#3b82f6'; // Fallback with extra safety
+            }
+            
+            // Create shade variations - smaller multiplier for more variations
+            const shadeMultiplier = 1 - (variation * 0.08);
             
             // Parse hex color and apply shade
             const r = parseInt(baseColor.slice(1, 3), 16);
@@ -214,19 +250,11 @@ export default function ClusterChart({
             
             return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
           }
-          return baseColors[0]; // Fallback color
+          return baseColors[0] || '#3b82f6'; // Fallback color with extra safety
         }}
-        onClick={(node) => {
-          if (node.data) {
-            handlePointClick(node.data as ClusterPoint);
-          }
-        }}
-        onMouseEnter={(node) => {
-          if (node.data && !clickedPoint) {
-            handlePointHover(node.data as ClusterPoint);
-          }
-        }}
-        onMouseLeave={() => !clickedPoint && handlePointHover(null)}
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         enableGridX={false}
         enableGridY={false}
         // Disable Nivo's built-in tooltip
