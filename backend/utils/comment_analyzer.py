@@ -72,26 +72,25 @@ This proposed rule would allow federal agencies to reclassify career civil serva
 
 Classification guidelines with special attention to boundary cases:
 
-- "For": Comment explicitly supports the rule, defends its merits, or argues for implementation. Look for: praise of accountability, presidential authority, removing bureaucratic obstacles, or making it easier to remove poor performers.
+- "For": Comment supports the rule, defends its merits, or argues for implementation. Look for: praise of accountability, presidential authority, removing bureaucratic obstacles, or making it easier to remove poor performers. Comments which oppose the deep state or support the president are almost certainty also in support of the regulation, even if they don't explicitly say so. 
 
 - "Against": Comment opposes the rule, including indirect opposition through thematic alignment. Critical indicators include:
   * Questions about constitutionality or legal concerns, even without explicit opposition
   * Support for current merit-based systems or civil service protections
   * Concerns about politicization of civil service
   * Emphasis on nonpartisan governance, constitutional loyalty, or professional integrity (these themes inherently oppose politicization)
-  * Anti-Trump or anti-administration sentiment
+  * Anti-Trump or anti-administration sentiment, EVEN if not combined with any explicit comments about the regulation
   * Comments about job performance standards that emphasize merit/fairness over political considerations
+  Again, if this is talking about how the president or government is doing bad things, it's almost certainly in opposition, unless it's talking about the civil service or deep state doing bad things. Like, if the comment is about how Trump is acting like a king, or it just says NO or fuck doge or something like that, it's against. 
 
 - "Neutral/Unclear": Reserve this classification ONLY for:
   * Comments purely requesting information without revealing stance
-  * Comments discussing completely unrelated topics
-  * Vague political statements that don't connect to civil service themes
+  * Comments discussing completely unrelated topics which don't involve support or opposition to the president
   * Comments that are genuinely ambiguous after considering thematic context
 
 IMPORTANT DISTINCTIONS:
 - Comments supporting easier removal of poor performers are "For" if they align with the rule's efficiency goals
 - Comments emphasizing constitutional duty, integrity, or nonpartisan service are "Against" (they oppose politicization)
-- General political complaints without civil service context should remain "Neutral/Unclear"
 - When in doubt between "Against" and "Neutral/Unclear", consider if the comment's themes would logically oppose politicizing civil service
 
 2. Themes: Identify which of these themes are present (select all that apply):
