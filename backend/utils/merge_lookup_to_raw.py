@@ -21,6 +21,8 @@ LOOKUP_FIELDS = {
     'lookup_id': None,
     'truncated_text': None,
     'text_source': None,
+    'comment_text': None,
+    'attachment_text': None,
     'comment_count': None,
     'stance': None,
     'key_quote': None,
@@ -60,13 +62,17 @@ EXPECTED_FIELDS_SCHEMA = {
     'has_attachments': {'type': bool, 'required': True, 'nullable': False},
     'attachment_count': {'type': int, 'required': False, 'nullable': True},
     
-    # List fields
-    'attachments': {'type': list, 'required': False, 'nullable': True},
+    # Attachment details (flattened)
+    'attachment_urls': {'type': str, 'required': False, 'nullable': True},
+    'attachment_titles': {'type': str, 'required': False, 'nullable': True},
+    'attachment_local_paths': {'type': str, 'required': False, 'nullable': True},
     
     # Lookup fields (from LOOKUP_FIELDS)
     'lookup_id': {'type': str, 'required': True, 'nullable': True},
     'truncated_text': {'type': str, 'required': False, 'nullable': True},
     'text_source': {'type': str, 'required': False, 'nullable': True},
+    'comment_text': {'type': str, 'required': False, 'nullable': True},
+    'attachment_text': {'type': str, 'required': False, 'nullable': True},
     'comment_count': {'type': int, 'required': False, 'nullable': True},
     'stance': {'type': str, 'required': False, 'nullable': True, 'allowed_values': ['For', 'Against', 'Neutral', 'Mixed', 'Neutral/Unclear', '', None]},
     'key_quote': {'type': str, 'required': False, 'nullable': True},
@@ -262,9 +268,30 @@ def flatten_comment(comment: Dict) -> Dict:
             'agency_id': attributes.get('agencyId'),
             'category': attributes.get('category', ''),
             'attachment_count': attributes.get('attachmentCount', 0),
-            'attachments': attributes.get('attachments', []),
             'has_attachments': attributes.get('attachmentCount', 0) > 0
         })
+        
+        # Flatten attachments if they exist
+        attachments = attributes.get('attachments', [])
+        if attachments:
+            # Extract lists of values
+            urls = []
+            titles = []
+            local_paths = []
+            
+            for att in attachments:
+                urls.append(att.get('fileUrl', ''))
+                titles.append(att.get('title', ''))
+                local_paths.append(att.get('localPath', ''))
+            
+            # Join with semicolons for easy parsing
+            flattened['attachment_urls'] = '; '.join(urls)
+            flattened['attachment_titles'] = '; '.join(titles)
+            flattened['attachment_local_paths'] = '; '.join(local_paths)
+        else:
+            flattened['attachment_urls'] = ''
+            flattened['attachment_titles'] = ''
+            flattened['attachment_local_paths'] = ''
         
         # Add any other top-level fields that aren't 'attributes'
         for key, value in comment.items():
@@ -343,7 +370,7 @@ def main():
     data_dir = base_dir / 'data'
     
     raw_data_path = data_dir / 'raw_data.json'
-    lookup_path = data_dir / 'lookup_table_corrected.json'
+    lookup_path = data_dir / 'lookup_table.json'
     output_path = data_dir / 'data.json'
     
     try:
@@ -377,6 +404,53 @@ def main():
         else:
             logger.warning(f"Merge completed with {validation_report['comments_with_issues']} validation issues - check validation report")
         
+    except Exception as e:
+        logger.error(f"Error during merge: {e}")
+        raise
+
+def merge_lookup_to_raw(raw_data_path: str, lookup_path: str, output_path: str) -> None:
+    """
+    Merge raw data with lookup table - callable from other modules
+    
+    Args:
+        raw_data_path: Path to raw_data.json file
+        lookup_path: Path to lookup_table.json file
+        output_path: Path to save merged data.json file
+    """
+    try:
+        # Load data
+        raw_data = load_json_file(Path(raw_data_path))
+        lookup_data = load_json_file(Path(lookup_path))
+        
+        # Create lookup mapping
+        lookup_mapping = create_lookup_mapping(lookup_data)
+        
+        # Merge data
+        merged_data = merge_data(raw_data, lookup_mapping)
+        
+        # Validate merged data
+        validation_results = validate_merged_data(merged_data)
+        
+        # Save merged data
+        with open(output_path, 'w') as f:
+            json.dump(merged_data, f, indent=2)
+        
+        logger.info(f"✅ Successfully merged {len(merged_data)} comments to {output_path}")
+        
+        # Save validation report
+        validation_report_path = Path(output_path).parent / 'data_validation_report.json'
+        with open(validation_report_path, 'w') as f:
+            json.dump(validation_results, f, indent=2)
+        
+        # Print validation summary
+        if validation_results['validation_passed']:
+            logger.info("✅ VALIDATION PASSED")
+        else:
+            logger.warning("❌ VALIDATION FAILED")
+            logger.warning(f"Total comments with issues: {validation_results['comments_with_issues']}")
+            
+        return validation_results['validation_passed']
+            
     except Exception as e:
         logger.error(f"Error during merge: {e}")
         raise
