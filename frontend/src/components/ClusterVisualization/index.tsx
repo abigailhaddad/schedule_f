@@ -1,3 +1,4 @@
+// src/components/ClusterVisualization/index.tsx
 "use client";
 
 import React, { useState, useMemo, useCallback } from 'react';
@@ -29,7 +30,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
   const chartSeriesData = useMemo(() => {
     if (!clusterData) return [];
     return clusterData.clusters.map(([id, points]) => ({
-      id: id, // Use the clusterId string directly as series ID
+      id: id,
       data: points.map(p => ({ ...p, x: p.pcaX, y: p.pcaY })),
     }));
   }, [clusterData]);
@@ -43,7 +44,6 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
   }, [chartSeriesData, selectedClusterId, clusterData]);
   
   // Data for ClusterChart component: if a cluster is selected, only pass that series
-  // otherwise, pass all series for correct coloring and legend.
   const chartDisplayData = useMemo(() => {
     if (!selectedClusterId || !chartSeriesData) return chartSeriesData;
     return chartSeriesData.filter(series => series.id === selectedClusterId);
@@ -79,12 +79,9 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="md:col-span-2 shadow-lg" collapsible={false}>
           <Card.Header>
-            <h2 className="text-lg font-bold">Cluster Scatter Plot</h2>
-            {clusterData.isSampled && (
-              <p className="text-sm text-gray-600">
-                Displaying a sample of {clusterData.sampledPoints} out of {clusterData.totalPoints} total points.
-              </p>
-            )}
+            <h2 className="text-lg font-bold">
+              Cluster Scatter Plot ({clusterData.totalPoints} comments in {clusterData.clusters.length} clusters)
+            </h2>
           </Card.Header>
           <Card.Body className="p-0 relative">
             <div style={{ minHeight: '500px' }}>
