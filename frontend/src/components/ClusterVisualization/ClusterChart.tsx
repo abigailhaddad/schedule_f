@@ -141,8 +141,7 @@ export default function ClusterChart({
   return (
     <div 
       ref={chartRef}
-      style={{ height: 600, position: 'relative' }} 
-      className="bg-white rounded-lg"
+      className="bg-white rounded-lg h-full relative"
       onMouseMove={handleMouseMove}
       onMouseLeave={() => !clickedPoint && handlePointHover(null)}
       onClick={handleChartClick}
