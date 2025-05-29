@@ -1,9 +1,8 @@
 // src/lib/db/config.ts
 import { config } from 'dotenv';
-import path from 'path';
 
-// Load environment variables
-const envPath = process.env.ENV_PATH || path.resolve(process.cwd(), '.env');
+// Load environment variables - simplified without path module
+const envPath = process.env.ENV_PATH || '.env';
 config({ path: envPath });
 
 // Database environment type - now supports 3 environments
