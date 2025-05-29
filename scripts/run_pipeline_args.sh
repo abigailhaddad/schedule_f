@@ -19,6 +19,7 @@ USE_RESUME=false
 SKIP_ANALYSIS=false
 SKIP_CLUSTERING=false
 TRUNCATE=""
+LIMIT=""
 CSV_FILE="comments.csv"
 RAW_DATA_FILE="data/raw_data.json"
 LOOKUP_TABLE_FILE="data/lookup_table_corrected.json"
@@ -42,6 +43,10 @@ while [[ $# -gt 0 ]]; do
             TRUNCATE="$2"
             shift 2
             ;;
+        --limit)
+            LIMIT="$2"
+            shift 2
+            ;;
         --csv)
             CSV_FILE="$2"
             shift 2
@@ -62,6 +67,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --skip-analysis       Skip LLM analysis"
             echo "  --skip-clustering     Skip clustering analysis"
             echo "  --truncate N          Truncate text to N characters"
+            echo "  --limit N             Limit to first N comments (for testing)"
             echo "  --csv FILE            CSV file path (default: comments.csv)"
             echo "  --raw-data FILE       Raw data file for resume mode (default: data/raw_data.json)"
             echo "  --lookup-table FILE   Lookup table file for resume mode (default: data/lookup_table_corrected.json)"
@@ -134,6 +140,9 @@ PIPELINE_ARGS="--csv $CSV_FILE --output_dir $OUTPUT_DIR $RESUME_ARGS"
 if [ -n "$TRUNCATE" ]; then
     PIPELINE_ARGS="$PIPELINE_ARGS --truncate $TRUNCATE"
 fi
+if [ -n "$LIMIT" ]; then
+    PIPELINE_ARGS="$PIPELINE_ARGS --limit $LIMIT"
+fi
 if [ "$SKIP_ANALYSIS" = true ]; then
     PIPELINE_ARGS="$PIPELINE_ARGS --skip_analysis"
 fi
@@ -153,6 +162,9 @@ if [ "$USE_RESUME" = true ]; then
 fi
 if [ -n "$TRUNCATE" ]; then
     echo "✂️  Truncation: $TRUNCATE characters"
+fi
+if [ -n "$LIMIT" ]; then
+    echo "📊 Limit: $LIMIT comments"
 fi
 if [ "$SKIP_ANALYSIS" = true ]; then
     echo "⏭️  Skipping: LLM Analysis"
