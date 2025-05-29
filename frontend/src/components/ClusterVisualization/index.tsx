@@ -106,7 +106,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
             </h2>
           </Card.Header>
           <Card.Body className="p-0 relative flex-1">
-            <div className="h-full min-h-[600px]">
+            <div className="h-full">
               <ClusterChart
                 data={chartDisplayData}
                 bounds={clusterData.bounds}
