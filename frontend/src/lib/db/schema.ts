@@ -15,7 +15,7 @@ export const lookupTable = pgTable('lookup_table', {
   rationale: text('rationale'),
   themes: text('themes'),
   corrected: boolean('corrected').default(false),
-  clusterId: integer('cluster_id'),
+  clusterId: text('cluster_id'),
   pcaX: doublePrecision('pca_x'),
   pcaY: doublePrecision('pca_y'),
   createdAt: timestamp('created_at').defaultNow().notNull()
@@ -44,11 +44,21 @@ export const comments = pgTable('comments', {
   rationale: text('rationale'),
   themes: text('themes'),
   corrected: boolean('corrected').default(false),
-  clusterId: integer('cluster_id'),
+  clusterId: text('cluster_id'),
   pcaX: doublePrecision('pca_x'),
   pcaY: doublePrecision('pca_y'),
   
-  createdAt: timestamp('created_at').defaultNow().notNull()
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  commentOn: varchar('comment_on'),
+  submitterName: varchar('submitter_name'),
+  organization: varchar('organization'),
+  city: varchar('city'),
+  state: varchar('state'),
+  country: varchar('country'),
+  documentType: varchar('document_type'),
+  attachmentCount: integer('attachment_count'),
+  attachments: json('attachments').$type<{ title: string; fileUrl: string; type: string; }[] | null>(),
+  truncatedText: text('truncated_text'),
 });
 
 // Type inference
