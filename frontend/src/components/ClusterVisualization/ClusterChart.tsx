@@ -40,11 +40,30 @@ export default function ClusterChart({
   // Create a stable color mapping for cluster IDs
   const clusterIdToColorIndex = useMemo(() => {
     const mapping = new Map<string, number>();
-    let nextIndex = 0;
-    // Ensure data is an array before calling forEach
+    const parentMapping = new Map<string, number>();
+    let nextParentIndex = 0;
+    
+    // First, identify parent clusters and assign base colors
+    (data || []).forEach(series => {
+      if (series && series.id) {
+        // Extract parent cluster (everything except last character)
+        const parentCluster = series.id.slice(0, -1);
+        if (!parentMapping.has(parentCluster)) {
+          parentMapping.set(parentCluster, nextParentIndex++);
+        }
+      }
+    });
+    
+    // Then, assign colors to sub-clusters based on their parent
     (data || []).forEach(series => {
       if (series && series.id && !mapping.has(series.id)) {
-        mapping.set(series.id, nextIndex++);
+        const parentCluster = series.id.slice(0, -1);
+        const parentIndex = parentMapping.get(parentCluster) || 0;
+        const subClusterLetter = series.id.slice(-1);
+        // Create variation based on the last character (a=0, b=1, c=2, etc.)
+        const variation = subClusterLetter.charCodeAt(0) - 'a'.charCodeAt(0);
+        // Combine parent index with variation for unique but related colors
+        mapping.set(series.id, parentIndex * 10 + variation);
       }
     });
     return mapping;
@@ -66,12 +85,11 @@ export default function ClusterChart({
     }
   }, [searchParams, data]);
 
-  // Color schemes
-  const clusterColors = [
-    "#e11d48", "#db2777", "#c026d3", "#9333ea", "#7c3aed",
-    "#6366f1", "#3b82f6", "#0ea5e9", "#06b6d4", "#14b8a6",
-    "#10b981", "#22c55e", "#84cc16", "#eab308", "#f59e0b",
-    "#f97316", "#ef4444", "#dc2626", "#b91c1c", "#991b1b",
+  // Base colors for parent clusters
+  const baseColors = [
+    "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
+    "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
+    "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
   ];
 
   // const stanceColors = { // This was commented out by user, ensuring it's fully gone or remains commented
@@ -79,17 +97,6 @@ export default function ClusterChart({
   //   Against: "#ef4444",
   //   "Neutral/Unclear": "#64748b",
   // };
-
-  // Define a more specific type for the Nivo node object for colors
-  type NivoColorNode = { serieId: string | number; data?: { stance?: string | null } };
-
-  const getNodeColor = useCallback((param: NivoColorNode) => {
-    const colorIndex = clusterIdToColorIndex.get(String(param.serieId));
-    if (colorIndex !== undefined) {
-      return clusterColors[colorIndex % clusterColors.length];
-    }
-    return clusterColors[0]; // Fallback color
-  }, [clusterIdToColorIndex, clusterColors]);
 
   const handleMouseMove = useCallback((event: React.MouseEvent) => {
     if (chartRef.current && hoveredPoint && !clickedPoint) {
@@ -141,7 +148,8 @@ export default function ClusterChart({
   return (
     <div 
       ref={chartRef}
-      className="bg-white rounded-lg h-full relative"
+      className="bg-white rounded-lg relative"
+      style={{ height: '600px' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => !clickedPoint && handlePointHover(null)}
       onClick={handleChartClick}
@@ -178,7 +186,36 @@ export default function ClusterChart({
           legendOffset: -60,
         }}
         nodeSize={8}
-        colors={getNodeColor}
+        colors={(node) => {
+          // Access the series id from the node
+          const serieId = node.serieId;
+          
+          if (!serieId) {
+            return baseColors[0]; // Fallback color
+          }
+          
+          const colorIndex = clusterIdToColorIndex.get(String(serieId));
+          if (colorIndex !== undefined) {
+            const parentIndex = Math.floor(colorIndex / 10);
+            const variation = colorIndex % 10;
+            const baseColor = baseColors[parentIndex % baseColors.length];
+            
+            // Create shade variations
+            const shadeMultiplier = 1 - (variation * 0.15);
+            
+            // Parse hex color and apply shade
+            const r = parseInt(baseColor.slice(1, 3), 16);
+            const g = parseInt(baseColor.slice(3, 5), 16);
+            const b = parseInt(baseColor.slice(5, 7), 16);
+            
+            const newR = Math.round(r * shadeMultiplier);
+            const newG = Math.round(g * shadeMultiplier);
+            const newB = Math.round(b * shadeMultiplier);
+            
+            return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+          }
+          return baseColors[0]; // Fallback color
+        }}
         onClick={(node) => {
           if (node.data) {
             handlePointClick(node.data as ClusterPoint);
@@ -194,28 +231,6 @@ export default function ClusterChart({
         enableGridY={false}
         // Disable Nivo's built-in tooltip
         tooltip={() => null}
-        // Show cluster legends
-        legends={[
-          {
-            anchor: "top-right",
-            direction: "column",
-            justify: false,
-            translateX: -20,
-            translateY: 20,
-            itemsSpacing: 5,
-            itemDirection: "left-to-right",
-            itemWidth: 80,
-            itemHeight: 20,
-            itemOpacity: 0.75,
-            symbolSize: 12,
-            symbolShape: "circle",
-            data: (data || []).map((series) => ({
-              id: series.id,
-              label: series.id,
-              color: clusterColors[(clusterIdToColorIndex.get(series.id) || 0) % clusterColors.length]
-            }))
-          },
-        ]}
       />
       
       {/* Show tooltip for either hovered or clicked point */}
