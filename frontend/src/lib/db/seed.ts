@@ -15,13 +15,13 @@ interface CommentDataItem {
   category: string;
   agency_id: string;
   comment: string;
-  original_comment: string; // Will be ignored
+  // original_comment: string; // Will be ignored
   has_attachments: boolean;
-  link: string;
+  link?: string;
   posted_date: string;
   received_date: string;
   lookup_id: string;
-  truncated_text: string; // Will be ignored
+  truncated_text: string;
   text_source: string;
   comment_count: number;
   stance?: string;
@@ -29,9 +29,19 @@ interface CommentDataItem {
   rationale?: string;
   themes?: string;
   corrected?: boolean;
-  cluster_id?: number;
+  cluster_id?: string;
   pca_x?: number;
   pca_y?: number;
+  // New fields
+  comment_on?: string;
+  submitter_name?: string;
+  organization?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  document_type?: string;
+  attachment_count?: number;
+  attachments?: { title: string; fileUrl: string; type: string; }[];
 }
 
 // Define interface for lookup table data
@@ -46,7 +56,7 @@ interface LookupTableItem {
   rationale?: string;
   themes?: string;
   corrected?: boolean;
-  cluster_id?: number;
+  cluster_id?: string;
   pca_x?: number;
   pca_y?: number;
 }
@@ -76,7 +86,7 @@ const main = async () => {
   //const devDataPath = path.resolve(__dirname, '../../__tests__/test-data-5-25.json');
   const devDataPath = path.resolve(__dirname, '../../../../data/data.json');
   const prodDataPath = path.resolve(__dirname, '../../../../data/data.json');
-  const lookupTablePath = path.resolve(__dirname, '../../../../data/lookup_table_corrected.json');
+  const lookupTablePath = path.resolve(__dirname, '../../../../data/lookup_table.json');
   
   const dataPath = dbConfig.isDev ? devDataPath : prodDataPath;
   
@@ -214,9 +224,20 @@ const main = async () => {
       rationale: item.rationale,
       themes: item.themes,
       corrected: item.corrected || false,
-      clusterId: item.cluster_id,
+      clusterId: item.cluster_id?.toString(),
       pcaX: item.pca_x,
       pcaY: item.pca_y,
+      // New fields
+      commentOn: item.comment_on || null,
+      submitterName: item.submitter_name || null,
+      organization: item.organization || null,
+      city: item.city || null,
+      state: item.state || null,
+      country: item.country || null,
+      documentType: item.document_type || null,
+      attachmentCount: item.attachment_count ?? (item.attachments ? item.attachments.length : 0),
+      attachments: item.attachments || [],
+      truncatedText: item.truncated_text || null,
     };
     commentsToInsert.push(newComment);
   }
@@ -249,7 +270,18 @@ const main = async () => {
             corrected: sql`excluded.corrected`,
             clusterId: sql`excluded.cluster_id`,
             pcaX: sql`excluded.pca_x`,
-            pcaY: sql`excluded.pca_y`
+            pcaY: sql`excluded.pca_y`,
+            // New fields
+            commentOn: sql`excluded.comment_on`,
+            submitterName: sql`excluded.submitter_name`,
+            organization: sql`excluded.organization`,
+            city: sql`excluded.city`,
+            state: sql`excluded.state`,
+            country: sql`excluded.country`,
+            documentType: sql`excluded.document_type`,
+            attachmentCount: sql`excluded.attachment_count`,
+            attachments: sql`excluded.attachments`,
+            truncatedText: sql`excluded.truncated_text`,
           } 
         });
         console.log(`Upserted chunk ${i / chunkSize + 1} of ${Math.ceil(commentsToInsert.length / chunkSize)} for comments`);

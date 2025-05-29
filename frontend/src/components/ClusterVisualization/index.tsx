@@ -1,132 +1,103 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import dynamic from "next/dynamic";
-import { ClusterData } from "@/lib/actions/clusters";
-import Card from "@/components/ui/Card";
+import React, { useState, useMemo, useCallback } from 'react';
+import { ClusterData, ClusterPoint } from "@/lib/actions/clusters";
+import ClusterChart from './ClusterChart';
 import ClusterControls from "./ClusterControls";
-
-// Dynamically import the chart to avoid SSR issues
-const ClusterChart = dynamic(() => import("./ClusterChart"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[600px] flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
-    </div>
-  ),
-});
+import Card from "@/components/ui/Card";
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 interface ClusterVisualizationProps {
-  data: Omit<ClusterData, 'clusters'> & {
-    clusters: Array<[number, import("@/lib/actions/clusters").ClusterPoint[]]>;
-  };
+  initialData: ClusterData | null;
+  isLoading: boolean;
+  error: string | null;
 }
 
-export default function ClusterVisualization({
-  data,
-}: ClusterVisualizationProps) {
-  const [selectedCluster, setSelectedCluster] = useState<number | null>(null);
+const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData, isLoading, error }) => {
+  const [clusterData, setClusterData] = useState<ClusterData | null>(initialData);
+  const [selectedClusterId, setSelectedClusterId] = useState<string | null>(null);
 
-  // const handlePointClick = (point: ClusterPoint) => { // No longer needed here if chart handles its own nav
-  //   router.push(`/comment/${point.id}`);
-  // };
+  const handleClusterSelected = useCallback((clusterId: string | null) => {
+    setSelectedClusterId(clusterId);
+  }, []);
 
-  // Memoize chart data transformation
-  const chartData = useMemo(() => {
-    return data.clusters.map(([clusterId, points]) => ({
-      id: `Cluster ${clusterId}`,
-      data: points.map((point) => ({
-        x: point.pcaX,
-        y: point.pcaY,
-        ...point,
-      })),
+  React.useEffect(() => {
+    setClusterData(initialData);
+  }, [initialData]);
+
+  // Data for the chart, formatted as Nivo expects series.
+  const chartSeriesData = useMemo(() => {
+    if (!clusterData) return [];
+    return clusterData.clusters.map(([id, points]) => ({
+      id: id, // Use the clusterId string directly as series ID
+      data: points.map(p => ({ ...p, x: p.pcaX, y: p.pcaY })),
     }));
-  }, [data.clusters]);
+  }, [clusterData]);
 
-  const filteredData = useMemo(() => {
-    return selectedCluster !== null
-      ? chartData.filter((series) => series.id === `Cluster ${selectedCluster}`)
-      : chartData;
-  }, [chartData, selectedCluster]);
+  // Points to render: all if no selection, or only selected cluster's points.
+  const pointsToRender = useMemo(() => {
+    if (!clusterData) return [];
+    if (!selectedClusterId) return chartSeriesData.flatMap(series => series.data);
+    const selectedSeries = chartSeriesData.find(series => series.id === selectedClusterId);
+    return selectedSeries ? selectedSeries.data : [];
+  }, [chartSeriesData, selectedClusterId, clusterData]);
+  
+  // Data for ClusterChart component: if a cluster is selected, only pass that series
+  // otherwise, pass all series for correct coloring and legend.
+  const chartDisplayData = useMemo(() => {
+    if (!selectedClusterId || !chartSeriesData) return chartSeriesData;
+    return chartSeriesData.filter(series => series.id === selectedClusterId);
+  }, [chartSeriesData, selectedClusterId]);
 
-  // Calculate total points for performance info
-  const totalPoints = useMemo(() => {
-    return data.clusters.reduce((sum, [, points]) => sum + points.length, 0);
-  }, [data.clusters]);
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-64"><LoadingSpinner /></div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center p-4">Error loading cluster data: {error}</div>;
+  }
+
+  if (!clusterData || clusterData.clusters.length === 0) {
+    return <div className="text-center p-4">No cluster data available.</div>;
+  }
 
   return (
-    <div className="space-y-6">
-      <Card collapsible={false}>
-        <Card.Header className="bg-gradient-to-r from-purple-500 to-pink-500">
-          <div className="flex justify-between items-center w-full">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <span className="mr-2">🔮</span>
-              Cluster Visualization
-            </h2>
-            <span className="text-sm text-white/80">
-              {totalPoints} total points
-              {data.isSampled && ` (showing ${data.sampledPoints} sampled)`}
-            </span>
-          </div>
+    <div className="p-4 bg-gray-50 min-h-screen">
+      <Card className="mb-4 shadow-lg" collapsible={false}>
+        <Card.Header>
+          <h2 className="text-lg font-bold">Cluster Controls</h2>
         </Card.Header>
-        <Card.Body className="p-4">
+        <Card.Body>
           <ClusterControls
-            clusters={data.clusters.map(([clusterId]) => clusterId)}
-            selectedCluster={selectedCluster}
-            onClusterSelect={setSelectedCluster}
+            clusters={clusterData.clusters.map(([clusterId]) => clusterId)}
+            selectedCluster={selectedClusterId}
+            onClusterSelect={handleClusterSelected}
           />
-
-          <div className="relative">
-            <ClusterChart
-              data={filteredData}
-              bounds={data.bounds}
-              // onPointClick={handlePointClick} // Removed
-            />
-          </div>
         </Card.Body>
       </Card>
 
-      {/* Cluster Statistics */}
-      <Card collapsible={true}>
-        <Card.Header className="bg-gradient-to-r from-blue-500 to-blue-600">
-          <h3 className="text-lg font-bold text-white">Cluster Statistics</h3>
-        </Card.Header>
-        <Card.Body className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {data.clusters.map(([clusterId, points]) => {
-              const stanceCounts = points.reduce((acc, point) => {
-                const stance = point.stance || "Neutral/Unclear";
-                acc[stance] = (acc[stance] || 0) + 1;
-                return acc;
-              }, {} as Record<string, number>);
-
-              return (
-                <div
-                  key={`cluster-stat-${clusterId}`}
-                  className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <h4 className="font-semibold text-gray-700">
-                    Cluster {clusterId}
-                  </h4>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {points.length}
-                  </p>
-                  <p className="text-sm text-gray-500 mb-2">comments</p>
-
-                  <div className="space-y-1 text-xs">
-                    {Object.entries(stanceCounts).map(([stance, count]) => (
-                      <div key={stance} className="flex justify-between">
-                        <span className="text-gray-600">{stance}:</span>
-                        <span className="font-medium">{count}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Card.Body>
-      </Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="md:col-span-2 shadow-lg" collapsible={false}>
+          <Card.Header>
+            <h2 className="text-lg font-bold">Cluster Scatter Plot</h2>
+            {clusterData.isSampled && (
+              <p className="text-sm text-gray-600">
+                Displaying a sample of {clusterData.sampledPoints} out of {clusterData.totalPoints} total points.
+              </p>
+            )}
+          </Card.Header>
+          <Card.Body className="p-0 relative">
+            <div style={{ minHeight: '500px' }}>
+              <ClusterChart
+                data={chartDisplayData}
+                bounds={clusterData.bounds}
+              />
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   );
-}
+};
+
+export default ClusterVisualization;

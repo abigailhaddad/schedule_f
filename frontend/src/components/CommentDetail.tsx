@@ -201,6 +201,48 @@ export default async function CommentDetail({ comment }: CommentDetailProps) {
               <dd className="text-gray-700 font-mono text-sm">{comment.id}</dd>
             </div>
           )}
+          {comment.commentOn && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Comment On:</dt>
+              <dd className="text-gray-700">{comment.commentOn}</dd>
+            </div>
+          )}
+          {comment.submitterName && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Submitter Name:</dt>
+              <dd className="text-gray-700">{comment.submitterName}</dd>
+            </div>
+          )}
+          {comment.organization && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Organization:</dt>
+              <dd className="text-gray-700">{comment.organization}</dd>
+            </div>
+          )}
+          {comment.city && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">City:</dt>
+              <dd className="text-gray-700">{comment.city}</dd>
+            </div>
+          )}
+          {comment.state && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">State:</dt>
+              <dd className="text-gray-700">{comment.state}</dd>
+            </div>
+          )}
+          {comment.country && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Country:</dt>
+              <dd className="text-gray-700">{comment.country}</dd>
+            </div>
+          )}
+          {comment.documentType && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Document Type:</dt>
+              <dd className="text-gray-700">{comment.documentType}</dd>
+            </div>
+          )}
           {comment.category && (
             <div>
               <dt className="text-sm font-medium text-gray-500">Category:</dt>
@@ -211,6 +253,12 @@ export default async function CommentDetail({ comment }: CommentDetailProps) {
             <div>
               <dt className="text-sm font-medium text-gray-500">Agency ID:</dt>
               <dd className="text-gray-700">{comment.agencyId}</dd>
+            </div>
+          )}
+          {comment.attachmentCount !== null && comment.attachmentCount > 0 && (
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Attachment Count:</dt>
+              <dd className="text-gray-700">{comment.attachmentCount}</dd>
             </div>
           )}
           {comment.hasAttachments !== null && (
@@ -304,6 +352,35 @@ export default async function CommentDetail({ comment }: CommentDetailProps) {
           )}
         </dl>
       </section>
+
+      {/* Attachments Section */}
+      {comment.attachments && comment.attachments.length > 0 && (
+        <section 
+          aria-labelledby="attachments-heading"
+          className="mt-8"
+        >
+          <h2 id="attachments-heading" className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Attachments</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            {comment.attachments.map((attachment, index) => (
+              <li key={index} className="text-gray-700">
+                {attachment.fileUrl ? (
+                  <a 
+                    href={attachment.fileUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    aria-label={`Download or view attachment: ${attachment.title} (opens in new tab)`}
+                  >
+                    <span className="mr-1" aria-hidden="true">📄</span>{attachment.title || 'Untitled Attachment'}
+                  </a>
+                ) : (
+                  <span>{attachment.title || 'Untitled Attachment'} (No URL)</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </article>
   );
 }

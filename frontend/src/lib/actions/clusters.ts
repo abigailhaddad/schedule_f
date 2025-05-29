@@ -11,7 +11,7 @@ export interface ClusterPoint {
   id: string;
   title: string;
   stance: string | null;
-  clusterId: number;
+  clusterId: string;
   pcaX: number;
   pcaY: number;
   keyQuote: string | null;
@@ -19,7 +19,7 @@ export interface ClusterPoint {
 }
 
 export interface ClusterData {
-  clusters: Array<[number, ClusterPoint[]]>; // Changed from Map to Array
+  clusters: Array<[string, ClusterPoint[]]>;
   bounds: {
     minX: number;
     maxX: number;
@@ -45,18 +45,18 @@ interface RawClusterPointRow {
   id: string;
   title: string | null; // Title can be null from DB
   stance: string | null;
-  clusterId: number | null; // Nullable from DB before filtering
+  clusterId: string | null; // Nullable from DB before filtering
   pcaX: number | null;      // Nullable from DB before filtering
   pcaY: number | null;      // Nullable from DB before filtering
   keyQuote: string | null;
   themes: string | null;
   // Allow for potential snake_case versions from direct SQL execution
-  cluster_id?: number | null;
+  cluster_id?: string | null;
   pca_x?: number | null;
   pca_y?: number | null;
   key_quote?: string | null;
   // Allow for potential all-lowercase versions
-  clusterid?: number | null;
+  clusterid?: string | null;
   pcax?: number | null;
   pcay?: number | null;
   keyquote?: string | null;
@@ -143,7 +143,7 @@ export async function getClusterData(sampleData: boolean = false): Promise<Clust
       }
 
       // Group by cluster ID using a Map internally
-      const clustersMap = new Map<number, ClusterPoint[]>();
+      const clustersMap = new Map<string, ClusterPoint[]>();
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
       result.forEach((row: RawClusterPointRow) => {
@@ -218,7 +218,7 @@ export async function getClusterStats(): Promise<{
   stats?: {
     totalClusters: number;
     totalPoints: number;
-    clusterSizes: { clusterId: number; size: number }[];
+    clusterSizes: { clusterId: string; size: number }[];
   };
   error?: string;
 }> {
