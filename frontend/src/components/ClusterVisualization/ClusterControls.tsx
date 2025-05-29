@@ -28,7 +28,9 @@ export default function ClusterControls({
     
     // First, identify parent clusters
     clusters.forEach(clusterId => {
-      const parentCluster = clusterId.slice(0, -1);
+      // Extract the numeric part at the beginning (parent cluster)
+      const match = clusterId.match(/^(\d+)/);
+      const parentCluster = match ? match[1] : clusterId;
       if (!parentMapping.has(parentCluster)) {
         parentMapping.set(parentCluster, nextParentIndex++);
       }
@@ -36,13 +38,23 @@ export default function ClusterControls({
     
     // Then, assign colors
     clusters.forEach(clusterId => {
-      const parentCluster = clusterId.slice(0, -1);
+      const match = clusterId.match(/^(\d+)(.*)/);
+      const parentCluster = match ? match[1] : clusterId;
+      const subPart = match ? match[2] : '';
       const parentIndex = parentMapping.get(parentCluster) || 0;
-      const subClusterLetter = clusterId.slice(-1);
-      const variation = subClusterLetter.charCodeAt(0) - 'a'.charCodeAt(0);
       
       const baseColor = baseColors[parentIndex % baseColors.length];
-      const shadeMultiplier = 1 - (variation * 0.15);
+      let shadeMultiplier = 1;
+      
+      if (subPart) {
+        // Create variation based on the sub-part (could be 'a', 'b', 'aa', 'ab', etc.)
+        let variation = 0;
+        for (let i = 0; i < subPart.length; i++) {
+          variation += (subPart.charCodeAt(i) - 'a'.charCodeAt(0)) * Math.pow(26, subPart.length - 1 - i);
+        }
+        // Limit the variation to prevent colors from getting too dark
+        shadeMultiplier = 1 - (Math.min(variation, 10) * 0.08);
+      }
       
       const r = parseInt(baseColor.slice(1, 3), 16);
       const g = parseInt(baseColor.slice(3, 5), 16);
@@ -62,7 +74,9 @@ export default function ClusterControls({
   const groupedClusters = useMemo(() => {
     const groups = new Map<string, string[]>();
     clusters.forEach(clusterId => {
-      const parent = clusterId.slice(0, -1);
+      // Extract the numeric part at the beginning (parent cluster)
+      const match = clusterId.match(/^(\d+)/);
+      const parent = match ? match[1] : clusterId;
       if (!groups.has(parent)) {
         groups.set(parent, []);
       }
@@ -71,7 +85,20 @@ export default function ClusterControls({
     // Sort groups and their clusters
     return Array.from(groups.entries())
       .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }))
-      .map(([parent, subs]) => [parent, subs.sort()] as const);
+      .map(([parent, subs]) => [parent, subs.sort((a, b) => {
+        // Custom sort to handle mixed formats (0a, 0b, 0aa, 0ab, etc.)
+        const aMatch = a.match(/^\d+(.*)/);
+        const bMatch = b.match(/^\d+(.*)/);
+        const aSuffix = aMatch ? aMatch[1] : '';
+        const bSuffix = bMatch ? bMatch[1] : '';
+        
+        // Sort by length first (a, b, c before aa, ab, ac)
+        if (aSuffix.length !== bSuffix.length) {
+          return aSuffix.length - bSuffix.length;
+        }
+        // Then alphabetically
+        return aSuffix.localeCompare(bSuffix);
+      })] as const);
   }, [clusters]);
 
   return (
