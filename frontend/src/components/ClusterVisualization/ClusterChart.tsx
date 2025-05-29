@@ -1,17 +1,17 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import {
   ResponsiveScatterPlotCanvas
 } from "@nivo/scatterplot";
 import { ClusterPoint } from "@/lib/actions/clusters";
 import { useRouter, useSearchParams } from 'next/navigation';
-import d3 from 'd3';
+// import d3 from 'd3'; // d3 import seems unused
 import ClusterTooltipOverlay from './ClusterTooltipOverlay';
 
 interface ClusterChartProps {
   data: Array<{
-    id: string;
+    id: string; // This is the clusterId string
     data: Array<{
       x: number;
       y: number;
@@ -37,11 +37,23 @@ export default function ClusterChart({
   const [clickedPoint, setClickedPoint] = useState<ClusterPoint | null>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Create a stable color mapping for cluster IDs
+  const clusterIdToColorIndex = useMemo(() => {
+    const mapping = new Map<string, number>();
+    let nextIndex = 0;
+    // Ensure data is an array before calling forEach
+    (data || []).forEach(series => {
+      if (series && series.id && !mapping.has(series.id)) {
+        mapping.set(series.id, nextIndex++);
+      }
+    });
+    return mapping;
+  }, [data]);
+
   // Check for pinned comment ID in URL on mount
   useEffect(() => {
     const pinnedId = searchParams.get('pinned');
-    if (pinnedId) {
-      // Find the point with this ID in the data
+    if (pinnedId && data) {
       for (const series of data) {
         const point = series.data.find(p => p.id === pinnedId);
         if (point) {
@@ -71,22 +83,13 @@ export default function ClusterChart({
   // Define a more specific type for the Nivo node object for colors
   type NivoColorNode = { serieId: string | number; data?: { stance?: string | null } };
 
-  const getNodeColor = (param: NivoColorNode) => {
-    // When showStanceColors is true, color by stance -- THIS LOGIC IS CURRENTLY NOT ACTIVE
-    // if (showStanceColors) { // showStanceColors is not a prop anymore
-    //   if (param.data) {
-    //     const stance = param.data.stance || "Neutral/Unclear";
-    //     return stanceColors[stance as keyof typeof stanceColors] || stanceColors["Neutral/Unclear"];
-    //   }
-    //   if (typeof param.serieId === 'string' && param.serieId in stanceColors) {
-    //     return stanceColors[param.serieId as keyof typeof stanceColors];
-    //   }
-    // }
-    
-    // Default: color by cluster
-    const clusterIndex = parseInt(String(param.serieId).replace("Cluster ", "")) % clusterColors.length;
-    return clusterColors[clusterIndex];
-  };
+  const getNodeColor = useCallback((param: NivoColorNode) => {
+    const colorIndex = clusterIdToColorIndex.get(String(param.serieId));
+    if (colorIndex !== undefined) {
+      return clusterColors[colorIndex % clusterColors.length];
+    }
+    return clusterColors[0]; // Fallback color
+  }, [clusterIdToColorIndex, clusterColors]);
 
   const handleMouseMove = useCallback((event: React.MouseEvent) => {
     if (chartRef.current && hoveredPoint && !clickedPoint) {
@@ -145,7 +148,7 @@ export default function ClusterChart({
       onClick={handleChartClick}
     >
       <ResponsiveScatterPlotCanvas
-        data={data}
+        data={data || []}
         margin={{ top: 20, right: 20, bottom: 60, left: 60 }}
         xScale={{
           type: "linear",
@@ -207,10 +210,10 @@ export default function ClusterChart({
             itemOpacity: 0.75,
             symbolSize: 12,
             symbolShape: "circle",
-            data: data.map((series) => ({
+            data: (data || []).map((series) => ({
               id: series.id,
               label: series.id,
-              color: clusterColors[parseInt(series.id.replace('Cluster ', '')) % clusterColors.length]
+              color: clusterColors[(clusterIdToColorIndex.get(series.id) || 0) % clusterColors.length]
             }))
           },
         ]}
@@ -242,7 +245,7 @@ export default function ClusterChart({
       
       {/* Instructions */}
       <div className="absolute bottom-2 left-2 text-xs text-gray-500">
-        Hover to preview • Click to freeze tooltip • {data.length} clusters shown
+        Hover to preview • Click to freeze tooltip • {(data || []).length} clusters shown
       </div>
     </div>
   );
