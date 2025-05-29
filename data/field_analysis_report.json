@@ -1,0 +1,201 @@
+{
+  "always_empty": [
+    {
+      "field": "submitter_name",
+      "occurrences": 500
+    },
+    {
+      "field": "organization",
+      "occurrences": 500
+    },
+    {
+      "field": "city",
+      "occurrences": 500
+    },
+    {
+      "field": "state",
+      "occurrences": 500
+    },
+    {
+      "field": "country",
+      "occurrences": 500
+    }
+  ],
+  "always_null": [],
+  "always_same": [
+    {
+      "field": "comment_on",
+      "value": "OPM-2025-0004-0001",
+      "occurrences": 500
+    },
+    {
+      "field": "document_type",
+      "value": "Public Submission",
+      "occurrences": 500
+    },
+    {
+      "field": "agency_id",
+      "value": "OPM",
+      "occurrences": 500
+    },
+    {
+      "field": "corrected",
+      "value": "False",
+      "occurrences": 500
+    }
+  ],
+  "mostly_empty": [
+    {
+      "field": "attachment_urls",
+      "empty_percentage": 99.0,
+      "null_percentage": 0.0,
+      "total_occurrences": 500
+    },
+    {
+      "field": "attachment_titles",
+      "empty_percentage": 99.0,
+      "null_percentage": 0.0,
+      "total_occurrences": 500
+    },
+    {
+      "field": "attachment_local_paths",
+      "empty_percentage": 99.0,
+      "null_percentage": 0.0,
+      "total_occurrences": 500
+    },
+    {
+      "field": "attachment_text",
+      "empty_percentage": 99.4,
+      "null_percentage": 0.0,
+      "total_occurrences": 500
+    }
+  ],
+  "mixed": [
+    {
+      "field": "id",
+      "unique_values": 500,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "title",
+      "unique_values": 307,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "posted_date",
+      "unique_values": 2,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "received_date",
+      "unique_values": 5,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "comment",
+      "unique_values": 482,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "original_comment",
+      "unique_values": 482,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "category",
+      "unique_values": 5,
+      "empty_percentage": 19.2,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "attachment_count",
+      "unique_values": 2,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "has_attachments",
+      "unique_values": 2,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "lookup_id",
+      "unique_values": 480,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "truncated_text",
+      "unique_values": 480,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "text_source",
+      "unique_values": 2,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "comment_text",
+      "unique_values": 480,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "comment_count",
+      "unique_values": 4,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "stance",
+      "unique_values": 3,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "key_quote",
+      "unique_values": 470,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "rationale",
+      "unique_values": 477,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "themes",
+      "unique_values": 27,
+      "empty_percentage": 3.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "cluster_id",
+      "unique_values": 23,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "pca_x",
+      "unique_values": 480,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "pca_y",
+      "unique_values": 480,
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    }
+  ]
+}
