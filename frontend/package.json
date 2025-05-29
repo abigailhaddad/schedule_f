@@ -35,6 +35,8 @@
     "studio:preprod": "DB_ENV=preprod drizzle-kit studio",
     "build:prod": "next build",
     "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts",
+    "debug:clusters": "DB_ENV=local && tsx scripts/debug-clusters.ts",
+
     "deploy": "npm run db:use:prod && vercel --prod",
     "cy:open": "cypress open"
   },
