@@ -259,6 +259,52 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
         
         existing_raw_data.extend(new_raw_data)
         
+        # Download attachments for new comments if any have them
+        attachments_to_download = []
+        for comment in new_raw_data:
+            if comment.get('attributes', {}).get('attachmentCount', 0) > 0:
+                attachments_to_download.append(comment)
+        
+        if attachments_to_download:
+            logger.info(f"📎 Downloading attachments for {len(attachments_to_download)} new comments...")
+            from .fetch.fetch_comments import download_all_attachments
+            
+            # Download attachments
+            updated_new_data = download_all_attachments(new_raw_data, output_dir)
+            
+            # Update the existing_raw_data with attachment info
+            # Create a mapping of comment IDs to updated comments
+            updated_map = {c['id']: c for c in updated_new_data}
+            
+            # Update existing_raw_data
+            for i, comment in enumerate(existing_raw_data):
+                if comment['id'] in updated_map:
+                    existing_raw_data[i] = updated_map[comment['id']]
+            
+            # Run attachment analysis
+            attachments_dir = os.path.join(output_dir, "attachments")
+            if os.path.exists(attachments_dir):
+                logger.info(f"📎 Analyzing new attachment text extraction...")
+                import subprocess
+                import sys
+                
+                analyze_cmd = [
+                    sys.executable,
+                    os.path.join(os.path.dirname(__file__), 'fetch', 'analyze_attachments.py'),
+                    '--results_dir', attachments_dir
+                ]
+                
+                result = subprocess.run(analyze_cmd, capture_output=True, text=True)
+                if result.returncode == 0:
+                    logger.info("✅ Attachment analysis complete")
+                    # Log just the summary lines
+                    for line in result.stdout.split('\n'):
+                        if any(keyword in line for keyword in ['Summary:', 'pdf:', 'docx:', 'txt:', 'png:', 'jpg:', 'Saved']):
+                            logger.info(f"   {line.strip()}")
+                else:
+                    logger.error("❌ Attachment analysis failed")
+                    logger.error(result.stderr)
+        
         # Save updated raw_data back to the original location
         with open(raw_data_file, 'w') as f:
             json.dump(existing_raw_data, f, indent=2)
@@ -485,15 +531,29 @@ def main():
         
         # Copy existing files to output directory first
         logger.info(f"\n=== Preparing output directory ===")
+        import shutil
+        
         if os.path.exists(input_raw_data_path):
-            import shutil
             shutil.copy2(input_raw_data_path, output_raw_data_path)
             logger.info(f"✅ Copied raw_data.json to output directory")
         
         if os.path.exists(input_lookup_table_path):
-            import shutil
             shutil.copy2(input_lookup_table_path, output_lookup_table_path)
             logger.info(f"✅ Copied lookup table to output directory")
+        
+        # Copy attachments directory if it exists
+        input_dir = os.path.dirname(input_raw_data_path)
+        input_attachments_dir = os.path.join(input_dir, "attachments")
+        output_attachments_dir = os.path.join(args.output_dir, "attachments")
+        
+        if os.path.exists(input_attachments_dir):
+            logger.info(f"📎 Copying existing attachments directory...")
+            shutil.copytree(input_attachments_dir, output_attachments_dir, dirs_exist_ok=True)
+            # Count files copied
+            file_count = sum(len(files) for _, _, files in os.walk(output_attachments_dir))
+            logger.info(f"✅ Copied {file_count} attachment files to output directory")
+        else:
+            logger.info(f"📎 No existing attachments directory found")
         
         # Fetch and append new comments with attachments
         if new_comment_ids:
@@ -652,28 +712,26 @@ def main():
             
             n_entries = len(lookup_table)
             # Ensure we don't request more clusters than entries
-            n_clusters = min(args.n_clusters, n_entries)
-            
             if n_entries == 0:
                 logger.info("No entries to cluster, skipping clustering")
             elif n_entries < 2:
                 logger.info("Only 1 entry, skipping clustering")
             else:
-                logger.info(f"Clustering {n_entries} entries into {n_clusters} clusters")
+                logger.info(f"Running hierarchical clustering on {n_entries} entries")
                 
                 # Import and run clustering
                 import sys
                 import subprocess
                 
-                # Get absolute path to the semantic_lookup script
+                # Get absolute path to the hierarchical_clustering script
                 script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                semantic_script = os.path.join(script_dir, 'backend', 'analysis', 'semantic_lookup.py')
+                clustering_script = os.path.join(script_dir, 'backend', 'analysis', 'hierarchical_clustering.py')
                 
                 clustering_cmd = [
                     sys.executable, 
-                    semantic_script,
+                    clustering_script,
                     '--input', output_lookup_table_path,
-                    '--n_clusters', str(n_clusters)
+                    '--output_dir', args.output_dir
                 ]
                 
                 result = subprocess.run(clustering_cmd, capture_output=True, text=True)

@@ -59,6 +59,8 @@ def main():
                        help='Skip LLM analysis (only create lookup table)')
     parser.add_argument('--skip_clustering', action='store_true',
                        help='Skip clustering (only do data fetching and LLM analysis)')
+    parser.add_argument('--limit', type=int, default=None,
+                       help='Limit number of comments to process (for testing)')
     
     args = parser.parse_args()
     
@@ -83,11 +85,60 @@ def main():
         from .fetch.fetch_comments import read_comments_from_csv
         
         logger.info(f"Reading comments from {args.csv}...")
-        raw_data_file = read_comments_from_csv(args.csv, args.output_dir)
+        if args.limit:
+            logger.info(f"Limiting to first {args.limit} comments")
+        raw_data_file = read_comments_from_csv(args.csv, args.output_dir, limit=args.limit)
         logger.info(f"✅ Raw comments saved to {raw_data_file}")
         
-        # Step 2: Create lookup table
-        logger.info(f"\n=== STEP 2: Creating Deduplicated Lookup Table ===")
+        # Step 2: Download and analyze attachments BEFORE creating lookup table
+        logger.info(f"\n=== STEP 2: Downloading and Analyzing Attachments ===")
+        from .fetch.fetch_comments import download_all_attachments
+        
+        # Load raw data
+        with open(raw_data_file, 'r') as f:
+            raw_data = json.load(f)
+        
+        # Check if there are any attachments to download
+        total_attachments = sum(comment.get('attributes', {}).get('attachmentCount', 0) for comment in raw_data)
+        
+        if total_attachments > 0:
+            # Download attachments
+            logger.info(f"Downloading {total_attachments} attachments to {args.output_dir}...")
+            updated_data = download_all_attachments(raw_data, args.output_dir)
+            
+            # Save updated data back
+            with open(raw_data_file, 'w') as f:
+                json.dump(updated_data, f, indent=2)
+            
+            # Run attachment analysis
+            attachments_dir = os.path.join(args.output_dir, "attachments")
+            if os.path.exists(attachments_dir):
+                logger.info(f"Analyzing attachment text extraction...")
+                import subprocess
+                import sys
+                
+                analyze_cmd = [
+                    sys.executable,
+                    os.path.join(os.path.dirname(__file__), 'fetch', 'analyze_attachments.py'),
+                    '--results_dir', attachments_dir
+                ]
+                
+                result = subprocess.run(analyze_cmd, capture_output=True, text=True)
+                if result.returncode == 0:
+                    logger.info("✅ Attachment analysis complete")
+                    logger.info(result.stdout)
+                else:
+                    logger.error("❌ Attachment analysis failed")
+                    logger.error(result.stderr)
+            
+            # Reload the data with attachment text
+            with open(raw_data_file, 'r') as f:
+                raw_data = json.load(f)
+        else:
+            logger.info("No attachments to download")
+        
+        # Step 3: Create lookup table (AFTER attachments are processed)
+        logger.info(f"\n=== STEP 3: Creating Deduplicated Lookup Table ===")
         from .analysis.create_lookup_table import create_lookup_table
         
         logger.info(f"Creating lookup table from {raw_data_file}...")
@@ -116,10 +167,10 @@ def main():
         logger.info(f"   Unique text patterns: {unique_texts:,}")
         logger.info(f"   Deduplication efficiency: {dedup_efficiency}%")
         
-        # Step 3: LLM Analysis
+        # Step 4: LLM Analysis
         analyzed_path = lookup_table_path
         if not args.skip_analysis:
-            logger.info(f"\n=== STEP 3: LLM Analysis ({unique_texts} unique texts) ===")
+            logger.info(f"\n=== STEP 4: LLM Analysis ({unique_texts} unique texts) ===")
             from .analysis.analyze_lookup_table import analyze_lookup_table_batch
             from .utils.comment_analyzer import CommentAnalyzer
             
@@ -141,11 +192,11 @@ def main():
             
             logger.info(f"✅ Analysis complete, saved to {lookup_table_path}")
         else:
-            logger.info(f"\n=== STEP 3: Skipping LLM Analysis ===")
+            logger.info(f"\n=== STEP 4: Skipping LLM Analysis ===")
         
-        # Step 4: Semantic Clustering
+        # Step 5: Semantic Clustering
         if not args.skip_clustering and unique_texts >= 2:
-            logger.info(f"\n=== STEP 4: Semantic Clustering ===")
+            logger.info(f"\n=== STEP 5: Semantic Clustering ===")
             
             logger.info(f"Running hierarchical clustering on {unique_texts} entries")
             
@@ -173,13 +224,13 @@ def main():
                 logger.error("❌ Clustering failed")
                 logger.error(result.stderr)
         elif unique_texts < 2:
-            logger.info(f"\n=== STEP 4: Skipping Clustering (too few entries: {unique_texts}) ===")
+            logger.info(f"\n=== STEP 5: Skipping Clustering (too few entries: {unique_texts}) ===")
         else:
-            logger.info(f"\n=== STEP 4: Skipping Clustering ===")
+            logger.info(f"\n=== STEP 5: Skipping Clustering ===")
         
-        # Step 5: Quote verification (always run if analysis was performed)
+        # Step 6: Quote verification (always run if analysis was performed)
         if not args.skip_analysis and unique_texts > 0:
-            logger.info(f"\n=== STEP 5: Quote Verification ===")
+            logger.info(f"\n=== STEP 6: Quote Verification ===")
             
             # Import and run quote verification
             from .analysis.verify_lookup_quotes import verify_lookup_quotes
@@ -200,8 +251,8 @@ def main():
             else:
                 logger.error("❌ Quote verification failed")
         
-        # Step 6: Create merged data.json
-        logger.info(f"\n=== STEP 6: Creating Merged data.json ===")
+        # Step 7: Create merged data.json
+        logger.info(f"\n=== STEP 7: Creating Merged data.json ===")
         from .utils.merge_lookup_to_raw import merge_lookup_to_raw
         
         # Always use the base lookup table (clustering updates it in place)
@@ -211,8 +262,8 @@ def main():
         merge_lookup_to_raw(raw_data_path, lookup_for_merge, output_data_path)
         logger.info(f"✅ Created merged data.json")
         
-        # Step 7: Validate output
-        logger.info(f"\n=== STEP 7: Validating Pipeline Output ===")
+        # Step 8: Validate output
+        logger.info(f"\n=== STEP 8: Validating Pipeline Output ===")
         from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
         
         validation_results = validate_pipeline_output(
@@ -242,13 +293,17 @@ def main():
         logger.info(f"   - raw_data.json (original comments + attachments)")
         logger.info(f"   - lookup_table.json (deduplicated patterns with analysis)")
         logger.info(f"   - data.json (merged data for frontend)")
+        if total_attachments > 0:
+            logger.info(f"   - attachments/ (downloaded attachment files with .extracted.txt)")
         if not args.skip_analysis:
             logger.info(f"   - lookup_table_quote_verification.json")
             logger.info(f"   - lookup_table_quote_verification.txt")
         if not args.skip_clustering and unique_texts >= 2:
-            logger.info(f"   - cluster_report.txt")
-            logger.info(f"   - clusters_visualization.png")
-            logger.info(f"   - dendrogram.png")
+            logger.info(f"   - cluster/ (clustering results directory)")
+            logger.info(f"     - hierarchical_cluster_report.txt")
+            logger.info(f"     - hierarchical_clusters_visualization.png")
+            logger.info(f"     - main_dendrogram.png")
+            logger.info(f"     - main_elbow_curve.png")
         
     except Exception as e:
         logger.error(f"❌ Pipeline failed: {e}")

@@ -526,8 +526,10 @@ def main():
     
     # Set output directory
     if args.output_dir:
-        output_dir = args.output_dir
+        # If output_dir is provided (from pipeline), create cluster subdirectory
+        output_dir = os.path.join(args.output_dir, "cluster")
     else:
+        # Standalone run - create timestamped directory
         input_dir = os.path.dirname(input_file)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_dir = os.path.join(input_dir, f"hierarchical_clustering_{timestamp}")

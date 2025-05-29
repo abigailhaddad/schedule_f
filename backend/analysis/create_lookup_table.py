@@ -52,9 +52,19 @@ def extract_and_combine_text(comment_data: Dict[str, Any], truncate_chars: Optio
         text_sources = ['comment']
         
         # Add attachment text if available
-        if 'attachment_text' in attributes and attributes['attachment_text']:
-            attachment_text = attributes['attachment_text'].strip()
-            if attachment_text:
+        attachment_text = ""
+        if 'attachment_texts' in attributes and attributes['attachment_texts']:
+            # Combine all attachment texts
+            attachment_parts = []
+            for att in attributes['attachment_texts']:
+                if isinstance(att, dict) and 'text' in att:
+                    text = att['text'].strip()
+                    if text:
+                        attachment_parts.append(text)
+            
+            if attachment_parts:
+                attachment_text = "\n\n--- NEXT ATTACHMENT ---\n\n".join(attachment_parts)
+                
                 if full_text:
                     full_text += f"\n\n--- ATTACHMENT CONTENT ---\n{attachment_text}"
                 else:
@@ -76,7 +86,9 @@ def extract_and_combine_text(comment_data: Dict[str, Any], truncate_chars: Optio
         return {
             'full_text': full_text,
             'truncated_text': truncated_text,
-            'text_source': '+'.join(text_sources)
+            'text_source': '+'.join(text_sources),
+            'comment_text': comment_text,
+            'attachment_text': attachment_text
         }
         
     except Exception as e:
@@ -84,7 +96,9 @@ def extract_and_combine_text(comment_data: Dict[str, Any], truncate_chars: Optio
         return {
             'full_text': '',
             'truncated_text': '',
-            'text_source': 'error'
+            'text_source': 'error',
+            'comment_text': '',
+            'attachment_text': ''
         }
 
 def normalize_text_for_dedup(text: str) -> str:
@@ -157,6 +171,8 @@ def create_lookup_table(raw_data: List[Dict[str, Any]], truncate_chars: Optional
                 text_groups[normalized_text] = {
                     'truncated_text': truncated_text,  # Keep the original case/formatting
                     'text_source': text_source,
+                    'comment_text': text_result['comment_text'],
+                    'attachment_text': text_result['attachment_text'],
                     'comment_ids': [],
                     'full_text_length': len(full_text),
                     'truncated_text_length': len(truncated_text)
@@ -177,6 +193,8 @@ def create_lookup_table(raw_data: List[Dict[str, Any]], truncate_chars: Optional
             'lookup_id': f"lookup_{lookup_id_counter:06d}",
             'truncated_text': group_data['truncated_text'],
             'text_source': group_data['text_source'],
+            'comment_text': group_data['comment_text'],
+            'attachment_text': group_data['attachment_text'],
             'comment_ids': group_data['comment_ids'],
             'comment_count': len(group_data['comment_ids']),
             'full_text_length': group_data['full_text_length'],
