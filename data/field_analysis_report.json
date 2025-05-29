@@ -44,15 +44,73 @@
       "occurrences": 500
     }
   ],
-  "mostly_empty": [
+  "single_unique": [],
+  "few_unique": [
     {
-      "field": "attachment_urls",
-      "empty_percentage": 99.0,
-      "null_percentage": 0.0,
-      "total_occurrences": 500
+      "field": "posted_date",
+      "unique_count": 2,
+      "values": [
+        "2025-04-28T04:00Z",
+        "2025-04-24T00:00Z"
+      ],
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "attachment_count",
+      "unique_count": 2,
+      "values": [
+        "0",
+        "1"
+      ],
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "has_attachments",
+      "unique_count": 2,
+      "values": [
+        "False",
+        "True"
+      ],
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
     },
     {
       "field": "attachment_titles",
+      "unique_count": 2,
+      "values": [
+        "attachment_1.png",
+        "attachment_1.pdf"
+      ],
+      "empty_percentage": 99.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "text_source",
+      "unique_count": 2,
+      "values": [
+        "comment",
+        "comment+attachments"
+      ],
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    },
+    {
+      "field": "stance",
+      "unique_count": 3,
+      "values": [
+        "Against",
+        "For",
+        "Neutral/Unclear"
+      ],
+      "empty_percentage": 0.0,
+      "null_percentage": 0.0
+    }
+  ],
+  "mostly_empty": [
+    {
+      "field": "attachment_urls",
       "empty_percentage": 99.0,
       "null_percentage": 0.0,
       "total_occurrences": 500
@@ -84,12 +142,6 @@
       "null_percentage": 0.0
     },
     {
-      "field": "posted_date",
-      "unique_values": 2,
-      "empty_percentage": 0.0,
-      "null_percentage": 0.0
-    },
-    {
       "field": "received_date",
       "unique_values": 5,
       "empty_percentage": 0.0,
@@ -114,18 +166,6 @@
       "null_percentage": 0.0
     },
     {
-      "field": "attachment_count",
-      "unique_values": 2,
-      "empty_percentage": 0.0,
-      "null_percentage": 0.0
-    },
-    {
-      "field": "has_attachments",
-      "unique_values": 2,
-      "empty_percentage": 0.0,
-      "null_percentage": 0.0
-    },
-    {
       "field": "lookup_id",
       "unique_values": 480,
       "empty_percentage": 0.0,
@@ -138,12 +178,6 @@
       "null_percentage": 0.0
     },
     {
-      "field": "text_source",
-      "unique_values": 2,
-      "empty_percentage": 0.0,
-      "null_percentage": 0.0
-    },
-    {
       "field": "comment_text",
       "unique_values": 480,
       "empty_percentage": 0.0,
@@ -152,12 +186,6 @@
     {
       "field": "comment_count",
       "unique_values": 4,
-      "empty_percentage": 0.0,
-      "null_percentage": 0.0
-    },
-    {
-      "field": "stance",
-      "unique_values": 3,
       "empty_percentage": 0.0,
       "null_percentage": 0.0
     },
