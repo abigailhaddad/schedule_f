@@ -62,6 +62,8 @@ def analyze_empty_fields(data_path: str) -> Dict[str, Dict[str, Any]]:
         "always_empty": [],
         "always_null": [],
         "always_same": [],
+        "single_unique": [],
+        "few_unique": [],
         "mostly_empty": [],
         "mixed": []
     }
@@ -102,6 +104,27 @@ def analyze_empty_fields(data_path: str) -> Dict[str, Dict[str, Any]]:
                         "value": value,
                         "occurrences": count
                     })
+            elif len(values) <= 1:
+                # 0 or 1 unique values (including null/empty)
+                unique_values = [v for v in values if v not in ("__NULL__", "__EMPTY__", "__EMPTY_COLLECTION__")]
+                results["single_unique"].append({
+                    "field": field,
+                    "unique_count": len(unique_values),
+                    "values": list(unique_values)[:20] if unique_values else [],
+                    "empty_percentage": empty_pct,
+                    "null_percentage": null_pct
+                })
+            elif len(values) <= 3:
+                # 2-3 unique values
+                unique_values = [v for v in values if v not in ("__NULL__", "__EMPTY__", "__EMPTY_COLLECTION__")]
+                truncated_values = [v[:20] + "..." if len(v) > 20 else v for v in unique_values]
+                results["few_unique"].append({
+                    "field": field,
+                    "unique_count": len(unique_values),
+                    "values": truncated_values,
+                    "empty_percentage": empty_pct,
+                    "null_percentage": null_pct
+                })
             elif empty_pct > 90 or null_pct > 90:
                 results["mostly_empty"].append({
                     "field": field,
@@ -147,6 +170,20 @@ def print_analysis(results: Dict[str, List[Dict[str, Any]]]):
             if len(value) > 50:
                 value = value[:50] + "..."
             print(f"  • {item['field']} = '{value}'")
+    
+    if results["single_unique"]:
+        print("\n🔢 SINGLE UNIQUE VALUE (0-1 values):")
+        print("-" * 40)
+        for item in results["single_unique"]:
+            values_str = ", ".join(item['values']) if item['values'] else "no non-null values"
+            print(f"  • {item['field']}: {item['unique_count']} unique ({values_str})")
+    
+    if results["few_unique"]:
+        print("\n🔤 FEW UNIQUE VALUES (2-3 values):")
+        print("-" * 40)
+        for item in results["few_unique"]:
+            values_str = ", ".join(f"'{v}'" for v in item['values'])
+            print(f"  • {item['field']}: {item['unique_count']} unique ({values_str})")
     
     if results["mostly_empty"]:
         print("\n⚠️  MOSTLY EMPTY (>90%):")

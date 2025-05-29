@@ -45,7 +45,7 @@ export default function ClusterChart({
     
     // First, identify parent clusters and assign base colors
     (data || []).forEach(series => {
-      if (series && series.id) {
+      if (series && series.id && typeof series.id === 'string' && series.id.length > 0) {
         // Extract parent cluster (everything except last character)
         const parentCluster = series.id.slice(0, -1);
         if (!parentMapping.has(parentCluster)) {
@@ -56,7 +56,7 @@ export default function ClusterChart({
     
     // Then, assign colors to sub-clusters based on their parent
     (data || []).forEach(series => {
-      if (series && series.id && !mapping.has(series.id)) {
+      if (series && series.id && typeof series.id === 'string' && series.id.length > 0 && !mapping.has(series.id)) {
         const parentCluster = series.id.slice(0, -1);
         const parentIndex = parentMapping.get(parentCluster) || 0;
         const subClusterLetter = series.id.slice(-1);
@@ -190,11 +190,11 @@ export default function ClusterChart({
           // Access the series id from the node
           const serieId = node.serieId;
           
-          if (!serieId) {
+          if (!serieId || typeof serieId !== 'string') {
             return baseColors[0]; // Fallback color
           }
           
-          const colorIndex = clusterIdToColorIndex.get(String(serieId));
+          const colorIndex = clusterIdToColorIndex.get(serieId);
           if (colorIndex !== undefined) {
             const parentIndex = Math.floor(colorIndex / 10);
             const variation = colorIndex % 10;
