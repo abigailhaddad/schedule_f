@@ -19,6 +19,7 @@ USE_RESUME=false
 SKIP_ANALYSIS=false
 SKIP_CLUSTERING=false
 TRUNCATE=""
+LIMIT=""
 CSV_FILE="comments.csv"
 RAW_DATA_FILE="data/raw_data.json"
 LOOKUP_TABLE_FILE="data/lookup_table_corrected.json"
@@ -42,6 +43,10 @@ while [[ $# -gt 0 ]]; do
             TRUNCATE="$2"
             shift 2
             ;;
+        --limit)
+            LIMIT="$2"
+            shift 2
+            ;;
         --csv)
             CSV_FILE="$2"
             shift 2
@@ -62,6 +67,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --skip-analysis       Skip LLM analysis"
             echo "  --skip-clustering     Skip clustering analysis"
             echo "  --truncate N          Truncate text to N characters"
+            echo "  --limit N             Limit to first N comments (for testing)"
             echo "  --csv FILE            CSV file path (default: comments.csv)"
             echo "  --raw-data FILE       Raw data file for resume mode (default: data/raw_data.json)"
             echo "  --lookup-table FILE   Lookup table file for resume mode (default: data/lookup_table_corrected.json)"
@@ -134,6 +140,9 @@ PIPELINE_ARGS="--csv $CSV_FILE --output_dir $OUTPUT_DIR $RESUME_ARGS"
 if [ -n "$TRUNCATE" ]; then
     PIPELINE_ARGS="$PIPELINE_ARGS --truncate $TRUNCATE"
 fi
+if [ -n "$LIMIT" ]; then
+    PIPELINE_ARGS="$PIPELINE_ARGS --limit $LIMIT"
+fi
 if [ "$SKIP_ANALYSIS" = true ]; then
     PIPELINE_ARGS="$PIPELINE_ARGS --skip_analysis"
 fi
@@ -153,6 +162,9 @@ if [ "$USE_RESUME" = true ]; then
 fi
 if [ -n "$TRUNCATE" ]; then
     echo "✂️  Truncation: $TRUNCATE characters"
+fi
+if [ -n "$LIMIT" ]; then
+    echo "📊 Limit: $LIMIT comments"
 fi
 if [ "$SKIP_ANALYSIS" = true ]; then
     echo "⏭️  Skipping: LLM Analysis"
@@ -200,7 +212,14 @@ show_progress() {
     # Get the last meaningful line from the log (skip empty lines and certain patterns)
     if [ -f "$OUTPUT_DIR/pipeline.log" ]; then
         # Look for key progress indicators
-        local new_comments=$(grep -E "New to fetch: [0-9]+" "$OUTPUT_DIR/pipeline.log" | tail -1 | grep -oE "[0-9]+" | tail -1)
+        # For new comments, get the actual number being processed, not just "new to fetch"
+        local new_comments=$(grep -E "Processing [0-9,]+ new comments" "$OUTPUT_DIR/pipeline.log" | tail -1 | grep -oE "[0-9,]+" | tail -1 | tr -d ',')
+        # If that's not found, try "new entries created"
+        if [ -z "$new_comments" ]; then
+            new_comments=$(grep -E "New entries created: [0-9,]+" "$OUTPUT_DIR/pipeline.log" | tail -1 | grep -oE "[0-9,]+" | tail -1 | tr -d ',')
+        fi
+        # For LLM analysis, get the number of entries being analyzed
+        local analyzing_entries=$(grep -E "=== STEP [0-9]+: LLM Analysis \([0-9,]+ entries\)" "$OUTPUT_DIR/pipeline.log" | tail -1 | grep -oE "\([0-9,]+ entries\)" | grep -oE "[0-9,]+" | tr -d ',')
         local processing_batch=$(grep -E "Processing batch [0-9]+" "$OUTPUT_DIR/pipeline.log" | tail -1)
         local current_step=$(grep -E "=== STEP [0-9]+" "$OUTPUT_DIR/pipeline.log" | tail -1)
         
@@ -210,8 +229,17 @@ show_progress() {
             status_line="$current_step"
         fi
         
-        if [ -n "$new_comments" ] && [ "$new_comments" -gt 0 ]; then
-            status_line="$status_line | New comments: $new_comments"
+        # If we're in LLM analysis step, show the number of entries being analyzed
+        if [[ "$current_step" == *"LLM Analysis"* ]] && [ -n "$analyzing_entries" ]; then
+            # Already included in the step name
+            true
+        elif [ -n "$new_comments" ] && [ "$new_comments" -gt 0 ]; then
+            # For other steps, show new comments/entries
+            if [[ "$current_step" == *"STEP 2"* ]]; then
+                status_line="$status_line | New unique patterns: $new_comments"
+            else
+                status_line="$status_line | New entries: $new_comments"
+            fi
         fi
         
         if [ -n "$processing_batch" ]; then
@@ -308,8 +336,8 @@ show_results() {
     
     if [ "$USE_RESUME" = true ]; then
         # For resume pipeline, check for new comments fetched
-        if grep -q "New to fetch:" "$OUTPUT_DIR/pipeline.log" 2>/dev/null; then
-            NEW_COMMENTS=$(grep "New to fetch:" "$OUTPUT_DIR/pipeline.log" | grep -oE 'New to fetch: [0-9,]+' | grep -oE '[0-9,]+' | tail -1 | tr -d ',')
+        if grep -q "new comments to raw_data" "$OUTPUT_DIR/pipeline.log" 2>/dev/null; then
+            NEW_COMMENTS=$(grep "Appended [0-9,]* new comments to raw_data" "$OUTPUT_DIR/pipeline.log" | grep -oE '[0-9,]+' | tail -1 | tr -d ',')
             if [ -n "$NEW_COMMENTS" ] && [ "$NEW_COMMENTS" -gt 0 ]; then
                 echo "🆕 New comments fetched: $NEW_COMMENTS"
             else

@@ -83,7 +83,7 @@ fi
 
 # Run merge_lookup_to_raw script if both required files exist
 echo ""
-if [ -f "$DATA_DIR/raw_data.json" ] && [ -f "$DATA_DIR/lookup_table_corrected.json" ]; then
+if [ -f "$DATA_DIR/raw_data.json" ] && [ -f "$DATA_DIR/lookup_table.json" ]; then
     echo "🔄 Running merge_lookup_to_raw.py to create data.json..."
     cd "$PROJECT_ROOT"
     python backend/utils/merge_lookup_to_raw.py
