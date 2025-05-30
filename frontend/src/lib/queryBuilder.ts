@@ -1,7 +1,8 @@
+// lib/queryBuilder.ts
 'use server';
 
-import { and, or, SQL, sql } from 'drizzle-orm';
-import { comments, stanceEnum } from './db/schema';
+import { and, or, SQL, sql, eq } from 'drizzle-orm';
+import { comments, stanceEnum, lookupTable } from './db/schema';
 import { db } from './db';
 
 export type FilterMode = 'exact' | 'includes' | 'at_least';
@@ -102,6 +103,66 @@ function buildStanceFilterConditions(column: SQL, filterValue: FilterValue): SQL
 }
 
 /**
+ * Builds SQL condition for commentCount ranges
+ */
+function buildCommentCountCondition(column: SQL, value: string): SQL | null {
+  switch (value) {
+    case '1':
+      return sql`${column} = 1`;
+    case '2-10':
+      return sql`${column} >= 2 AND ${column} <= 10`;
+    case '11-50':
+      return sql`${column} >= 11 AND ${column} <= 50`;
+    case '50+':
+      return sql`${column} > 50`;
+    default:
+      // Try to parse as a number for direct values
+      const num = parseInt(value, 10);
+      if (!isNaN(num)) {
+        return sql`${column} = ${num}`;
+      }
+      return null;
+  }
+}
+
+/**
+ * Builds conditions for commentCount filters
+ */
+function buildCommentCountFilterConditions(column: SQL, filterValue: FilterValue): SQL[] {
+  const conditions: SQL[] = [];
+  
+  if (filterValue.mode === 'at_least') {
+    // "Must include all" mode - doesn't make sense for ranges, treat as OR
+    const countConditions: SQL[] = [];
+    filterValue.values.forEach(countValue => {
+      const condition = buildCommentCountCondition(column, String(countValue));
+      if (condition) countConditions.push(condition);
+    });
+    
+    if (countConditions.length > 0) {
+      conditions.push(sql`(${or(...countConditions)})`);
+    }
+  } else if (filterValue.mode === 'exact' && filterValue.values.length === 1) {
+    // Exact match for single value
+    const condition = buildCommentCountCondition(column, String(filterValue.values[0]));
+    if (condition) conditions.push(condition);
+  } else {
+    // "includes" mode - any match is sufficient (OR)
+    const countConditions: SQL[] = [];
+    filterValue.values.forEach(countValue => {
+      const condition = buildCommentCountCondition(column, String(countValue));
+      if (condition) countConditions.push(condition);
+    });
+    
+    if (countConditions.length > 0) {
+      conditions.push(sql`(${or(...countConditions)})`);
+    }
+  }
+  
+  return conditions;
+}
+
+/**
  * Builds conditions for theme filters
  */
 function buildThemeFilterConditions(column: SQL, filterValue: FilterValue): SQL[] {
@@ -190,7 +251,7 @@ function buildTextFilterConditions(column: SQL, values: string[]): SQL[] {
  * Determines if a field should use text search (ILIKE) vs exact match
  */
 function isTextSearchField(key: string): boolean {
-  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale'];
+  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale', 'key_quote', 'submitterName', 'organization', 'city', 'state', 'country', 'documentType', 'commentOn', 'attachmentUrls', 'attachmentTitles'];
   return textFields.includes(key);
 }
 
@@ -220,6 +281,11 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
     // Special handling for themes
     if (key === 'themes') {
       return buildThemeFilterConditions(column, filterValue);
+    }
+    
+    // Special handling for commentCount
+    if (key === 'commentCount') {
+      return buildCommentCountFilterConditions(column, filterValue);
     }
     
     // General handling for other fields with mode
@@ -275,6 +341,17 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
       if (stanceConditions.length > 0) {
         conditions.push(sql`(${or(...stanceConditions)})`);
       }
+    } else if (key === 'commentCount') {
+      // Special handling for commentCount ranges in array
+      const countConditions: SQL[] = [];
+      value.forEach(countValue => {
+        const condition = buildCommentCountCondition(column, String(countValue));
+        if (condition) countConditions.push(condition);
+      });
+      
+      if (countConditions.length > 0) {
+        conditions.push(sql`(${or(...countConditions)})`);
+      }
     } else if (isTextSearchField(key)) {
       // For text fields, use ILIKE with OR for partial matches
       return buildTextFilterConditions(column, value.map(String));
@@ -287,6 +364,10 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
   else {
     if (key === 'stance') {
       const condition = buildStanceCondition(column, String(value));
+      if (condition) conditions.push(condition);
+    } else if (key === 'commentCount') {
+      // Special handling for commentCount ranges
+      const condition = buildCommentCountCondition(column, String(value));
       if (condition) conditions.push(condition);
     } else if (isTextSearchField(key)) {
       // Use ILIKE for text fields to search for partial matches
@@ -344,7 +425,7 @@ function buildSearchConditions(search?: string, searchFields?: string[]): SQL[] 
   // Determine which fields to search
   const fieldsToSearch = searchFields && searchFields.length > 0 
     ? searchFields 
-    : ['comment', 'title', 'keyQuote', 'themes', 'rationale', 'category'];
+    : ['comment', 'title', 'keyQuote', 'key_quote', 'themes', 'rationale', 'category', 'submitterName', 'organization', 'documentType', 'commentOn', 'attachmentUrls', 'attachmentTitles'];
   
   // Build search conditions for each field
   fieldsToSearch.forEach(field => {
@@ -484,24 +565,57 @@ export async function buildStatsQueries(options: QueryOptions) {
     neutralQuery
   };
 }
-// frontend/src/lib/queryBuilder.ts
-// Add this to the existing buildTimeSeriesQuery function
 
+/**
+ * Build a query to fetch related comments through the lookup table
+ */
+export async function buildRelatedCommentsQuery(lookupId: string) {
+  // First get the lookup table entry
+  const lookupEntry = await db
+    .select()
+    .from(lookupTable)
+    .where(eq(lookupTable.lookupId, lookupId))
+    .limit(1);
+  
+  if (!lookupEntry.length) {
+    return { relatedComments: [] };
+  }
+  
+  const commentIds = lookupEntry[0].commentIds;
+  
+  // Fetch all comments with those IDs
+  const relatedComments = await db
+    .select()
+    .from(comments)
+    .where(sql`${comments.id} = ANY(${commentIds})`);
+  
+  return { relatedComments };
+}
+
+/**
+ * Build time series query with duplicate handling through lookup table
+ */
 export async function buildTimeSeriesQuery(
   options: QueryOptions,
   dateField: 'postedDate' | 'receivedDate' = 'postedDate',
-  includeDuplicates: boolean = true // New parameter
+  includeDuplicates: boolean = true
 ) {
   // Build filter conditions
   const filterConditions = buildFilterConditions(options.filters);
   const searchConditions = buildSearchConditions(options.search, options.searchFields);
   const allConditions = [...filterConditions, ...searchConditions];
 
-  // Add condition to exclude duplicates if requested
+  // Add condition to only include primary comments (first in each lookup group) if excluding duplicates
   if (!includeDuplicates) {
-    // Exclude comments where duplicateOf is not null and not empty array
+    // We need to only include comments that are the first in their lookup group
+    // This requires a subquery or window function
     allConditions.push(
-      sql`(${comments.duplicateOf} IS NULL OR CARDINALITY(${comments.duplicateOf}) = 0)`
+      sql`${comments.id} IN (
+        SELECT DISTINCT ON (${lookupTable.lookupId}) ${comments.id}
+        FROM ${comments}
+        LEFT JOIN ${lookupTable} ON ${comments.lookupId} = ${lookupTable.lookupId}
+        ORDER BY ${lookupTable.lookupId}, ${comments.id}
+      )`
     );
   }
 
@@ -530,6 +644,7 @@ export async function buildTimeSeriesQuery(
 
   return baseQuery;
 }
+
 // Export helper functions for testing
 export { 
   buildFilterConditions, 

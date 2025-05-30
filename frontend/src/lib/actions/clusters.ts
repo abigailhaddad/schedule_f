@@ -1,4 +1,4 @@
-// Export the functions
+// src/lib/actions/clusters.ts
 'use server';
 
 import { db, connectDb } from '@/lib/db';
@@ -11,7 +11,7 @@ export interface ClusterPoint {
   id: string;
   title: string;
   stance: string | null;
-  clusterId: number;
+  clusterId: string;
   pcaX: number;
   pcaY: number;
   keyQuote: string | null;
@@ -19,16 +19,14 @@ export interface ClusterPoint {
 }
 
 export interface ClusterData {
-  clusters: Array<[number, ClusterPoint[]]>; // Changed from Map to Array
+  clusters: Array<[string, ClusterPoint[]]>;
   bounds: {
     minX: number;
     maxX: number;
     minY: number;
     maxY: number;
   };
-  isSampled: boolean;
   totalPoints: number;
-  sampledPoints: number;
 }
 
 export interface ClusterDataResponse {
@@ -37,32 +35,29 @@ export interface ClusterDataResponse {
   error?: string;
 }
 
-const MAX_POINTS_PER_CLUSTER = 50; // Limit points per cluster for performance
-const MAX_TOTAL_POINTS = 500; // Maximum total points to render for smooth interaction
-
 // Define an interface for the raw data returned by the database query
 interface RawClusterPointRow {
   id: string;
-  title: string | null; // Title can be null from DB
+  title: string | null;
   stance: string | null;
-  clusterId: number | null; // Nullable from DB before filtering
-  pcaX: number | null;      // Nullable from DB before filtering
-  pcaY: number | null;      // Nullable from DB before filtering
+  clusterId: string | null;
+  pcaX: number | null;
+  pcaY: number | null;
   keyQuote: string | null;
   themes: string | null;
   // Allow for potential snake_case versions from direct SQL execution
-  cluster_id?: number | null;
+  cluster_id?: string | null;
   pca_x?: number | null;
   pca_y?: number | null;
   key_quote?: string | null;
   // Allow for potential all-lowercase versions
-  clusterid?: number | null;
+  clusterid?: string | null;
   pcax?: number | null;
   pcay?: number | null;
   keyquote?: string | null;
 }
 
-export async function getClusterData(sampleData: boolean = false): Promise<ClusterDataResponse> {
+export async function getClusterData(): Promise<ClusterDataResponse> {
   const fetchClusterData = async () => {
     try {
       const connection = await connectDb();
@@ -70,80 +65,24 @@ export async function getClusterData(sampleData: boolean = false): Promise<Clust
         throw new Error("Failed to connect to database");
       }
 
-      // First, get cluster statistics
-      const clusterStats = await db
+      // Fetch all cluster data without sampling
+      const result = await db
         .select({
+          id: comments.id,
+          title: comments.title,
+          stance: comments.stance,
           clusterId: comments.clusterId,
-          count: sql<number>`COUNT(*)`.mapWith(Number),
+          pcaX: comments.pcaX,
+          pcaY: comments.pcaY,
+          keyQuote: comments.keyQuote,
+          themes: comments.themes,
         })
         .from(comments)
-        .where(sql`${comments.clusterId} IS NOT NULL`)
-        .groupBy(comments.clusterId)
+        .where(sql`${comments.clusterId} IS NOT NULL AND ${comments.pcaX} IS NOT NULL AND ${comments.pcaY} IS NOT NULL`)
         .execute();
 
-      const totalPointsCount = clusterStats.reduce((sum, stat) => sum + stat.count, 0);
-      
-      // Determine if we need to sample
-      const shouldSample = sampleData && totalPointsCount > MAX_TOTAL_POINTS;
-      
-      let result: RawClusterPointRow[]; // Use the defined interface
-      
-      if (shouldSample) {
-        // Use a more efficient sampling strategy
-        // Sample proportionally from each cluster
-        const samplingRatio = MAX_TOTAL_POINTS / totalPointsCount;
-        
-        // Build a UNION query to sample from each cluster
-        const clusterQueries = clusterStats.map((stat) => {
-          const sampleSize = Math.max(1, Math.floor(stat.count * samplingRatio));
-          const limitedSize = Math.min(sampleSize, MAX_POINTS_PER_CLUSTER);
-          
-          return sql`
-            (SELECT 
-              ${comments.id},
-              ${comments.title},
-              ${comments.stance},
-              ${comments.clusterId},
-              ${comments.pcaX},
-              ${comments.pcaY},
-              ${comments.keyQuote},
-              ${comments.themes}
-            FROM ${comments}
-            WHERE ${comments.clusterId} = ${stat.clusterId}
-              AND ${comments.pcaX} IS NOT NULL 
-              AND ${comments.pcaY} IS NOT NULL
-            ORDER BY RANDOM()
-            LIMIT ${limitedSize})
-          `;
-        });
-        
-        // Combine all cluster queries
-        const queryResult = await db.execute(sql`
-          ${sql.join(clusterQueries, sql` UNION ALL `)}
-        `);
-        
-        // Extract rows from QueryResult
-        result = queryResult.rows as unknown as RawClusterPointRow[]; // Assert via unknown for raw SQL
-      } else {
-        // Fetch all data if under the limit
-        result = await db
-          .select({
-            id: comments.id,
-            title: comments.title,
-            stance: comments.stance,
-            clusterId: comments.clusterId,
-            pcaX: comments.pcaX,
-            pcaY: comments.pcaY,
-            keyQuote: comments.keyQuote,
-            themes: comments.themes,
-          })
-          .from(comments)
-          .where(sql`${comments.clusterId} IS NOT NULL AND ${comments.pcaX} IS NOT NULL AND ${comments.pcaY} IS NOT NULL`)
-          .execute();
-      }
-
-      // Group by cluster ID using a Map internally
-      const clustersMap = new Map<number, ClusterPoint[]>();
+      // Group by cluster ID using a Map
+      const clustersMap = new Map<string, ClusterPoint[]>();
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
       result.forEach((row: RawClusterPointRow) => {
@@ -178,9 +117,7 @@ export async function getClusterData(sampleData: boolean = false): Promise<Clust
         data: {
           clusters: clustersArray,
           bounds: { minX, maxX, minY, maxY },
-          isSampled: shouldSample,
-          totalPoints: totalPointsCount,
-          sampledPoints: result.length,
+          totalPoints: result.length,
         }
       };
     } catch (error) {
@@ -202,7 +139,7 @@ export async function getClusterData(sampleData: boolean = false): Promise<Clust
 
   const getCachedClusterData = unstable_cache(
     fetchClusterData,
-    [`cluster-data-${sampleData}`],
+    ['cluster-data'],
     {
       revalidate: 86400, // 24 hours
       tags: ['clusters']
@@ -212,13 +149,13 @@ export async function getClusterData(sampleData: boolean = false): Promise<Clust
   return getCachedClusterData();
 }
 
-// Get basic cluster statistics without loading all points
+// Get basic cluster statistics
 export async function getClusterStats(): Promise<{
   success: boolean;
   stats?: {
     totalClusters: number;
     totalPoints: number;
-    clusterSizes: { clusterId: number; size: number }[];
+    clusterSizes: { clusterId: string; size: number }[];
   };
   error?: string;
 }> {

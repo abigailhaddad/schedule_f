@@ -1,132 +1,274 @@
+// src/components/ClusterVisualization/index.tsx
 "use client";
 
-import { useState, useMemo } from "react";
-import dynamic from "next/dynamic";
+import React, { useState, useMemo, useEffect } from 'react';
 import { ClusterData } from "@/lib/actions/clusters";
-import Card from "@/components/ui/Card";
+import ClusterChart from './ClusterChart';
 import ClusterControls from "./ClusterControls";
-
-// Dynamically import the chart to avoid SSR issues
-const ClusterChart = dynamic(() => import("./ClusterChart"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[600px] flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
-    </div>
-  ),
-});
+import ClusterSummaryCard from './ClusterSummaryCard';
+import Card from "@/components/ui/Card";
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { usePathname } from 'next/navigation';
 
 interface ClusterVisualizationProps {
-  data: Omit<ClusterData, 'clusters'> & {
-    clusters: Array<[number, import("@/lib/actions/clusters").ClusterPoint[]]>;
-  };
+  initialData: ClusterData | null;
+  isLoading: boolean;
+  error: string | null;
+  initialSelectedCluster?: string | null;
 }
 
-export default function ClusterVisualization({
-  data,
-}: ClusterVisualizationProps) {
-  const [selectedCluster, setSelectedCluster] = useState<number | null>(null);
+const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData, isLoading, error, initialSelectedCluster }) => {
+  const pathname = usePathname();
+  const [clusterData, setClusterData] = useState<ClusterData | null>(initialData);
+  const [selectedClusterId, setSelectedClusterId] = useState<string | null>(initialSelectedCluster || null);
 
-  // const handlePointClick = (point: ClusterPoint) => { // No longer needed here if chart handles its own nav
-  //   router.push(`/comment/${point.id}`);
-  // };
+  // Update selected cluster based on URL changes
+  useEffect(() => {
+    const pathParts = pathname.split('/');
+    const clusterFromUrl = pathParts.length > 2 && pathParts[1] === 'clusters' ? pathParts[2] : null;
+    setSelectedClusterId(clusterFromUrl);
+  }, [pathname]);
 
-  // Memoize chart data transformation
-  const chartData = useMemo(() => {
-    return data.clusters.map(([clusterId, points]) => ({
-      id: `Cluster ${clusterId}`,
-      data: points.map((point) => ({
-        x: point.pcaX,
-        y: point.pcaY,
-        ...point,
-      })),
+
+  React.useEffect(() => {
+    setClusterData(initialData);
+  }, [initialData]);
+
+  // Data for the chart, formatted as Nivo expects series.
+  const chartSeriesData = useMemo(() => {
+    if (!clusterData) return [];
+    return clusterData.clusters.map(([id, points]) => ({
+      id: id,
+      data: points.map(p => ({ ...p, x: p.pcaX, y: p.pcaY })),
     }));
-  }, [data.clusters]);
+  }, [clusterData]);
 
-  const filteredData = useMemo(() => {
-    return selectedCluster !== null
-      ? chartData.filter((series) => series.id === `Cluster ${selectedCluster}`)
-      : chartData;
-  }, [chartData, selectedCluster]);
+  
+  // Data for ClusterChart component: if a cluster is selected, only pass that series
+  const chartDisplayData = useMemo(() => {
+    if (!selectedClusterId || !chartSeriesData) return chartSeriesData;
+    return chartSeriesData.filter(series => series.id === selectedClusterId);
+  }, [chartSeriesData, selectedClusterId]);
 
-  // Calculate total points for performance info
-  const totalPoints = useMemo(() => {
-    return data.clusters.reduce((sum, [, points]) => sum + points.length, 0);
-  }, [data.clusters]);
+  // Get cluster-specific information
+  const selectedClusterInfo = useMemo(() => {
+    if (!selectedClusterId || !clusterData) return null;
+    const clusterPoints = clusterData.clusters.find(([id]) => id === selectedClusterId)?.[1];
+    if (!clusterPoints) return null;
+
+    // Calculate statistics for the selected cluster
+    const stanceCounts = clusterPoints.reduce((acc, point) => {
+      acc[point.stance || 'Neutral/Unclear'] = (acc[point.stance || 'Neutral/Unclear'] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      totalComments: clusterPoints.length,
+      stanceCounts,
+      sampleComments: clusterPoints.slice(0, 5) // First 5 comments as samples
+    };
+  }, [selectedClusterId, clusterData]);
+
+  // Calculate interesting cluster statistics when no cluster is selected
+  const clusterSummaries = useMemo(() => {
+    if (!clusterData || selectedClusterId) return null;
+
+    const summaries = clusterData.clusters.map(([clusterId, points]) => {
+      const stanceCounts = points.reduce((acc, point) => {
+        acc[point.stance || 'Neutral/Unclear'] = (acc[point.stance || 'Neutral/Unclear'] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const forCount = stanceCounts['For'] || 0;
+      const againstCount = stanceCounts['Against'] || 0;
+      const neutralCount = stanceCounts['Neutral/Unclear'] || 0;
+      const total = points.length;
+
+      return {
+        clusterId,
+        total,
+        forCount,
+        againstCount,
+        neutralCount,
+        forPercentage: total > 0 ? (forCount / total) * 100 : 0,
+        againstPercentage: total > 0 ? (againstCount / total) * 100 : 0,
+        neutralPercentage: total > 0 ? (neutralCount / total) * 100 : 0,
+        dominantStance: forCount > againstCount && forCount > neutralCount ? 'For' :
+                        againstCount > forCount && againstCount > neutralCount ? 'Against' : 
+                        'Neutral/Unclear'
+      };
+    });
+
+    // Sort to find interesting clusters
+    const highestFor = [...summaries].sort((a, b) => b.forPercentage - a.forPercentage)[0];
+    const highestAgainst = [...summaries].sort((a, b) => b.againstPercentage - a.againstPercentage)[0];
+    const mostBalanced = [...summaries].sort((a, b) => {
+      const aBalance = Math.abs(a.forPercentage - a.againstPercentage);
+      const bBalance = Math.abs(b.forPercentage - b.againstPercentage);
+      return aBalance - bBalance;
+    }).find(s => s.forPercentage > 10 && s.againstPercentage > 10); // Only consider clusters with meaningful splits
+    const largest = [...summaries].sort((a, b) => b.total - a.total)[0];
+
+    return {
+      highestFor,
+      highestAgainst,
+      mostBalanced,
+      largest,
+      all: summaries
+    };
+  }, [clusterData, selectedClusterId]);
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-64"><LoadingSpinner /></div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center p-4">Error loading cluster data: {error}</div>;
+  }
+
+  if (!clusterData || clusterData.clusters.length === 0) {
+    return <div className="text-center p-4">No cluster data available.</div>;
+  }
 
   return (
-    <div className="space-y-6">
-      <Card collapsible={false}>
-        <Card.Header className="bg-gradient-to-r from-purple-500 to-pink-500">
-          <div className="flex justify-between items-center w-full">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <span className="mr-2">🔮</span>
-              Cluster Visualization
-            </h2>
-            <span className="text-sm text-white/80">
-              {totalPoints} total points
-              {data.isSampled && ` (showing ${data.sampledPoints} sampled)`}
-            </span>
-          </div>
+    <div className="h-full flex flex-col p-4">
+      {/* Controls Section */}
+      <Card className="mb-4 shadow-lg" collapsible={true} >
+        <Card.Header>
+          <h2 className="text-lg font-bold">Cluster Controls</h2>
         </Card.Header>
-        <Card.Body className="p-4">
+        <Card.Body>
           <ClusterControls
-            clusters={data.clusters.map(([clusterId]) => clusterId)}
-            selectedCluster={selectedCluster}
-            onClusterSelect={setSelectedCluster}
+            clusters={clusterData.clusters.map(([clusterId]) => clusterId)}
+            selectedCluster={selectedClusterId}
           />
-
-          <div className="relative">
-            <ClusterChart
-              data={filteredData}
-              bounds={data.bounds}
-              // onPointClick={handlePointClick} // Removed
-            />
-          </div>
         </Card.Body>
       </Card>
 
-      {/* Cluster Statistics */}
-      <Card collapsible={true}>
-        <Card.Header className="bg-gradient-to-r from-blue-500 to-blue-600">
-          <h3 className="text-lg font-bold text-white">Cluster Statistics</h3>
-        </Card.Header>
-        <Card.Body className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {data.clusters.map(([clusterId, points]) => {
-              const stanceCounts = points.reduce((acc, point) => {
-                const stance = point.stance || "Neutral/Unclear";
-                acc[stance] = (acc[stance] || 0) + 1;
-                return acc;
-              }, {} as Record<string, number>);
+      {/* Main content area with chart and info */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Chart Section - spans 2 columns on large screens */}
+        <Card className="lg:col-span-2 shadow-lg h-full" collapsible={true}>
+          <Card.Header>
+            <h2 className="text-lg font-bold">
+              Cluster Scatter Plot ({clusterData.totalPoints} comments in {clusterData.clusters.length} clusters)
+            </h2>
+          </Card.Header>
+          <Card.Body className="p-0 relative flex-1">
+            <div className="h-full">
+              <ClusterChart
+                data={chartDisplayData}
+                bounds={clusterData.bounds}
+              />
+            </div>
+          </Card.Body>
+        </Card>
 
-              return (
-                <div
-                  key={`cluster-stat-${clusterId}`}
-                  className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <h4 className="font-semibold text-gray-700">
-                    Cluster {clusterId}
-                  </h4>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {points.length}
-                  </p>
-                  <p className="text-sm text-gray-500 mb-2">comments</p>
-
-                  <div className="space-y-1 text-xs">
-                    {Object.entries(stanceCounts).map(([stance, count]) => (
-                      <div key={stance} className="flex justify-between">
-                        <span className="text-gray-600">{stance}:</span>
+        {/* Cluster Information Section */}
+        <Card className="shadow-lg h-full overflow-hidden" collapsible={true}>
+          <Card.Header>
+            <h2 className="text-lg font-bold">
+              {selectedClusterId ? `Cluster ${selectedClusterId} Details` : 'Cluster Information'}
+            </h2>
+          </Card.Header>
+          <Card.Body className="overflow-y-auto">
+            {selectedClusterInfo ? (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700">Total Comments</h3>
+                  <p className="text-2xl font-bold">{selectedClusterInfo.totalComments}</p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Stance Distribution</h3>
+                  <div className="space-y-1">
+                    {Object.entries(selectedClusterInfo.stanceCounts).map(([stance, count]) => (
+                      <div key={stance} className="flex justify-between items-center">
+                        <span className={`text-sm ${
+                          stance === 'For' ? 'text-green-600' : 
+                          stance === 'Against' ? 'text-red-600' : 
+                          'text-gray-600'
+                        }`}>{stance}:</span>
                         <span className="font-medium">{count}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </Card.Body>
-      </Card>
+
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Sample Comments</h3>
+                  <div className="space-y-2">
+                    {selectedClusterInfo.sampleComments.map((comment) => (
+                      <div key={comment.id} className="bg-gray-50 p-2 rounded text-xs">
+                        <p className="text-gray-600 line-clamp-2">{comment.title}</p>
+                        {comment.keyQuote && (
+                          <p className="text-gray-500 italic mt-1 line-clamp-2">&ldquo;{comment.keyQuote}&rdquo;</p>
+                        )}
+                        <p className="text-gray-400 mt-1">
+                          Stance: <span className={
+                            comment.stance === 'For' ? 'text-green-600' : 
+                            comment.stance === 'Against' ? 'text-red-600' : 
+                            'text-gray-600'
+                          }>{comment.stance || 'Neutral/Unclear'}</span>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="text-gray-500 text-center pb-4 border-b border-gray-200">
+                  <p>Select a cluster to view detailed information</p>
+                  <p className="text-sm mt-2">Click on a cluster in the controls above or on the chart</p>
+                </div>
+                
+                {clusterSummaries && (
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-sm text-gray-700">Interesting Clusters</h3>
+                    
+                    {clusterSummaries.highestFor && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.highestFor}
+                        label="Highest support"
+                      />
+                    )}
+                    
+                    {clusterSummaries.highestAgainst && 
+                     clusterSummaries.highestAgainst.clusterId !== clusterSummaries.highestFor?.clusterId && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.highestAgainst}
+                        label="Highest opposition"
+                      />
+                    )}
+                    
+                    {clusterSummaries.mostBalanced && 
+                     clusterSummaries.mostBalanced.clusterId !== clusterSummaries.highestFor?.clusterId &&
+                     clusterSummaries.mostBalanced.clusterId !== clusterSummaries.highestAgainst?.clusterId && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.mostBalanced}
+                        label="Most balanced views"
+                      />
+                    )}
+                    
+                    {clusterSummaries.largest && 
+                     clusterSummaries.largest.clusterId !== clusterSummaries.highestFor?.clusterId &&
+                     clusterSummaries.largest.clusterId !== clusterSummaries.highestAgainst?.clusterId &&
+                     clusterSummaries.largest.clusterId !== clusterSummaries.mostBalanced?.clusterId && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.largest}
+                        label="Largest cluster"
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   );
-}
+};
+
+export default ClusterVisualization;
