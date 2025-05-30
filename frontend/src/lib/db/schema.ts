@@ -25,7 +25,6 @@ export const comments = pgTable('comments', {
   id: varchar('id').primaryKey(),
   title: text('title'),
   category: varchar('category'),
-  agencyId: varchar('agency_id'),
   comment: text('comment'),
   // originalComment removed - not needed
   hasAttachments: boolean('has_attachments').default(false),
@@ -49,15 +48,12 @@ export const comments = pgTable('comments', {
   pcaY: doublePrecision('pca_y'),
   
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  commentOn: varchar('comment_on'),
-  submitterName: varchar('submitter_name'),
   organization: varchar('organization'),
-  city: varchar('city'),
-  state: varchar('state'),
-  country: varchar('country'),
   documentType: varchar('document_type'),
+  attachmentUrls: text('attachment_urls'), //This will be somma separated with a space, example: "https://downloads.regulations.gov/OPM-2025-0004-0645/attachment_1.docx; https://downloads.regulations.gov/OPM-2025-0004-0645/attachment_1.pdf",
+  attachmentTitles: text('attachment_titles'), //An example:     "attachment_titles": "attachment_1.docx; attachment_1.pdf",
+
   attachmentCount: integer('attachment_count'),
-  attachments: json('attachments').$type<{ title: string; fileUrl: string; type: string; }[] | null>(),
   truncatedText: text('truncated_text'),
 });
 

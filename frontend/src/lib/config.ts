@@ -126,48 +126,48 @@ export const datasetConfig = {
         visible: true,
         format: 'date'
       },
-      {
-        key: 'commentOn',
-        title: 'Comment On',
-        filter: 'text',
-        visible: false
-      },
-      {
-        key: 'submitterName',
-        title: 'Submitter Name',
-        filter: 'text',
-        visible: false
-      },
+      // {
+      //   key: 'commentOn',
+      //   title: 'Comment On',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'submitterName',
+      //   title: 'Submitter Name',
+      //   filter: 'text',
+      //   visible: false
+      // },
       {
         key: 'organization',
         title: 'Organization',
         filter: 'text',
         visible: true
       },
-      {
-        key: 'city',
-        title: 'City',
-        filter: 'text',
-        visible: false
-      },
-      {
-        key: 'state',
-        title: 'State',
-        filter: 'text',
-        visible: false
-      },
-      {
-        key: 'country',
-        title: 'Country',
-        filter: 'text',
-        visible: false
-      },
-      {
-        key: 'documentType',
-        title: 'Document Type',
-        filter: 'text',
-        visible: false
-      },
+      // {
+      //   key: 'city',
+      //   title: 'City',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'state',
+      //   title: 'State',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'country',
+      //   title: 'Country',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'documentType',
+      //   title: 'Document Type',
+      //   filter: 'text',
+      //   visible: false
+      // },
       {
         key: 'attachmentCount',
         title: 'Attachment Count',
@@ -175,11 +175,16 @@ export const datasetConfig = {
         visible: true
       },
       {
-        key: 'attachments',
-        title: 'Attachments',
-        visible: false, // This is for display in detail, not usually a table column
-        // No filter type needed if not for direct table filtering
-        format: 'attachments' // Custom format type for rendering
+        key: 'attachmentUrls',
+        title: 'Attachment URLs',
+        filter: 'text',
+        visible: false
+      },
+      {
+        key: 'attachmentTitles',
+        title: 'Attachment Titles',
+        filter: 'text',
+        visible: false
       }
     ],
     

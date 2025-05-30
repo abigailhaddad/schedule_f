@@ -55,16 +55,19 @@ export default function ClusterControls({
           variation += (subPart.charCodeAt(i) - 'a'.charCodeAt(0)) * Math.pow(26, subPart.length - 1 - i);
         }
         // Limit the variation to prevent colors from getting too dark
-        shadeMultiplier = 1 - (Math.min(variation, 10) * 0.08);
+        variation = Math.min(variation, 15); // Match ClusterChart logic
+        shadeMultiplier = Math.max(0.75, 1 - (variation * 0.02)); // Max 25% darkening only
       }
       
       const r = parseInt(baseColor.slice(1, 3), 16);
       const g = parseInt(baseColor.slice(3, 5), 16);
       const b = parseInt(baseColor.slice(5, 7), 16);
       
-      const newR = Math.round(r * shadeMultiplier);
-      const newG = Math.round(g * shadeMultiplier);
-      const newB = Math.round(b * shadeMultiplier);
+      // Apply shade but ensure minimum RGB values for visibility
+      const minValue = 100; // Higher minimum RGB value to keep colors bright
+      const newR = Math.max(minValue, Math.round(r * shadeMultiplier));
+      const newG = Math.max(minValue, Math.round(g * shadeMultiplier));
+      const newB = Math.max(minValue, Math.round(b * shadeMultiplier));
       
       colors.set(clusterId, `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`);
     });
