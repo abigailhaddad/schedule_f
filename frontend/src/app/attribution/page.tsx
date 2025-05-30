@@ -24,7 +24,7 @@ const CONTRIBUTORS = [
   {
     name: "Michael Boyce",
     role: "Application Developer and Recovering ex-Federal Employee",
-    bio: `Former Chief of Innovation for the Refugee and Asylum Programs at USCIS, Michael led the roll‑out of the agency's first refugee case‑management system and now works on AI in the public interest. He is the instigator of this Schedule F public‑comment explorer and loves long walks, chess, and TypeScript.`,
+    bio: `Michael Boyce is a tech and policy expert who recently wrapped up his role as Director of the AI Corps at DHS, where he built the federal government's largest civilian AI team and hired 50 senior AI experts into the Department. Before that, he spent time at the White House helping write key AI policy, overseeing Western Hemisphere Foreign Assistance, and working at the United States Digital Service. He has over a decade of experience digitizing government processes and building machine learning systems across immigration and national security agencies. Earlier in his career, he worked directly as a Refugee Officer, leading teams in places like Ethiopia during a national emergency and reviewing complex refugee cases across Jordan, Kenya, Lebanon, Malaysia, and Turkey, before later using technology to lead the team that digitized the  U.S. refugee and asylum  application process. He lives in the Petworth neighborhood of Washington DC, and likes playing chess and finding good soup dumpling restaurants in the DC suburbs.`,
     github: "michaeleboyce",
     linkedin: "https://www.linkedin.com/in/michael-boyce-dhs-ai-corps/",
   },
