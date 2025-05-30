@@ -1,7 +1,7 @@
 // src/components/ClusterVisualization/index.tsx
 "use client";
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ClusterData } from "@/lib/actions/clusters";
 import ClusterChart from './ClusterChart';
 import ClusterControls from "./ClusterControls";
@@ -29,10 +29,6 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
     setSelectedClusterId(clusterFromUrl);
   }, [pathname]);
 
-  const handleClusterSelected = useCallback((clusterId: string | null) => {
-    // Don't update state here - let the URL change trigger the update
-    // This prevents the infinite loop
-  }, []);
 
   React.useEffect(() => {
     setClusterData(initialData);
@@ -47,13 +43,6 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
     }));
   }, [clusterData]);
 
-  // Points to render: all if no selection, or only selected cluster's points.
-  const pointsToRender = useMemo(() => {
-    if (!clusterData) return [];
-    if (!selectedClusterId) return chartSeriesData.flatMap(series => series.data);
-    const selectedSeries = chartSeriesData.find(series => series.id === selectedClusterId);
-    return selectedSeries ? selectedSeries.data : [];
-  }, [chartSeriesData, selectedClusterId, clusterData]);
   
   // Data for ClusterChart component: if a cluster is selected, only pass that series
   const chartDisplayData = useMemo(() => {
@@ -152,7 +141,6 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
           <ClusterControls
             clusters={clusterData.clusters.map(([clusterId]) => clusterId)}
             selectedCluster={selectedClusterId}
-            onClusterSelect={handleClusterSelected}
           />
         </Card.Body>
       </Card>
@@ -210,11 +198,11 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
                 <div>
                   <h3 className="font-semibold text-sm text-gray-700 mb-2">Sample Comments</h3>
                   <div className="space-y-2">
-                    {selectedClusterInfo.sampleComments.map((comment, idx) => (
+                    {selectedClusterInfo.sampleComments.map((comment) => (
                       <div key={comment.id} className="bg-gray-50 p-2 rounded text-xs">
                         <p className="text-gray-600 line-clamp-2">{comment.title}</p>
                         {comment.keyQuote && (
-                          <p className="text-gray-500 italic mt-1 line-clamp-2">"{comment.keyQuote}"</p>
+                          <p className="text-gray-500 italic mt-1 line-clamp-2">&ldquo;{comment.keyQuote}&rdquo;</p>
                         )}
                         <p className="text-gray-400 mt-1">
                           Stance: <span className={

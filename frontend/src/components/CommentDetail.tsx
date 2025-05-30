@@ -201,40 +201,10 @@ export default async function CommentDetail({ comment }: CommentDetailProps) {
               <dd className="text-gray-700 font-mono text-sm">{comment.id}</dd>
             </div>
           )}
-          {comment.commentOn && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Comment On:</dt>
-              <dd className="text-gray-700">{comment.commentOn}</dd>
-            </div>
-          )}
-          {comment.submitterName && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Submitter Name:</dt>
-              <dd className="text-gray-700">{comment.submitterName}</dd>
-            </div>
-          )}
           {comment.organization && (
             <div>
               <dt className="text-sm font-medium text-gray-500">Organization:</dt>
               <dd className="text-gray-700">{comment.organization}</dd>
-            </div>
-          )}
-          {comment.city && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">City:</dt>
-              <dd className="text-gray-700">{comment.city}</dd>
-            </div>
-          )}
-          {comment.state && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">State:</dt>
-              <dd className="text-gray-700">{comment.state}</dd>
-            </div>
-          )}
-          {comment.country && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Country:</dt>
-              <dd className="text-gray-700">{comment.country}</dd>
             </div>
           )}
           {comment.documentType && (
@@ -247,12 +217,6 @@ export default async function CommentDetail({ comment }: CommentDetailProps) {
             <div>
               <dt className="text-sm font-medium text-gray-500">Category:</dt>
               <dd className="text-gray-700">{comment.category}</dd>
-            </div>
-          )}
-          {comment.agencyId && (
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Agency ID:</dt>
-              <dd className="text-gray-700">{comment.agencyId}</dd>
             </div>
           )}
           {comment.attachmentCount !== null && comment.attachmentCount > 0 && (

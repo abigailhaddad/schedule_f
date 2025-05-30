@@ -33,6 +33,7 @@
     "db:push:prod": "DB_ENV=prod drizzle-kit push",
     "studio": "npm run db:ensure:local && DB_ENV=local drizzle-kit studio",
     "studio:preprod": "DB_ENV=preprod drizzle-kit studio",
+    "studio:prod": "DB_ENV=prod drizzle-kit studio",
     "build:prod": "next build",
     "debug:build": "NODE_OPTIONS='--inspect' tsx scripts/debug-build.ts",
     "debug:clusters": "DB_ENV=local && tsx scripts/debug-clusters.ts",

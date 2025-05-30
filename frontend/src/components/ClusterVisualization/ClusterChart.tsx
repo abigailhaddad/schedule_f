@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect, useMemo } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo, Suspense } from 'react';
 import {
   ResponsiveScatterPlotCanvas
 } from "@nivo/scatterplot";
@@ -32,7 +32,7 @@ interface ClusterChartProps {
   };
 }
 
-export default function ClusterChart({
+function ClusterChartContent({
   data,
   bounds,
 }: ClusterChartProps) {
@@ -200,13 +200,13 @@ export default function ClusterChart({
     }
   }, [clickedPoint, handlePointHover]);
 
-  const handleMouseEnter = useCallback((node: any) => {
+  const handleMouseEnter = useCallback((node: { data?: unknown }) => {
     if (node.data && !clickedPoint) {
       handlePointHover(node.data as ClusterPoint);
     }
   }, [clickedPoint, handlePointHover]);
 
-  const handleClick = useCallback((node: any) => {
+  const handleClick = useCallback((node: { data?: unknown }) => {
     if (node.data) {
       handlePointClick(node.data as ClusterPoint);
     }
@@ -332,5 +332,13 @@ export default function ClusterChart({
         Hover to preview • Click to freeze tooltip • {(data || []).length} clusters shown
       </div>
     </div>
+  );
+}
+
+export default function ClusterChart(props: ClusterChartProps) {
+  return (
+    <Suspense fallback={<div className="h-full flex items-center justify-center">Loading chart...</div>}>
+      <ClusterChartContent {...props} />
+    </Suspense>
   );
 }

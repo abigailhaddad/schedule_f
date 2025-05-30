@@ -6,24 +6,23 @@ import { useRouter } from 'next/navigation';
 interface ClusterControlsProps {
   clusters: string[];
   selectedCluster: string | null;
-  onClusterSelect: (cluster: string | null) => void;
 }
 
 export default function ClusterControls({
   clusters,
   selectedCluster,
-  onClusterSelect,
 }: ClusterControlsProps) {
   const router = useRouter();
-  // Base colors for parent clusters (same as in ClusterChart)
-  const baseColors = [
-    "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
-    "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
-    "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
-  ];
 
   // Generate cluster colors (same logic as in ClusterChart)
   const clusterColors = useMemo(() => {
+    // Base colors for parent clusters (same as in ClusterChart)
+    const baseColors = [
+      "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
+      "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
+      "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
+    ];
+    
     const colors = new Map<string, string>();
     const parentMapping = new Map<string, number>();
     let nextParentIndex = 0;

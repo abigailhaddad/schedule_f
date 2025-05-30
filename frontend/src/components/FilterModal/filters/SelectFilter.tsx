@@ -1,11 +1,10 @@
 // frontend/src/components/FilterModal/filters/SelectFilter.tsx
 import React, { useState, useMemo } from 'react';
-import { BaseFilterProps, MultiSelectFilterValue } from '../types';
+import { BaseFilterProps } from '../types';
 import { getUniqueValues } from '../utils/filterHelpers';
 import Button from '@/components/ui/Button';
 
 export function SelectFilter({ value, onChange, field }: BaseFilterProps) {
-  const currentValue = value as MultiSelectFilterValue | null;
   const [searchTerm, setSearchTerm] = useState('');
   
   const options = useMemo(() => getUniqueValues(field), [field]);
