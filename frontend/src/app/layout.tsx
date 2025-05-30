@@ -31,7 +31,7 @@ export default function RootLayout({
       <title>&quot;Schedule F&quot; Analysis</title>
       <body className="bg-light font-sans">
         <Navbar />
-        <div className="h-36 sm:h-32 md:h-40 lg:h-28 xl:h-28" />
+        <div className="h-36 sm:h-36 md:h-36 lg:h-36 xl:h-36" />
         {children}
         {process.env.NODE_ENV === 'development' && <DatabaseStatus />}
         <Analytics />
