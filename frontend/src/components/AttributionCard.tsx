@@ -43,7 +43,32 @@ export default function AttributionCard({
       {/* Body */}
       <Card.Body>
         <p className="text-gray-700 mb-4 leading-relaxed whitespace-pre-line">
-          {bio}
+          {bio.split(' ').map((word, index) => {
+            // Check if the word looks like a URL
+            if (word.includes('.') && (word.includes('.com') || word.includes('.org') || word.includes('.net') || word.includes('.substack'))) {
+              // Remove trailing punctuation
+              const punctuation = word.match(/[.,!?;:]$/)?.[0] || '';
+              const cleanWord = punctuation ? word.slice(0, -1) : word;
+              
+              // Add https:// if not present
+              const url = cleanWord.startsWith('http://') || cleanWord.startsWith('https://') ? cleanWord : `https://${cleanWord}`;
+              
+              return (
+                <span key={index}>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {cleanWord}
+                  </a>
+                  {punctuation}{' '}
+                </span>
+              );
+            }
+            return <span key={index}>{word} </span>;
+          })}
         </p>
 
         <div className="flex gap-3">
