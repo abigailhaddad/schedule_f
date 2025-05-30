@@ -1,25 +1,37 @@
 // src/components/ClusterVisualization/index.tsx
 "use client";
 
-import React, { useState, useMemo, useCallback } from 'react';
-import { ClusterData, ClusterPoint } from "@/lib/actions/clusters";
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { ClusterData } from "@/lib/actions/clusters";
 import ClusterChart from './ClusterChart';
 import ClusterControls from "./ClusterControls";
+import ClusterSummaryCard from './ClusterSummaryCard';
 import Card from "@/components/ui/Card";
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { usePathname } from 'next/navigation';
 
 interface ClusterVisualizationProps {
   initialData: ClusterData | null;
   isLoading: boolean;
   error: string | null;
+  initialSelectedCluster?: string | null;
 }
 
-const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData, isLoading, error }) => {
+const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData, isLoading, error, initialSelectedCluster }) => {
+  const pathname = usePathname();
   const [clusterData, setClusterData] = useState<ClusterData | null>(initialData);
-  const [selectedClusterId, setSelectedClusterId] = useState<string | null>(null);
+  const [selectedClusterId, setSelectedClusterId] = useState<string | null>(initialSelectedCluster || null);
+
+  // Update selected cluster based on URL changes
+  useEffect(() => {
+    const pathParts = pathname.split('/');
+    const clusterFromUrl = pathParts.length > 2 && pathParts[1] === 'clusters' ? pathParts[2] : null;
+    setSelectedClusterId(clusterFromUrl);
+  }, [pathname]);
 
   const handleClusterSelected = useCallback((clusterId: string | null) => {
-    setSelectedClusterId(clusterId);
+    // Don't update state here - let the URL change trigger the update
+    // This prevents the infinite loop
   }, []);
 
   React.useEffect(() => {
@@ -68,6 +80,55 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
     };
   }, [selectedClusterId, clusterData]);
 
+  // Calculate interesting cluster statistics when no cluster is selected
+  const clusterSummaries = useMemo(() => {
+    if (!clusterData || selectedClusterId) return null;
+
+    const summaries = clusterData.clusters.map(([clusterId, points]) => {
+      const stanceCounts = points.reduce((acc, point) => {
+        acc[point.stance || 'Neutral/Unclear'] = (acc[point.stance || 'Neutral/Unclear'] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const forCount = stanceCounts['For'] || 0;
+      const againstCount = stanceCounts['Against'] || 0;
+      const neutralCount = stanceCounts['Neutral/Unclear'] || 0;
+      const total = points.length;
+
+      return {
+        clusterId,
+        total,
+        forCount,
+        againstCount,
+        neutralCount,
+        forPercentage: total > 0 ? (forCount / total) * 100 : 0,
+        againstPercentage: total > 0 ? (againstCount / total) * 100 : 0,
+        neutralPercentage: total > 0 ? (neutralCount / total) * 100 : 0,
+        dominantStance: forCount > againstCount && forCount > neutralCount ? 'For' :
+                        againstCount > forCount && againstCount > neutralCount ? 'Against' : 
+                        'Neutral/Unclear'
+      };
+    });
+
+    // Sort to find interesting clusters
+    const highestFor = [...summaries].sort((a, b) => b.forPercentage - a.forPercentage)[0];
+    const highestAgainst = [...summaries].sort((a, b) => b.againstPercentage - a.againstPercentage)[0];
+    const mostBalanced = [...summaries].sort((a, b) => {
+      const aBalance = Math.abs(a.forPercentage - a.againstPercentage);
+      const bBalance = Math.abs(b.forPercentage - b.againstPercentage);
+      return aBalance - bBalance;
+    }).find(s => s.forPercentage > 10 && s.againstPercentage > 10); // Only consider clusters with meaningful splits
+    const largest = [...summaries].sort((a, b) => b.total - a.total)[0];
+
+    return {
+      highestFor,
+      highestAgainst,
+      mostBalanced,
+      largest,
+      all: summaries
+    };
+  }, [clusterData, selectedClusterId]);
+
   if (isLoading) {
     return <div className="flex justify-center items-center h-64"><LoadingSpinner /></div>;
   }
@@ -83,7 +144,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
   return (
     <div className="h-full flex flex-col p-4">
       {/* Controls Section */}
-      <Card className="mb-4 shadow-lg" collapsible={false}>
+      <Card className="mb-4 shadow-lg" collapsible={true} >
         <Card.Header>
           <h2 className="text-lg font-bold">Cluster Controls</h2>
         </Card.Header>
@@ -99,7 +160,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
       {/* Main content area with chart and info */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Chart Section - spans 2 columns on large screens */}
-        <Card className="lg:col-span-2 shadow-lg h-full" collapsible={false}>
+        <Card className="lg:col-span-2 shadow-lg h-full" collapsible={true}>
           <Card.Header>
             <h2 className="text-lg font-bold">
               Cluster Scatter Plot ({clusterData.totalPoints} comments in {clusterData.clusters.length} clusters)
@@ -116,7 +177,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
         </Card>
 
         {/* Cluster Information Section */}
-        <Card className="shadow-lg h-full overflow-hidden" collapsible={false}>
+        <Card className="shadow-lg h-full overflow-hidden" collapsible={true}>
           <Card.Header>
             <h2 className="text-lg font-bold">
               {selectedClusterId ? `Cluster ${selectedClusterId} Details` : 'Cluster Information'}
@@ -168,9 +229,51 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
                 </div>
               </div>
             ) : (
-              <div className="text-gray-500 text-center py-8">
-                <p>Select a cluster to view detailed information</p>
-                <p className="text-sm mt-2">Click on a cluster in the controls above or on the chart</p>
+              <div className="space-y-4">
+                <div className="text-gray-500 text-center pb-4 border-b border-gray-200">
+                  <p>Select a cluster to view detailed information</p>
+                  <p className="text-sm mt-2">Click on a cluster in the controls above or on the chart</p>
+                </div>
+                
+                {clusterSummaries && (
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-sm text-gray-700">Interesting Clusters</h3>
+                    
+                    {clusterSummaries.highestFor && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.highestFor}
+                        label="Highest support"
+                      />
+                    )}
+                    
+                    {clusterSummaries.highestAgainst && 
+                     clusterSummaries.highestAgainst.clusterId !== clusterSummaries.highestFor?.clusterId && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.highestAgainst}
+                        label="Highest opposition"
+                      />
+                    )}
+                    
+                    {clusterSummaries.mostBalanced && 
+                     clusterSummaries.mostBalanced.clusterId !== clusterSummaries.highestFor?.clusterId &&
+                     clusterSummaries.mostBalanced.clusterId !== clusterSummaries.highestAgainst?.clusterId && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.mostBalanced}
+                        label="Most balanced views"
+                      />
+                    )}
+                    
+                    {clusterSummaries.largest && 
+                     clusterSummaries.largest.clusterId !== clusterSummaries.highestFor?.clusterId &&
+                     clusterSummaries.largest.clusterId !== clusterSummaries.highestAgainst?.clusterId &&
+                     clusterSummaries.largest.clusterId !== clusterSummaries.mostBalanced?.clusterId && (
+                      <ClusterSummaryCard
+                        {...clusterSummaries.largest}
+                        label="Largest cluster"
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </Card.Body>

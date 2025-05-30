@@ -171,7 +171,7 @@ export const datasetConfig = {
       {
         key: 'attachmentCount',
         title: 'Attachment Count',
-        filter: 'select', // Or 'number' if you prefer range, select is simpler for counts
+        filter: 'select', 
         visible: true
       },
       {

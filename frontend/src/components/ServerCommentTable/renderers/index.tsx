@@ -41,8 +41,25 @@ export function createFieldRenderer(props: RendererProps): React.ReactElement {
     return <LinkRenderer {...props} value={value} />;
   }
   
-  if (field.badges && typeof value === 'string' && field.badges[value as keyof typeof field.badges]) {
-    return <BadgeRenderer {...props} value={value} />;
+  if (field.badges) {
+    // Special handling for commentCount field which stores numbers but displays as ranges
+    if (field.key === 'commentCount' && typeof value === 'number') {
+      let badgeKey: string;
+      if (value === 1) {
+        badgeKey = '1';
+      } else if (value >= 2 && value <= 10) {
+        badgeKey = '2-10';
+      } else if (value >= 11 && value <= 50) {
+        badgeKey = '11-50';
+      } else {
+        badgeKey = '50+';
+      }
+      return <BadgeRenderer {...props} value={badgeKey} />;
+    }
+    // Regular badge handling for string values
+    else if (typeof value === 'string' && field.badges[value as keyof typeof field.badges]) {
+      return <BadgeRenderer {...props} value={value} />;
+    }
   }
   
   // Default to text renderer

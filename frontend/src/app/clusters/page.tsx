@@ -2,6 +2,9 @@ import { Metadata } from 'next';
 import { getClusterData } from '@/lib/actions/clusters';
 import ClusterVisualization from '@/components/ClusterVisualization';
 
+// Next.js 13+ App Router revalidation
+export const revalidate = 86400; // 24 hours in seconds
+
 export const metadata: Metadata = {
   title: 'Comment Clusters - Schedule F Analysis',
   description: 'Visualization of comment clusters using PCA analysis',
@@ -31,6 +34,7 @@ export default async function ClustersPage() {
             initialData={clusterResponse.data || null}
             isLoading={false}
             error={clusterResponse.error || null}
+            initialSelectedCluster={null}
           />
         </div>
       </div>

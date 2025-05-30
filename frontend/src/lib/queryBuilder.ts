@@ -103,6 +103,66 @@ function buildStanceFilterConditions(column: SQL, filterValue: FilterValue): SQL
 }
 
 /**
+ * Builds SQL condition for commentCount ranges
+ */
+function buildCommentCountCondition(column: SQL, value: string): SQL | null {
+  switch (value) {
+    case '1':
+      return sql`${column} = 1`;
+    case '2-10':
+      return sql`${column} >= 2 AND ${column} <= 10`;
+    case '11-50':
+      return sql`${column} >= 11 AND ${column} <= 50`;
+    case '50+':
+      return sql`${column} > 50`;
+    default:
+      // Try to parse as a number for direct values
+      const num = parseInt(value, 10);
+      if (!isNaN(num)) {
+        return sql`${column} = ${num}`;
+      }
+      return null;
+  }
+}
+
+/**
+ * Builds conditions for commentCount filters
+ */
+function buildCommentCountFilterConditions(column: SQL, filterValue: FilterValue): SQL[] {
+  const conditions: SQL[] = [];
+  
+  if (filterValue.mode === 'at_least') {
+    // "Must include all" mode - doesn't make sense for ranges, treat as OR
+    const countConditions: SQL[] = [];
+    filterValue.values.forEach(countValue => {
+      const condition = buildCommentCountCondition(column, String(countValue));
+      if (condition) countConditions.push(condition);
+    });
+    
+    if (countConditions.length > 0) {
+      conditions.push(sql`(${or(...countConditions)})`);
+    }
+  } else if (filterValue.mode === 'exact' && filterValue.values.length === 1) {
+    // Exact match for single value
+    const condition = buildCommentCountCondition(column, String(filterValue.values[0]));
+    if (condition) conditions.push(condition);
+  } else {
+    // "includes" mode - any match is sufficient (OR)
+    const countConditions: SQL[] = [];
+    filterValue.values.forEach(countValue => {
+      const condition = buildCommentCountCondition(column, String(countValue));
+      if (condition) countConditions.push(condition);
+    });
+    
+    if (countConditions.length > 0) {
+      conditions.push(sql`(${or(...countConditions)})`);
+    }
+  }
+  
+  return conditions;
+}
+
+/**
  * Builds conditions for theme filters
  */
 function buildThemeFilterConditions(column: SQL, filterValue: FilterValue): SQL[] {
@@ -223,6 +283,11 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
       return buildThemeFilterConditions(column, filterValue);
     }
     
+    // Special handling for commentCount
+    if (key === 'commentCount') {
+      return buildCommentCountFilterConditions(column, filterValue);
+    }
+    
     // General handling for other fields with mode
     if (filterValue.mode === 'at_least') {
       // For "must include all" mode - add each condition
@@ -276,6 +341,17 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
       if (stanceConditions.length > 0) {
         conditions.push(sql`(${or(...stanceConditions)})`);
       }
+    } else if (key === 'commentCount') {
+      // Special handling for commentCount ranges in array
+      const countConditions: SQL[] = [];
+      value.forEach(countValue => {
+        const condition = buildCommentCountCondition(column, String(countValue));
+        if (condition) countConditions.push(condition);
+      });
+      
+      if (countConditions.length > 0) {
+        conditions.push(sql`(${or(...countConditions)})`);
+      }
     } else if (isTextSearchField(key)) {
       // For text fields, use ILIKE with OR for partial matches
       return buildTextFilterConditions(column, value.map(String));
@@ -288,6 +364,10 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
   else {
     if (key === 'stance') {
       const condition = buildStanceCondition(column, String(value));
+      if (condition) conditions.push(condition);
+    } else if (key === 'commentCount') {
+      // Special handling for commentCount ranges
+      const condition = buildCommentCountCondition(column, String(value));
       if (condition) conditions.push(condition);
     } else if (isTextSearchField(key)) {
       // Use ILIKE for text fields to search for partial matches
