@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface ClusterControlsProps {
   clusters: string[];
@@ -13,6 +14,7 @@ export default function ClusterControls({
   selectedCluster,
   onClusterSelect,
 }: ClusterControlsProps) {
+  const router = useRouter();
   // Base colors for parent clusters (same as in ClusterChart)
   const baseColors = [
     "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
@@ -112,7 +114,15 @@ export default function ClusterControls({
           <select
             id="cluster-select"
             value={selectedCluster ?? ''}
-            onChange={(e) => onClusterSelect(e.target.value ? e.target.value : null)}
+            onChange={(e) => {
+              const newCluster = e.target.value;
+              // Only update the URL - the component will react to the URL change
+              if (newCluster) {
+                router.push(`/clusters/${newCluster}`);
+              } else {
+                router.push('/clusters');
+              }
+            }}
             className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Clusters</option>

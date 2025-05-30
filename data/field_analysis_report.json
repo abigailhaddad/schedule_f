@@ -50,8 +50,8 @@
       "field": "posted_date",
       "unique_count": 2,
       "values": [
-        "2025-04-28T04:00Z",
-        "2025-04-24T00:00Z"
+        "2025-04-24T00:00Z",
+        "2025-04-28T04:00Z"
       ],
       "empty_percentage": 0.0,
       "null_percentage": 0.0
@@ -70,8 +70,8 @@
       "field": "has_attachments",
       "unique_count": 2,
       "values": [
-        "False",
-        "True"
+        "True",
+        "False"
       ],
       "empty_percentage": 0.0,
       "null_percentage": 0.0
@@ -80,8 +80,8 @@
       "field": "attachment_titles",
       "unique_count": 2,
       "values": [
-        "attachment_1.png",
-        "attachment_1.pdf"
+        "attachment_1.pdf",
+        "attachment_1.png"
       ],
       "empty_percentage": 99.0,
       "null_percentage": 0.0
@@ -100,9 +100,9 @@
       "field": "stance",
       "unique_count": 3,
       "values": [
-        "Against",
         "For",
-        "Neutral/Unclear"
+        "Neutral/Unclear",
+        "Against"
       ],
       "empty_percentage": 0.0,
       "null_percentage": 0.0

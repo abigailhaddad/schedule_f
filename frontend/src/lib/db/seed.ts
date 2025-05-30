@@ -84,8 +84,8 @@ const main = async () => {
 
   // Determine data path based on environment
   //const devDataPath = path.resolve(__dirname, '../../__tests__/test-data-5-25.json');
-  const devDataPath = path.resolve(__dirname, '../../../../data/data.json');
-  const prodDataPath = path.resolve(__dirname, '../../../../data/data.json');
+  const devDataPath = path.resolve(__dirname, '../../../../data/data_large.json');
+  const prodDataPath = path.resolve(__dirname, '../../../../data/data_large.json');
   const lookupTablePath = path.resolve(__dirname, '../../../../data/lookup_table.json');
   
   const dataPath = dbConfig.isDev ? devDataPath : prodDataPath;

@@ -43,6 +43,8 @@ export default function ClusterChart({
   const [hoveredPoint, setHoveredPoint] = useState<ClusterPoint | null>(null);
   const [clickedPoint, setClickedPoint] = useState<ClusterPoint | null>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastHoverTimeRef = useRef<number>(0);
+  const pendingHoverRef = useRef<ClusterPoint | null>(null);
 
   // Create a stable color mapping for cluster IDs
   const clusterIdToColorIndex = useMemo(() => {
@@ -50,8 +52,11 @@ export default function ClusterChart({
     const parentMapping = new Map<string, number>();
     let nextParentIndex = 0;
     
+    // Only proceed if we have data
+    if (!data || data.length === 0) return mapping;
+    
     // First, identify parent clusters and assign base colors
-    (data || []).forEach(series => {
+    data.forEach(series => {
       if (series && series.id && typeof series.id === 'string' && series.id.length > 0) {
         // Extract the numeric part at the beginning (parent cluster)
         const match = series.id.match(/^(\d+)/);
@@ -63,7 +68,7 @@ export default function ClusterChart({
     });
     
     // Then, assign colors to sub-clusters based on their parent
-    (data || []).forEach(series => {
+    data.forEach(series => {
       if (series && series.id && typeof series.id === 'string' && series.id.length > 0 && !mapping.has(series.id)) {
         const match = series.id.match(/^(\d+)(.*)/);
         const parentCluster = match ? match[1] : series.id;
@@ -105,6 +110,15 @@ export default function ClusterChart({
     }
   }, [searchParams, data]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // const stanceColors = { // This was commented out by user, ensuring it's fully gone or remains commented
   //   For: "#10b981",
   //   Against: "#ef4444",
@@ -125,14 +139,36 @@ export default function ClusterChart({
     // Don't update hover if we have a clicked point
     if (clickedPoint) return;
     
+    // Throttle hover updates to prevent excessive re-renders
+    const now = Date.now();
+    const timeSinceLastHover = now - lastHoverTimeRef.current;
+    
     // Clear any existing timeout
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
 
     if (point) {
-      setHoveredPoint(point);
+      // Store the pending hover point
+      pendingHoverRef.current = point;
+      
+      // If we're hovering too quickly, delay the update
+      if (timeSinceLastHover < 50) { // 50ms throttle
+        hoverTimeoutRef.current = setTimeout(() => {
+          if (pendingHoverRef.current) {
+            setHoveredPoint(pendingHoverRef.current);
+            lastHoverTimeRef.current = Date.now();
+          }
+        }, 50 - timeSinceLastHover);
+      } else {
+        // Update immediately if enough time has passed
+        setHoveredPoint(point);
+        lastHoverTimeRef.current = now;
+      }
     } else {
+      // Clear pending hover
+      pendingHoverRef.current = null;
+      
       // Add a delay before hiding tooltip to allow clicking
       hoverTimeoutRef.current = setTimeout(() => {
         setHoveredPoint(null);
@@ -176,6 +212,9 @@ export default function ClusterChart({
     }
   }, [handlePointClick]);
 
+  // Memoize the chart data to prevent unnecessary re-renders
+  const chartData = useMemo(() => data || [], [data]);
+
   return (
     <div 
       ref={chartRef}
@@ -186,7 +225,7 @@ export default function ClusterChart({
       onClick={handleChartClick}
     >
       <ResponsiveScatterPlotCanvas
-        data={data || []}
+        data={chartData}
         margin={{ top: 20, right: 20, bottom: 60, left: 60 }}
         xScale={{
           type: "linear",
