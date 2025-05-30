@@ -1,14 +1,24 @@
 import Link from "next/link";
 import React from "react";
 import ClusterLink from "./ClusterLink";
+import AttributionLink from "./AttributionLink";
 
-type DesktopNavProps = {
+/**
+ * Props accepted by the DesktopNav component.
+ */
+export type DesktopNavProps = {
+  /** Optional label used for the GitHub repo button (the old `subtitle`). */
   subtitle?: string;
 };
 
+/**
+ * A navigation cluster rendered on viewport ≥768 px.
+ */
 const DesktopNav: React.FC<DesktopNavProps> = ({ subtitle }) => (
   <div className="flex flex-col items-end gap-2 w-full max-w-xs">
+    {/* First row: external links */}
     <div className="flex w-full gap-2">
+      {/* GitHub repo – only if subtitle provided */}
       {subtitle && (
         <Link
           href="https://github.com/your-repo"
@@ -17,6 +27,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ subtitle }) => (
           className="flex-1 min-w-[120px] flex items-center bg-white/20 px-3 py-1.5 rounded hover:bg-white/30 transition-colors justify-center"
           aria-label="GitHub repository (opens in new tab)"
         >
+          {/* GitHub icon */}
           <svg
             className="w-5 h-5 mr-2"
             fill="currentColor"
@@ -29,7 +40,14 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ subtitle }) => (
           {subtitle}
         </Link>
       )}
+
+      {/* Clusters */}
       <ClusterLink className="flex-1 min-w-[120px] justify-center" />
+    </div>
+
+    {/* Second row: internal About / Attribution link */}
+    <div className="flex w-full gap-2">
+      <AttributionLink className="flex-1 min-w-[120px] justify-center" />
     </div>
   </div>
 );

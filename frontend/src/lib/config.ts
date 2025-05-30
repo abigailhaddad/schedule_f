@@ -72,17 +72,29 @@ export const datasetConfig = {
         }
       },
       {
-        key: 'agencyId',
-        title: 'Agency ID',
-        filter: 'text',
-        visible: false
+        key: 'commentCount',
+        title: 'Duplicates',
+        filter: 'select',
+        visible: true,
+        badges: {
+          '1': 'bg-gray-100',
+          '2-10': 'bg-blue-100',
+          '11-50': 'bg-purple-100',
+          '50+': 'bg-red-100'
+        }
       },
+      // {
+      //   key: 'agencyId',
+      //   title: 'Agency ID',
+      //   filter: 'text',
+      //   visible: false
+      // },
       { 
         key: 'link',        
         title: 'Source Link',        
         filter: 'text',
         format: 'link',
-        visible: true 
+        visible: false
       },
       { 
         key: 'id',           
@@ -113,6 +125,66 @@ export const datasetConfig = {
         filter: 'date',
         visible: true,
         format: 'date'
+      },
+      // {
+      //   key: 'commentOn',
+      //   title: 'Comment On',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'submitterName',
+      //   title: 'Submitter Name',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      {
+        key: 'organization',
+        title: 'Organization',
+        filter: 'text',
+        visible: true
+      },
+      // {
+      //   key: 'city',
+      //   title: 'City',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'state',
+      //   title: 'State',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'country',
+      //   title: 'Country',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      // {
+      //   key: 'documentType',
+      //   title: 'Document Type',
+      //   filter: 'text',
+      //   visible: false
+      // },
+      {
+        key: 'attachmentCount',
+        title: 'Attachment Count',
+        filter: 'select', 
+        visible: true
+      },
+      {
+        key: 'attachmentUrls',
+        title: 'Attachment URLs',
+        filter: 'text',
+        visible: false
+      },
+      {
+        key: 'attachmentTitles',
+        title: 'Attachment Titles',
+        filter: 'text',
+        visible: false
       }
     ],
     
