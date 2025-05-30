@@ -41,7 +41,8 @@ interface CommentDataItem {
   country?: string;
   document_type?: string;
   attachment_count?: number;
-  attachments?: { title: string; fileUrl: string; type: string; }[];
+  attachment_urls?: string;
+  attachment_titles?: string;
 }
 
 // Define interface for lookup table data
@@ -235,8 +236,9 @@ const main = async () => {
       state: item.state || null,
       country: item.country || null,
       documentType: item.document_type || null,
-      attachmentCount: item.attachment_count ?? (item.attachments ? item.attachments.length : 0),
-      attachments: item.attachments || [],
+      attachmentCount: item.attachment_count ?? 0,
+      attachmentUrls: item.attachment_urls || null,
+      attachmentTitles: item.attachment_titles || null,
       truncatedText: item.truncated_text || null,
     };
     commentsToInsert.push(newComment);
@@ -280,7 +282,8 @@ const main = async () => {
             country: sql`excluded.country`,
             documentType: sql`excluded.document_type`,
             attachmentCount: sql`excluded.attachment_count`,
-            attachments: sql`excluded.attachments`,
+            attachmentUrls: sql`excluded.attachment_urls`,
+            attachmentTitles: sql`excluded.attachment_titles`,
             truncatedText: sql`excluded.truncated_text`,
           } 
         });

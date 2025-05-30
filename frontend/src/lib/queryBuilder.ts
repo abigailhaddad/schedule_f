@@ -251,7 +251,7 @@ function buildTextFilterConditions(column: SQL, values: string[]): SQL[] {
  * Determines if a field should use text search (ILIKE) vs exact match
  */
 function isTextSearchField(key: string): boolean {
-  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale', 'key_quote', 'submitterName', 'organization', 'city', 'state', 'country', 'documentType', 'commentOn'];
+  const textFields = ['comment', 'title', 'keyQuote', 'category', 'rationale', 'key_quote', 'submitterName', 'organization', 'city', 'state', 'country', 'documentType', 'commentOn', 'attachmentUrls', 'attachmentTitles'];
   return textFields.includes(key);
 }
 
@@ -425,7 +425,7 @@ function buildSearchConditions(search?: string, searchFields?: string[]): SQL[] 
   // Determine which fields to search
   const fieldsToSearch = searchFields && searchFields.length > 0 
     ? searchFields 
-    : ['comment', 'title', 'keyQuote', 'key_quote', 'themes', 'rationale', 'category', 'submitterName', 'organization', 'documentType', 'commentOn'];
+    : ['comment', 'title', 'keyQuote', 'key_quote', 'themes', 'rationale', 'category', 'submitterName', 'organization', 'documentType', 'commentOn', 'attachmentUrls', 'attachmentTitles'];
   
   // Build search conditions for each field
   fieldsToSearch.forEach(field => {

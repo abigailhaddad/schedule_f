@@ -10,6 +10,7 @@ interface ClusterSummaryCardProps {
   neutralCount: number;
   forPercentage: number;
   againstPercentage: number;
+  neutralPercentage?: number;
   dominantStance: string;
 }
 
@@ -22,6 +23,7 @@ export default function ClusterSummaryCard({
   neutralCount,
   forPercentage,
   againstPercentage,
+  neutralPercentage,
   dominantStance
 }: ClusterSummaryCardProps) {
   const router = useRouter();
@@ -82,11 +84,11 @@ export default function ClusterSummaryCard({
             <div className="w-20 bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
                 className="bg-gray-500 h-full"
-                style={{ width: `${100 - forPercentage - againstPercentage}%` }}
+                style={{ width: `${neutralPercentage ?? Math.max(0, 100 - forPercentage - againstPercentage)}%` }}
               />
             </div>
             <span className="text-gray-700 w-12 text-right">
-              {(100 - forPercentage - againstPercentage).toFixed(0)}%
+              {Math.max(0, neutralPercentage ?? (100 - forPercentage - againstPercentage)).toFixed(0)}%
             </span>
           </div>
         </div>

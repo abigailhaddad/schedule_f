@@ -354,30 +354,33 @@ export default async function CommentDetail({ comment }: CommentDetailProps) {
       </section>
 
       {/* Attachments Section */}
-      {comment.attachments && comment.attachments.length > 0 && (
+      {comment.attachmentUrls && comment.attachmentTitles && (
         <section 
           aria-labelledby="attachments-heading"
           className="mt-8"
         >
           <h2 id="attachments-heading" className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Attachments</h2>
           <ul className="list-disc pl-5 space-y-2">
-            {comment.attachments.map((attachment, index) => (
-              <li key={index} className="text-gray-700">
-                {attachment.fileUrl ? (
-                  <a 
-                    href={attachment.fileUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
-                    aria-label={`Download or view attachment: ${attachment.title} (opens in new tab)`}
-                  >
-                    <span className="mr-1" aria-hidden="true">📄</span>{attachment.title || 'Untitled Attachment'}
-                  </a>
-                ) : (
-                  <span>{attachment.title || 'Untitled Attachment'} (No URL)</span>
-                )}
-              </li>
-            ))}
+            {(() => {
+              const urls = comment.attachmentUrls.split('; ');
+              const titles = comment.attachmentTitles.split('; ');
+              return urls.map((url, index) => {
+                const title = titles[index] || `Attachment ${index + 1}`;
+                return (
+                  <li key={index} className="text-gray-700">
+                    <a 
+                      href={url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      aria-label={`Download or view attachment: ${title} (opens in new tab)`}
+                    >
+                      <span className="mr-1" aria-hidden="true">📄</span>{title}
+                    </a>
+                  </li>
+                );
+              });
+            })()}
           </ul>
         </section>
       )}
