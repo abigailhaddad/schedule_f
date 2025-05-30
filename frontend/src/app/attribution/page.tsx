@@ -31,7 +31,7 @@ const CONTRIBUTORS = [
   {
     name: "Abigail Haddad",
     role: "Creator and Machine Learning Engineer",
-    bio: `Abigail is a data scientist with deep expertise in federal procurement and civic‑tech policy. She develops clustering and PCA visualisations that help make sense of thousands of public comments, ensuring transparency and rigour in the analysis.`,
+    bio: `Abigail Haddad is building modular tools for unstructured text data pipelines. She holds a PhD in Public Policy from RAND and has worked as a data scientist for the Department of the Army and, most recently, as a Machine Learning Engineer with DHS AI Corps. She blogs at presentofcoding.substack.com.`,
     github: "abigailhaddad",
     linkedin: "https://www.linkedin.com/in/abigail-haddad/",
   },
