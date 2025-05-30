@@ -17,6 +17,8 @@ analyzed_comments/
 comments.json
 *.json
 !data/**
+data/data_large.json
+data/data.json
 data/attachments/
 data/temp*/
 !frontend/package.json
