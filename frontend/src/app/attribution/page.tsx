@@ -196,7 +196,7 @@ export default function AttributionPage() {
             
             <div className="flex flex-wrap gap-3 justify-center">
               <a 
-                href="mailto:michael.e.boyce@gmail.com,abigail.haddad@gmail.com?subject=Schedule F Analysis Collaboration"
+                href="mailto:abigail.haddad@gmail.com?subject=Schedule F Analysis Collaboration"
                 className="btn btn-primary"
               >
                 📧 Email Us
@@ -246,7 +246,7 @@ export default function AttributionPage() {
               Has your organization used this data? We'd love to showcase your work!
             </p>
             <a 
-              href="mailto:michael.e.boyce@gmail.com,abigail.haddad@gmail.com?subject=We used your Schedule F analysis"
+              href="mailto:abigail.haddad@gmail.com?subject=We used your Schedule F analysis"
               className="text-blue-600 hover:underline font-medium"
             >
               Let us know about your project →
