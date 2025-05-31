@@ -6,10 +6,11 @@ import { Field, datasetConfig } from '@/lib/config';
 import FilterModal from './FilterModal';
 import { useServerDataContext } from '@/contexts/ServerDataContext';
 import Card from '@/components/ui/Card';
+import SearchInput from '@/components/ui/SearchInput';
 
 export default function ServerFilterSection() {
-  // Get filters and setFilters from the context
-  const { filters, setFilters } = useServerDataContext();
+  // Get filters, setFilters, searchQuery, and setSearchQuery from the context
+  const { filters, setFilters, searchQuery, setSearchQuery } = useServerDataContext();
   
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [activeField, setActiveField] = useState<Field | null>(null);
@@ -252,6 +253,27 @@ export default function ServerFilterSection() {
         <div className="mt-4 pt-4 border-t border-gray-200">
           <h6 className="font-medium text-gray-700 mb-2">Filter Options</h6>
           {renderFilterButtons()}
+        </div>
+        
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <h6 className="font-medium text-gray-700 mb-2">Search</h6>
+          <SearchInput
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search comments..."
+            lightTheme={true}
+          />
+          {searchQuery && (
+            <div className="mt-2 text-sm text-gray-600">
+              Searching for: <span className="font-medium">{searchQuery}</span>
+              <button
+                className="ml-2 text-blue-500 hover:text-blue-700"
+                onClick={() => setSearchQuery('')}
+              >
+                Clear
+              </button>
+            </div>
+          )}
         </div>
       </Card.Body>
       

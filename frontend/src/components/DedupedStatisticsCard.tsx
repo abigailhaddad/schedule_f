@@ -51,8 +51,8 @@ export default function DedupedStatisticsCard() {
     </div>
   );
 
-  // Loading state display
-  if (isInitialLoad && loading) {
+  // Loading state display - show during initial load OR when data is updating
+  if (loading) {
     return (
       <Card className="overflow-hidden" collapsible={true} initiallyCollapsed={false}>
         <Card.Header className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600">
