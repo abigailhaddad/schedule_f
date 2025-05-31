@@ -153,13 +153,13 @@ function ClusterChartContent({
       pendingHoverRef.current = point;
       
       // If we're hovering too quickly, delay the update
-      if (timeSinceLastHover < 50) { // 50ms throttle
+      if (timeSinceLastHover < 25) { // Reduced throttle for more responsiveness
         hoverTimeoutRef.current = setTimeout(() => {
           if (pendingHoverRef.current) {
             setHoveredPoint(pendingHoverRef.current);
             lastHoverTimeRef.current = Date.now();
           }
-        }, 50 - timeSinceLastHover);
+        }, 25 - timeSinceLastHover);
       } else {
         // Update immediately if enough time has passed
         setHoveredPoint(point);
@@ -169,10 +169,10 @@ function ClusterChartContent({
       // Clear pending hover
       pendingHoverRef.current = null;
       
-      // Add a delay before hiding tooltip to allow clicking
+      // Add a minimal delay before hiding tooltip to allow clicking
       hoverTimeoutRef.current = setTimeout(() => {
         setHoveredPoint(null);
-      }, 100); // Reduced delay for better responsiveness
+      }, 50); // Reduced delay for more precise hover behavior
     }
   }, [clickedPoint]);
 
@@ -256,6 +256,7 @@ function ClusterChartContent({
           legendOffset: -60,
         }}
         nodeSize={10}
+        // Add a smaller detection area for hover
         colors={(node) => {
           // Access the series id from the node
           const serieId = node.serieId;
