@@ -362,6 +362,81 @@ export async function getCommentStatistics(
 }
 
 /**
+ * Fetches statistics with duplicates removed based on current filters
+ */
+export async function getDedupedCommentStatistics(
+  options: QueryOptions
+): Promise<CommentsStatisticsResponse> {
+  // Create cache key based on options (without pagination)
+  const filterOptions = { ...options };
+  delete filterOptions.page;
+  delete filterOptions.pageSize;
+  
+  // Core function that fetches deduped statistics
+  const fetchDedupedStatistics = async () => {
+    try {
+      const connection = await connectDb();
+      if (!connection.success) {
+        throw new Error("Failed to connect to database");
+      }
+
+      // Build all stats queries with deduplication
+      const queryResults = await buildStatsQueries(options, false); // false = exclude duplicates
+
+      // Execute all queries
+      const [totalResult, forResult, againstResult, neutralResult] = await Promise.all([
+        db.execute(queryResults.totalQuery),
+        db.execute(queryResults.forQuery),
+        db.execute(queryResults.againstQuery),
+        db.execute(queryResults.neutralQuery)
+      ]);
+
+      // Parse results
+      const totalCount = extractCountValue(totalResult);
+      const forCount = extractCountValue(forResult);
+      const againstCount = extractCountValue(againstResult);
+      const neutralCount = extractCountValue(neutralResult);
+
+      return {
+        success: true,
+        stats: {
+          total: totalCount,
+          for: forCount,
+          against: againstCount,
+          neutral: neutralCount
+        }
+      };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error fetching deduped comment statistics:", errorMessage);
+      return { 
+        success: false, 
+        error: `Failed to fetch deduped statistics: ${errorMessage}` 
+      };
+    }
+  };
+
+  // Check if we should skip caching
+  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  
+  if (shouldSkipCache) {
+    return fetchDedupedStatistics();
+  }
+
+  // Use Next.js unstable_cache for production or when cache is enabled
+  const getCachedDedupedStats = unstable_cache(
+    fetchDedupedStatistics,
+    [`deduped-stats-${JSON.stringify(filterOptions)}`], // Cache key
+    {
+      revalidate: 86400, // 24 hours, matching your page revalidation
+      tags: ['deduped-stats']
+    }
+  );
+  
+  return getCachedDedupedStats();
+}
+
+/**
  * Fetches a single comment by ID
  */
 export async function getCommentById(

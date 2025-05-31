@@ -3,6 +3,7 @@
 import ServerFilterSection from './ServerFilterSection';
 import ServerCommentTable from './ServerCommentTable';
 import ServerStatisticsCard from './ServerStatisticsCard';
+import DedupedStatisticsCard from './DedupedStatisticsCard';
 import StanceOverTimeClient from './StanceOverTime/StanceOverTimeClient';
 import Card from '@/components/ui/Card';
 
@@ -13,6 +14,9 @@ export default function ServerDataState() {
       <div className="row mb-4">
         <div className="col-md-6">
           <ServerStatisticsCard />
+          <div className="mt-4">
+            <DedupedStatisticsCard />
+          </div>
         </div>
         <div className="col-md-6">
           <ServerFilterSection />
