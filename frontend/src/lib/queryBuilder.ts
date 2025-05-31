@@ -511,7 +511,7 @@ export async function buildCommentsQuery(options: QueryOptions) {
 /**
  * Builds queries for statistics based on filters
  */
-export async function buildStatsQueries(options: QueryOptions) {
+export async function buildStatsQueries(options: QueryOptions, includeDuplicates: boolean = true) {
   // Build filter conditions
   const filterConditions = buildFilterConditions(options.filters);
   
@@ -520,6 +520,19 @@ export async function buildStatsQueries(options: QueryOptions) {
   
   // Combine all conditions
   const allConditions = [...filterConditions, ...searchConditions];
+  
+  // Add condition to exclude duplicates if requested
+  if (!includeDuplicates) {
+    // Only include the first comment from each lookup group
+    allConditions.push(
+      sql`${comments.id} IN (
+        SELECT DISTINCT ON (${lookupTable.lookupId}) ${comments.id}
+        FROM ${comments}
+        LEFT JOIN ${lookupTable} ON ${comments.lookupId} = ${lookupTable.lookupId}
+        ORDER BY ${lookupTable.lookupId}, ${comments.id}
+      )`
+    );
+  }
   
   // Create base count query
   const totalBaseQuery = db.select({ count: sql`count(*)` }).from(comments);

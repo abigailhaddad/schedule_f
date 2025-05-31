@@ -14,6 +14,7 @@ import { SortingState } from "@/components/ServerCommentTable/types";
 import {
   getPaginatedComments,
   getCommentStatistics,
+  getDedupedCommentStatistics,
   parseUrlToQueryOptions,
   getStanceTimeSeries,
 } from "@/lib/actions/comments";
@@ -35,6 +36,14 @@ interface ServerDataContextProps {
 
   // Statistics
   stats: {
+    total: number;
+    for: number;
+    against: number;
+    neutral: number;
+  };
+
+  // Deduped Statistics
+  dedupedStats: {
     total: number;
     for: number;
     against: number;
@@ -143,6 +152,12 @@ export function ServerDataContextProvider({
     against: 0,
     neutral: 0,
   });
+  const [dedupedStats, setDedupedStats] = useState({
+    total: 0,
+    for: 0,
+    against: 0,
+    neutral: 0,
+  });
   const [stanceTimeSeriesData, setStanceTimeSeriesData] =
     useState<StanceChartData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -234,9 +249,10 @@ export function ServerDataContextProvider({
       options.pageSize = pageSize;
 
       // Fetch data and stats in parallel (but not stance time series)
-      const [dataResponse, statsResponse] = await Promise.all([
+      const [dataResponse, statsResponse, dedupedStatsResponse] = await Promise.all([
         getPaginatedComments(options),
         getCommentStatistics(options),
+        getDedupedCommentStatistics(options),
       ]);
 
       if (dataResponse.success && dataResponse.data) {
@@ -252,6 +268,12 @@ export function ServerDataContextProvider({
         setStats(statsResponse.stats);
       } else {
         console.error("Error fetching stats:", statsResponse.error);
+      }
+
+      if (dedupedStatsResponse.success && dedupedStatsResponse.stats) {
+        setDedupedStats(dedupedStatsResponse.stats);
+      } else {
+        console.error("Error fetching deduped stats:", dedupedStatsResponse.error);
       }
     } catch (err) {
       console.error("Exception in fetchData:", err);
@@ -469,6 +491,9 @@ export function ServerDataContextProvider({
 
     // Statistics
     stats,
+
+    // Deduped Statistics
+    dedupedStats,
 
     // Stance Time Series Data
     stanceTimeSeriesData,
