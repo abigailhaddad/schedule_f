@@ -1,15 +1,20 @@
 // src/app/attribution/page.tsx
+'use client' 
+
 import { Metadata } from "next";
 import AttributionCard from "@/components/AttributionCard";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import { useState } from "react";
 
 /**
  * Page metadata – this is picked up by the Next.js App Router.
  */
-export const metadata: Metadata = {
-  title: "Attribution – Schedule F Analysis",
-  description:
-    "Meet the people behind the Schedule F Analysis project and learn how to connect with them.",
-};
+// export const metadata: Metadata = {
+//   title: "Attribution & Collaboration – Schedule F Analysis",
+//   description:
+//     "Meet the team behind the Schedule F Analysis project, learn how to cite our work, and explore collaboration opportunities.",
+// };
 
 /**
  * Simple helper to build an avatar URL from a GitHub username.
@@ -31,21 +36,189 @@ const CONTRIBUTORS = [
   {
     name: "Abigail Haddad",
     role: "Creator and Machine Learning Engineer",
-    bio: `Abigail Haddad is building modular tools for unstructured text data pipelines. She holds a PhD in Public Policy from RAND and has worked as a data scientist for the Department of the Army and, most recently, as a Machine Learning Engineer with DHS AI Corps. She blogs at presentofcoding.substack.com.`,
+    bio: `Abigail Haddad is an Machine Learning Engineer working on text data pipelines and testing frameworks. She has a PhD in Public Policy from RAND and previously worked for the Army and DHS AI Corps. She co-organizes Data Science DC, runs a civic tech happy hour, and blogs at presentofcoding.substack.com, where she writes about practical approaches to LLM evaluation, text processing pipelines, and coding in government. Some of her work has focused on analyzing government personnel data, including FedScope and USAJobs datasets. She's currently looking for her next job.`,
     github: "abigailhaddad",
     linkedin: "https://www.linkedin.com/in/abigail-haddad/",
   },
 ];
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  
+  return (
+    <button
+      onClick={handleCopy}
+      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+    >
+      {copied ? "✓ Copied!" : "📋 Copy to clipboard"}
+    </button>
+  );
+}
+
 export default function AttributionPage() {
+  const attributionText = `Schedule F comment analysis by Michael Boyce and Abigail Haddad via schedule-f.vercel.app which adds stance classification and thematic analysis to public comments from regulations.gov`;
+  
+  const academicCitation = `Boyce, M. & Haddad, A. (2024). Schedule F Public Comment Analysis Dataset. Retrieved from https://schedulef.org`;
+
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col">
       <div className="container mx-auto px-4 md:px-8 py-10">
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 flex items-center gap-2">
           <span aria-hidden="true">👥</span>
-          Project Attribution
+          Attribution & Collaboration
         </h1>
 
+        {/* Quick Attribution Section */}
+        <Card className="mb-8" collapsible={false}>
+          <Card.Header className="bg-gradient-to-r from-blue-500 to-blue-600">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <span className="mr-2">📝</span>
+              Quick Attribution
+            </h2>
+          </Card.Header>
+          <Card.Body className="p-6">
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-sm text-gray-700 mb-2">For Articles & Reports:</h3>
+                <p className="text-sm font-mono bg-white p-3 rounded border border-gray-200 mb-2">
+                  {attributionText}
+                </p>
+                <CopyButton text={attributionText} />
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-sm text-gray-700 mb-2">For Academic Papers:</h3>
+                <p className="text-sm font-mono bg-white p-3 rounded border border-gray-200 mb-2">
+                  {academicCitation}
+                </p>
+                <CopyButton text={academicCitation} />
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+
+        {/* What We've Added Section */}
+        <Card className="mb-8" collapsible={false}>
+          <Card.Header className="bg-gradient-to-r from-green-500 to-green-600">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <span className="mr-2">✨</span>
+              Our Contributions to the Data
+            </h2>
+          </Card.Header>
+          <Card.Body className="p-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-blue-50 p-5 rounded-lg">
+                <h3 className="font-semibold text-blue-900 mb-3">Analysis Added</h3>
+                <ul className="space-y-2 text-sm text-blue-800">
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Stance classification (For/Against/Neutral)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Thematic categorization & tagging</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Key quote extraction</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>PCA clustering visualization</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Duplicate detection & linking</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-green-50 p-5 rounded-lg">
+                <h3 className="font-semibold text-green-900 mb-3">Technical Features</h3>
+                <ul className="space-y-2 text-sm text-green-800">
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Full-text search across all comments</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Advanced multi-criteria filtering</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>CSV export with all metadata</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Time series analysis & visualization</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">✓</span>
+                    <span>Mobile-responsive interface</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+
+        {/* Let's Collaborate Section */}
+        <Card className="mb-8" collapsible={false}>
+          <Card.Header className="bg-gradient-to-r from-purple-500 to-purple-600">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <span className="mr-2">🤝</span>
+              Let's Collaborate
+            </h2>
+          </Card.Header>
+          <Card.Body className="p-6">
+            <p className="text-gray-700 mb-6">
+              We're passionate about making government data more accessible and analyzable. 
+              Whether you're a journalist, researcher, policy analyst, or civic technologist, 
+              we'd love to connect!
+            </p>
+            
+            <div className="bg-purple-50 p-5 rounded-lg mb-6">
+              <h3 className="font-semibold text-purple-900 mb-3">Ways to Work Together:</h3>
+              <ul className="space-y-2 text-sm text-purple-800">
+                <li>• Use our analysis in your reporting (with attribution)</li>
+                <li>• Collaborate on analyzing other regulatory comments</li>
+                <li>• Build on our open-source code</li>
+                <li>• Partner on civic tech projects</li>
+                <li>• Hire us for custom data analysis</li>
+              </ul>
+            </div>
+            
+            <div className="flex flex-wrap gap-3 justify-center">
+              <a 
+                href="mailto:michael.e.boyce@gmail.com,abigail.haddad@gmail.com?subject=Schedule F Analysis Collaboration"
+                className="btn btn-primary"
+              >
+                📧 Email Us
+              </a>
+              <a 
+                href="https://github.com/your-repo/schedule-f-analysis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline-primary"
+              >
+                🐙 View on GitHub
+              </a>
+            </div>
+          </Card.Body>
+        </Card>
+
+        {/* Meet the Team Section */}
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <span aria-hidden="true">👨‍💻👩‍💻</span>
+          Meet the Team
+        </h2>
+        
         <div className="grid gap-8 md:grid-cols-2">
           {CONTRIBUTORS.map(({ name, role, bio, github, linkedin }) => (
             <AttributionCard
@@ -59,6 +232,27 @@ export default function AttributionPage() {
             />
           ))}
         </div>
+
+        {/* Projects Using This Data (Initially empty, ready to showcase) */}
+        <Card className="mt-8" collapsible={false}>
+          <Card.Header className="bg-gradient-to-r from-orange-500 to-orange-600">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <span className="mr-2">🌟</span>
+              Projects Using This Analysis
+            </h2>
+          </Card.Header>
+          <Card.Body className="p-6 text-center">
+            <p className="text-gray-600 mb-4">
+              Has your organization used this data? We'd love to showcase your work!
+            </p>
+            <a 
+              href="mailto:michael.e.boyce@gmail.com,abigail.haddad@gmail.com?subject=We used your Schedule F analysis"
+              className="text-blue-600 hover:underline font-medium"
+            >
+              Let us know about your project →
+            </a>
+          </Card.Body>
+        </Card>
       </div>
     </main>
   );
