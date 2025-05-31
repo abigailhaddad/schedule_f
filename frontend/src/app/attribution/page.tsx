@@ -1,10 +1,10 @@
 // src/app/attribution/page.tsx
 'use client' 
 
-import { Metadata } from "next";
+//import { Metadata } from "next";
 import AttributionCard from "@/components/AttributionCard";
 import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+//import Button from "@/components/ui/Button";
 import { useState } from "react";
 
 /**
@@ -62,9 +62,9 @@ function CopyButton({ text }: { text: string }) {
 }
 
 export default function AttributionPage() {
-  const attributionText = `Schedule F comment analysis by Michael Boyce and Abigail Haddad via schedule-f.vercel.app which adds stance classification and thematic analysis to public comments from regulations.gov`;
+  const attributionText = `Schedule F comment analysis by Michael Boyce and Abigail Haddad via schedule-f.vercel.app which analyzed public comments from regulations.gov to determine support and themes.`;
   
-  const academicCitation = `Boyce, M. & Haddad, A. (2024). Schedule F Public Comment Analysis Dataset. Retrieved from https://schedulef.org`;
+  const academicCitation = `Boyce, M. & Haddad, A. (2024). Schedule F Public Comment Analysis Dataset. Retrieved from https://schedule-f.vercel.app`;
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col">
@@ -103,96 +103,20 @@ export default function AttributionPage() {
           </Card.Body>
         </Card>
 
-        {/* What We've Added Section */}
-        <Card className="mb-8" collapsible={false}>
-          <Card.Header className="bg-gradient-to-r from-green-500 to-green-600">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <span className="mr-2">✨</span>
-              Our Contributions to the Data
-            </h2>
-          </Card.Header>
-          <Card.Body className="p-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-blue-50 p-5 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-3">Analysis Added</h3>
-                <ul className="space-y-2 text-sm text-blue-800">
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Stance classification (For/Against/Neutral)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Thematic categorization & tagging</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Key quote extraction</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>PCA clustering visualization</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Duplicate detection & linking</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="bg-green-50 p-5 rounded-lg">
-                <h3 className="font-semibold text-green-900 mb-3">Technical Features</h3>
-                <ul className="space-y-2 text-sm text-green-800">
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Full-text search across all comments</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Advanced multi-criteria filtering</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>CSV export with all metadata</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Time series analysis & visualization</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>Mobile-responsive interface</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
-
         {/* Let's Collaborate Section */}
         <Card className="mb-8" collapsible={false}>
           <Card.Header className="bg-gradient-to-r from-purple-500 to-purple-600">
             <h2 className="text-lg font-bold text-white flex items-center">
               <span className="mr-2">🤝</span>
-              Let's Collaborate
+              Let&apos;s Collaborate
             </h2>
           </Card.Header>
           <Card.Body className="p-6">
             <p className="text-gray-700 mb-6">
-              We're passionate about making government data more accessible and analyzable. 
-              Whether you're a journalist, researcher, policy analyst, or civic technologist, 
-              we'd love to connect!
+              We&apos;re passionate about making government data more accessible and analyzable. 
+              Whether you&apos;re a journalist, researcher, policy analyst, or civic technologist, 
+              we&apos;d love to connect!
             </p>
-            
-            <div className="bg-purple-50 p-5 rounded-lg mb-6">
-              <h3 className="font-semibold text-purple-900 mb-3">Ways to Work Together:</h3>
-              <ul className="space-y-2 text-sm text-purple-800">
-                <li>• Use our analysis in your reporting (with attribution)</li>
-                <li>• Collaborate on analyzing other regulatory comments</li>
-                <li>• Build on our open-source code</li>
-                <li>• Partner on civic tech projects</li>
-                <li>• Hire us for custom data analysis</li>
-              </ul>
-            </div>
             
             <div className="flex flex-wrap gap-3 justify-center">
               <a 
@@ -243,7 +167,7 @@ export default function AttributionPage() {
           </Card.Header>
           <Card.Body className="p-6 text-center">
             <p className="text-gray-600 mb-4">
-              Has your organization used this data? We'd love to showcase your work!
+              Has your organization used this data? We&apos;d love to showcase your work!
             </p>
             <a 
               href="mailto:abigail.haddad@gmail.com?subject=We used your Schedule F analysis"
