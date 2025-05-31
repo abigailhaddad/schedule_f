@@ -23,6 +23,11 @@ export default function ServerCommentTable() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, context.setSearchQuery]);
   
+  // Sync local searchInput when context.searchQuery changes from outside
+  useEffect(() => {
+    setSearchInput(context.searchQuery);
+  }, [context.searchQuery]);
+  
   const columnVisibility = useColumnVisibility(datasetConfig.fields);
   const { handleRowClick } = useTableNavigation();
   
