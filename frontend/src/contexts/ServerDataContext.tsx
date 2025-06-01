@@ -109,6 +109,10 @@ export function ServerDataContextProvider({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  
+  // Refs to track the latest fetch requests
+  const fetchIdRef = useRef(0);
+  const stanceFetchIdRef = useRef(0);
 
   // Extract URL parameters
   const urlSort = searchParams.get("sort");
@@ -165,6 +169,7 @@ export function ServerDataContextProvider({
 
   // UI state
   const [searchQuery, setSearchQuery] = useState(urlSearch);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(urlSearch);
   const [filters, setFilters] = useState<Record<string, unknown>>(
     getInitialFilters()
   );
@@ -174,13 +179,25 @@ export function ServerDataContextProvider({
       : undefined
   );
 
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // Update the fetchStanceTimeSeries function
   const fetchStanceTimeSeries = async () => {
+    // Increment stance fetch ID to track the latest request
+    const currentStanceFetchId = ++stanceFetchIdRef.current;
+    
     try {
-      // Create options with current filters and search
+      // Create options with current filters and debounced search
       const stanceChartOptions = {
         filters: filters,
-        search: searchQuery || undefined,
+        search: debouncedSearchQuery || undefined,
         searchFields: undefined,
       };
 
@@ -196,6 +213,12 @@ export function ServerDataContextProvider({
         getStanceTimeSeries(stanceChartOptions, "postedDate", false),
         getStanceTimeSeries(stanceChartOptions, "receivedDate", false),
       ]);
+
+      // Check if this is still the latest request
+      if (currentStanceFetchId !== stanceFetchIdRef.current) {
+        // A newer request has been initiated, discard these results
+        return;
+      }
 
       // Process and set stance time series data
       const newStanceData: StanceChartData = {
@@ -220,19 +243,25 @@ export function ServerDataContextProvider({
       };
       setStanceTimeSeriesData(newStanceData);
     } catch (err) {
-      console.error("Error fetching stance time series:", err);
-      setStanceTimeSeriesData({
-        posted_date: [],
-        received_date: [],
-        posted_date_no_duplicates: [],
-        received_date_no_duplicates: [],
-        error: "Failed to fetch time series data",
-      });
+      // Check if this is still the latest request before setting error
+      if (currentStanceFetchId === stanceFetchIdRef.current) {
+        console.error("Error fetching stance time series:", err);
+        setStanceTimeSeriesData({
+          posted_date: [],
+          received_date: [],
+          posted_date_no_duplicates: [],
+          received_date_no_duplicates: [],
+          error: "Failed to fetch time series data",
+        });
+      }
     }
   };
 
   // Fetch data based on current parameters
   const fetchData = async () => {
+    // Increment fetch ID to track the latest request
+    const currentFetchId = ++fetchIdRef.current;
+    
     setLoading(true);
 
     try {
@@ -254,6 +283,12 @@ export function ServerDataContextProvider({
         getCommentStatistics(options),
         getDedupedCommentStatistics(options),
       ]);
+
+      // Check if this is still the latest request
+      if (currentFetchId !== fetchIdRef.current) {
+        // A newer request has been initiated, discard these results
+        return;
+      }
 
       if (dataResponse.success && dataResponse.data) {
         // Debug logging for commentCount
@@ -289,10 +324,16 @@ export function ServerDataContextProvider({
         console.error("Error fetching deduped stats:", dedupedStatsResponse.error);
       }
     } catch (err) {
-      console.error("Exception in fetchData:", err);
-      setError("An unexpected error occurred");
+      // Check if this is still the latest request before setting error
+      if (currentFetchId === fetchIdRef.current) {
+        console.error("Exception in fetchData:", err);
+        setError("An unexpected error occurred");
+      }
     } finally {
-      setLoading(false);
+      // Only set loading to false if this is still the latest request
+      if (currentFetchId === fetchIdRef.current) {
+        setLoading(false);
+      }
     }
   };
 
@@ -302,11 +343,11 @@ export function ServerDataContextProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only on mount
 
-  // Refetch stance time series when filters or search changes
+  // Refetch stance time series when filters or debounced search changes
   useEffect(() => {
     fetchStanceTimeSeries();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, searchQuery]); // Only when filters or search changes
+  }, [filters, debouncedSearchQuery]); // Only when filters or debounced search changes
 
   // Refresh data function that can be called by consumers
   const refreshData = async () => {
@@ -314,12 +355,12 @@ export function ServerDataContextProvider({
   };
 
   // Use refs to track previous values
-  const prevSearchQuery = useRef(searchQuery);
+  const prevDebouncedSearchQuery = useRef(debouncedSearchQuery);
   const prevFilters = useRef(filters);
 
-  // Update URL when filters, sorting or search changes
+  // Update URL when filters, sorting or debounced search changes
   useEffect(() => {
-    const searchChanged = prevSearchQuery.current !== searchQuery;
+    const searchChanged = prevDebouncedSearchQuery.current !== debouncedSearchQuery;
     const filtersChanged =
       JSON.stringify(prevFilters.current) !== JSON.stringify(filters);
 
@@ -337,8 +378,8 @@ export function ServerDataContextProvider({
     }
 
     // Update search parameter
-    if (searchQuery) {
-      params.set("search", searchQuery);
+    if (debouncedSearchQuery) {
+      params.set("search", debouncedSearchQuery);
     }
 
     // Update filter parameters
@@ -372,9 +413,9 @@ export function ServerDataContextProvider({
     router.replace(fullPath, { scroll: false });
 
     // Update refs for next comparison
-    prevSearchQuery.current = searchQuery;
+    prevDebouncedSearchQuery.current = debouncedSearchQuery;
     prevFilters.current = filters;
-  }, [searchQuery, sorting, filters, router, pathname, currentPage, pageSize]);
+  }, [debouncedSearchQuery, sorting, filters, router, pathname, currentPage, pageSize]);
 
   // Fetch data when URL parameters change
   useEffect(() => {

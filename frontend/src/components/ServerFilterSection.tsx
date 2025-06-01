@@ -1,7 +1,7 @@
 // components/ServerFilterSection.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Field, datasetConfig } from '@/lib/config';
 import FilterModal from './FilterModal';
 import { useServerDataContext } from '@/contexts/ServerDataContext';
