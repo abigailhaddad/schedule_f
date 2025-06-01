@@ -20,18 +20,18 @@ import sys
 from typing import Optional
 from pathlib import Path
 
-from .config import config
-from .fetch import read_comments_from_csv, download_all_attachments
-from .analysis import create_lookup_table, analyze_lookup_table_batch
-from .analysis.verify_lookup_quotes import verify_lookup_quotes
-from .utils import (
+from backend.config import config
+from backend.fetch import read_comments_from_csv, download_all_attachments
+from backend.analysis import create_lookup_table, analyze_lookup_table_batch
+from backend.analysis.verify_lookup_quotes import verify_lookup_quotes
+from backend.utils import (
     CommentAnalyzer,
     PipelineLogger,
     FileManager,
     FileOperationError,
     ConfigurationError,
 )
-from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
+from backend.utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
 
 # Set up logger
 logger = PipelineLogger.get_logger(__name__)
