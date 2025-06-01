@@ -1,0 +1,49 @@
+QUOTE VERIFICATION REPORT
+================================================================================
+
+SUMMARY
+----------------------------------------
+Total lookup entries: 27
+Total comments represented: 29
+Lookup entries with quotes: 27
+Quotes found (exact): 24 (88.9%)
+Quotes found (similar): 2 (7.4%)
+Quotes NOT found: 1 (3.7%)
+Overall verification rate: 96.3%
+
+
+QUOTES NOT FOUND (1 entries)
+================================================================================
+
+1. Lookup ID: lookup_000008
+   Represents 1 comment(s)
+   Comment IDs: OPM-2025-0004-0009
+
+   QUOTE: "This proposal, by stripping numerous civil servants of their tenure protections, blatantly violates that rule."
+
+   TRUNCATED TEXT (487 characters):
+   ‬ ‭ The‬‭ CSRA‬‭ bars‬‭ expanding‬‭ the‬‭ confidential‬‭ and‬‭ policymaking‬‭
+   designation‬‭ beyond‬‭ political‬ ‭ appointees.‬ Federal‬‭ civil‬‭
+   servants,‬‭ once‬‭ granted‬‭ CSRA‬‭ protections,‬‭ may‬‭ not‬‭ be‬‭ fired‬‭
+   (or‬ ‭ otherwise‬‭ deprived‬‭ of‬‭ their‬‭ CSRA‬‭ rights)‬‭ without‬‭
+   procedures‬‭ closely‬‭ tracking‬‭ those‬‭ the‬ ‭ CSRA‬‭ requires.‬‭ This
+   proposal,‬‭ by‬‭ stripping numerous‬‭ civil‬‭ servants‬‭ of‬‭ their‬‭ tenure‬
+   ‭ protections, blatantly violates that rule.‬
+--------------------------------------------------------------------------------
+
+
+QUOTES WITH SIMILAR MATCHES (2 entries)
+================================================================================
+
+1. Lookup ID: lookup_000015
+   Represents 1 comment(s)
+   QUOTE: "This regulation is incompatible with the laws, principles, and values that define the U.S. government. It erodes merit, eliminates accountability, and opens the federal workforce to political exploitation."
+   MATCH INFO: Found similar (not exact): to action this regulation is incompatible with the laws, principles, and values that define the u.s. government. it erodes merit, eliminates accountability, and opens the federal workforce to political exploitation. i urge th
+----------------------------------------
+
+2. Lookup ID: lookup_000019
+   Represents 1 comment(s)
+   QUOTE: "This does not create a viable functional workforce, if their jobs are on the line, all of the time. This is unconstitutional."
+   MATCH INFO: Found similar (not exact): y reason. this does not create a viable functional workforce, if their jobs are on the line, all of the time. this is unconstitutional. as citize
+----------------------------------------
+
