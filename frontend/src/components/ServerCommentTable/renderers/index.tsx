@@ -8,6 +8,7 @@ import { DateRenderer } from './DateRenderer';
 import { LinkRenderer } from './LinkRenderer';
 import { MultiLabelRenderer } from './MultiLabelRenderer';
 import { TextRenderer } from './TextRenderer';
+import { CountRenderer } from './CountRenderer';
 
 export function createFieldRenderer(props: RendererProps): React.ReactElement {
   const { field, value } = props;
@@ -19,8 +20,8 @@ export function createFieldRenderer(props: RendererProps): React.ReactElement {
     );
   }
   
-  // Handle null/undefined/empty values
-  if (value === null || value === undefined || value === '') {
+  // Handle null/undefined/empty values (except for count fields which may have 0)
+  if (field.format !== 'count' && (value === null || value === undefined || value === '')) {
     return <span className="text-gray-400 italic">—</span>;
   }
   
@@ -41,23 +42,13 @@ export function createFieldRenderer(props: RendererProps): React.ReactElement {
     return <LinkRenderer {...props} value={value} />;
   }
   
+  if (field.format === 'count') {
+    return <CountRenderer {...props} value={value as number} />;
+  }
+  
   if (field.badges) {
-    // Special handling for commentCount field which stores numbers but displays as ranges
-    if (field.key === 'commentCount' && typeof value === 'number') {
-      let badgeKey: string;
-      if (value === 1) {
-        badgeKey = '1';
-      } else if (value >= 2 && value <= 10) {
-        badgeKey = '2-10';
-      } else if (value >= 11 && value <= 50) {
-        badgeKey = '11-50';
-      } else {
-        badgeKey = '50+';
-      }
-      return <BadgeRenderer {...props} value={badgeKey} />;
-    }
     // Regular badge handling for string values
-    else if (typeof value === 'string' && field.badges[value as keyof typeof field.badges]) {
+    if (typeof value === 'string' && field.badges[value as keyof typeof field.badges]) {
       return <BadgeRenderer {...props} value={value} />;
     }
   }

@@ -163,25 +163,27 @@ function TableBody({ data, columns, onRowClick,  getColumnWidth }: TableBodyProp
 
   return (
     <tbody className="bg-white divide-y divide-gray-200">
-      {data.map((item) => (
-        <tr
-          key={item.id}
-          className="cursor-pointer hover:bg-blue-50"
-          onClick={() => onRowClick(item)}
-        >
-          {columns.map((column) => (
-            <td 
-              key={`${item.id}-${column.key}`} 
-              className="px-4 py-3 text-sm break-words"
-              style={{ width: getColumnWidth(column) }}
-            >
-              <div className="max-w-full">
-                {column.render(item)}
-              </div>
-            </td>
-          ))}
-        </tr>
-      ))}
+      {data.map((item) => {
+        return (
+          <tr
+            key={item.id}
+            className="cursor-pointer hover:bg-blue-50"
+            onClick={() => onRowClick(item)}
+          >
+            {columns.map((column) => (
+              <td 
+                key={`${item.id}-${column.key}`} 
+                className="px-4 py-3 text-sm break-words"
+                style={{ width: getColumnWidth(column) }}
+              >
+                <div className="max-w-full">
+                  {column.render(item)}
+                </div>
+              </td>
+            ))}
+          </tr>
+        );
+      })}
     </tbody>
   );
 }

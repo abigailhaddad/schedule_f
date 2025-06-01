@@ -12,15 +12,6 @@ export const metadata: Metadata = {
 
 export default async function ClustersPage() {
   const clusterResponse = await getClusterData(); 
-  
-  // Server-side logging to debug
-  console.log('Cluster data fetch result:', {
-    success: clusterResponse.success,
-    hasData: !!clusterResponse.data,
-    clusterCount: clusterResponse.data?.clusters?.length,
-    totalPoints: clusterResponse.data?.totalPoints,
-    error: clusterResponse.error
-  });
 
   // Pass the data with the correct prop names
   return (
