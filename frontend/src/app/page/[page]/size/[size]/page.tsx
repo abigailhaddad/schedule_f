@@ -4,9 +4,6 @@ import ServerCommentDataProvider from "@/components/ServerCommentDataProvider";
 import { datasetConfig } from "@/lib/config";
 import { redirect } from "next/navigation";
 
-// Disable caching in development if configured to do so
-export const revalidate = 86400;
-
 // Generate metadata
 export const metadata: Metadata = {
   title: datasetConfig.title,
@@ -14,9 +11,15 @@ export const metadata: Metadata = {
 };
 
 // Statically generate common page size combinations at build time
+// Disable in development to prevent debugger issues
 export async function generateStaticParams() {
-  const commonPageSizes = [10, 25, 50, 100];
-  const pagesToPreGenerate = [1, 2, 3]; // First 3 pages
+  // Skip static generation in development to prevent debugger pausing issues
+  if (process.env.NODE_ENV === "development") {
+    return [];
+  }
+
+  const commonPageSizes = [25, 50]; // Reduced from [10, 25, 50, 100]
+  const pagesToPreGenerate = [1, 2]; // Reduced from [1, 2, 3]
 
   const params = [];
 
@@ -29,10 +32,6 @@ export async function generateStaticParams() {
       });
     }
   }
-
-  // Optionally, add a few more specific high-traffic combinations
-  // For example, if you know users often jump to page 5 with 50 items
-  //   params.push({ page: '5', size: '50' });
 
   return params;
 }
@@ -52,13 +51,6 @@ export default async function CommentPage({ params }: PageProps) {
   const page = parseInt(pageParam, 10);
   const size = parseInt(sizeParam, 10);
 
-  // Log when this page is being rendered (only in dev)
-  if (process.env.NODE_ENV === "development") {
-    console.log(
-      `Rendering page ${page} with size ${size} at ${new Date().toISOString()}`
-    );
-  }
-
   // Redirect to valid values if invalid
   if (isNaN(page) || page < 1 || isNaN(size) || size < 1) {
     // redirects to /page/1/size/10
@@ -77,10 +69,10 @@ export default async function CommentPage({ params }: PageProps) {
             />
           </Suspense>
 
-          {/* Optional: Show when page was last generated in development */}
+          {/* Optional: Show development info */}
           {process.env.NODE_ENV === "development" && (
             <div className="text-xs text-gray-500 text-center mt-4">
-              Page will revalidate every {revalidate} seconds
+              Next.js 15 async params - dynamic rendering
               {process.env.LAST_DATA_UPDATE && (
                 <>
                   {" "}

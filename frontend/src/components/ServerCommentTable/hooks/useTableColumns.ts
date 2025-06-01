@@ -26,6 +26,18 @@ export function useTableColumns({
         sortable: config.sortable !== false,
         className: config.className,
         render: (comment: Comment) => {
+          // Debug logging for commentCount field
+          if (field.key === 'commentCount' && process.env.NODE_ENV === 'development') {
+            console.log('Rendering commentCount for comment:', {
+              id: comment.id,
+              title: comment.title?.substring(0, 50),
+              commentCount: comment.commentCount,
+              commentCountType: typeof comment.commentCount,
+              hasCommentCount: 'commentCount' in comment,
+              allKeys: Object.keys(comment).sort()
+            });
+          }
+          
           const rendererProps: RendererProps<unknown> = {
             field,
             value: comment[field.key as keyof Comment],

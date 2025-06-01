@@ -256,6 +256,19 @@ export function ServerDataContextProvider({
       ]);
 
       if (dataResponse.success && dataResponse.data) {
+        // Debug logging for commentCount
+        if (process.env.NODE_ENV === 'development' && dataResponse.data.length > 0) {
+          console.log('Sample fetched comment data:', {
+            firstComment: {
+              id: dataResponse.data[0].id,
+              title: dataResponse.data[0].title?.substring(0, 50),
+              commentCount: dataResponse.data[0].commentCount,
+              allKeys: Object.keys(dataResponse.data[0]).sort()
+            },
+            totalComments: dataResponse.data.length
+          });
+        }
+        
         setData(dataResponse.data);
         setTotalItems(dataResponse.total || 0);
         setError(null);

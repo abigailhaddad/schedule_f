@@ -9,6 +9,10 @@ import Navbar from '@/components/Navbar'
 export const metadata: Metadata = {
   title: datasetConfig.title,
   description: 'Public Comments on "Schedule F" Regulation',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  other: {
+    charset: 'utf-8',
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32' },
@@ -28,7 +32,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <title>&quot;Schedule F&quot; Analysis</title>
       <body className="bg-light font-sans">
         <Navbar />
         <div className="h-36 sm:h-36 md:h-36 lg:h-36 xl:h-36" />

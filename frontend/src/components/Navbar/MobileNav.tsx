@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import ClusterLink from "./ClusterLink";
+import AttributionLink from "./AttributionLink";
 
 type MobileNavProps = {
   isMenuOpen: boolean;
@@ -40,6 +41,11 @@ const MobileNav: React.FC<MobileNavProps> = ({ isMenuOpen, setIsMenuOpen, subtit
         </Link>
       )}
       <ClusterLink
+        onClick={() => setIsMenuOpen(false)}
+        tabIndex={isMenuOpen ? 0 : -1}
+        className="py-2 px-3 rounded-md"
+      />
+      <AttributionLink
         onClick={() => setIsMenuOpen(false)}
         tabIndex={isMenuOpen ? 0 : -1}
         className="py-2 px-3 rounded-md"
