@@ -7,7 +7,7 @@ first creating 2-5 main clusters using the elbow method, then recursively
 clustering each main cluster.
 
 Usage:
-python hierarchical_clustering.py [--input analyzed_lookup_table.json]
+python hierarchical_clustering.py [--input lookup_table.json]
 """
 
 import os
@@ -20,6 +20,15 @@ import seaborn as sns
 from datetime import datetime
 import re
 from typing import List, Dict, Any, Optional, Tuple
+
+# Import cluster description functionality
+try:
+    from cluster_descriptions import parse_cluster_report, generate_cluster_descriptions, save_cluster_descriptions
+except ImportError:
+    # Fallback if module not available
+    parse_cluster_report = None
+    generate_cluster_descriptions = None
+    save_cluster_descriptions = None
 
 # Core ML libraries
 from sentence_transformers import SentenceTransformer
@@ -37,38 +46,35 @@ def strip_html_tags(text):
     return re.sub(clean, '', text)
 
 def find_most_recent_lookup_table():
-    """Find the most recent analyzed_lookup_table.json file"""
+    """Find the most recent lookup_table.json file"""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(os.path.dirname(script_dir))
     
-    # Look in data directory first
-    data_dir = os.path.join(project_root, "data")
-    if os.path.exists(data_dir):
-        # Check for lookup_table_corrected.json
-        lookup_file = os.path.join(data_dir, "lookup_table_corrected.json")
-        if os.path.exists(lookup_file):
-            print(f"✅ Found: {lookup_file}")
-            return lookup_file
-    
-    # Fall back to results directories
+    # Look in project root and results directories
     search_paths = [
         project_root,
         os.path.join(project_root, "results"),
+        os.path.join(project_root, "data"),  # Also check data directory
     ]
     
+    # Also check results subdirectories
     results_base = os.path.join(project_root, "results")
     if os.path.exists(results_base):
         result_dirs = glob.glob(os.path.join(results_base, "results_*"))
         search_paths.extend(result_dirs)
     
+    print(f"🔍 Looking for lookup_table.json files...")
+    
     candidates = []
     for search_path in search_paths:
         if os.path.exists(search_path):
-            lookup_file = os.path.join(search_path, "analyzed_lookup_table.json")
+            lookup_file = os.path.join(search_path, "lookup_table.json")
             if os.path.exists(lookup_file):
                 candidates.append(lookup_file)
+                print(f"📁 Found: {lookup_file}")
     
     if candidates:
+        # Sort by modification time, newest first
         candidates.sort(key=os.path.getctime, reverse=True)
         print(f"✅ Most recent: {candidates[0]}")
         return candidates[0]
@@ -150,16 +156,29 @@ def calculate_wcss(embeddings: np.ndarray, k_range: range) -> List[float]:
 
 def find_elbow_point(wcss: List[float], k_range: range) -> int:
     """Find the elbow point using the elbow method"""
+    # Handle edge cases
+    k_list = list(k_range)
+    if len(k_list) <= 1:
+        return k_list[0] if k_list else 2
+    
+    if len(wcss) <= 2:
+        # For very small datasets, just use the smallest k
+        return k_list[0]
+    
     # Calculate the differences and second differences
     diffs = np.diff(wcss)
     diffs2 = np.diff(diffs)
+    
+    if len(diffs2) == 0:
+        # If no second differences, use the first k value
+        return k_list[0]
     
     # Find the point with maximum curvature (most negative second derivative)
     # Add 2 because we lose 2 indices from double differentiation
     elbow_idx = np.argmin(diffs2) + 2
     
     # Ensure we're within the valid range
-    elbow_k = list(k_range)[min(elbow_idx, len(k_range) - 1)]
+    elbow_k = k_list[min(elbow_idx, len(k_list) - 1)]
     
     return elbow_k
 
@@ -287,10 +306,11 @@ def recursive_clustering(embeddings: np.ndarray, processed_entries: List[Dict],
         if should_subcluster:
             print(f"\n{'  ' * level}📊 Subclustering Cluster {result['cluster_id']} ({len(cluster_entries)} texts)...")
             
-            # Use elbow method for subclusters (2-5 clusters)
-            k_range = range(2, min(6, len(cluster_entries)))
+            # Use elbow method for subclusters (2-min(5, n_samples))
+            max_subclusters = min(5, len(cluster_entries) - 1)
             
-            if len(k_range) > 1:
+            if max_subclusters >= 2:
+                k_range = range(2, max_subclusters + 1)
                 print(f"{'  ' * level}  Finding optimal k using elbow method...")
                 wcss = calculate_wcss(cluster_embeddings, k_range)
                 optimal_k = find_elbow_point(wcss, k_range)
@@ -311,6 +331,8 @@ def recursive_clustering(embeddings: np.ndarray, processed_entries: List[Dict],
                         output_dir, level + 1, result['cluster_id']
                     )
                     result['subclusters'].append(sub_result)
+            else:
+                print(f"{'  ' * level}  ⚠️  Too few entries ({len(cluster_entries)}) for subclustering")
     
     return result
 
@@ -562,29 +584,46 @@ def main():
     # Create embeddings
     embeddings = create_embeddings(comment_texts, args.model)
     
-    # Find optimal number of main clusters using elbow method (2-5)
+    # Find optimal number of main clusters using elbow method (2-min(5, n_samples))
     print("\n🔍 Finding optimal number of main clusters using elbow method...")
-    k_range = range(2, 6)
-    wcss = calculate_wcss(embeddings, k_range)
-    optimal_k = find_elbow_point(wcss, k_range)
+    n_samples = len(comment_texts)
+    max_clusters = min(5, n_samples - 1)  # Can't have more clusters than samples-1
     
-    # Plot main elbow curve
-    plot_elbow_curve(wcss, k_range, optimal_k, output_dir, prefix="Main ")
+    if max_clusters < 2:
+        print(f"⚠️  Only {n_samples} samples - using 1 cluster")
+        optimal_k = 1
+        wcss = []
+    else:
+        k_range = range(2, max_clusters + 1)
+        wcss = calculate_wcss(embeddings, k_range)
+        optimal_k = find_elbow_point(wcss, k_range)
+    
+    # Plot main elbow curve (only if we have wcss data)
+    if wcss:
+        plot_elbow_curve(wcss, k_range, optimal_k, output_dir, prefix="Main ")
     
     print(f"\n✅ Optimal number of main clusters: {optimal_k}")
     
     # Perform main clustering
-    main_labels, linkage_matrix = perform_hierarchical_clustering(embeddings, optimal_k)
+    if optimal_k == 1:
+        # Special case: all samples in one cluster
+        main_labels = np.zeros(len(comment_texts), dtype=int)
+        linkage_matrix = None
+    else:
+        main_labels, linkage_matrix = perform_hierarchical_clustering(embeddings, optimal_k)
     
-    # Create dendrogram for main clusters
-    plt.figure(figsize=(15, 8))
-    dendrogram(linkage_matrix, truncate_mode='lastp', p=30, leaf_rotation=90, leaf_font_size=12)
-    plt.title('Hierarchical Clustering Dendrogram (Main Clusters)')
-    plt.xlabel('Sample Index or (Cluster Size)')
-    plt.ylabel('Distance (Ward)')
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'main_dendrogram.png'), dpi=300, bbox_inches='tight')
-    plt.close()
+    # Create dendrogram for main clusters (only if we have linkage_matrix)
+    if linkage_matrix is not None:
+        plt.figure(figsize=(15, 8))
+        dendrogram(linkage_matrix, truncate_mode='lastp', p=30, leaf_rotation=90, leaf_font_size=12)
+        plt.title('Hierarchical Clustering Dendrogram (Main Clusters)')
+        plt.xlabel('Sample Index or (Cluster Size)')
+        plt.ylabel('Distance (Ward)')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, 'main_dendrogram.png'), dpi=300, bbox_inches='tight')
+        plt.close()
+    else:
+        print("⚠️  Skipping dendrogram creation - only one cluster")
     
     # Perform recursive clustering on each main cluster
     clustering_results = []
@@ -605,6 +644,23 @@ def main():
     update_lookup_table_with_hierarchical_clusters(input_file, clustering_results, 
                                                  embeddings_2d, processed_entries)
     
+    # Generate cluster descriptions using OpenAI
+    if all([parse_cluster_report, generate_cluster_descriptions, save_cluster_descriptions]):
+        try:
+            print(f"\n🤖 Generating cluster descriptions using OpenAI...")
+            report_path = os.path.join(output_dir, 'hierarchical_cluster_report.txt')
+            clusters = parse_cluster_report(report_path)
+            descriptions = generate_cluster_descriptions(clusters)
+            descriptions_path = os.path.join(output_dir, 'cluster_descriptions.json')
+            save_cluster_descriptions(descriptions, descriptions_path)
+            print(f"✅ Cluster descriptions saved to: {descriptions_path}")
+        except Exception as e:
+            print(f"⚠️  Could not generate cluster descriptions: {e}")
+            descriptions_path = None
+    else:
+        print(f"⚠️  Cluster descriptions module not available")
+        descriptions_path = None
+    
     # Summary statistics
     total_clusters = len(clustering_results)
     total_subclusters = sum(len(r['subclusters']) for r in clustering_results)
@@ -617,6 +673,8 @@ def main():
     print(f"   - {os.path.join(output_dir, 'main_dendrogram.png')}")
     print(f"   - {os.path.join(output_dir, 'hierarchical_clusters_visualization.png')}")
     print(f"   - {os.path.join(output_dir, 'hierarchical_cluster_report.txt')}")
+    if descriptions_path:
+        print(f"   - {descriptions_path}")
     print(f"   - {input_file} (updated with cluster IDs)")
 
 if __name__ == "__main__":

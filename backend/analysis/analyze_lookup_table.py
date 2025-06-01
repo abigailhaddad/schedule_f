@@ -6,24 +6,22 @@ This script takes a lookup table (created by create_lookup_table.py) and adds
 LLM analysis (stance, key_quote, rationale, themes) to each unique text entry.
 
 Usage:
-python analyze_lookup_table.py [--input lookup_table.json] [--output analyzed_lookup_table.json]
+python analyze_lookup_table.py [--input lookup_table.json] [--output lookup_table.json]
 """
 
 import json
 import os
 import argparse
 import logging
-import signal
 import time
 import traceback
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import concurrent.futures
-from threading import Thread
-import queue
 
 # Import the analysis components from the utility module
 from ..utils.comment_analyzer import CommentAnalyzer, TimeoutException
+from ..config import DEFAULT_MODEL, DEFAULT_BATCH_SIZE, DEFAULT_TIMEOUT, DEFAULT_LOOKUP_TABLE
 
 # Set up logging
 logging.basicConfig(
@@ -308,16 +306,16 @@ def print_analysis_stats(lookup_table: List[Dict[str, Any]]):
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(description='Analyze lookup table with LLM')
-    parser.add_argument('--input', type=str, default='lookup_table.json',
-                       help='Input lookup table file (default: lookup_table.json)')
-    parser.add_argument('--output', type=str, default='analyzed_lookup_table.json',
-                       help='Output analyzed lookup table file (default: analyzed_lookup_table.json)')
-    parser.add_argument('--model', type=str, default='gpt-4o-mini',
-                       help='LLM model to use (default: gpt-4o-mini)')
-    parser.add_argument('--batch_size', type=int, default=5,
-                       help='Number of entries to process in parallel (default: 5)')
-    parser.add_argument('--timeout', type=int, default=30,
-                       help='Timeout for each API call in seconds (default: 30)')
+    parser.add_argument('--input', type=str, default=DEFAULT_LOOKUP_TABLE,
+                       help=f'Input lookup table file (default: {DEFAULT_LOOKUP_TABLE})')
+    parser.add_argument('--output', type=str, default=None,
+                       help='Output analyzed lookup table file (default: overwrite input file)')
+    parser.add_argument('--model', type=str, default=DEFAULT_MODEL,
+                       help=f'LLM model to use (default: {DEFAULT_MODEL})')
+    parser.add_argument('--batch_size', type=int, default=DEFAULT_BATCH_SIZE,
+                       help=f'Number of entries to process in parallel (default: {DEFAULT_BATCH_SIZE})')
+    parser.add_argument('--timeout', type=int, default=DEFAULT_TIMEOUT,
+                       help=f'Timeout for each API call in seconds (default: {DEFAULT_TIMEOUT})')
     parser.add_argument('--resume', action='store_true',
                        help='Resume from checkpoint if available')
     parser.add_argument('--no_parallel', action='store_true',
@@ -325,12 +323,17 @@ def main():
     
     args = parser.parse_args()
     
+    # Default output to input file if not specified
+    if args.output is None:
+        args.output = args.input
+    
     # Check if input file exists
     if not os.path.exists(args.input):
         logger.error(f"Input file not found: {args.input}")
         return
     
     logger.info(f"Analyzing lookup table from {args.input}")
+    logger.info(f"Output will be saved to {args.output}")
     logger.info(f"Using model: {args.model}")
     logger.info(f"Batch size: {args.batch_size}")
     logger.info(f"Timeout: {args.timeout} seconds")

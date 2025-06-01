@@ -81,29 +81,11 @@ if [ -f "$DATA_DIR/analyzed_lookup_table.json" ]; then
     echo "✅ analyzed_lookup_table.json: found"
 fi
 
-# Run merge_lookup_to_raw script if both required files exist
+# Note about merging data
 echo ""
 if [ -f "$DATA_DIR/raw_data.json" ] && [ -f "$DATA_DIR/lookup_table.json" ]; then
-    echo "🔄 Running merge_lookup_to_raw.py to create data.json..."
-    cd "$PROJECT_ROOT"
-    python backend/utils/merge_lookup_to_raw.py
-    
-    if [ $? -eq 0 ]; then
-        echo "✅ Successfully created merged data.json"
-        if [ -f "$DATA_DIR/data.json" ]; then
-            MERGED_COUNT=$(python -c "import json; print(len(json.load(open('$DATA_DIR/data.json'))))" 2>/dev/null || echo "?")
-            echo "   Merged data.json: $MERGED_COUNT comments"
-        fi
-    else
-        echo "❌ Error running merge_lookup_to_raw.py"
-    fi
-elif [ -f "$DATA_DIR/raw_data.json" ] && [ -f "$DATA_DIR/lookup_table.json" ]; then
-    echo "⚠️  Note: Found lookup_table.json but not lookup_table_corrected.json"
-    echo "   The merge script requires lookup_table_corrected.json"
-    echo "   If you have corrections, create lookup_table_corrected.json first"
-else
-    echo "ℹ️  Skipping merge - required files not found:"
-    echo "   Need: raw_data.json and lookup_table_corrected.json"
+    echo "ℹ️  To create data.json, run: ./scripts/merge_data.sh"
+    echo "   This will merge raw_data.json with lookup_table.json"
 fi
 
 echo ""

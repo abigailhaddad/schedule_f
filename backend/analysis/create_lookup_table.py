@@ -15,8 +15,12 @@ import os
 import argparse
 import logging
 from typing import List, Dict, Any, Optional
-from datetime import datetime
 import re
+
+# Import config constants
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from backend.config import DEFAULT_RAW_DATA, DEFAULT_LOOKUP_TABLE
 
 # Set up logging
 logging.basicConfig(
@@ -253,10 +257,10 @@ def print_stats(lookup_table: List[Dict[str, Any]], original_count: int):
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(description='Create deduplicated lookup table from raw comment data')
-    parser.add_argument('--input', type=str, default='raw_data.json',
-                       help='Input raw data file (default: raw_data.json)')
-    parser.add_argument('--output', type=str, default='lookup_table.json',
-                       help='Output lookup table file (default: lookup_table.json)')
+    parser.add_argument('--input', type=str, default=DEFAULT_RAW_DATA,
+                       help=f'Input raw data file (default: {DEFAULT_RAW_DATA})')
+    parser.add_argument('--output', type=str, default=DEFAULT_LOOKUP_TABLE,
+                       help=f'Output lookup table file (default: {DEFAULT_LOOKUP_TABLE})')
     parser.add_argument('--truncate', type=int, default=None,
                        help='Truncate text to this many characters (default: no truncation)')
     
