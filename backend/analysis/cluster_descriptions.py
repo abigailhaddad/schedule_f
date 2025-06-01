@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field
 load_dotenv()
 
 # Import config constants
-from ..config import config
+from backend.config import config
 
 class ClusterDescription(BaseModel):
     """Pydantic model for a single cluster description"""
