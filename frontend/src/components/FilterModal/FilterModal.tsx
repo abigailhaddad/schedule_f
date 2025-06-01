@@ -8,6 +8,7 @@ import { DateFilter } from './filters/DateFilter';
 import { SelectFilter } from './filters/SelectFilter';
 import { TextFilter } from './filters/TextFilter';
 import { ThemeFilter } from './filters/ThemeFilter';
+import { CountFilter } from './filters/CountFilter';
 
 export function FilterModal({ 
   field, 
@@ -34,6 +35,9 @@ export function FilterModal({
       
       case 'text':
         return <TextFilter value={value} onChange={setValue} field={field} />;
+      
+      case 'count':
+        return <CountFilter value={value as string | null} onChange={setValue} field={field} />;
       
       default:
         return <p>Unsupported filter type: {field.filter}</p>;

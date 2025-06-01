@@ -37,7 +37,7 @@ export function useTableColumns({
               allKeys: Object.keys(comment).sort()
             });
           }
-          
+
           const rendererProps: RendererProps<unknown> = {
             field,
             value: comment[field.key as keyof Comment],

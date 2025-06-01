@@ -283,8 +283,8 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
       return buildThemeFilterConditions(column, filterValue);
     }
     
-    // Special handling for commentCount
-    if (key === 'commentCount') {
+    // Special handling for commentCount/comment_count
+    if (key === 'commentCount' || key === 'comment_count' || key === 'attachmentCount' || key === 'attachment_count') {
       return buildCommentCountFilterConditions(column, filterValue);
     }
     
@@ -341,8 +341,8 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
       if (stanceConditions.length > 0) {
         conditions.push(sql`(${or(...stanceConditions)})`);
       }
-    } else if (key === 'commentCount') {
-      // Special handling for commentCount ranges in array
+    } else if (key === 'commentCount' || key === 'comment_count' || key === 'attachmentCount' || key === 'attachment_count') {
+      // Special handling for count ranges in array
       const countConditions: SQL[] = [];
       value.forEach(countValue => {
         const condition = buildCommentCountCondition(column, String(countValue));
@@ -365,8 +365,8 @@ function buildSingleFilterCondition(key: string, value: unknown, column: SQL): S
     if (key === 'stance') {
       const condition = buildStanceCondition(column, String(value));
       if (condition) conditions.push(condition);
-    } else if (key === 'commentCount') {
-      // Special handling for commentCount ranges
+    } else if (key === 'commentCount' || key === 'comment_count' || key === 'attachmentCount' || key === 'attachment_count') {
+      // Special handling for count ranges
       const condition = buildCommentCountCondition(column, String(value));
       if (condition) conditions.push(condition);
     } else if (isTextSearchField(key)) {

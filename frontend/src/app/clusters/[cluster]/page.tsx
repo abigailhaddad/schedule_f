@@ -41,16 +41,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ClusterPage({ params }: PageProps) {
   const { cluster } = await params;
   const clusterResponse = await getClusterData();
-  
-  // Server-side logging to debug
-  console.log('Cluster data fetch result:', {
-    success: clusterResponse.success,
-    hasData: !!clusterResponse.data,
-    selectedCluster: cluster,
-    clusterCount: clusterResponse.data?.clusters?.length,
-    totalPoints: clusterResponse.data?.totalPoints,
-    error: clusterResponse.error
-  });
 
   // Pass the data with the correct prop names
   return (

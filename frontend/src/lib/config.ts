@@ -72,9 +72,10 @@ export const datasetConfig = {
         }
       },
       {
-        key: 'commentCount',
+        key: 'comment_count',
         title: 'Duplicates',
-        filter: 'select',
+        filter: 'count',
+        format: 'count',
         visible: true,
         badges: {
           '1': 'bg-gray-100',
@@ -103,7 +104,7 @@ export const datasetConfig = {
         filter: 'text'
       },
       {
-        key: 'hasAttachments',
+        key: 'has_attachments',
         title: 'Has Attachments',
         filter: 'select',
         visible: false,
@@ -168,20 +169,27 @@ export const datasetConfig = {
       //   filter: 'text',
       //   visible: false
       // },
+      // {
+      //   key: 'attachment_count',
+      //   title: 'Attachment Count',
+      //   filter: 'count',
+      //   format: 'count',
+      //   visible: true,
+      //   badges: {
+      //     '1': 'bg-gray-100',
+      //     '2-10': 'bg-blue-100',
+      //     '11-50': 'bg-purple-100',
+      //     '50+': 'bg-red-100'
+      //   }
+      // },
+      // {
+      //   key: 'attachment_urls',
+      //   title: 'Attachment URLs',
+      //   filter: 'text',
+      //   visible: false
+      // },
       {
-        key: 'attachmentCount',
-        title: 'Attachment Count',
-        filter: 'select', 
-        visible: true
-      },
-      {
-        key: 'attachmentUrls',
-        title: 'Attachment URLs',
-        filter: 'text',
-        visible: false
-      },
-      {
-        key: 'attachmentTitles',
+        key: 'attachment_titles',
         title: 'Attachment Titles',
         filter: 'text',
         visible: false
