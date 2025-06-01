@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { datasetConfig } from '@/lib/config';
 import { useServerDataContext } from '@/contexts/ServerDataContext';
-import { useDebounce } from './hooks/useDebounce';
 import { useColumnVisibility } from './hooks/useColumnVisibility';
 import { useTableColumns } from './hooks/useTableColumns';
 import { useTableNavigation } from './hooks/useTableNavigation';
@@ -15,18 +14,6 @@ import { Column } from './types';
 
 export default function ServerCommentTable() {
   const context = useServerDataContext();
-  const [searchInput, setSearchInput] = useState(context.searchQuery);
-  const debouncedSearch = useDebounce(searchInput, 500);
-  
-  useEffect(() => {
-    context.setSearchQuery(debouncedSearch);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch, context.setSearchQuery]);
-  
-  // Sync local searchInput when context.searchQuery changes from outside
-  useEffect(() => {
-    setSearchInput(context.searchQuery);
-  }, [context.searchQuery]);
   
   const columnVisibility = useColumnVisibility(datasetConfig.fields);
   const { handleRowClick } = useTableNavigation();
@@ -61,8 +48,8 @@ export default function ServerCommentTable() {
     <TableContainer>
       <TableControls
         title="Comment Data"
-        searchValue={searchInput}
-        onSearchChange={setSearchInput}
+        searchValue={context.searchQuery}
+        onSearchChange={context.setSearchQuery}
         onExport={handleExport}
         columnVisibility={columnVisibility}
       />
