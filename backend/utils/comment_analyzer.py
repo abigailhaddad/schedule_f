@@ -20,16 +20,14 @@ from typing import List, Optional
 load_dotenv()
 
 # Import config constants
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from backend.config import DEFAULT_MODEL, DEFAULT_TIMEOUT
+from ..config import config
+from .exceptions import TimeoutError as PipelineTimeoutError
 
 # Setup logging
 logger = logging.getLogger(__name__)
 
-class TimeoutException(Exception):
-    """Custom exception for timeout handling"""
-    pass
+# For backward compatibility
+TimeoutException = PipelineTimeoutError
 
 class Stance(str, Enum):
     FOR = "For"
@@ -61,8 +59,8 @@ class CommentAnalysisResult(BaseModel):
 class CommentAnalyzer:
     """LiteLLM-based analyzer for public comments using Pydantic models for structured output."""
     def __init__(self, model=None, timeout_seconds=None):
-        self.model = model or DEFAULT_MODEL
-        self.timeout_seconds = timeout_seconds or DEFAULT_TIMEOUT
+        self.model = model or config.llm.model
+        self.timeout_seconds = timeout_seconds or config.llm.timeout
         
         # Ensure API key is available
         if "OPENAI_API_KEY" not in os.environ:

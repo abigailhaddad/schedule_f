@@ -30,10 +30,7 @@ from backend.analysis.create_lookup_table import normalize_text_for_dedup, extra
 from backend.analysis.analyze_lookup_table import analyze_lookup_table_batch, CommentAnalyzer
 from backend.analysis.verify_lookup_quotes import verify_lookup_quotes
 from backend.utils.retry_gemini_attachments import extract_text_with_gemini
-from backend.config import (
-    DEFAULT_MODEL, DEFAULT_BATCH_SIZE, DEFAULT_RAW_DATA, DEFAULT_LOOKUP_TABLE,
-    DEFAULT_OUTPUT_DIR, DEFAULT_ATTACHMENT_RETRIES, DEFAULT_TIMEOUT
-)
+from backend.config import config
 
 # Initial logger setup (will be reconfigured with file handler in main)
 logger = logging.getLogger(__name__)
@@ -346,7 +343,7 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
                             
                             try:
                                 # Use Gemini extraction 
-                                extracted_text = extract_text_with_gemini(file_path, max_retries=DEFAULT_ATTACHMENT_RETRIES, timeout=DEFAULT_TIMEOUT)
+                                extracted_text = extract_text_with_gemini(file_path, max_retries=config.attachments.retries, timeout=config.llm.timeout)
                                 
                                 if extracted_text and not extracted_text.startswith('['):
                                     # Save extracted text
@@ -531,16 +528,16 @@ def main():
     parser = argparse.ArgumentParser(description='Resume-aware pipeline for lookup table workflow')
     parser.add_argument('--csv', type=str, required=True,
                        help='Path to comments.csv file')
-    parser.add_argument('--raw_data', type=str, default=DEFAULT_RAW_DATA,
-                       help=f'Path to raw_data.json file (default: {DEFAULT_RAW_DATA})')
-    parser.add_argument('--lookup_table', type=str, default=DEFAULT_LOOKUP_TABLE,
-                       help=f'Path to lookup_table.json file (default: {DEFAULT_LOOKUP_TABLE})')
-    parser.add_argument('--output_dir', type=str, default=DEFAULT_OUTPUT_DIR,
-                       help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
+    parser.add_argument('--raw_data', type=str, default=config.files.raw_data_filename,
+                       help=f'Path to raw_data.json file (default: {config.files.raw_data_filename})')
+    parser.add_argument('--lookup_table', type=str, default=config.files.lookup_table_filename,
+                       help=f'Path to lookup_table.json file (default: {config.files.lookup_table_filename})')
+    parser.add_argument('--output_dir', type=str, default=config.files.output_dir,
+                       help=f'Output directory (default: {config.files.output_dir})')
     parser.add_argument('--truncate', type=int, default=None,
                        help='Truncate text to this many characters')
-    parser.add_argument('--model', type=str, default=DEFAULT_MODEL,
-                       help=f'LLM model for analysis (default: {DEFAULT_MODEL})')
+    parser.add_argument('--model', type=str, default=config.llm.model,
+                       help=f'LLM model for analysis (default: {config.llm.model})')
     parser.add_argument('--skip_analysis', action='store_true',
                        help='Skip LLM analysis (only update data)')
     parser.add_argument('--skip_clustering', action='store_true',
@@ -768,7 +765,7 @@ def main():
                 analyzed_lookup_table = analyze_lookup_table_batch(
                     lookup_table=lookup_table_to_analyze,
                     analyzer=analyzer,
-                    batch_size=DEFAULT_BATCH_SIZE,
+                    batch_size=config.llm.batch_size,
                     use_parallel=True,
                     checkpoint_file=f"{output_lookup_table_path}.checkpoint"
                 )

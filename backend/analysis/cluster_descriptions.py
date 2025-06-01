@@ -22,9 +22,7 @@ from pydantic import BaseModel, Field
 load_dotenv()
 
 # Import config constants
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from backend.config import DEFAULT_MODEL, DEFAULT_TIMEOUT
+from ..config import config
 
 class ClusterDescription(BaseModel):
     """Pydantic model for a single cluster description"""
@@ -152,12 +150,12 @@ Return a JSON object with all clusters."""
 
         response = completion(
             temperature=0.0,
-            model=DEFAULT_MODEL,
+            model=config.llm.model,
             messages=[
                 {"role": "system", "content": "You are analyzing public comment clusters. Respond with valid JSON containing short and long descriptions for each cluster."},
                 {"role": "user", "content": prompt}
             ],
-            timeout=DEFAULT_TIMEOUT
+            timeout=config.llm.timeout
         )
         
         # Process the response
