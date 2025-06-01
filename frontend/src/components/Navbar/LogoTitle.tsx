@@ -63,4 +63,4 @@ const LogoTitle: React.FC<LogoTitleProps> = ({ title, description, scrolled }) =
   </div>
 );
 
-export default LogoTitle; 
+export default LogoTitle;

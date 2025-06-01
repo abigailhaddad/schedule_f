@@ -459,6 +459,11 @@ export async function buildCommentsQuery(options: QueryOptions) {
   // Create base query
   const baseQuery = db.select().from(comments);
   
+  // Debug log in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Building query with all comment fields, including commentCount');
+  }
+  
   // Create dynamic query for adding conditions
   const query = baseQuery.$dynamic();
   
