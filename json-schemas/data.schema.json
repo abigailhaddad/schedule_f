@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Data JSON Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "title",
+      "comment_on",
+      "posted_date",
+      "received_date",
+      "submitter_name",
+      "organization",
+      "city",
+      "state",
+      "country",
+      "comment",
+      "original_comment",
+      "document_type",
+      "agency_id",
+      "category",
+      "attachment_count",
+      "has_attachments",
+      "attachment_urls",
+      "attachment_titles",
+      "attachment_local_paths",
+      "lookup_id",
+      "truncated_text",
+      "text_source",
+      "comment_text",
+      "attachment_text",
+      "comment_count",
+      "stance",
+      "key_quote",
+      "rationale",
+      "themes",
+      "corrected",
+      "cluster_id",
+      "pca_x",
+      "pca_y"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[A-Z]+-[0-9]{4}-[0-9]{4}-[0-9]+$",
+        "description": "Comment ID"
+      },
+      "title": {
+        "type": "string",
+        "description": "Title of the comment"
+      },
+      "comment_on": {
+        "type": ["string", "null"],
+        "description": "ID of what this comments on"
+      },
+      "posted_date": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO date when posted"
+      },
+      "received_date": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO date when received"
+      },
+      "submitter_name": {
+        "type": "string",
+        "description": "Name of submitter"
+      },
+      "organization": {
+        "type": "string",
+        "description": "Organization name"
+      },
+      "city": {
+        "type": "string",
+        "description": "City"
+      },
+      "state": {
+        "type": "string",
+        "description": "State"
+      },
+      "country": {
+        "type": "string",
+        "description": "Country"
+      },
+      "comment": {
+        "type": "string",
+        "description": "The comment text"
+      },
+      "original_comment": {
+        "type": "string",
+        "description": "Original comment text"
+      },
+      "document_type": {
+        "type": "string",
+        "description": "Type of document"
+      },
+      "agency_id": {
+        "type": "string",
+        "description": "Agency identifier"
+      },
+      "category": {
+        "type": "string",
+        "description": "Category"
+      },
+      "attachment_count": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Number of attachments"
+      },
+      "has_attachments": {
+        "type": "boolean",
+        "description": "Whether has attachments"
+      },
+      "attachment_urls": {
+        "type": "string",
+        "description": "URLs of attachments"
+      },
+      "attachment_titles": {
+        "type": "string",
+        "description": "Titles of attachments"
+      },
+      "attachment_local_paths": {
+        "type": "string",
+        "description": "Local file paths of attachments"
+      },
+      "lookup_id": {
+        "type": ["string", "null"],
+        "description": "Reference to lookup_table entry"
+      },
+      "truncated_text": {
+        "type": ["string", "null"],
+        "description": "Shortened version of text"
+      },
+      "text_source": {
+        "type": ["string", "null"],
+        "enum": ["comment", "comment+attachments", null],
+        "description": "Source of text"
+      },
+      "comment_text": {
+        "type": ["string", "null"],
+        "description": "Comment text"
+      },
+      "attachment_text": {
+        "type": ["string", "null"],
+        "description": "Text from attachments"
+      },
+      "comment_count": {
+        "type": ["integer", "null"],
+        "minimum": 1,
+        "description": "Count of comments"
+      },
+      "stance": {
+        "type": ["string", "null"],
+        "enum": ["Against", "For", "Neutral/Unclear", "", null],
+        "description": "Position on issue"
+      },
+      "key_quote": {
+        "type": ["string", "null"],
+        "description": "Key quote from text"
+      },
+      "rationale": {
+        "type": ["string", "null"],
+        "description": "Rationale for classification"
+      },
+      "themes": {
+        "type": ["string", "array", "null"],
+        "items": {
+          "type": "string"
+        },
+        "description": "Themes identified"
+      },
+      "corrected": {
+        "type": "boolean",
+        "description": "Whether manually corrected"
+      },
+      "cluster_id": {
+        "type": ["string", "null"],
+        "description": "Cluster identifier"
+      },
+      "pca_x": {
+        "type": ["number", "null"],
+        "description": "PCA X-coordinate"
+      },
+      "pca_y": {
+        "type": ["number", "null"],
+        "description": "PCA Y-coordinate"
+      }
+    },
+    "additionalProperties": false
+  }
+}

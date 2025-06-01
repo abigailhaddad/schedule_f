@@ -1,0 +1,133 @@
+name: Test Pipeline
+
+# TODO: Fix CSV generation YAML syntax issue and re-enable automatic triggers
+# Current issue: YAML parsing problems with Python string literals
+# Workaround: Manual trigger only for now
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run'
+        required: false
+        default: 'quick'
+        type: choice
+        options:
+        - quick
+        - integration
+        - all
+  # MANUAL TRIGGER ONLY - NO AUTOMATIC RUNS
+  # All push/PR triggers permanently disabled to avoid unwanted CI runs
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: [3.13]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Create test data
+      run: |
+        mkdir -p tests/data
+        # Use simple Python execution to avoid YAML parsing issues
+        python3 -c '
+import pandas as pd
+import os
+
+# Create test data
+test_data = [
+    {"Document ID": "OPM-2025-0004-0001", "Agency ID": "OPM", "Document Type": "Proposed Rule", "Posted Date": "2025-04-23T04:00Z", "Title": "Test Proposed Rule", "Comment on Document ID": "", "Received Date": "2025-04-21T00:00Z", "First Name": "", "Last Name": "", "City": "", "State/Province": "", "Country": "", "Comment": "", "Category": ""},
+    {"Document ID": "OPM-2025-0004-0002", "Agency ID": "OPM", "Document Type": "Public Submission", "Posted Date": "2025-04-28T04:00Z", "Title": "Test Comment 1", "Comment on Document ID": "OPM-2025-0004-0001", "Received Date": "2025-04-26T00:00Z", "First Name": "Test", "Last Name": "User", "City": "Test City", "State/Province": "Test State", "Country": "USA", "Comment": "This is a test comment for CI testing purposes.", "Category": ""},
+    {"Document ID": "OPM-2025-0004-0003", "Agency ID": "OPM", "Document Type": "Public Submission", "Posted Date": "2025-04-28T04:00Z", "Title": "Test Comment 2", "Comment on Document ID": "OPM-2025-0004-0001", "Received Date": "2025-04-26T00:00Z", "First Name": "Another", "Last Name": "User", "City": "Another City", "State/Province": "Another State", "Country": "USA", "Comment": "Another test comment for validation purposes.", "Category": ""}
+]
+
+# All required CSV columns
+all_columns = ["Document ID", "Agency ID", "Docket ID", "Tracking Number", "Document Type", "Posted Date", "Is Withdrawn?", "Federal Register Number", "FR Citation", "Title", "Comment Start Date", "Comment Due Date", "Allow Late Comments", "Comment on Document ID", "Effective Date", "Implementation Date", "Postmark Date", "Received Date", "Author Date", "Related RIN(s)", "Authors", "CFR", "Abstract", "Legacy ID", "Media", "Document Subtype", "Exhibit Location", "Exhibit Type", "Additional Field 1", "Additional Field 2", "Topics", "Duplicate Comments", "OMB/PRA Approval Number", "Page Count", "Page Length", "Paper Width", "Special Instructions", "Source Citation", "Start End Page", "Subject", "First Name", "Last Name", "City", "State/Province", "Zip/Postal Code", "Country", "Organization Name", "Submitter Representative", "Representative Address", "Representative City State Zip", "Government Agency", "Government Agency Type", "Comment", "Category", "Restrict Reason Type", "Restrict Reason", "Reason Withdrawn", "Content Files", "Attachment Files", "Display Properties"]
+
+# Create DataFrame
+df_data = []
+for comment in test_data:
+    row = {col: comment.get(col, "") for col in all_columns}
+    df_data.append(row)
+
+df = pd.DataFrame(df_data)
+os.makedirs("tests/data", exist_ok=True)
+df.to_csv("tests/data/test_comments.csv", index=False)
+df.head(2).to_csv("tests/data/integration_test_comments.csv", index=False)
+
+print(f"Created CSV with {len(df)} rows and {len(df.columns)} columns")
+comment_pos = list(df.columns).index("Comment") + 1
+print(f"Comment column is at position: {comment_pos}")
+'
+        
+    - name: Copy test attachments (if available)
+      run: |
+        mkdir -p tests/data/attachments
+        if [ -d "attachments" ]; then
+          # Copy a few test attachments if they exist
+          find attachments -name "OPM-2025-0004-*" -type d | head -2 | xargs -I {} cp -r {} tests/data/attachments/ 2>/dev/null || true
+        fi
+        
+    - name: Run quick tests (no API calls)
+      run: |
+        chmod +x scripts/run_tests.sh
+        ./scripts/run_tests.sh quick
+        
+    - name: Run integration tests (no API calls)
+      run: ./scripts/run_tests.sh integration
+      
+    - name: Run shell script tests
+      run: ./scripts/run_tests.sh scripts
+      
+    - name: Run real API tests (with cost controls)
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        REGS_API_KEY: ${{ secrets.REGS_API_KEY }}
+      run: |
+        # Verify required API keys are available - FAIL if missing
+        if [ -z "$OPENAI_API_KEY" ]; then
+          echo "❌ OPENAI_API_KEY is required but not found in secrets"
+          exit 1
+        fi
+        if [ -z "$REGS_API_KEY" ]; then
+          echo "❌ REGS_API_KEY is required but not found in secrets"
+          exit 1
+        fi
+        
+        echo "🚀 Running real API integration tests..."
+        echo "✅ API keys validated - proceeding with real API tests"
+        python tests/run_tests.py --class TestRealAPIIntegration --verbose
+      
+    - name: Upload test results
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.python-version }}
+        path: |
+          tests/temp_*/
+          *.log
+        retention-days: 7

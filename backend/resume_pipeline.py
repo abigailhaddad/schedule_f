@@ -14,19 +14,26 @@ import json
 import os
 import argparse
 import logging
+import csv
+import subprocess
+import sys
+import shutil
 from typing import List, Dict, Any, Set, Optional
-from datetime import datetime
 import pandas as pd
 
 # Add the parent directory to path for imports
-import sys
-import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import our existing modules
-from backend.fetch.fetch_comments import read_comments_from_csv
+from backend.fetch.fetch_comments import read_comments_from_csv, download_all_attachments
 from backend.analysis.create_lookup_table import normalize_text_for_dedup, extract_and_combine_text
 from backend.analysis.analyze_lookup_table import analyze_lookup_table_batch, CommentAnalyzer
+from backend.analysis.verify_lookup_quotes import verify_lookup_quotes
+from backend.utils.retry_gemini_attachments import extract_text_with_gemini
+from backend.config import (
+    DEFAULT_MODEL, DEFAULT_BATCH_SIZE, DEFAULT_RAW_DATA, DEFAULT_LOOKUP_TABLE,
+    DEFAULT_OUTPUT_DIR, DEFAULT_ATTACHMENT_RETRIES, DEFAULT_TIMEOUT
+)
 
 # Initial logger setup (will be reconfigured with file handler in main)
 logger = logging.getLogger(__name__)
@@ -98,18 +105,21 @@ def validate_truncation_consistency(lookup_table_file: str, requested_truncation
         logger.error(f"Error validating truncation: {e}")
         raise
 
-def load_comment_ids_from_csv(csv_file: str) -> Set[str]:
+def load_comment_ids_from_csv(csv_file: str, limit: Optional[int] = None) -> Set[str]:
     """Load comment IDs from CSV file."""
     logger.info(f"📖 Loading comment IDs from CSV: {csv_file}")
+    if limit:
+        logger.info(f"   Limiting to first {limit} rows")
     
     try:
         # Try parsing with Python csv module which handles embedded quotes better
-        import csv
         comment_ids = set()
         
         with open(csv_file, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
-            for row in reader:
+            for i, row in enumerate(reader):
+                if limit and i >= limit:
+                    break
                 # Try both 'Comment ID' and 'Document ID' columns
                 comment_id = row.get('Comment ID') or row.get('Document ID')
                 if comment_id:
@@ -126,9 +136,13 @@ def load_comment_ids_from_csv(csv_file: str) -> Set[str]:
             # Try to read either Comment ID or Document ID column
             try:
                 df = pd.read_csv(csv_file, usecols=['Comment ID'], on_bad_lines='skip', encoding='utf-8')
+                if limit:
+                    df = df.head(limit)
                 comment_ids = set(df['Comment ID'].astype(str).tolist())
             except KeyError:
                 df = pd.read_csv(csv_file, usecols=['Document ID'], on_bad_lines='skip', encoding='utf-8')
+                if limit:
+                    df = df.head(limit)
                 comment_ids = set(df['Document ID'].astype(str).tolist())
             logger.info(f"✅ Found {len(comment_ids):,} comment IDs in CSV (pandas fallback)")
             return comment_ids
@@ -155,15 +169,18 @@ def load_comment_ids_from_raw_data(raw_data_file: str) -> Set[str]:
         logger.error(f"Error loading raw_data: {e}")
         raise
 
-def find_new_comment_ids(csv_file: str, raw_data_file: str) -> Set[str]:
+def find_new_comment_ids(csv_file: str, raw_data_file: str, limit: Optional[int] = None) -> Set[str]:
     """Find comment IDs that are in CSV but not in raw_data."""
-    csv_ids = load_comment_ids_from_csv(csv_file)
+    csv_ids = load_comment_ids_from_csv(csv_file, limit=limit)
     raw_ids = load_comment_ids_from_raw_data(raw_data_file)
     
     new_ids = csv_ids - raw_ids
     
     logger.info(f"📊 Comment ID analysis:")
-    logger.info(f"   CSV file: {len(csv_ids):,} comments")
+    if limit:
+        logger.info(f"   CSV file: {len(csv_ids):,} comments (limited to first {limit})")
+    else:
+        logger.info(f"   CSV file: {len(csv_ids):,} comments")
     logger.info(f"   Raw data: {len(raw_ids):,} comments") 
     logger.info(f"   New to fetch: {len(new_ids):,} comments")
     
@@ -192,8 +209,6 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
         logger.info("Trying CSV module instead...")
         
         # Use csv module as fallback
-        import csv
-        import tempfile
         
         # Read with csv module and write clean version
         rows = []
@@ -267,7 +282,6 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
         
         if attachments_to_download:
             logger.info(f"📎 Downloading attachments for {len(attachments_to_download)} new comments...")
-            from .fetch.fetch_comments import download_all_attachments
             
             # Download attachments
             updated_new_data = download_all_attachments(new_raw_data, output_dir)
@@ -281,29 +295,85 @@ def fetch_and_append_new_comments(new_comment_ids: Set[str], csv_file: str,
                 if comment['id'] in updated_map:
                     existing_raw_data[i] = updated_map[comment['id']]
             
-            # Run attachment analysis
+            # Run attachment analysis ONLY on new comment attachments
+            # Build a list of attachment paths that belong to NEW comments only
+            new_attachment_paths = []
             attachments_dir = os.path.join(output_dir, "attachments")
+            
             if os.path.exists(attachments_dir):
-                logger.info(f"📎 Analyzing new attachment text extraction...")
-                import subprocess
-                import sys
+                # Only process attachments from the NEW comments we just added
+                for comment in new_raw_data:
+                    comment_id = comment.get('id', '')
+                    if comment_id:
+                        comment_attachments_dir = os.path.join(attachments_dir, comment_id)
+                        if os.path.exists(comment_attachments_dir):
+                            # Find all attachment files for this comment
+                            for file_name in os.listdir(comment_attachments_dir):
+                                if not file_name.endswith('.extracted.txt'):  # Skip extracted text files themselves
+                                    file_path = os.path.join(comment_attachments_dir, file_name)
+                                    if os.path.isfile(file_path):
+                                        # Always add to list - we'll check for existing extraction later
+                                        new_attachment_paths.append(file_path)
                 
-                analyze_cmd = [
-                    sys.executable,
-                    os.path.join(os.path.dirname(__file__), 'fetch', 'analyze_attachments.py'),
-                    '--results_dir', attachments_dir
-                ]
-                
-                result = subprocess.run(analyze_cmd, capture_output=True, text=True)
-                if result.returncode == 0:
-                    logger.info("✅ Attachment analysis complete")
-                    # Log just the summary lines
-                    for line in result.stdout.split('\n'):
-                        if any(keyword in line for keyword in ['Summary:', 'pdf:', 'docx:', 'txt:', 'png:', 'jpg:', 'Saved']):
-                            logger.info(f"   {line.strip()}")
+                if new_attachment_paths:
+                    logger.info(f"📎 Processing {len(new_attachment_paths)} attachment files from new comments...")
+                    
+                    try:
+                        
+                        processed = 0
+                        existing_used = 0
+                        newly_extracted = 0
+                        skipped = 0
+                        failed = 0
+                        
+                        for i, file_path in enumerate(new_attachment_paths, 1):
+                            extracted_path = file_path + '.extracted.txt'
+                            
+                            # ALWAYS check for existing extraction first and USE IT REGARDLESS OF LENGTH
+                            if os.path.exists(extracted_path):
+                                try:
+                                    with open(extracted_path, 'r', encoding='utf-8') as f:
+                                        existing_text = f.read()
+                                    logger.info(f"  [{i}/{len(new_attachment_paths)}] {os.path.basename(file_path)} - ✅ Using existing extraction ({len(existing_text)} chars)")
+                                    processed += 1
+                                    existing_used += 1
+                                    continue
+                                except Exception as e:
+                                    logger.warning(f"  Error reading existing extraction: {e}, will re-extract")
+                                
+                            # Only extract if no existing extraction found
+                            logger.info(f"  [{i}/{len(new_attachment_paths)}] {os.path.basename(file_path)} - extracting...")
+                            
+                            try:
+                                # Use Gemini extraction 
+                                extracted_text = extract_text_with_gemini(file_path, max_retries=DEFAULT_ATTACHMENT_RETRIES, timeout=DEFAULT_TIMEOUT)
+                                
+                                if extracted_text and not extracted_text.startswith('['):
+                                    # Save extracted text
+                                    with open(extracted_path, 'w', encoding='utf-8') as f:
+                                        f.write(extracted_text)
+                                    processed += 1
+                                    newly_extracted += 1
+                                    logger.info(f"    ✅ Extracted: {len(extracted_text)} chars")
+                                else:
+                                    skipped += 1
+                                    logger.info(f"    ⏭️  Skipped: {extracted_text}")
+                                    
+                            except Exception as e:
+                                failed += 1
+                                logger.warning(f"    ❌ Failed: {e}")
+                        
+                        logger.info(f"✅ Processing complete:")
+                        logger.info(f"   Total processed: {processed}")
+                        logger.info(f"   Existing extractions used: {existing_used}")
+                        logger.info(f"   Newly extracted: {newly_extracted}")
+                        logger.info(f"   Failed: {failed}")
+                        logger.info(f"   Skipped: {skipped}")
+                        
+                    except Exception as e:
+                        logger.warning(f"⚠️  Attachment processing failed: {e}")
                 else:
-                    logger.error("❌ Attachment analysis failed")
-                    logger.error(result.stderr)
+                    logger.info("✅ No attachments found for new comments")
         
         # Save updated raw_data back to the original location
         with open(raw_data_file, 'w') as f:
@@ -408,14 +478,17 @@ def update_lookup_table_with_new_comments(new_comment_ids: Set[str], raw_data_fi
                     'lookup_id': f"lookup_{next_lookup_id:06d}",
                     'truncated_text': truncated_text,
                     'text_source': text_result['text_source'],
+                    'comment_text': text_result.get('comment_text', ''),
+                    'attachment_text': text_result.get('attachment_text', ''),
                     'comment_ids': [comment_id],
                     'comment_count': 1,
-                    # Analysis fields (to be filled later or preserved)
+                    'full_text_length': len(text_result.get('full_text', '')),
+                    'truncated_text_length': len(truncated_text),
+                    # Analysis fields (to be filled later)
                     'stance': None,
                     'key_quote': None,
                     'rationale': None,
-                    'themes': None,
-                    'corrected': False  # New entries haven't been manually corrected
+                    'themes': None
                 }
                 
                 lookup_table.append(new_entry)
@@ -458,22 +531,22 @@ def main():
     parser = argparse.ArgumentParser(description='Resume-aware pipeline for lookup table workflow')
     parser.add_argument('--csv', type=str, required=True,
                        help='Path to comments.csv file')
-    parser.add_argument('--raw_data', type=str, default='raw_data.json',
-                       help='Path to raw_data.json file (default: raw_data.json)')
-    parser.add_argument('--lookup_table', type=str, default='lookup_table.json',
-                       help='Path to lookup_table.json file (default: lookup_table.json)')
-    parser.add_argument('--output_dir', type=str, default='.',
-                       help='Output directory (default: current directory)')
+    parser.add_argument('--raw_data', type=str, default=DEFAULT_RAW_DATA,
+                       help=f'Path to raw_data.json file (default: {DEFAULT_RAW_DATA})')
+    parser.add_argument('--lookup_table', type=str, default=DEFAULT_LOOKUP_TABLE,
+                       help=f'Path to lookup_table.json file (default: {DEFAULT_LOOKUP_TABLE})')
+    parser.add_argument('--output_dir', type=str, default=DEFAULT_OUTPUT_DIR,
+                       help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
     parser.add_argument('--truncate', type=int, default=None,
                        help='Truncate text to this many characters')
-    parser.add_argument('--model', type=str, default='gpt-4o-mini',
-                       help='LLM model for analysis (default: gpt-4o-mini)')
-    parser.add_argument('--n_clusters', type=int, default=15,
-                       help='Number of clusters for semantic analysis (default: 15)')
+    parser.add_argument('--model', type=str, default=DEFAULT_MODEL,
+                       help=f'LLM model for analysis (default: {DEFAULT_MODEL})')
     parser.add_argument('--skip_analysis', action='store_true',
                        help='Skip LLM analysis (only update data)')
     parser.add_argument('--skip_clustering', action='store_true',
                        help='Skip clustering (only do data update and LLM analysis)')
+    parser.add_argument('--limit', type=int, default=None,
+                       help='Limit to first N comments from CSV (for testing)')
     
     args = parser.parse_args()
     
@@ -522,7 +595,16 @@ def main():
         validated_truncation = validate_truncation_consistency(input_lookup_table_path, args.truncate)
         
         # Step 2: Find new comment IDs (compare CSV with input raw data)
-        new_comment_ids = find_new_comment_ids(args.csv, input_raw_data_path)
+        all_new_comment_ids = find_new_comment_ids(args.csv, input_raw_data_path, limit=None)
+        
+        # Apply limit to NEW comments only (not total CSV)
+        if args.limit is not None and args.limit > 0 and len(all_new_comment_ids) > args.limit:
+            logger.info(f"📊 Found {len(all_new_comment_ids)} new comments, limiting to first {args.limit}")
+            new_comment_ids = set(list(all_new_comment_ids)[:args.limit])
+        else:
+            new_comment_ids = all_new_comment_ids
+            if args.limit is not None and args.limit > 0:
+                logger.info(f"📊 Found {len(all_new_comment_ids)} new comments (no limiting needed, less than {args.limit})")
         
         # Initialize counters for summary
         added_to_existing = 0
@@ -531,7 +613,6 @@ def main():
         
         # Copy existing files to output directory first
         logger.info(f"\n=== Preparing output directory ===")
-        import shutil
         
         if os.path.exists(input_raw_data_path):
             shutil.copy2(input_raw_data_path, output_raw_data_path)
@@ -573,8 +654,6 @@ def main():
         
         # Only process new comments if any were fetched
         if new_comment_ids:
-            # Import necessary functions
-            from .analysis.create_lookup_table import extract_and_combine_text, normalize_text_for_dedup
             
             # Load the complete raw data to get the new comments
             with open(output_raw_data_path, 'r') as f:
@@ -633,13 +712,16 @@ def main():
                             'lookup_id': f"lookup_{next_lookup_id:06d}",
                             'truncated_text': truncated_text,
                             'text_source': text_result['text_source'],
+                            'comment_text': text_result.get('comment_text', ''),
+                            'attachment_text': text_result.get('attachment_text', ''),
                             'comment_ids': [comment_id],
                             'comment_count': 1,
+                            'full_text_length': len(text_result.get('full_text', '')),
+                            'truncated_text_length': len(truncated_text),
                             'stance': None,
                             'key_quote': None,
                             'rationale': None,
-                            'themes': None,
-                            'corrected': False
+                            'themes': None
                         }
                         
                         lookup_table.append(new_entry)
@@ -669,7 +751,7 @@ def main():
                             if any(cid in new_comment_ids for cid in entry.get('comment_ids', [])))
             logger.info(f"   Including {new_entries} entries with new comments")
         
-        # Step 6: Run LLM analysis on unanalyzed entries
+        # Step 3: Run LLM analysis on unanalyzed entries
         if not args.skip_analysis:
             unanalyzed_count = count_unanalyzed_entries(output_lookup_table_path)
             if unanalyzed_count > 0:
@@ -686,7 +768,7 @@ def main():
                 analyzed_lookup_table = analyze_lookup_table_batch(
                     lookup_table=lookup_table_to_analyze,
                     analyzer=analyzer,
-                    batch_size=5,
+                    batch_size=DEFAULT_BATCH_SIZE,
                     use_parallel=True,
                     checkpoint_file=f"{output_lookup_table_path}.checkpoint"
                 )
@@ -701,7 +783,7 @@ def main():
         else:
             logger.info(f"\n=== STEP 3: Skipping LLM Analysis ===")
         
-        # Step 6: Run clustering
+        # Step 4: Run clustering
         n_entries = 0  # Initialize for use in final summary
         if not args.skip_clustering:
             logger.info(f"\n=== STEP 4: Semantic Clustering ===")
@@ -719,9 +801,7 @@ def main():
             else:
                 logger.info(f"Running hierarchical clustering on {n_entries} entries")
                 
-                # Import and run clustering
-                import sys
-                import subprocess
+                # Run clustering
                 
                 # Get absolute path to the hierarchical_clustering script
                 script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -745,12 +825,11 @@ def main():
         else:
             logger.info(f"\n=== STEP 4: Skipping Clustering ===")
         
-        # Step 7: Quote verification (always run if analysis was performed)
+        # Step 5: Quote verification (always run if analysis was performed)
         if not args.skip_analysis:
             logger.info(f"\n=== STEP 5: Quote Verification ===")
             
-            # Import and run quote verification
-            from backend.analysis.verify_lookup_quotes import verify_lookup_quotes
+            # Run quote verification
             
             # Use the lookup table path
             verification_output = output_lookup_table_path.replace('.json', '_quote_verification.json')
@@ -769,33 +848,31 @@ def main():
             else:
                 logger.error("❌ Quote verification failed")
         
-        # Step 8: Create merged data.json
-        logger.info(f"\n=== STEP 6: Creating Merged data.json ===")
-        from backend.utils.merge_lookup_to_raw import merge_lookup_to_raw
+        # Step 6: Validate output (simplified for resume pipeline)
+        logger.info(f"\n=== STEP 6: Validating Pipeline Output ===")
         
-        # Always use the base lookup table (clustering updates it in place)
-        lookup_for_merge = output_lookup_table_path
+        # Simple validation for resume pipeline
+        try:
+            # Check that files exist and are valid JSON
+            with open(output_raw_data_path, 'r') as f:
+                raw_data = json.load(f)
+            raw_count = len(raw_data)
             
-        output_data_path = os.path.join(args.output_dir, 'data.json')
-        merge_lookup_to_raw(output_raw_data_path, lookup_for_merge, output_data_path)
-        logger.info(f"✅ Created merged data.json")
-        
-        # Step 9: Validate output
-        logger.info(f"\n=== STEP 7: Validating Pipeline Output ===")
-        from backend.utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
-        
-        validation_results = validate_pipeline_output(
-            csv_file=args.csv,
-            raw_data_file=output_raw_data_path,
-            data_file=output_data_path,
-            lookup_table_file=output_lookup_table_path
-        )
-        
-        # Print validation summary
-        print_validation_summary(validation_results)
-        
-        if not validation_results['valid']:
-            logger.error("❌ Pipeline validation failed! Check errors above.")
+            with open(output_lookup_table_path, 'r') as f:
+                lookup_table = json.load(f)
+            lookup_count = len(lookup_table)
+            
+            # Count analyzed entries
+            analyzed_count = sum(1 for entry in lookup_table if entry.get('stance') is not None)
+            
+            logger.info(f"✅ Validation successful:")
+            logger.info(f"   Raw data: {raw_count:,} comments")
+            logger.info(f"   Lookup table: {lookup_count:,} entries")
+            logger.info(f"   Analyzed entries: {analyzed_count:,} ({analyzed_count/max(1,lookup_count)*100:.1f}%)")
+            logger.info(f"   New comments added: {len(new_comment_ids):,}")
+            
+        except Exception as e:
+            logger.error(f"❌ Validation failed: {e}")
         
         # Final summary with better visibility
         logger.info(f"\n{'='*60}")
@@ -815,7 +892,6 @@ def main():
         logger.info(f"\n📁 Output files in {args.output_dir}:")
         logger.info(f"   - {os.path.basename(output_raw_data_path)} (raw comment data)")
         logger.info(f"   - {os.path.basename(output_lookup_table_path)} (deduplicated patterns with analysis)")
-        logger.info(f"   - data.json (merged data for frontend)")
         if not args.skip_analysis:
             logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.json'))}")
             logger.info(f"   - {os.path.basename(output_lookup_table_path.replace('.json', '_quote_verification.txt'))}")

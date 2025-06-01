@@ -5,8 +5,8 @@ Main Pipeline for Schedule F Comment Analysis
 This script orchestrates the complete analysis pipeline using the new lookup table approach:
 1. Fetch comments from CSV → raw_data.json
 2. Create deduplicated lookup table → lookup_table.json  
-3. Run LLM analysis on unique texts → lookup_table_analyzed.json
-4. Run semantic clustering → lookup_table_analyzed_clustered.json
+3. Run LLM analysis on unique texts (updates lookup_table.json in place)
+4. Run semantic clustering (adds cluster data to lookup_table.json)
 
 Usage:
 python pipeline.py --csv comments.csv [--output_dir output] [--truncate 500] [--model gpt-4o-mini]
@@ -16,8 +16,18 @@ import json
 import os
 import argparse
 import logging
+import subprocess
+import sys
 from typing import Optional
 from datetime import datetime
+
+from .fetch.fetch_comments import read_comments_from_csv, download_all_attachments
+from .analysis.create_lookup_table import create_lookup_table
+from .analysis.analyze_lookup_table import analyze_lookup_table_batch
+from .analysis.verify_lookup_quotes import verify_lookup_quotes
+from .utils.comment_analyzer import CommentAnalyzer
+from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
+from .config import DEFAULT_MODEL, DEFAULT_BATCH_SIZE, DEFAULT_OUTPUT_DIR, DEFAULT_RAW_DATA, DEFAULT_LOOKUP_TABLE
 
 # Initial logger setup (will be reconfigured with file handler in main)
 logger = logging.getLogger(__name__)
@@ -47,14 +57,12 @@ def main():
     parser = argparse.ArgumentParser(description='Schedule F comment analysis pipeline')
     parser.add_argument('--csv', type=str, required=True,
                        help='Path to comments.csv file')
-    parser.add_argument('--output_dir', type=str, default='.',
-                       help='Output directory (default: current directory)')
+    parser.add_argument('--output_dir', type=str, default=DEFAULT_OUTPUT_DIR,
+                       help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
     parser.add_argument('--truncate', type=int, default=None,
                        help='Truncate text to this many characters')
-    parser.add_argument('--model', type=str, default='gpt-4o-mini',
-                       help='LLM model for analysis (default: gpt-4o-mini)')
-    parser.add_argument('--n_clusters', type=int, default=15,
-                       help='Number of clusters for semantic analysis (default: 15)')
+    parser.add_argument('--model', type=str, default=DEFAULT_MODEL,
+                       help=f'LLM model for analysis (default: {DEFAULT_MODEL})')
     parser.add_argument('--skip_analysis', action='store_true',
                        help='Skip LLM analysis (only create lookup table)')
     parser.add_argument('--skip_clustering', action='store_true',
@@ -70,8 +78,8 @@ def main():
     # Set up logging with output directory
     setup_logging(args.output_dir)
     
-    raw_data_path = os.path.join(args.output_dir, 'raw_data.json')
-    lookup_table_path = os.path.join(args.output_dir, 'lookup_table.json')
+    raw_data_path = os.path.join(args.output_dir, DEFAULT_RAW_DATA)
+    lookup_table_path = os.path.join(args.output_dir, DEFAULT_LOOKUP_TABLE)
     
     logger.info(f"🚀 Starting Schedule F analysis pipeline...")
     logger.info(f"📁 CSV file: {args.csv}")
@@ -82,7 +90,6 @@ def main():
     try:
         # Step 1: Fetch comments from CSV
         logger.info(f"\n=== STEP 1: Fetching Comments from CSV ===")
-        from .fetch.fetch_comments import read_comments_from_csv
         
         logger.info(f"Reading comments from {args.csv}...")
         if args.limit:
@@ -92,7 +99,6 @@ def main():
         
         # Step 2: Download and analyze attachments BEFORE creating lookup table
         logger.info(f"\n=== STEP 2: Downloading and Analyzing Attachments ===")
-        from .fetch.fetch_comments import download_all_attachments
         
         # Load raw data
         with open(raw_data_file, 'r') as f:
@@ -114,8 +120,6 @@ def main():
             attachments_dir = os.path.join(args.output_dir, "attachments")
             if os.path.exists(attachments_dir):
                 logger.info(f"Analyzing attachment text extraction...")
-                import subprocess
-                import sys
                 
                 analyze_cmd = [
                     sys.executable,
@@ -139,7 +143,6 @@ def main():
         
         # Step 3: Create lookup table (AFTER attachments are processed)
         logger.info(f"\n=== STEP 3: Creating Deduplicated Lookup Table ===")
-        from .analysis.create_lookup_table import create_lookup_table
         
         logger.info(f"Creating lookup table from {raw_data_file}...")
         
@@ -171,8 +174,6 @@ def main():
         analyzed_path = lookup_table_path
         if not args.skip_analysis:
             logger.info(f"\n=== STEP 4: LLM Analysis ({unique_texts} unique texts) ===")
-            from .analysis.analyze_lookup_table import analyze_lookup_table_batch
-            from .utils.comment_analyzer import CommentAnalyzer
             
             # Initialize analyzer
             analyzer = CommentAnalyzer(model=args.model)
@@ -181,7 +182,7 @@ def main():
             analyzed_lookup_table = analyze_lookup_table_batch(
                 lookup_table=lookup_table,
                 analyzer=analyzer,
-                batch_size=5,
+                batch_size=DEFAULT_BATCH_SIZE,
                 use_parallel=True,
                 checkpoint_file=f"{lookup_table_path}.checkpoint"
             )
@@ -200,9 +201,7 @@ def main():
             
             logger.info(f"Running hierarchical clustering on {unique_texts} entries")
             
-            # Import and run clustering
-            import sys
-            import subprocess
+            # Run clustering
             
             # Get absolute path to the hierarchical_clustering script
             script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -232,8 +231,7 @@ def main():
         if not args.skip_analysis and unique_texts > 0:
             logger.info(f"\n=== STEP 6: Quote Verification ===")
             
-            # Import and run quote verification
-            from .analysis.verify_lookup_quotes import verify_lookup_quotes
+            # Run quote verification
             
             # Use the lookup table path for verification
             verification_output = lookup_table_path.replace('.json', '_quote_verification.json')
@@ -251,26 +249,16 @@ def main():
             else:
                 logger.error("❌ Quote verification failed")
         
-        # Step 7: Create merged data.json
-        logger.info(f"\n=== STEP 7: Creating Merged data.json ===")
-        from .utils.merge_lookup_to_raw import merge_lookup_to_raw
-        
-        # Always use the base lookup table (clustering updates it in place)
-        lookup_for_merge = lookup_table_path
-            
-        output_data_path = os.path.join(args.output_dir, 'data.json')
-        merge_lookup_to_raw(raw_data_path, lookup_for_merge, output_data_path)
-        logger.info(f"✅ Created merged data.json")
-        
-        # Step 8: Validate output
-        logger.info(f"\n=== STEP 8: Validating Pipeline Output ===")
-        from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
+        # Step 7: Validate output
+        logger.info(f"\n=== STEP 7: Validating Pipeline Output ===")
         
         validation_results = validate_pipeline_output(
             csv_file=args.csv,
             raw_data_file=raw_data_path,
-            data_file=output_data_path,
-            lookup_table_file=lookup_table_path
+            data_file=None,  # No data.json created in pipeline anymore
+            lookup_table_file=lookup_table_path,
+            skip_analysis_validation=args.skip_analysis,
+            skip_count_validation=bool(args.limit)  # Skip count validation if using --limit
         )
         
         # Print validation summary
@@ -290,9 +278,8 @@ def main():
         logger.info(f"   API calls saved: ~{total_comments - unique_texts:,}")
         
         logger.info(f"\n📁 Output files in {args.output_dir}:")
-        logger.info(f"   - raw_data.json (original comments + attachments)")
-        logger.info(f"   - lookup_table.json (deduplicated patterns with analysis)")
-        logger.info(f"   - data.json (merged data for frontend)")
+        logger.info(f"   - {DEFAULT_RAW_DATA} (original comments + attachments)")
+        logger.info(f"   - {DEFAULT_LOOKUP_TABLE} (deduplicated patterns with analysis)")
         if total_attachments > 0:
             logger.info(f"   - attachments/ (downloaded attachment files with .extracted.txt)")
         if not args.skip_analysis:
