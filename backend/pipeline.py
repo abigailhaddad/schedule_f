@@ -12,57 +12,51 @@ Usage:
 python pipeline.py --csv comments.csv [--output_dir output] [--truncate 500] [--model gpt-4o-mini]
 """
 
+import argparse
 import json
 import os
-import argparse
-import logging
 import subprocess
 import sys
 from typing import Optional
-from datetime import datetime
+from pathlib import Path
 
-from .fetch.fetch_comments import read_comments_from_csv, download_all_attachments
-from .analysis.create_lookup_table import create_lookup_table
-from .analysis.analyze_lookup_table import analyze_lookup_table_batch
+from .config import config
+from .fetch import read_comments_from_csv, download_all_attachments
+from .analysis import create_lookup_table, analyze_lookup_table_batch
 from .analysis.verify_lookup_quotes import verify_lookup_quotes
-from .utils.comment_analyzer import CommentAnalyzer
+from .utils import (
+    CommentAnalyzer,
+    PipelineLogger,
+    FileManager,
+    FileOperationError,
+    ConfigurationError,
+)
 from .utils.validate_pipeline_output import validate_pipeline_output, print_validation_summary
-from .config import DEFAULT_MODEL, DEFAULT_BATCH_SIZE, DEFAULT_OUTPUT_DIR, DEFAULT_RAW_DATA, DEFAULT_LOOKUP_TABLE
 
-# Initial logger setup (will be reconfigured with file handler in main)
-logger = logging.getLogger(__name__)
+# Set up logger
+logger = PipelineLogger.get_logger(__name__)
 
-def setup_logging(output_dir: str):
-    """Set up logging with file handler in the output directory."""
-    log_file = os.path.join(output_dir, 'pipeline.log')
-    
-    # Clear any existing handlers
-    for handler in logger.handlers[:]:
-        logger.removeHandler(handler)
-    
-    # Set up new handlers
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler()
-        ],
-        force=True  # Override existing configuration
+def setup_pipeline_logging(output_dir: Path) -> None:
+    """Set up logging for the pipeline using the centralized logger."""
+    global logger
+    logger = PipelineLogger.setup_logger(
+        name="pipeline",
+        output_dir=output_dir,
+        log_file="pipeline.log",
+        include_timestamp=False
     )
-    logger.info(f"📝 Logging to: {log_file}")
 
 def main():
     """Main pipeline orchestration function."""
     parser = argparse.ArgumentParser(description='Schedule F comment analysis pipeline')
     parser.add_argument('--csv', type=str, required=True,
                        help='Path to comments.csv file')
-    parser.add_argument('--output_dir', type=str, default=DEFAULT_OUTPUT_DIR,
-                       help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
+    parser.add_argument('--output_dir', type=str, default=config.files.output_dir,
+                       help=f'Output directory (default: {config.files.output_dir})')
     parser.add_argument('--truncate', type=int, default=None,
                        help='Truncate text to this many characters')
-    parser.add_argument('--model', type=str, default=DEFAULT_MODEL,
-                       help=f'LLM model for analysis (default: {DEFAULT_MODEL})')
+    parser.add_argument('--model', type=str, default=config.llm.model,
+                       help=f'LLM model for analysis (default: {config.llm.model})')
     parser.add_argument('--skip_analysis', action='store_true',
                        help='Skip LLM analysis (only create lookup table)')
     parser.add_argument('--skip_clustering', action='store_true',
@@ -72,14 +66,20 @@ def main():
     
     args = parser.parse_args()
     
-    # Setup paths
-    os.makedirs(args.output_dir, exist_ok=True)
-    
-    # Set up logging with output directory
-    setup_logging(args.output_dir)
-    
-    raw_data_path = os.path.join(args.output_dir, DEFAULT_RAW_DATA)
-    lookup_table_path = os.path.join(args.output_dir, DEFAULT_LOOKUP_TABLE)
+    try:
+        # Setup paths
+        output_dir = Path(args.output_dir)
+        FileManager.ensure_directory(output_dir)
+        
+        # Set up logging
+        setup_pipeline_logging(output_dir)
+        
+        raw_data_path = output_dir / config.files.raw_data_filename
+        lookup_table_path = output_dir / config.files.lookup_table_filename
+        
+    except (FileOperationError, ConfigurationError) as e:
+        print(f"❌ Setup failed: {e}")
+        return 1
     
     logger.info(f"🚀 Starting Schedule F analysis pipeline...")
     logger.info(f"📁 CSV file: {args.csv}")
@@ -182,7 +182,7 @@ def main():
             analyzed_lookup_table = analyze_lookup_table_batch(
                 lookup_table=lookup_table,
                 analyzer=analyzer,
-                batch_size=DEFAULT_BATCH_SIZE,
+                batch_size=config.llm.batch_size,
                 use_parallel=True,
                 checkpoint_file=f"{lookup_table_path}.checkpoint"
             )
@@ -233,11 +233,11 @@ def main():
             
             # Run quote verification
             
-            # Use the lookup table path for verification
-            verification_output = lookup_table_path.replace('.json', '_quote_verification.json')
+            # Use the lookup table path for verification  
+            verification_output = str(lookup_table_path).replace('.json', '_quote_verification.json')
             
             logger.info(f"Verifying quotes in {lookup_table_path}...")
-            verification_results = verify_lookup_quotes(lookup_table_path, verification_output)
+            verification_results = verify_lookup_quotes(str(lookup_table_path), verification_output)
             
             if verification_results:
                 logger.info(f"✅ Quote verification complete")
@@ -278,8 +278,8 @@ def main():
         logger.info(f"   API calls saved: ~{total_comments - unique_texts:,}")
         
         logger.info(f"\n📁 Output files in {args.output_dir}:")
-        logger.info(f"   - {DEFAULT_RAW_DATA} (original comments + attachments)")
-        logger.info(f"   - {DEFAULT_LOOKUP_TABLE} (deduplicated patterns with analysis)")
+        logger.info(f"   - {config.files.raw_data_filename} (original comments + attachments)")
+        logger.info(f"   - {config.files.lookup_table_filename} (deduplicated patterns with analysis)")
         if total_attachments > 0:
             logger.info(f"   - attachments/ (downloaded attachment files with .extracted.txt)")
         if not args.skip_analysis:

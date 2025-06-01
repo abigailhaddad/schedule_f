@@ -21,17 +21,11 @@ import concurrent.futures
 
 # Import the analysis components from the utility module
 from ..utils.comment_analyzer import CommentAnalyzer, TimeoutException
-from ..config import DEFAULT_MODEL, DEFAULT_BATCH_SIZE, DEFAULT_TIMEOUT, DEFAULT_LOOKUP_TABLE
+from ..config import config
+from ..utils import PipelineLogger
 
 # Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+logger = PipelineLogger.get_logger(__name__)
 
 def analyze_lookup_entry(entry: Dict[str, Any], analyzer: CommentAnalyzer, max_retries: int = 3) -> Dict[str, Any]:
     """
@@ -306,16 +300,16 @@ def print_analysis_stats(lookup_table: List[Dict[str, Any]]):
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(description='Analyze lookup table with LLM')
-    parser.add_argument('--input', type=str, default=DEFAULT_LOOKUP_TABLE,
-                       help=f'Input lookup table file (default: {DEFAULT_LOOKUP_TABLE})')
+    parser.add_argument('--input', type=str, default=config.files.lookup_table_filename,
+                       help=f'Input lookup table file (default: {config.files.lookup_table_filename})')
     parser.add_argument('--output', type=str, default=None,
                        help='Output analyzed lookup table file (default: overwrite input file)')
-    parser.add_argument('--model', type=str, default=DEFAULT_MODEL,
-                       help=f'LLM model to use (default: {DEFAULT_MODEL})')
-    parser.add_argument('--batch_size', type=int, default=DEFAULT_BATCH_SIZE,
-                       help=f'Number of entries to process in parallel (default: {DEFAULT_BATCH_SIZE})')
-    parser.add_argument('--timeout', type=int, default=DEFAULT_TIMEOUT,
-                       help=f'Timeout for each API call in seconds (default: {DEFAULT_TIMEOUT})')
+    parser.add_argument('--model', type=str, default=config.llm.model,
+                       help=f'LLM model to use (default: {config.llm.model})')
+    parser.add_argument('--batch_size', type=int, default=config.llm.batch_size,
+                       help=f'Number of entries to process in parallel (default: {config.llm.batch_size})')
+    parser.add_argument('--timeout', type=int, default=config.llm.timeout,
+                       help=f'Timeout for each API call in seconds (default: {config.llm.timeout})')
     parser.add_argument('--resume', action='store_true',
                        help='Resume from checkpoint if available')
     parser.add_argument('--no_parallel', action='store_true',
