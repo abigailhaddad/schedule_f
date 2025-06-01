@@ -43,6 +43,9 @@ REGS_API_KEY=your_regulations_gov_api_key
 
 # For analyzing comments
 OPENAI_API_KEY=your_openai_api_key
+
+# For attachment processing (optional)
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ## Usage
@@ -52,22 +55,22 @@ OPENAI_API_KEY=your_openai_api_key
 #### Fresh Analysis (from scratch)
 ```bash
 # Run complete pipeline on CSV file
-python -m backend.pipeline --csv comments.csv --output_dir results_2024
+python backend/pipeline.py --csv comments.csv --output_dir results_2024
 
 # With options
-python -m backend.pipeline --csv comments.csv --output_dir results_2024 \
+python backend/pipeline.py --csv comments.csv --output_dir results_2024 \
   --model gpt-4o-mini --truncate 1000 --skip-clustering
 ```
 
 #### Incremental Updates (resume)
 ```bash
 # Resume from existing data
-python -m backend.resume_pipeline --csv comments.csv \
+python backend/resume_pipeline.py --csv comments.csv \
   --raw_data data/raw_data.json --lookup_table data/lookup_table.json \
   --truncate 1003
 
 # Skip analysis (just fetch new comments)
-python -m backend.resume_pipeline --csv comments.csv \
+python backend/resume_pipeline.py --csv comments.csv \
   --raw_data data/raw_data.json --lookup_table data/lookup_table.json \
   --skip-analysis
 ```
@@ -75,14 +78,14 @@ python -m backend.resume_pipeline --csv comments.csv \
 #### Individual Analysis Steps
 ```bash
 # Just create lookup table
-python -m backend.analysis.create_lookup_table --input raw_data.json \
+python backend/analysis/create_lookup_table.py --input raw_data.json \
   --output lookup_table.json --truncate 1000
 
 # Just run LLM analysis
-python -m backend.analysis.analyze_lookup_table --input lookup_table.json
+python backend/analysis/analyze_lookup_table.py --input lookup_table.json
 
 # Just run clustering
-python -m backend.analysis.semantic_lookup --input lookup_table.json
+python backend/analysis/hierarchical_clustering.py --input lookup_table.json
 ```
 
 ### Pipeline Options
@@ -128,6 +131,30 @@ cd correct_labels
 cd frontend
 npm run dev
 ```
+
+### Testing
+
+The project includes a comprehensive test suite covering all major functionality:
+
+```bash
+# Run all tests
+cd tests
+python run_tests.py
+
+# Run specific test categories
+python -m unittest test_pipeline.TestPipelineIntegration -v
+python -m unittest test_pipeline.TestRealAPIIntegration -v
+```
+
+The test suite includes:
+- Data fetching and CSV parsing
+- Lookup table creation and deduplication
+- LLM analysis (with mock mode for CI)
+- Clustering and visualization
+- Resume pipeline functionality
+- Attachment processing with Gemini API
+- Schema validation
+- End-to-end workflow testing
 
 ## Architecture
 
