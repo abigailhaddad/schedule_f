@@ -125,12 +125,12 @@
     },
     "comment_text": {
       "present_count": 28027,
-      "non_null_count": 25763,
+      "non_null_count": 28026,
       "type_errors": 0
     },
     "attachment_text": {
       "present_count": 28027,
-      "non_null_count": 25763,
+      "non_null_count": 28026,
       "type_errors": 0
     },
     "comment_count": {
