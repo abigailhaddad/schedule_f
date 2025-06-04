@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to merge raw_data.json with lookup_table_corrected.json
+Script to merge raw_data.json with lookup_table.json
 Creates a data.json file with row-level data including LLM info
 """
 import json

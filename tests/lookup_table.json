@@ -1,0 +1,42 @@
+[
+  {
+    "lookup_id": "lookup_000001",
+    "truncated_text": "This is a test comment for CI testing purposes.",
+    "text_source": "comment",
+    "comment_text": "This is a test comment for CI testing purposes.",
+    "attachment_text": "",
+    "comment_ids": [
+      "OPM-2025-0004-0002"
+    ],
+    "comment_count": 1,
+    "full_text_length": 47,
+    "truncated_text_length": 47,
+    "stance": "Neutral/Unclear",
+    "key_quote": "This is a test comment for CI testing purposes.",
+    "rationale": "The comment does not express a clear stance for or against the proposed rule and is purely informational, indicating it is a test comment.",
+    "themes": "",
+    "cluster_id": "0",
+    "pca_x": 0.38040971755981445,
+    "pca_y": -3.3007015787234195e-08
+  },
+  {
+    "lookup_id": "lookup_000002",
+    "truncated_text": "Another test comment for validation purposes.",
+    "text_source": "comment",
+    "comment_text": "Another test comment for validation purposes.",
+    "attachment_text": "",
+    "comment_ids": [
+      "OPM-2025-0004-0003"
+    ],
+    "comment_count": 1,
+    "full_text_length": 45,
+    "truncated_text_length": 45,
+    "stance": "Neutral/Unclear",
+    "key_quote": "Another test comment for validation purposes.",
+    "rationale": "The comment does not express a clear stance for or against the proposed rule and is purely informational, making it neutral.",
+    "themes": "",
+    "cluster_id": "0",
+    "pca_x": -0.3804096579551697,
+    "pca_y": -3.3007019339947874e-08
+  }
+]

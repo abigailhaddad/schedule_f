@@ -10,7 +10,7 @@ Requirements:
 - Python 3.8+
 
 Usage:
-python -m backend.analysis.verify_lookup_quotes --input lookup_table_analyzed.json
+python -m backend.analysis.verify_lookup_quotes --input lookup_table.json
 """
 
 import os
@@ -119,7 +119,7 @@ def verify_lookup_quotes(lookup_table_file: str, output_file: Optional[str] = No
     Verify quotes in analyzed lookup table and generate a report.
     
     Args:
-        lookup_table_file: Path to the analyzed lookup table file (lookup_table_analyzed.json)
+        lookup_table_file: Path to the lookup table file (lookup_table.json)
         output_file: Path to save verification results (JSON)
         text_report_file: Path to save human-readable text report
         
@@ -308,7 +308,7 @@ def main():
     """Parse arguments and run the verification."""
     parser = argparse.ArgumentParser(description='Verify quotes in analyzed lookup table')
     parser.add_argument('--input', type=str, required=True,
-                        help='Path to analyzed lookup table JSON file (lookup_table_analyzed.json)')
+                        help='Path to lookup table JSON file (lookup_table.json)')
     parser.add_argument('--output', type=str, default=None,
                         help='Path to save verification results (default: lookup_quote_verification.json in same directory as input)')
     

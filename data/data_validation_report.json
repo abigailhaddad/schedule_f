@@ -1,81 +1,81 @@
 {
-  "total_comments": 500,
+  "total_comments": 29123,
   "comments_with_issues": 0,
   "validation_passed": true,
   "field_coverage": {
     "id": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "title": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "comment": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "original_comment": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "agency_id": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "posted_date": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "received_date": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "category": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "submitter_name": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "organization": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "city": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "state": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "country": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "comment_on": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "document_type": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "link": {
@@ -84,98 +84,98 @@
       "type_errors": 0
     },
     "has_attachments": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "attachment_count": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "attachment_urls": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "attachment_titles": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "attachment_local_paths": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "lookup_id": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "truncated_text": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "text_source": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "comment_text": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "attachment_text": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "comment_count": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "stance": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "key_quote": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "rationale": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "themes": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "corrected": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29123,
       "type_errors": 0
     },
     "cluster_id": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "pca_x": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     },
     "pca_y": {
-      "present_count": 500,
-      "non_null_count": 500,
+      "present_count": 29123,
+      "non_null_count": 29122,
       "type_errors": 0
     }
   },

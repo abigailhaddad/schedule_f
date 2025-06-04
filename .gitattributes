@@ -1,0 +1,2 @@
+data/data.json filter=lfs diff=lfs merge=lfs -text
+data/lookup_table.json filter=lfs diff=lfs merge=lfs -text

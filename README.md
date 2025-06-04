@@ -43,43 +43,71 @@ REGS_API_KEY=your_regulations_gov_api_key
 
 # For analyzing comments
 OPENAI_API_KEY=your_openai_api_key
+
+# For attachment processing (optional)
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ## Usage
 
 ### Running the Analysis Pipeline
 
-The main workflow uses three scripts:
+#### Fresh Analysis (from scratch)
+```bash
+# Run complete pipeline on CSV file
+python backend/pipeline.py --csv comments.csv --output_dir results_2024
 
-1. **Run the pipeline** (choose between fresh or incremental):
-   ```bash
-   # Interactive pipeline with guided options
-   ./scripts/run_pipeline_safe.sh
-   
-   # Or command-line version for automation
-   ./scripts/run_pipeline_args.sh [--resume] [--skip-analysis] [--skip-clustering]
-   ```
+# With options
+python backend/pipeline.py --csv comments.csv --output_dir results_2024 \
+  --model gpt-4o-mini --truncate 1000 --skip-clustering
+```
 
-2. **Copy results to data folder**:
-   ```bash
-   # Copies latest results to data/ and creates merged data.json
-   ./scripts/copy_latest_data.sh
-   ```
+#### Incremental Updates (resume)
+```bash
+# Resume from existing data
+python backend/resume_pipeline.py --csv comments.csv \
+  --raw_data data/raw_data.json --lookup_table data/lookup_table.json \
+  --truncate 1003
 
-3. **Deploy to git** (optional):
-   ```bash
-   # Commit and push data files to git (data branch or current branch)
-   ./scripts/deploy_results.sh
-   ```
+# Skip analysis (just fetch new comments)
+python backend/resume_pipeline.py --csv comments.csv \
+  --raw_data data/raw_data.json --lookup_table data/lookup_table.json \
+  --skip-analysis
+```
+
+#### Individual Analysis Steps
+```bash
+# Just create lookup table
+python backend/analysis/create_lookup_table.py --input raw_data.json \
+  --output lookup_table.json --truncate 1000
+
+# Just run LLM analysis
+python backend/analysis/analyze_lookup_table.py --input lookup_table.json
+
+# Just run clustering
+python backend/analysis/hierarchical_clustering.py --input lookup_table.json
+```
 
 ### Pipeline Options
 
-- **Fresh pipeline**: Fetches all comments and analyzes from scratch
-- **Resume pipeline**: Only fetches new comments and preserves existing analysis
-- **Skip analysis**: Only fetch and deduplicate (no LLM calls)
-- **Skip clustering**: Skip semantic clustering step
+#### Common Options
+- `--csv comments.csv` - Input CSV file with comment data
+- `--output_dir results/` - Output directory for results
+- `--model gpt-4o-mini` - LLM model for analysis (default: gpt-4o-mini)
+- `--truncate 1000` - Truncate text to N characters for analysis
+- `--limit 100` - Process only first N comments (for testing)
 
-Note: Quote verification runs automatically after analysis to check if extracted quotes appear in the original text.
+#### Fresh Pipeline Options
+- `--skip-analysis` - Skip LLM analysis (only fetch and deduplicate)
+- `--skip-clustering` - Skip semantic clustering step
+
+#### Resume Pipeline Options  
+- `--raw_data path/to/raw_data.json` - Existing raw data file
+- `--lookup_table path/to/lookup_table.json` - Existing lookup table
+- `--skip-analysis` - Only fetch new comments (no LLM analysis)
+- `--skip-clustering` - Skip clustering step
+
+**Note**: Quote verification runs automatically after LLM analysis to verify extracted quotes exist in original text.
 
 ### Manual Corrections
 
@@ -93,7 +121,7 @@ cd correct_labels
 # This will:
 # 1. Launch a web interface at http://localhost:5000
 # 2. Allow you to review and edit stance/themes/quotes
-# 3. Save corrections to lookup_table_corrected.json
+# 3. Save corrections back to the lookup table
 ```
 
 ### Frontend Development
@@ -104,65 +132,96 @@ cd frontend
 npm run dev
 ```
 
+### Testing
+
+The project includes a comprehensive test suite covering all major functionality:
+
+```bash
+# Run all tests
+cd tests
+python run_tests.py
+
+# Run specific test categories
+python -m unittest test_pipeline.TestPipelineIntegration -v
+python -m unittest test_pipeline.TestRealAPIIntegration -v
+```
+
+The test suite includes:
+- Data fetching and CSV parsing
+- Lookup table creation and deduplication
+- LLM analysis (with mock mode for CI)
+- Clustering and visualization
+- Resume pipeline functionality
+- Attachment processing with Gemini API
+- Schema validation
+- End-to-end workflow testing
+
 ## Architecture
 
 This project has three main components:
 
-1. **Data Fetching**: Python scripts to fetch comments from regulations.gov API
-2. **Analysis**: Python scripts using LLMs to analyze comments 
-3. **Frontend**: Next.js application to view and search comments
+1. **Data Fetching**: Python scripts to fetch comments and attachments from regulations.gov API
+2. **Text Extraction**: Smart extraction from PDFs, DOCX, images with Gemini API fallback  
+3. **Analysis**: Python scripts using LLMs to analyze deduplicated comment text
+4. **Clustering**: Semantic clustering to group similar comments
+5. **Frontend**: Next.js application to view and search comments
 
 ### Data Flow
 
 1. **Fetch**: Comments from regulations.gov → `raw_data.json` (all comments with metadata)
 2. **Deduplicate**: Create `lookup_table.json` with unique text patterns
-3. **Analyze**: LLM analysis adds stance, themes, quotes to lookup table
-4. **Correct**: Manual corrections → `lookup_table_corrected.json`
-5. **Merge**: Combine raw + corrected lookup → `data.json` (final dataset)
-6. **View**: Frontend displays merged data
+3. **Analyze**: LLM analysis adds stance, themes, quotes directly to `lookup_table.json`
+4. **Cluster**: Semantic clustering adds cluster information to `lookup_table.json`
+5. **Verify**: Quote verification creates separate verification reports
+6. **Merge**: (Optional) Combine raw + lookup → `data.json` for legacy frontend compatibility
+7. **View**: Frontend displays merged data
 
 ### Key Files
 
-- **`raw_data.json`**: All fetched comments with full metadata
-- **`lookup_table.json`**: Deduplicated text patterns for analysis
-- **`lookup_table_corrected.json`**: Lookup table with manual corrections
-- **`data.json`**: Final merged dataset for frontend (created by merge script)
+- **`raw_data.json`**: All fetched comments with full metadata and attachment text
+- **`lookup_table.json`**: Deduplicated text patterns with complete analysis (stance, themes, quotes, clusters)
+- **`lookup_table_quote_verification.json`**: Quote verification results
+- **`data.json`**: (Optional) Final merged dataset for legacy frontend compatibility
 
 ### Deduplication Strategy
 
-The system reduces redundant analysis by ~27%:
-- Comments with identical/similar text share one lookup entry
-- Each lookup entry has a `comment_ids` array listing all matching comments
-- Analysis (LLM calls) only happens once per unique text pattern
+The system reduces redundant LLM analysis significantly:
+- Comments with identical/similar text (after normalization) share one lookup entry
+- Each lookup entry has a `comment_ids` array listing all matching comments  
+- Analysis (expensive LLM calls) only happens once per unique text pattern
+- Typical efficiency: Analyze ~21,000 unique patterns instead of ~28,000 total comments
+- Speed improvement: ~25% reduction in API calls and analysis time
 
 ## Pipeline Details
 
 ### Fresh Pipeline (`pipeline.py`)
-1. Fetches all comments from CSV
-2. Downloads attachments
-3. Creates lookup table from scratch
-4. Runs LLM analysis on all entries
-5. Performs semantic clustering
-6. Outputs to timestamped results folder
+1. Fetches all comments from CSV → `raw_data.json`
+2. Downloads and extracts attachments (PDF, DOCX, images)
+3. Creates deduplicated `lookup_table.json` from scratch
+4. Runs LLM analysis on unique text patterns (updates `lookup_table.json` in place)
+5. Performs semantic clustering (adds cluster data to `lookup_table.json`)
+6. Runs quote verification and creates verification reports
+7. Outputs to specified directory
 
 ### Resume Pipeline (`resume_pipeline.py`)
-1. Identifies new comments in CSV
-2. Fetches only new comments
-3. Updates existing lookup table
-4. Preserves all existing analysis
-5. Only analyzes truly new text patterns
-6. Maintains consistent deduplication
+1. Compares CSV with existing `raw_data.json` to find new comments
+2. Fetches only new comments and appends to `raw_data.json`
+3. Downloads attachments for new comments
+4. Updates existing `lookup_table.json` with new text patterns
+5. Preserves all existing analysis and only analyzes new patterns
+6. Runs clustering and verification on the complete dataset
+7. Maintains perfect consistency with existing deduplication
 
 ### Output Structure
 
-Each pipeline run creates a timestamped folder in `results/` containing:
-- `raw_data.json` - All comments
-- `lookup_table.json` - Deduplicated entries  
-- `lookup_table_corrected.json` - With analysis
-- `lookup_table_corrected_quote_verification.json` - Quote verification results
-- `lookup_table_corrected_quote_verification.txt` - Human-readable report of quotes not found
+Each pipeline run creates output in the specified directory containing:
+- `raw_data.json` - All comments with attachment text
+- `lookup_table.json` - Deduplicated entries with complete analysis (stance, themes, quotes, clusters)
+- `lookup_table_quote_verification.json` - Quote verification results
+- `lookup_table_quote_verification.txt` - Human-readable verification report
 - `pipeline.log` or `resume_pipeline.log` - Execution log
-- `clustering_*/` - Clustering visualizations (if clustering enabled)
+- `attachments/` - Downloaded attachment files with extracted text
+- `clustering_*/` - Clustering visualizations and reports (if clustering enabled)
 
 ## License
 

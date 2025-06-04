@@ -33,6 +33,7 @@ import time
 import argparse
 import requests
 import mimetypes
+import string
 from pathlib import Path
 from dotenv import load_dotenv
 from tqdm import tqdm
@@ -287,6 +288,76 @@ def extract_text_from_text_file(file_path: str) -> str:
     except Exception as e:
         return f"[TEXT FILE EXTRACTION FAILED: {str(e)}]"
 
+
+def extract_text_from_file_basic_no_tesseract(file_path: str) -> str:
+    """
+    Smart basic text extraction - handles TXT, DOCX, PDF without OCR.
+    """
+    _, ext = os.path.splitext(file_path)
+    ext = ext.lower()
+    
+    try:
+        # Text files - simple and fast
+        if ext in ['.txt', '.csv', '.log']:
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    text = f.read()
+                return text if text.strip() else "[EMPTY TEXT FILE]"
+            except:
+                # Try with different encoding
+                with open(file_path, 'r', encoding='latin-1', errors='ignore') as f:
+                    return f.read()
+        
+        # Microsoft Word documents
+        elif ext in ['.docx']:
+            try:
+                from docx import Document
+                doc = Document(file_path)
+                text = []
+                for paragraph in doc.paragraphs:
+                    text.append(paragraph.text)
+                result = '\n'.join(text)
+                return result if result.strip() else "[EMPTY DOCX FILE]"
+            except ImportError:
+                return "[DOCX LIBRARY NOT AVAILABLE]"
+            except Exception as e:
+                return f"[DOCX EXTRACTION FAILED: {str(e)}]"
+        
+        # PDF files - simple extraction only
+        elif ext == '.pdf':
+            try:
+                import PyPDF2
+                with open(file_path, 'rb') as f:
+                    reader = PyPDF2.PdfReader(f)
+                    text = ""
+                    for page in reader.pages:
+                        try:
+                            text += page.extract_text() + "\n"
+                        except:
+                            continue  # Skip problematic pages
+                    return text.strip() if text.strip() else "[EMPTY PDF OR EXTRACTION FAILED]"
+            except Exception as e:
+                return f"[PDF EXTRACTION FAILED: {str(e)}]"
+        
+        # RTF files (common in government docs)
+        elif ext == '.rtf':
+            try:
+                from striprtf.striprtf import rtf_to_text
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    rtf_content = f.read()
+                text = rtf_to_text(rtf_content)
+                return text if text.strip() else "[EMPTY RTF FILE]"
+            except ImportError:
+                return "[RTF LIBRARY NOT AVAILABLE]"
+            except Exception as e:
+                return f"[RTF EXTRACTION FAILED: {str(e)}]"
+        
+        # Unsupported file types (images, etc.)
+        else:
+            return f"[UNSUPPORTED FILE TYPE: {ext.upper()}]"
+            
+    except Exception as e:
+        return f"[EXTRACTION ERROR: {str(e)}]"
 
 def extract_text_from_file(file_path: str) -> str:
     """
@@ -999,10 +1070,52 @@ def download_all_attachments(comments_data, output_dir: str):
                     attachments[i]["localPath"] = downloaded_path
                     downloaded += 1
                     
-                    # Extract text from any supported file type
+                    # Smart extraction: try basic methods first, then Gemini if needed
                     try:
-                        # Use the generic extraction function for all file types
-                        attachment_text = extract_text_from_file(downloaded_path)
+                        # Step 1: Try basic extraction first (free and fast)
+                        print(f"    📄 Trying basic extraction for {safe_title}...")
+                        basic_text = extract_text_from_file_basic_no_tesseract(downloaded_path)
+                        
+                        # Check if basic extraction was successful (>100 chars of real content)
+                        clean_text = basic_text.strip() if basic_text else ""
+                        is_good_extraction = (
+                            len(clean_text) > 100 and 
+                            not clean_text.startswith('[') and
+                            not clean_text.upper().startswith('ERROR')
+                        )
+                        
+                        if is_good_extraction:
+                            # Basic extraction worked well - use it!
+                            attachment_text = basic_text
+                            print(f"    ✅ Basic extraction successful: {len(attachment_text)} characters")
+                        else:
+                            # Basic extraction failed or gave minimal text - try Gemini
+                            print(f"    🤖 Basic extraction insufficient ({len(clean_text)} chars), trying Gemini...")
+                            try:
+                                from backend.utils.retry_gemini_attachments import extract_text_with_gemini
+                                gemini_text = extract_text_with_gemini(downloaded_path, max_retries=1, timeout=30)
+                                
+                                if gemini_text and not gemini_text.startswith('[') and len(gemini_text.strip()) > len(clean_text):
+                                    # Gemini gave better results
+                                    attachment_text = gemini_text
+                                    print(f"    ✅ Gemini extraction successful: {len(attachment_text)} characters")
+                                else:
+                                    # Gemini failed or wasn't better - use basic result
+                                    attachment_text = basic_text
+                                    print(f"    ⚠️  Using basic extraction result: {len(attachment_text)} characters")
+                                    
+                            except Exception as gemini_error:
+                                print(f"    ❌ Gemini extraction failed: {gemini_error}")
+                                attachment_text = basic_text
+                                print(f"    📝 Using basic extraction fallback: {len(attachment_text)} characters")
+                        
+                        # Save extracted text immediately if we got good results
+                        if attachment_text and len(attachment_text.strip()) > 50:
+                            extracted_path = downloaded_path + '.extracted.txt'
+                            with open(extracted_path, 'w', encoding='utf-8') as f:
+                                f.write(attachment_text)
+                            print(f"    💾 Saved extracted text to {os.path.basename(extracted_path)}")
+                            
                         attachment_texts.append({
                             "id": f"{comment_id}_attachment_{i+1}",
                             "title": attachment_title or safe_title,
@@ -1010,8 +1123,9 @@ def download_all_attachments(comments_data, output_dir: str):
                             "file_path": downloaded_path,
                             "mime_type": get_mime_type(url, filename)
                         })
+                        
                     except Exception as e:
-                        print(f"Error extracting text from {filename}: {e}")
+                        print(f"    💥 All extraction methods failed for {filename}: {e}")
                         attachment_texts.append({
                             "id": f"{comment_id}_attachment_{i+1}",
                             "title": attachment_title or safe_title,
@@ -1190,8 +1304,14 @@ def read_comments_from_csv(csv_file_path: str, output_dir: str, limit: Optional[
     
     print(f"Reading comments from CSV file: {csv_file_path}")
     
-    # Read the CSV file normally to get the headers
-    df = pd.read_csv(csv_file_path)
+    # Read the CSV file with error handling for malformed data
+    try:
+        df = pd.read_csv(csv_file_path)
+    except pd.errors.ParserError as e:
+        print(f"Warning: CSV parsing error: {e}")
+        print("Attempting to read with quoting=csv.QUOTE_NONE...")
+        import csv
+        df = pd.read_csv(csv_file_path, quoting=csv.QUOTE_NONE, on_bad_lines='skip')
     
     # Skip the second row (first data row) which is not a real comment
     df = df.iloc[1:].reset_index(drop=True)

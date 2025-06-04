@@ -22,7 +22,8 @@ TRUNCATE=""
 LIMIT=""
 CSV_FILE="comments.csv"
 RAW_DATA_FILE="data/raw_data.json"
-LOOKUP_TABLE_FILE="data/lookup_table_corrected.json"
+LOOKUP_TABLE_FILE="data/lookup_table.json"
+DETACH=false
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -37,6 +38,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-clustering)
             SKIP_CLUSTERING=true
+            shift
+            ;;
+        --detach)
+            DETACH=true
             shift
             ;;
         --truncate)
@@ -66,11 +71,12 @@ while [[ $# -gt 0 ]]; do
             echo "  --resume              Use resume pipeline (requires existing data files)"
             echo "  --skip-analysis       Skip LLM analysis"
             echo "  --skip-clustering     Skip clustering analysis"
+            echo "  --detach              Run in background without waiting for completion"
             echo "  --truncate N          Truncate text to N characters"
             echo "  --limit N             Limit to first N comments (for testing)"
             echo "  --csv FILE            CSV file path (default: comments.csv)"
             echo "  --raw-data FILE       Raw data file for resume mode (default: data/raw_data.json)"
-            echo "  --lookup-table FILE   Lookup table file for resume mode (default: data/lookup_table_corrected.json)"
+            echo "  --lookup-table FILE   Lookup table file for resume mode (default: data/lookup_table.json)"
             echo "  --help                Show this help message"
             echo ""
             echo "Examples:"
@@ -82,6 +88,9 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "  # Resume with existing data:"
             echo "  $0 --resume"
+            echo ""
+            echo "  # Run overnight without monitoring:"
+            echo "  $0 --detach"
             echo ""
             exit 0
             ;;
@@ -180,9 +189,9 @@ if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
     tmux kill-session -t "$SESSION_NAME"
 fi
 
-# Create tmux session
+# Create tmux session with larger history limit
 echo "⚙️  Starting tmux session: $SESSION_NAME"
-tmux new-session -d -s "$SESSION_NAME"
+tmux new-session -d -s "$SESSION_NAME" \; set-option -g history-limit 50000
 
 # Send commands to tmux session
 tmux send-keys -t "$SESSION_NAME" "cd $PROJECT_ROOT" C-m
@@ -405,7 +414,15 @@ show_results() {
     echo "📄 Full log: $OUTPUT_DIR/pipeline.log"
 }
 
-# Wait for completion and show results
-trap 'echo -e "\n⏸️  Stopped monitoring. Pipeline continues in background.\n📊 Check progress: tail -f $OUTPUT_DIR/pipeline.log"; exit 0' INT
-wait_for_completion
-show_results
+# Wait for completion and show results (unless detached)
+if [ "$DETACH" = true ]; then
+    echo "🚀 Pipeline running in detached mode"
+    echo "📊 Check progress:  tail -f $OUTPUT_DIR/pipeline.log"
+    echo "📁 Results will be saved to: $OUTPUT_DIR"
+    echo ""
+    echo "💡 Tip: Run 'tmux attach -t $SESSION_NAME' to see live output"
+else
+    trap 'echo -e "\n⏸️  Stopped monitoring. Pipeline continues in background.\n📊 Check progress: tail -f $OUTPUT_DIR/pipeline.log"; exit 0' INT
+    wait_for_completion
+    show_results
+fi

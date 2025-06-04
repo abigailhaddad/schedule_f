@@ -1,0 +1,13 @@
+QUOTE VERIFICATION REPORT
+================================================================================
+
+SUMMARY
+----------------------------------------
+Total lookup entries: 2
+Total comments represented: 2
+Lookup entries with quotes: 2
+Quotes found (exact): 2 (100.0%)
+Quotes found (similar): 0 (0.0%)
+Quotes NOT found: 0 (0.0%)
+Overall verification rate: 100.0%
+
