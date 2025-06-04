@@ -3,6 +3,15 @@ import { pgTable, text, timestamp, varchar, boolean, pgEnum, integer, doublePrec
 
 export const stanceEnum = pgEnum('stance', ['For', 'Against', 'Neutral/Unclear']);
 
+// Cluster descriptions table for storing human-readable cluster information
+export const clusterDescriptions = pgTable('cluster_descriptions', {
+  clusterId: text('cluster_id').primaryKey(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull()
+});
+
 // Lookup table for grouping duplicate comments
 export const lookupTable = pgTable('lookup_table', {
   lookupId: varchar('lookup_id').primaryKey(),
@@ -62,3 +71,5 @@ export type Comment = typeof comments.$inferSelect;
 export type NewComment = typeof comments.$inferInsert;
 export type LookupTableEntry = typeof lookupTable.$inferSelect;
 export type NewLookupTableEntry = typeof lookupTable.$inferInsert;
+export type ClusterDescription = typeof clusterDescriptions.$inferSelect;
+export type NewClusterDescription = typeof clusterDescriptions.$inferInsert;

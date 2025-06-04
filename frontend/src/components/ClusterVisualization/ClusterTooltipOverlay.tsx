@@ -93,9 +93,14 @@ export default function ClusterTooltipOverlay({
       </h4>
       
       <div className="space-y-2 text-sm">
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           <span className="text-gray-600">Cluster:</span>
-          <span className="font-medium">{point.clusterId}</span>
+          <div className="flex-1">
+            <span className="font-medium">{point.clusterId}</span>
+            {point.clusterTitle && (
+              <p className="text-xs text-gray-500 italic mt-1">{point.clusterTitle}</p>
+            )}
+          </div>
         </div>
         
         {point.stance && (

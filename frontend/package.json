@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "npm run db:ensure:local && DB_ENV=local next dev",
     "dev:no-docker": "DB_ENV=preprod next dev",
+    "dev:preprod": "DB_ENV=preprod next dev",
     "dev:dangerously_use_prod_db": "DB_ENV=prod next dev",
     "build": "next build",
     "start": "next start",
@@ -25,6 +26,9 @@
     "db:seed:local": "npm run db:ensure:local && DB_ENV=local tsx src/lib/db/seed.ts",
     "db:seed:preprod": "DB_ENV=preprod tsx src/lib/db/seed.ts",
     "db:seed:prod": "DB_ENV=prod tsx src/lib/db/seed.ts",
+    "db:load-clusters:local": "npm run db:ensure:local && DB_ENV=local tsx scripts/load-cluster-descriptions.ts",
+    "db:load-clusters:preprod": "DB_ENV=preprod tsx scripts/load-cluster-descriptions.ts",
+    "db:load-clusters:prod": "DB_ENV=prod tsx scripts/load-cluster-descriptions.ts",
     "db:migrate:local": "npm run db:ensure:local && DB_ENV=local drizzle-kit migrate",
     "db:migrate:preprod": "DB_ENV=preprod drizzle-kit migrate",
     "db:migrate:prod": "DB_ENV=prod drizzle-kit migrate",

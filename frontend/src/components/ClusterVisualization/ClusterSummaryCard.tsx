@@ -12,6 +12,8 @@ interface ClusterSummaryCardProps {
   againstPercentage: number;
   neutralPercentage?: number;
   dominantStance: string;
+  clusterTitle?: string;
+  clusterDescription?: string;
 }
 
 export default function ClusterSummaryCard({
@@ -21,7 +23,9 @@ export default function ClusterSummaryCard({
   forPercentage,
   againstPercentage,
   neutralPercentage,
-  dominantStance
+  dominantStance,
+  clusterTitle,
+  clusterDescription
 }: ClusterSummaryCardProps) {
   const router = useRouter();
 
@@ -35,11 +39,26 @@ export default function ClusterSummaryCard({
       className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
     >
       <div className="flex justify-between items-start mb-2">
-        <div>
-          <h4 className="font-semibold text-sm text-gray-900">Cluster {clusterId}</h4>
+        <div className="flex-1 pr-2">
+          <h4 className="font-semibold text-sm text-gray-900 flex items-center gap-1">
+            Cluster {clusterId}
+            {clusterDescription && (
+              <div className="group relative">
+                <svg className="w-4 h-4 text-gray-400 hover:text-gray-600 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="absolute z-10 left-0 top-full mt-1 p-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none w-64">
+                  {clusterDescription}
+                </div>
+              </div>
+            )}
+          </h4>
           <p className="text-xs text-gray-500">{label}</p>
+          {clusterTitle && (
+            <p className="text-xs text-gray-600 italic mt-1">{clusterTitle}</p>
+          )}
         </div>
-        <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+        <span className="text-xs bg-gray-100 px-2 py-1 rounded whitespace-nowrap">
           {total} comments
         </span>
       </div>

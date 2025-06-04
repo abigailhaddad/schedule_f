@@ -32,9 +32,26 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { cluster } = await params;
+  
+  // Get cluster data to find the descriptive title
+  const clusterResponse = await getClusterData();
+  let clusterTitle = `Cluster ${cluster}`;
+  let clusterDescription = `Visualization of comment cluster ${cluster} using PCA analysis`;
+  
+  if (clusterResponse.success && clusterResponse.data) {
+    const clusterData = clusterResponse.data.clusters.find(([id]) => id === cluster);
+    if (clusterData && clusterData[1].length > 0) {
+      const firstPoint = clusterData[1][0];
+      if (firstPoint.clusterTitle) {
+        clusterTitle = firstPoint.clusterTitle;
+        clusterDescription = firstPoint.clusterDescription || `Analysis of cluster: ${firstPoint.clusterTitle}`;
+      }
+    }
+  }
+  
   return {
-    title: `Cluster ${cluster} - Schedule F Analysis`,
-    description: `Visualization of comment cluster ${cluster} using PCA analysis`,
+    title: `${clusterTitle} - Schedule F Analysis`,
+    description: clusterDescription,
   };
 }
 

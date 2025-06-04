@@ -2,7 +2,7 @@
 'use server';
 
 import { db, connectDb } from '@/lib/db';
-import { comments } from '@/lib/db/schema';
+import { comments, clusterDescriptions } from '@/lib/db/schema';
 import { sql } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 import { cacheConfig } from '../cache-config';
@@ -16,6 +16,8 @@ export interface ClusterPoint {
   pcaY: number;
   keyQuote: string | null;
   themes: string | null;
+  clusterTitle?: string | null;
+  clusterDescription?: string | null;
 }
 
 export interface ClusterData {
@@ -45,11 +47,15 @@ interface RawClusterPointRow {
   pcaY: number | null;
   keyQuote: string | null;
   themes: string | null;
+  clusterTitle: string | null;
+  clusterDescription: string | null;
   // Allow for potential snake_case versions from direct SQL execution
   cluster_id?: string | null;
   pca_x?: number | null;
   pca_y?: number | null;
   key_quote?: string | null;
+  cluster_title?: string | null;
+  cluster_description?: string | null;
   // Allow for potential all-lowercase versions
   clusterid?: string | null;
   pcax?: number | null;
@@ -65,7 +71,7 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
         throw new Error("Failed to connect to database");
       }
 
-      // Fetch all cluster data without sampling
+      // Fetch all cluster data with descriptions via LEFT JOIN
       const result = await db
         .select({
           id: comments.id,
@@ -76,8 +82,11 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
           pcaY: comments.pcaY,
           keyQuote: comments.keyQuote,
           themes: comments.themes,
+          clusterTitle: clusterDescriptions.title,
+          clusterDescription: clusterDescriptions.description,
         })
         .from(comments)
+        .leftJoin(clusterDescriptions, sql`${comments.clusterId} = ${clusterDescriptions.clusterId}`)
         .where(sql`${comments.clusterId} IS NOT NULL AND ${comments.pcaX} IS NOT NULL AND ${comments.pcaY} IS NOT NULL`)
         .execute();
 
@@ -95,6 +104,8 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
           pcaY: (row.pca_y || row.pcaY || row.pcay)!,
           keyQuote: (row.key_quote || row.keyQuote || row.keyquote) || null,
           themes: row.themes,
+          clusterTitle: (row.cluster_title || row.clusterTitle) || null,
+          clusterDescription: (row.cluster_description || row.clusterDescription) || null,
         };
 
         if (!clustersMap.has(point.clusterId)) {

@@ -2,7 +2,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
-import { NewComment, NewLookupTableEntry, stanceEnum } from './schema';
+import { NewComment, NewLookupTableEntry, NewClusterDescription, clusterDescriptions, stanceEnum } from './schema';
 import fs from 'fs';
 import path from 'path';
 import { sql } from 'drizzle-orm';
@@ -85,21 +85,25 @@ const main = async () => {
 
   // Determine data path based on environment
   //const devDataPath = path.resolve(__dirname, '../../__tests__/test-data-5-25.json');
-  const devDataPath = path.resolve(__dirname, '../../../../data/data_large.json');
-  const prodDataPath = path.resolve(__dirname, '../../../../data/data_large.json');
+  const devDataPath = path.resolve(__dirname, '../../../../data/data.json');
+  const prodDataPath = path.resolve(__dirname, '../../../../data/data.json');
   const lookupTablePath = path.resolve(__dirname, '../../../../data/lookup_table.json');
+  const clusterDescriptionsPath = path.resolve(__dirname, '../../../../data/cluster/cluster_descriptions.json');
   
   const dataPath = dbConfig.isDev ? devDataPath : prodDataPath;
   
   console.log(`Reading comments data from: ${dataPath}`);
   console.log(`Reading lookup table data from: ${lookupTablePath}`);
+  console.log(`Reading cluster descriptions from: ${clusterDescriptionsPath}`);
 
   let rawData;
   let lookupData;
+  let clusterDescriptionsData;
   
   try {
     rawData = fs.readFileSync(dataPath, 'utf-8');
     lookupData = fs.readFileSync(lookupTablePath, 'utf-8');
+    clusterDescriptionsData = fs.readFileSync(clusterDescriptionsPath, 'utf-8');
   } catch (error) {
     console.error('Error reading data files:', error);
     process.exit(1);
@@ -107,11 +111,39 @@ const main = async () => {
   
   const jsonData: CommentDataItem[] = JSON.parse(rawData);
   const lookupTableData: LookupTableItem[] = JSON.parse(lookupData);
+  const clusterDescriptions: Record<string, [string, string]> = JSON.parse(clusterDescriptionsData);
 
   console.log(`Found ${jsonData.length} comments to process.`);
   console.log(`Found ${lookupTableData.length} lookup table entries to process.`);
+  console.log(`Found ${Object.keys(clusterDescriptions).length} cluster descriptions to process.`);
 
-  // Step 1: Insert lookup table data first
+  // Step 1: Insert cluster descriptions first
+  console.log('\n🏷️  Inserting cluster descriptions...');
+  const clusterDescriptionsToInsert: NewClusterDescription[] = Object.entries(clusterDescriptions).map(
+    ([clusterId, [title, description]]) => ({
+      clusterId,
+      title,
+      description,
+    })
+  );
+
+  if (clusterDescriptionsToInsert.length > 0) {
+    try {
+      await db.insert(schema.clusterDescriptions).values(clusterDescriptionsToInsert).onConflictDoUpdate({
+        target: schema.clusterDescriptions.clusterId,
+        set: {
+          title: sql`excluded.title`,
+          description: sql`excluded.description`,
+          updatedAt: sql`now()`
+        }
+      });
+      console.log(`Upserted ${clusterDescriptionsToInsert.length} cluster descriptions.`);
+    } catch (error) {
+      console.error('Error upserting cluster descriptions:', error);
+    }
+  }
+
+  // Step 2: Insert lookup table data
   console.log('\n📋 Inserting lookup table entries...');
   const lookupEntriesToInsert: NewLookupTableEntry[] = [];
 
@@ -183,7 +215,7 @@ const main = async () => {
     lookupMap.set(item.lookup_id, item.comment_ids);
   });
 
-  // Step 3: Process comments and calculate comment_count
+  // Step 4: Process comments and calculate comment_count
   console.log('\n📝 Processing comments...');
   const commentsToInsert: NewComment[] = [];
 
@@ -238,7 +270,7 @@ const main = async () => {
     commentsToInsert.push(newComment);
   }
 
-  // Step 4: Insert comments in chunks
+  // Step 5: Insert comments in chunks
   if (commentsToInsert.length > 0) {
     console.log(`Inserting ${commentsToInsert.length} comments into the database...`);
     const chunkSize = 100;
@@ -285,7 +317,7 @@ const main = async () => {
     console.log('No comments found to seed.');
   }
 
-  // Step 5: Verify insertion by counting records
+  // Step 6: Verify insertion by counting records
   try {
     const lookupResult = await db.select({ count: sql`count(*)` }).from(schema.lookupTable);
     const lookupCount = lookupResult[0]?.count || 0;
@@ -294,6 +326,10 @@ const main = async () => {
     const commentResult = await db.select({ count: sql`count(*)` }).from(schema.comments);
     const commentCount = commentResult[0]?.count || 0;
     console.log(`Verification: Found ${commentCount} records in the comments table.`);
+
+    const clusterDescResult = await db.select({ count: sql`count(*)` }).from(schema.clusterDescriptions);
+    const clusterDescCount = clusterDescResult[0]?.count || 0;
+    console.log(`Verification: Found ${clusterDescCount} records in the cluster_descriptions table.`);
   } catch (error) {
     console.error('Error verifying counts:', error);
   }
