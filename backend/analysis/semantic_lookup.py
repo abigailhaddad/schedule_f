@@ -14,7 +14,7 @@ Requirements:
 - seaborn
 
 Usage:
-python semantic_lookup.py [--input analyzed_lookup_table.json] [--n_clusters 15]
+python semantic_lookup.py [--input lookup_table.json] [--n_clusters 15]
 """
 
 import os
@@ -44,7 +44,7 @@ def strip_html_tags(text):
     return re.sub(clean, '', text)
 
 def find_most_recent_lookup_table():
-    """Find the most recent analyzed_lookup_table.json file"""
+    """Find the most recent lookup_table.json file"""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(os.path.dirname(script_dir))
     
@@ -52,6 +52,7 @@ def find_most_recent_lookup_table():
     search_paths = [
         project_root,
         os.path.join(project_root, "results"),
+        os.path.join(project_root, "data"),  # Also check data directory
     ]
     
     # Also check results subdirectories
@@ -60,12 +61,12 @@ def find_most_recent_lookup_table():
         result_dirs = glob.glob(os.path.join(results_base, "results_*"))
         search_paths.extend(result_dirs)
     
-    print(f"🔍 Looking for analyzed_lookup_table.json files...")
+    print(f"🔍 Looking for lookup_table.json files...")
     
     candidates = []
     for search_path in search_paths:
         if os.path.exists(search_path):
-            lookup_file = os.path.join(search_path, "analyzed_lookup_table.json")
+            lookup_file = os.path.join(search_path, "lookup_table.json")
             if os.path.exists(lookup_file):
                 candidates.append(lookup_file)
                 print(f"📁 Found: {lookup_file}")
@@ -525,7 +526,7 @@ def update_lookup_table_with_clusters(input_file: str, processed_entries: List[D
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(description='Semantic clustering on deduplicated lookup table')
-    parser.add_argument('--input', type=str, help='Path to analyzed_lookup_table.json file')
+    parser.add_argument('--input', type=str, help='Path to lookup_table.json file')
     parser.add_argument('--n_clusters', type=int, default=None, help='Number of clusters (default: auto-detect)')
     parser.add_argument('--auto_clusters', action='store_true', help='Automatically find optimal number of clusters')
     parser.add_argument('--subclusters', action='store_true', help='Extract natural subclusters from dendrogram')
@@ -542,7 +543,7 @@ def main():
     if input_file is None:
         input_file = find_most_recent_lookup_table()
         if input_file is None:
-            print("❌ Could not find analyzed_lookup_table.json file. Please specify with --input")
+            print("❌ Could not find lookup_table.json file. Please specify with --input")
             return
     
     # Set output directory

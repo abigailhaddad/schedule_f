@@ -19,12 +19,15 @@ from typing import List, Optional
 # Load environment variables
 load_dotenv()
 
+# Import config constants
+from ..config import config
+from .exceptions import TimeoutError as PipelineTimeoutError
+
 # Setup logging
 logger = logging.getLogger(__name__)
 
-class TimeoutException(Exception):
-    """Custom exception for timeout handling"""
-    pass
+# For backward compatibility
+TimeoutException = PipelineTimeoutError
 
 class Stance(str, Enum):
     FOR = "For"
@@ -55,9 +58,9 @@ class CommentAnalysisResult(BaseModel):
 
 class CommentAnalyzer:
     """LiteLLM-based analyzer for public comments using Pydantic models for structured output."""
-    def __init__(self, model="gpt-4o-mini", timeout_seconds=30):
-        self.model = model
-        self.timeout_seconds = timeout_seconds
+    def __init__(self, model=None, timeout_seconds=None):
+        self.model = model or config.llm.model
+        self.timeout_seconds = timeout_seconds or config.llm.timeout
         
         # Ensure API key is available
         if "OPENAI_API_KEY" not in os.environ:

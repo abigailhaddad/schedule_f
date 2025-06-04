@@ -1,8 +1,4 @@
 # Environment
-
-!data/data.json
-data/attachments
-data/temp*/
 .env
 myenv/
 venv/
@@ -13,23 +9,19 @@ __pycache__/
 
 # Data and results
 results/
-analyzed_comments/
-comments.json
-*.json
-!data/**
-data/data_large.json
-data/data.json
-data/attachments/
-data/temp*/
+attachments/
+*.json                    # First, ignore all JSON files
+!data/data.json          # Then, make exceptions
+!data/lookup_table.json
+!data/cluster/cluster_descriptions.json
+!cluster/cluster_descriptions.json
 !frontend/package.json
 !frontend/package-lock.json
 !frontend/tsconfig.json
+!json-schemas/**
 
 # Log files (should be in timestamped results folders)
 *.log
-pipeline.log
-resume_pipeline.log
-
 
 # OS specific
 .DS_Store

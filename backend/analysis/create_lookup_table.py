@@ -15,18 +15,14 @@ import os
 import argparse
 import logging
 from typing import List, Dict, Any, Optional
-from datetime import datetime
 import re
 
+# Import config constants
+from ..config import config
+from ..utils import PipelineLogger
+
 # Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+logger = PipelineLogger.get_logger(__name__)
 
 def extract_and_combine_text(comment_data: Dict[str, Any], truncate_chars: Optional[int] = None) -> Dict[str, str]:
     """
@@ -253,10 +249,10 @@ def print_stats(lookup_table: List[Dict[str, Any]], original_count: int):
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(description='Create deduplicated lookup table from raw comment data')
-    parser.add_argument('--input', type=str, default='raw_data.json',
-                       help='Input raw data file (default: raw_data.json)')
-    parser.add_argument('--output', type=str, default='lookup_table.json',
-                       help='Output lookup table file (default: lookup_table.json)')
+    parser.add_argument('--input', type=str, default=config.files.raw_data_filename,
+                       help=f'Input raw data file (default: {config.files.raw_data_filename})')
+    parser.add_argument('--output', type=str, default=config.files.lookup_table_filename,
+                       help=f'Output lookup table file (default: {config.files.lookup_table_filename})')
     parser.add_argument('--truncate', type=int, default=None,
                        help='Truncate text to this many characters (default: no truncation)')
     

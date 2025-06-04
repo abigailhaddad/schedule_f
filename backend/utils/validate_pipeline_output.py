@@ -12,16 +12,19 @@ from typing import Dict, List, Tuple, Set
 logger = logging.getLogger(__name__)
 
 def validate_pipeline_output(csv_file: str, raw_data_file: str, data_file: str, 
-                           lookup_table_file: str, exclude_ids: Set[str] = None) -> Dict[str, any]:
+                           lookup_table_file: str, exclude_ids: Set[str] = None, 
+                           skip_count_validation: bool = False, skip_analysis_validation: bool = False) -> Dict[str, any]:
     """
     Validate pipeline output for consistency and completeness.
     
     Args:
         csv_file: Path to comments CSV file
         raw_data_file: Path to raw_data.json
-        data_file: Path to data.json (merged file)
+        data_file: Path to data.json (merged file, can be None)
         lookup_table_file: Path to lookup table JSON
         exclude_ids: Set of comment IDs to exclude from validation (e.g., {'OPM-2025-0004-0001'})
+        skip_count_validation: Skip validation of CSV vs raw_data count (for tests with --limit)
+        skip_analysis_validation: Skip validation requiring LLM analysis (for tests with --skip_analysis)
     
     Returns:
         Dictionary with validation results and any issues found
@@ -70,13 +73,20 @@ def validate_pipeline_output(csv_file: str, raw_data_file: str, data_file: str,
         raw_ids = {item['id'] for item in raw_data if item.get('id') not in exclude_ids}
         results['stats']['raw_data_count'] = raw_count
         
-        # 3. Load and validate data.json
-        logger.info("Loading data.json...")
-        with open(data_file, 'r') as f:
-            data = json.load(f)
-        data_count = len(data)
-        data_ids = {item['id'] for item in data if item.get('id') not in exclude_ids}
-        results['stats']['data_count'] = data_count
+        # 3. Load and validate data.json (if provided)
+        if data_file:
+            logger.info("Loading data.json...")
+            with open(data_file, 'r') as f:
+                data = json.load(f)
+            data_count = len(data)
+            data_ids = {item['id'] for item in data if item.get('id') not in exclude_ids}
+            results['stats']['data_count'] = data_count
+        else:
+            logger.info("Skipping data.json validation (not provided)")
+            data = []
+            data_count = 0
+            data_ids = set()
+            results['stats']['data_count'] = 'N/A'
         
         # 4. Load lookup table
         logger.info("Loading lookup table...")
@@ -96,8 +106,8 @@ def validate_pipeline_output(csv_file: str, raw_data_file: str, data_file: str,
         
         # VALIDATION CHECKS
         
-        # Check 1: CSV count matches raw_data and data counts
-        if csv_count != raw_count:
+        # Check 1: CSV count matches raw_data and data counts (unless skipped)
+        if not skip_count_validation and csv_count != raw_count:
             results['errors'].append(
                 f"CSV has {csv_count} comments but raw_data.json has {raw_count} "
                 f"(difference: {abs(csv_count - raw_count)})"
@@ -112,7 +122,7 @@ def validate_pipeline_output(csv_file: str, raw_data_file: str, data_file: str,
                     + (" ..." if len(missing_from_raw) > 10 else "")
                 )
         
-        if raw_count != data_count:
+        if data_file and raw_count != data_count:
             results['errors'].append(
                 f"raw_data.json has {raw_count} comments but data.json has {data_count}"
             )
@@ -128,37 +138,38 @@ def validate_pipeline_output(csv_file: str, raw_data_file: str, data_file: str,
             )
             results['valid'] = False
         
-        # Check 3: All lookup entries have LLM analysis
+        # Check 3: All lookup entries have LLM analysis (unless skipped)
         unanalyzed_entries = []
         partially_analyzed = []
         
-        for entry in lookup_table:
-            lookup_id = entry.get('lookup_id', 'unknown')
+        if not skip_analysis_validation:
+            for entry in lookup_table:
+                lookup_id = entry.get('lookup_id', 'unknown')
+                
+                # Check if entry has all required analysis fields
+                if entry.get('stance') is None:
+                    unanalyzed_entries.append(lookup_id)
+                elif not all([
+                    entry.get('key_quote') is not None,
+                    entry.get('rationale') is not None,
+                    entry.get('themes') is not None
+                ]):
+                    partially_analyzed.append(lookup_id)
             
-            # Check if entry has all required analysis fields
-            if entry.get('stance') is None:
-                unanalyzed_entries.append(lookup_id)
-            elif not all([
-                entry.get('key_quote') is not None,
-                entry.get('rationale') is not None,
-                entry.get('themes') is not None
-            ]):
-                partially_analyzed.append(lookup_id)
-        
-        if unanalyzed_entries:
-            results['errors'].append(
-                f"{len(unanalyzed_entries)} lookup entries have no analysis: "
-                f"{unanalyzed_entries[:10]}"
-                + (" ..." if len(unanalyzed_entries) > 10 else "")
-            )
-            results['valid'] = False
-        
-        if partially_analyzed:
-            results['warnings'].append(
-                f"{len(partially_analyzed)} lookup entries have incomplete analysis: "
-                f"{partially_analyzed[:10]}"
-                + (" ..." if len(partially_analyzed) > 10 else "")
-            )
+            if unanalyzed_entries:
+                results['errors'].append(
+                    f"{len(unanalyzed_entries)} lookup entries have no analysis: "
+                    f"{unanalyzed_entries[:10]}"
+                    + (" ..." if len(unanalyzed_entries) > 10 else "")
+                )
+                results['valid'] = False
+            
+            if partially_analyzed:
+                results['warnings'].append(
+                    f"{len(partially_analyzed)} lookup entries have incomplete analysis: "
+                    f"{partially_analyzed[:10]}"
+                    + (" ..." if len(partially_analyzed) > 10 else "")
+                )
         
         # Additional stats
         results['stats']['total_analyzed'] = lookup_count - len(unanalyzed_entries)
@@ -167,15 +178,16 @@ def validate_pipeline_output(csv_file: str, raw_data_file: str, data_file: str,
             if lookup_count > 0 else 0
         )
         
-        # Check data.json has lookup fields
-        data_without_lookup = [
-            item['id'] for item in data 
-            if not item.get('lookup_id') or item.get('stance') is None
-        ]
-        if data_without_lookup:
-            results['warnings'].append(
-                f"{len(data_without_lookup)} entries in data.json missing lookup data"
-            )
+        # Check data.json has lookup fields (if data.json exists)
+        if data_file and data:
+            data_without_lookup = [
+                item['id'] for item in data 
+                if not item.get('lookup_id') or item.get('stance') is None
+            ]
+            if data_without_lookup:
+                results['warnings'].append(
+                    f"{len(data_without_lookup)} entries in data.json missing lookup data"
+                )
         
     except Exception as e:
         results['valid'] = False
@@ -194,12 +206,17 @@ def print_validation_summary(results: Dict[str, any]):
     # Stats
     stats = results.get('stats', {})
     print(f"\n📈 Statistics:")
-    print(f"   CSV comments: {stats.get('csv_count', 'N/A'):,}")
-    print(f"   Raw data comments: {stats.get('raw_data_count', 'N/A'):,}")
-    print(f"   Data.json comments: {stats.get('data_count', 'N/A'):,}")
-    print(f"   Lookup table entries: {stats.get('lookup_entries', 'N/A'):,}")
-    print(f"   Comments in lookup: {stats.get('comments_in_lookup', 'N/A'):,}")
-    print(f"   Analyzed entries: {stats.get('total_analyzed', 'N/A'):,} "
+    
+    # Helper function to format numbers with commas or return N/A
+    def format_count(value):
+        return f"{value:,}" if isinstance(value, int) else str(value)
+    
+    print(f"   CSV comments: {format_count(stats.get('csv_count', 'N/A'))}")
+    print(f"   Raw data comments: {format_count(stats.get('raw_data_count', 'N/A'))}")
+    print(f"   Data.json comments: {format_count(stats.get('data_count', 'N/A'))}")
+    print(f"   Lookup table entries: {format_count(stats.get('lookup_entries', 'N/A'))}")
+    print(f"   Comments in lookup: {format_count(stats.get('comments_in_lookup', 'N/A'))}")
+    print(f"   Analyzed entries: {format_count(stats.get('total_analyzed', 'N/A'))} "
           f"({stats.get('analysis_rate', 0):.1f}%)")
     
     # Validation result
