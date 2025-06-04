@@ -84,6 +84,11 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
       const neutralCount = stanceCounts['Neutral/Unclear'] || 0;
       const total = points.length;
 
+      // Get cluster title and description from first point
+      const firstPoint = points[0];
+      const clusterTitle = firstPoint?.clusterTitle || null;
+      const clusterDescription = firstPoint?.clusterDescription || null;
+
       return {
         clusterId,
         total,
@@ -95,7 +100,9 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
         neutralPercentage: total > 0 ? (neutralCount / total) * 100 : 0,
         dominantStance: forCount > againstCount && forCount > neutralCount ? 'For' :
                         againstCount > forCount && againstCount > neutralCount ? 'Against' : 
-                        'Neutral/Unclear'
+                        'Neutral/Unclear',
+        clusterTitle,
+        clusterDescription
       };
     });
 
@@ -139,7 +146,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
         </Card.Header>
         <Card.Body>
           <ClusterControls
-            clusters={clusterData.clusters.map(([clusterId]) => clusterId)}
+            clusters={clusterData.clusters}
             selectedCluster={selectedClusterId}
           />
         </Card.Body>

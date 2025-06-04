@@ -24,16 +24,15 @@ const getDbEnvironment = (): DbEnvironment => {
 // Get the appropriate database URL
 const getDatabaseUrl = (): string => {
   const dbEnv = getDbEnvironment();
-
+  
   // Map environment to URL
   const urlMap = {
     local: process.env.DATABASE_URL_LOCAL,
     preprod: process.env.DATABASE_URL_PREPROD,
     prod: process.env.DATABASE_URL_PROD
   };
-
+  
   const dbUrl = urlMap[dbEnv];
-
   if (!dbUrl) {
     throw new Error(`DATABASE_URL_${dbEnv.toUpperCase()} is not defined in environment variables`);
   }

@@ -2,9 +2,10 @@
 
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { ClusterPoint } from '@/lib/actions/clusters';
 
 interface ClusterControlsProps {
-  clusters: string[];
+  clusters: Array<[string, ClusterPoint[]]>;
   selectedCluster: string | null;
 }
 
@@ -13,6 +14,21 @@ export default function ClusterControls({
   selectedCluster,
 }: ClusterControlsProps) {
   const router = useRouter();
+
+  // Extract cluster IDs and get descriptions
+  const clusterData = useMemo(() => {
+    return clusters.map(([clusterId, points]) => {
+      const firstPoint = points[0];
+      return {
+        id: clusterId,
+        title: firstPoint?.clusterTitle || null,
+        description: firstPoint?.clusterDescription || null,
+        count: points.length
+      };
+    });
+  }, [clusters]);
+
+  const clusterIds = useMemo(() => clusters.map(([clusterId]) => clusterId), [clusters]);
 
   // Generate cluster colors (same logic as in ClusterChart)
   const clusterColors = useMemo(() => {
@@ -28,7 +44,7 @@ export default function ClusterControls({
     let nextParentIndex = 0;
     
     // First, identify parent clusters
-    clusters.forEach(clusterId => {
+    clusterIds.forEach(clusterId => {
       // Extract the numeric part at the beginning (parent cluster)
       const match = clusterId.match(/^(\d+)/);
       const parentCluster = match ? match[1] : clusterId;
@@ -38,7 +54,7 @@ export default function ClusterControls({
     });
     
     // Then, assign colors
-    clusters.forEach(clusterId => {
+    clusterIds.forEach(clusterId => {
       const match = clusterId.match(/^(\d+)(.*)/);
       const parentCluster = match ? match[1] : clusterId;
       const subPart = match ? match[2] : '';
@@ -72,12 +88,12 @@ export default function ClusterControls({
     });
     
     return colors;
-  }, [clusters]);
+  }, [clusterIds]);
 
   // Group clusters by parent for better organization
   const groupedClusters = useMemo(() => {
     const groups = new Map<string, string[]>();
-    clusters.forEach(clusterId => {
+    clusterIds.forEach(clusterId => {
       // Extract the numeric part at the beginning (parent cluster)
       const match = clusterId.match(/^(\d+)/);
       const parent = match ? match[1] : clusterId;
@@ -103,7 +119,7 @@ export default function ClusterControls({
         // Then alphabetically
         return aSuffix.localeCompare(bSuffix);
       })] as const);
-  }, [clusters]);
+  }, [clusterIds]);
 
   return (
     <div className="space-y-4">
@@ -128,9 +144,9 @@ export default function ClusterControls({
             className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Clusters</option>
-            {clusters.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })).map(clusterId => (
-              <option key={`cluster-option-${clusterId}`} value={clusterId}>
-                Cluster {clusterId}
+            {clusterData.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' })).map(cluster => (
+              <option key={`cluster-option-${cluster.id}`} value={cluster.id}>
+                {cluster.title ? `${cluster.title} (${cluster.id})` : `Cluster ${cluster.id}`}
               </option>
             ))}
           </select>
@@ -146,15 +162,34 @@ export default function ClusterControls({
             return (
               <div key={parent} className="space-y-1">
                 <div className="text-xs font-medium text-gray-600">Group {parent}</div>
-                {subClusters.map((clusterId: string) => (
-                  <div key={clusterId} className="flex items-center gap-1">
-                    <div 
-                      className="w-3 h-3 rounded-full flex-shrink-0" 
-                      style={{ backgroundColor: clusterColors.get(clusterId) }}
-                    />
-                    <span className="text-xs text-gray-700">{clusterId}</span>
-                  </div>
-                ))}
+                {subClusters.map((clusterId: string) => {
+                  const cluster = clusterData.find(c => c.id === clusterId);
+                  return (
+                    <div key={clusterId} className="flex items-center gap-1">
+                      <div 
+                        className="w-3 h-3 rounded-full flex-shrink-0" 
+                        style={{ backgroundColor: clusterColors.get(clusterId) }}
+                      />
+                      <div className="flex flex-col group relative">
+                        <span className="text-xs text-gray-700">{clusterId}</span>
+                        {cluster?.title && (
+                          <>
+                            <span className="text-xs text-gray-500 italic">
+                              {cluster.title.length > 30 ? `${cluster.title.substring(0, 30)}...` : cluster.title}
+                            </span>
+                            {/* Full description tooltip on hover */}
+                            <div className="absolute z-10 left-0 top-full mt-1 p-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none max-w-xs">
+                              <div className="font-semibold mb-1">{cluster.title}</div>
+                              {cluster.description && (
+                                <div className="text-gray-300">{cluster.description}</div>
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
