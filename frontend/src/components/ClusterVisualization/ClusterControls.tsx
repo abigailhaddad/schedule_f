@@ -183,7 +183,7 @@ export default function ClusterControls({
                                 )}
                               </div>
                             }
-                            className="!left-0 !-translate-x-0"
+                            className="!left-0 !-translate-x-0 !whitespace-normal !w-max !max-w-xs"
                           >
                             <span className="text-xs text-gray-500 italic cursor-help">
                               {cluster.title.length > 30 ? `${cluster.title.substring(0, 30)}...` : cluster.title}
