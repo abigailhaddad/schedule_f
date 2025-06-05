@@ -24,7 +24,7 @@ const LogoTitle: React.FC<LogoTitleProps> = ({ title, description, scrolled }) =
     <div className="flex flex-col">
       <Link
         href="/"
-        className={`navbar-brand-text font-bold hover:text-white/80 transition-all duration-300 ${
+        className={`navbar-brand-text font-semibold text-slate-900 hover:text-slate-700 transition-all duration-300 ${
           scrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
         }`}
         aria-label={`${title} - Home`}
@@ -35,7 +35,7 @@ const LogoTitle: React.FC<LogoTitleProps> = ({ title, description, scrolled }) =
         href="https://www.regulations.gov/document/OPM-2025-0004-0001"
         target="_blank"
         rel="noopener noreferrer"
-        className={`group text-xs md:text-sm text-white/90 hover:text-white max-w-sm md:max-w-xl lg:max-w-2xl transition-all duration-300 flex items-center ${
+        className={`group text-xs md:text-sm text-slate-600 hover:text-slate-800 max-w-sm md:max-w-xl lg:max-w-2xl transition-all duration-300 flex items-center ${
           scrolled ? "hidden md:flex" : "flex"
         }`}
         aria-label="View official regulations document (opens in new tab)"

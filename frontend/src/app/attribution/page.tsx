@@ -54,7 +54,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+      className="text-slate-600 hover:text-slate-800 text-sm font-medium"
     >
       {copied ? "✓ Copied!" : "📋 Copy to clipboard"}
     </button>
@@ -67,34 +67,34 @@ export default function AttributionPage() {
   const academicCitation = `Boyce, M. & Haddad, A. (2024). Schedule F Public Comment Analysis Dataset. Retrieved from https://schedule-f.vercel.app`;
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-slate-50 flex flex-col">
       <div className="container mx-auto px-4 md:px-8 py-10">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 flex items-center gap-2">
-          <span aria-hidden="true">👥</span>
+        <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-8 flex items-center gap-2">
+          <span aria-hidden="true" className="opacity-70">👥</span>
           Attribution & Collaboration
         </h1>
 
         {/* Quick Attribution Section */}
         <Card className="mb-8" collapsible={false}>
-          <Card.Header className="bg-gradient-to-r from-blue-500 to-blue-600">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <span className="mr-2">📝</span>
+          <Card.Header className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+              <span className="mr-2 opacity-60">📝</span>
               Quick Attribution
             </h2>
           </Card.Header>
           <Card.Body className="p-6">
             <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-sm text-gray-700 mb-2">For Articles & Reports:</h3>
-                <p className="text-sm font-mono bg-white p-3 rounded border border-gray-200 mb-2">
+              <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <h3 className="font-semibold text-sm text-slate-700 mb-2">For Articles & Reports:</h3>
+                <p className="text-sm font-mono bg-white p-3 rounded border border-slate-200 mb-2">
                   {attributionText}
                 </p>
                 <CopyButton text={attributionText} />
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-sm text-gray-700 mb-2">For Academic Papers:</h3>
-                <p className="text-sm font-mono bg-white p-3 rounded border border-gray-200 mb-2">
+              <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <h3 className="font-semibold text-sm text-slate-700 mb-2">For Academic Papers:</h3>
+                <p className="text-sm font-mono bg-white p-3 rounded border border-slate-200 mb-2">
                   {academicCitation}
                 </p>
                 <CopyButton text={academicCitation} />
@@ -105,14 +105,14 @@ export default function AttributionPage() {
 
         {/* Let's Collaborate Section */}
         <Card className="mb-8" collapsible={false}>
-          <Card.Header className="bg-gradient-to-r from-purple-500 to-purple-600">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <span className="mr-2">🤝</span>
+          <Card.Header className="bg-gradient-to-r from-slate-100 to-blue-50 border-b border-slate-200">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+              <span className="mr-2 opacity-60">🤝</span>
               Let&apos;s Collaborate
             </h2>
           </Card.Header>
           <Card.Body className="p-6">
-            <p className="text-gray-700 mb-6">
+            <p className="text-slate-700 mb-6">
               We&apos;re passionate about making government data more accessible and analyzable. 
               Whether you&apos;re a journalist, researcher, policy analyst, or civic technologist, 
               we&apos;d love to connect!
@@ -121,25 +121,25 @@ export default function AttributionPage() {
             <div className="flex flex-wrap gap-3 justify-center">
               <a 
                 href="mailto:abigail.haddad@gmail.com?subject=Schedule F Analysis Collaboration"
-                className="btn btn-primary"
+                className="inline-flex items-center px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-md font-medium transition-colors"
               >
-                📧 Email Us
+                <span className="mr-2 opacity-80">📧</span> Email Us
               </a>
               <a 
                 href="https://github.com/your-repo/schedule-f-analysis"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-outline-primary"
+                className="inline-flex items-center px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-md font-medium transition-colors"
               >
-                🐙 View on GitHub
+                <span className="mr-2 opacity-80">🐙</span> View on GitHub
               </a>
             </div>
           </Card.Body>
         </Card>
 
         {/* Meet the Team Section */}
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <span aria-hidden="true">👨‍💻👩‍💻</span>
+        <h2 className="text-2xl font-semibold text-slate-800 mb-6 flex items-center gap-2">
+          <span aria-hidden="true" className="opacity-70">👨‍💻👩‍💻</span>
           Meet the Team
         </h2>
         
@@ -159,19 +159,19 @@ export default function AttributionPage() {
 
         {/* Projects Using This Data (Initially empty, ready to showcase) */}
         <Card className="mt-8" collapsible={false}>
-          <Card.Header className="bg-gradient-to-r from-orange-500 to-orange-600">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <span className="mr-2">🌟</span>
+          <Card.Header className="bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+              <span className="mr-2 opacity-60">🌟</span>
               Projects Using This Analysis
             </h2>
           </Card.Header>
           <Card.Body className="p-6 text-center">
-            <p className="text-gray-600 mb-4">
+            <p className="text-slate-600 mb-4">
               Has your organization used this data? We&apos;d love to showcase your work!
             </p>
             <a 
               href="mailto:abigail.haddad@gmail.com?subject=We used your Schedule F analysis"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-slate-600 hover:text-slate-800 hover:underline font-medium"
             >
               Let us know about your project →
             </a>

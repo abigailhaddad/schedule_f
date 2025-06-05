@@ -24,7 +24,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ subtitle }) => (
           href="https://github.com/your-repo"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 min-w-[120px] flex items-center bg-white/20 px-3 py-1.5 rounded hover:bg-white/30 transition-colors justify-center"
+          className="flex-1 min-w-[120px] flex items-center bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-200 transition-colors justify-center border border-slate-200"
           aria-label="GitHub repository (opens in new tab)"
         >
           {/* GitHub icon */}

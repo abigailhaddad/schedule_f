@@ -17,10 +17,10 @@ export function ColumnVisibilityMenu({
   return (
     <div className="relative inline-block column-visibility-menu">
       <button 
-        className="flex items-center px-3 py-2 text-sm font-medium bg-white bg-opacity-20 rounded hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 text-white transition-colors"
+        className="flex items-center px-3 py-2 text-sm font-medium bg-white text-slate-700 rounded hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-50 border border-slate-300 transition-colors"
         onClick={onToggleMenu}
       >
-        <span className="mr-1">👁️</span>
+        <span className="mr-1 opacity-70">👁️</span>
         Columns
       </button>
       

@@ -23,7 +23,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ isMenuOpen, setIsMenuOpen, subtit
           href="https://github.com/your-repo"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center bg-white/20 py-2 px-3 rounded-md hover:bg-white/30 transition-colors"
+          className="flex items-center bg-slate-100 text-slate-700 py-2 px-3 rounded-md hover:bg-slate-200 transition-colors border border-slate-200"
           onClick={() => setIsMenuOpen(false)}
           aria-label="GitHub repository (opens in new tab)"
           tabIndex={isMenuOpen ? 0 : -1}

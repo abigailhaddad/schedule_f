@@ -24,7 +24,7 @@ export default function AttributionCard({
   return (
     <Card collapsible={false} className="overflow-hidden">
       {/* Header */}
-      <Card.Header className="flex items-center gap-4 bg-gradient-to-r from-indigo-50 to-indigo-100">
+      <Card.Header className="flex items-center gap-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
         <Image
           src={avatarUrl}
           alt={name}
@@ -33,16 +33,16 @@ export default function AttributionCard({
           className="rounded-full shadow-sm border border-gray-200 shrink-0"
         />
         <div>
-          <h2 className="text-xl font-semibold text-gray-800 leading-tight">
+          <h2 className="text-xl font-semibold text-slate-800 leading-tight">
             {name}
           </h2>
-          <p className="text-sm text-gray-600">{role}</p>
+          <p className="text-sm text-slate-600">{role}</p>
         </div>
       </Card.Header>
 
       {/* Body */}
       <Card.Body>
-        <p className="text-gray-700 mb-4 leading-relaxed whitespace-pre-line">
+        <p className="text-slate-700 mb-4 leading-relaxed whitespace-pre-line">
           {bio.split(' ').map((word, index) => {
             // Check if the word looks like a URL
             if (word.includes('.') && (word.includes('.com') || word.includes('.org') || word.includes('.net') || word.includes('.substack'))) {
@@ -59,7 +59,7 @@ export default function AttributionCard({
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                    className="text-slate-600 hover:text-slate-800 hover:underline"
                   >
                     {cleanWord}
                   </a>

@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ClusterPoint } from '@/lib/actions/clusters';
+import { SimpleTooltip } from '@/components/ui/Tooltip';
 
 interface ClusterControlsProps {
   clusters: Array<[string, ClusterPoint[]]>;
@@ -34,9 +35,9 @@ export default function ClusterControls({
   const clusterColors = useMemo(() => {
     // Base colors for parent clusters (same as in ClusterChart)
     const baseColors = [
-      "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
-      "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
-      "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
+      "#6366f1", "#10b981", "#f59e0b", "#ec4899", "#06b6d4",
+      "#8b5cf6", "#f97316", "#14b8a6", "#3b82f6", "#ef4444",
+      "#a855f7", "#0ea5e9", "#84cc16", "#f43f5e", "#2563eb"
     ];
     
     const colors = new Map<string, string>();
@@ -170,21 +171,24 @@ export default function ClusterControls({
                         className="w-3 h-3 rounded-full flex-shrink-0" 
                         style={{ backgroundColor: clusterColors.get(clusterId) }}
                       />
-                      <div className="flex flex-col group relative">
+                      <div className="flex flex-col">
                         <span className="text-xs text-gray-700">{clusterId}</span>
                         {cluster?.title && (
-                          <>
-                            <span className="text-xs text-gray-500 italic">
+                          <SimpleTooltip
+                            content={
+                              <div className="max-w-xs">
+                                <div className="font-semibold mb-1">{cluster.title}</div>
+                                {cluster.description && (
+                                  <div className="text-gray-300">{cluster.description}</div>
+                                )}
+                              </div>
+                            }
+                            className="!left-0 !-translate-x-0"
+                          >
+                            <span className="text-xs text-gray-500 italic cursor-help">
                               {cluster.title.length > 30 ? `${cluster.title.substring(0, 30)}...` : cluster.title}
                             </span>
-                            {/* Full description tooltip on hover */}
-                            <div className="absolute z-10 left-0 top-full mt-1 p-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none max-w-xs">
-                              <div className="font-semibold mb-1">{cluster.title}</div>
-                              {cluster.description && (
-                                <div className="text-gray-300">{cluster.description}</div>
-                              )}
-                            </div>
-                          </>
+                          </SimpleTooltip>
                         )}
                       </div>
                     </div>

@@ -21,14 +21,14 @@ export default function SearchInput({
   id = 'search-input',
   ariaLabel = 'Search'
 }: SearchInputProps) {
-  const baseInputClasses = "placeholder-opacity-70 border border-transparent rounded py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:border-transparent";
+  const baseInputClasses = "placeholder-opacity-70 border rounded py-2 pl-10 pr-4 focus:outline-none focus:ring-2";
   const themeClasses = lightTheme 
-    ? "bg-white text-gray-700 placeholder-gray-500 focus:ring-blue-500 focus:ring-opacity-40"
-    : "bg-white bg-opacity-20 text-white placeholder-white focus:ring-white focus:ring-opacity-40";
+    ? "bg-white text-slate-700 placeholder-slate-500 border-slate-300 focus:ring-slate-400 focus:ring-opacity-50 focus:border-slate-400"
+    : "bg-white bg-opacity-20 text-white placeholder-white border-transparent focus:ring-white focus:ring-opacity-40 focus:border-transparent";
   
   return (
     <div className={`relative ${className}`}>
-      <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${lightTheme ? 'text-gray-400' : 'text-white'}`}>
+      <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${lightTheme ? 'text-slate-400' : 'text-white'}`}>
         <svg 
           className="h-4 w-4" 
           fill="none" 
