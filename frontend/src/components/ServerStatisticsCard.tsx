@@ -4,6 +4,8 @@
 import { useServerDataContext } from '@/contexts/ServerDataContext';
 import { useState, useEffect } from 'react';
 import Card from '@/components/ui/Card';
+import Skeleton from '@/components/ui/Skeleton';
+import { getStatColors } from '@/utils/statistics';
 
 export default function ServerStatisticsCard() {
   const { stats, loading } = useServerDataContext();
@@ -25,15 +27,6 @@ export default function ServerStatisticsCard() {
     }
   }, [stats, loading, isInitialLoad]);
   
-  // Function to get color based on stat type
-  const getStatColors = (key: string) => {
-    if (key === 'for') return { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' };
-    if (key === 'against') return { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' };
-    if (key === 'neutral') return { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' };
-    
-    // Default for total
-    return { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' };
-  };
   
   // Create statistics data with labels and values
   const statisticsData = [
@@ -45,20 +38,20 @@ export default function ServerStatisticsCard() {
 
   // Placeholder component for individual stat
   const StatPlaceholder = () => (
-    <div className="p-4 rounded-lg border shadow-sm bg-gray-100 animate-pulse">
-      <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-      <div className="h-8 bg-gray-300 rounded w-1/2 mb-1"></div>
-      <div className="h-4 bg-gray-300 rounded w-1/4 mt-2"></div>
+    <div className="p-4 rounded-lg border shadow-sm bg-gray-100">
+      <Skeleton variant="text" width="75%" className="mb-2" />
+      <Skeleton variant="text" width="50%" height={32} className="mb-1" />
+      <Skeleton variant="text" width="25%" className="mt-2" />
     </div>
   );
 
   // Loading state display - show during initial load OR when data is updating
   if (loading) {
     return (
-      <Card className="overflow-hidden" collapsible={true} initiallyCollapsed={false}>
-        <Card.Header className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
-          <h5 className="text-lg font-bold text-white flex items-center">
-            <span className="mr-2">📊</span>
+      <Card className="overflow-hidden shadow-sm" collapsible={true} initiallyCollapsed={false}>
+        <Card.Header className="px-6 py-4 bg-gradient-to-r from-white to-slate-50 border-b border-slate-200">
+          <h5 className="text-lg font-semibold text-slate-800 flex items-center">
+            <span className="mr-2 opacity-60">📊</span>
             Statistics Overview
           </h5>
         </Card.Header>
@@ -75,10 +68,10 @@ export default function ServerStatisticsCard() {
   
   // Main display of statistics
   return (
-    <Card className="overflow-hidden" collapsible={true} initiallyCollapsed={false}>
-      <Card.Header className="border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600">
-        <h5 className="text-lg font-bold text-white flex items-center">
-          <span className="mr-2">📊</span>
+    <Card className="overflow-hidden shadow-sm" collapsible={true} initiallyCollapsed={false}>
+      <Card.Header className="px-6 py-4 bg-gradient-to-r from-white to-slate-50 border-b border-slate-200">
+        <h5 className="text-lg font-semibold text-slate-800 flex items-center">
+          <span className="mr-2 opacity-60">📊</span>
           Statistics Overview
         </h5>
       </Card.Header>

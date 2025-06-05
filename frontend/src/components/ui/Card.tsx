@@ -64,7 +64,7 @@ function Card({
   return (
     <CardContext.Provider value={{ collapsible, isCollapsed: effectiveIsCollapsed, toggleCollapse }}>
       <section 
-        className={`card shadow-md mb-6 ${className}`}
+        className={`card shadow-sm mb-6 border border-slate-200 ${className}`}
         role={role}
         aria-label={ariaLabel}
       >
@@ -94,7 +94,7 @@ function CardHeader({ children, className = '', id }: CardHeaderProps) {
       {collapsible && (
         <button 
           onClick={toggleCollapse}
-          className="ml-2 p-1.5 text-indigo-100 hover:text-white hover:bg-black hover:bg-opacity-10 rounded-full transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-opacity-75"
+          className="ml-2 p-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-opacity-75"
           aria-label={isCollapsed ? "Expand card" : "Collapse card"}
           title={isCollapsed ? "Expand card" : "Collapse card"}
           aria-expanded={!isCollapsed}

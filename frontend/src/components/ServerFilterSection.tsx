@@ -57,9 +57,9 @@ export default function ServerFilterSection() {
   const renderFilterTags = () => {
     if (!hasActiveFilters) {
       return (
-        <div className="text-center py-4 bg-blue-50 rounded-lg border border-blue-100">
-          <div className="text-blue-600 font-medium mb-1">No filters applied</div>
-          <div className="text-blue-500 text-sm">Use the filter buttons below to refine your data view</div>
+        <div className="text-center py-4 bg-slate-50 rounded-lg border border-slate-200">
+          <div className="text-slate-700 font-medium mb-1">No filters applied</div>
+          <div className="text-slate-600 text-sm">Use the filter buttons below to refine your data view</div>
         </div>
       );
     }
@@ -84,12 +84,12 @@ export default function ServerFilterSection() {
         return filterValue.values.map((v, i) => (
           <div 
             key={`${key}-${i}`}
-            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            className="bg-slate-100 text-slate-700 rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-slate-200 transition-colors border border-slate-200"
           >
             <span className="mr-1 font-medium">{field.title} {i === 0 ? modeText : ''}:</span> 
             <span>{v}</span>
             <button 
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-slate-700 bg-opacity-10 rounded-full text-xs hover:bg-opacity-20 transition-colors"
               onClick={() => {
                 // Create new values array without this value
                 const newValues = (filterValue.values).filter(item => item !== v);
@@ -117,12 +117,12 @@ export default function ServerFilterSection() {
         return (value as string[]).map((v, i) => (
           <div 
             key={`${key}-${i}`}
-            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            className="bg-slate-100 text-slate-700 rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-slate-200 transition-colors border border-slate-200"
           >
             <span className="mr-1 font-medium">{field.title}:</span> 
             <span>{v}</span>
             <button 
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-slate-700 bg-opacity-10 rounded-full text-xs hover:bg-opacity-20 transition-colors"
               onClick={() => handleFilterChange(key, (value as string[]).filter(item => item !== v))}
               aria-label="Remove filter"
             >
@@ -167,12 +167,12 @@ export default function ServerFilterSection() {
         return (
           <div
             key={key}
-            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            className="bg-slate-100 text-slate-700 rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-slate-200 transition-colors border border-slate-200"
           >
             <span className="mr-1 font-medium">{field.title}:</span>
             <span>{dateString}</span>
             <button
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-slate-700 bg-opacity-10 rounded-full text-xs hover:bg-opacity-20 transition-colors"
               onClick={() => handleFilterChange(key, null)}
               aria-label="Remove filter"
             >
@@ -186,12 +186,12 @@ export default function ServerFilterSection() {
         return (
           <div 
             key={key}
-            className="bg-blue-500 text-white rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-blue-600 transition-colors"
+            className="bg-slate-100 text-slate-700 rounded-full px-3 py-1.5 mr-2 mb-2 text-sm inline-flex items-center shadow-sm hover:bg-slate-200 transition-colors border border-slate-200"
           >
             <span className="mr-1 font-medium">{field.title}:</span> 
             <span>{String(value)}</span>
             <button 
-              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-white bg-opacity-20 rounded-full text-xs hover:bg-opacity-30 transition-colors"
+              className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-slate-700 bg-opacity-10 rounded-full text-xs hover:bg-opacity-20 transition-colors"
               onClick={() => handleFilterChange(key, null)}
               aria-label="Remove filter"
             >
@@ -214,8 +214,8 @@ export default function ServerFilterSection() {
             key={field.key}
             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors 
               ${filters[field.key] 
-                ? 'bg-blue-500 text-white hover:bg-blue-600' 
-                : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'}`}
+                ? 'bg-slate-700 text-white hover:bg-slate-800 border border-slate-700' 
+                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'}`}
             onClick={() => openFilterModal(field)}
           >
             {field.title}
@@ -227,15 +227,15 @@ export default function ServerFilterSection() {
   
   return (
     <Card collapsible={true} initiallyCollapsed={false}>
-      <Card.Header className="bg-gradient-to-r from-indigo-500 to-indigo-600">
+      <Card.Header className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
         <div className="flex justify-between items-center w-full">
-          <h5 className="text-lg font-bold text-white flex items-center">
-            <span className="mr-2">{hasActiveFilters ? '🔍' : '⚙️'}</span>
+          <h5 className="text-lg font-semibold text-slate-800 flex items-center">
+            <span className="mr-2 opacity-60">{hasActiveFilters ? '🔍' : '⚙️'}</span>
             {hasActiveFilters ? 'Active Filters' : 'Filters'}
           </h5>
           {hasActiveFilters && (
             <button 
-              className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-3 py-1 rounded transition-colors"
+              className="bg-white hover:bg-slate-50 text-slate-700 text-sm px-3 py-1 rounded transition-colors border border-slate-200"
               onClick={clearAllFilters}
             >
               Clear All
@@ -267,7 +267,7 @@ export default function ServerFilterSection() {
             <div className="mt-2 text-sm text-gray-600">
               Searching for: <span className="font-medium">{searchQuery}</span>
               <button
-                className="ml-2 text-blue-500 hover:text-blue-700"
+                className="ml-2 text-slate-600 hover:text-slate-800"
                 onClick={() => setSearchQuery('')}
               >
                 Clear

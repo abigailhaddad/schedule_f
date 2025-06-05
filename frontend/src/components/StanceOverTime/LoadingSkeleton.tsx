@@ -1,14 +1,13 @@
 'use client';
 
 import Card from '@/components/ui/Card';
+import Skeleton from '@/components/ui/Skeleton';
 
 const LoadingSkeleton = () => {
   return (
     <Card className="h-96" collapsible={false}>
       <Card.Body className="flex items-center justify-center h-full">
-        <div className="animate-pulse">
-          <div className="h-64 bg-gray-200 rounded-lg w-full"></div>
-        </div>
+        <Skeleton variant="rounded" width={400} height={256} />
       </Card.Body>
     </Card>
   );

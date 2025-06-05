@@ -60,21 +60,21 @@ export default function StanceOverTimeClient() {
   }
 
   return (
-    <Card collapsible={true} initiallyCollapsed={false}>
-      <Card.Header className="bg-gradient-to-r from-indigo-500 to-purple-600">
+    <Card collapsible={true} initiallyCollapsed={false} className="shadow-sm">
+      <Card.Header className="bg-gradient-to-r from-slate-50 to-blue-50 border-b border-slate-200">
         <div className="flex justify-between items-center w-full">
-          <h5 className="text-lg font-bold text-white flex items-center">
-            <span className="mr-2">📈</span>
+          <h5 className="text-lg font-semibold text-slate-800 flex items-center">
+            <span className="mr-2 opacity-60">📈</span>
             Comments Over Time
           </h5>
           <div className="flex flex-col md:flex-row items-end md:items-center gap-3">
             {/* Duplicate toggle */}
-            <label className="flex items-center gap-2 text-white text-sm cursor-pointer">
+            <label className="flex items-center gap-2 text-slate-700 text-sm cursor-pointer">
               <input
                 type="checkbox"
                 checked={includeDuplicates}
                 onChange={(e) => setIncludeDuplicates(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:ring-opacity-50"
+                className="w-4 h-4 rounded border-slate-300 text-slate-600 focus:ring-slate-500 focus:ring-opacity-50"
                 aria-label="Include duplicate comments in the chart"
               />
               <span className="select-none">Include Duplicates</span>
@@ -84,7 +84,7 @@ export default function StanceOverTimeClient() {
             <select
               value={selectedDateType}
               onChange={(e) => setSelectedDateType(e.target.value as 'posted_date' | 'received_date')}
-              className="bg-white bg-opacity-20 text-white text-sm px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              className="bg-white text-slate-700 text-sm px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-50 border border-slate-200"
               aria-label="Select the appropriate date that you would like to see for the chart"
             >
               <option value="posted_date" className="text-gray-700">By Posted Date</option>

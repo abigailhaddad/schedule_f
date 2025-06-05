@@ -48,9 +48,9 @@ export default function ClusterPreviewCard() {
   if (loading) {
     return (
       <Card collapsible={false}>
-        <Card.Header className="bg-gradient-to-r from-purple-500 to-pink-500">
-          <h5 className="text-lg font-bold text-white flex items-center">
-            <span className="mr-2">🔮</span>
+        <Card.Header className="bg-gradient-to-r from-slate-100 to-blue-50 border-b border-slate-200">
+          <h5 className="text-lg font-semibold text-slate-800 flex items-center">
+            <span className="mr-2 opacity-60">🔮</span>
             Cluster Analysis
           </h5>
         </Card.Header>
@@ -70,9 +70,9 @@ export default function ClusterPreviewCard() {
   if (error) {
     return (
       <Card collapsible={false}>
-        <Card.Header className="bg-gradient-to-r from-red-500 to-red-600">
-          <h5 className="text-lg font-bold text-white flex items-center">
-            <span className="mr-2">⚠️</span>
+        <Card.Header className="bg-gradient-to-r from-rose-50 to-rose-100 border-b border-rose-200">
+          <h5 className="text-lg font-semibold text-rose-800 flex items-center">
+            <span className="mr-2 opacity-60">⚠️</span>
             Cluster Analysis Error
           </h5>
         </Card.Header>
@@ -96,32 +96,32 @@ export default function ClusterPreviewCard() {
         </h5>
       </Card.Header>
       <Card.Body className="p-6">
-        <p className="text-gray-600 mb-4">
+        <p className="text-slate-600 mb-4">
           Explore comment clusters visualized using PCA analysis to identify patterns and themes.
         </p>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="text-center">
-            <p className="text-2xl font-bold text-purple-600">{stats.totalClusters}</p>
-            <p className="text-sm text-gray-500">Clusters</p>
+            <p className="text-2xl font-bold text-slate-700">{stats.totalClusters}</p>
+            <p className="text-sm text-slate-500">Clusters</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-pink-600">{stats.totalPoints}</p>
-            <p className="text-sm text-gray-500">Comments</p>
+            <p className="text-2xl font-bold text-slate-700">{stats.totalPoints}</p>
+            <p className="text-sm text-slate-500">Comments</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-purple-600">{stats.largestCluster}</p>
-            <p className="text-sm text-gray-500">Largest</p>
+            <p className="text-2xl font-bold text-slate-700">{stats.largestCluster}</p>
+            <p className="text-sm text-slate-500">Largest</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-pink-600">{stats.smallestCluster}</p>
-            <p className="text-sm text-gray-500">Smallest</p>
+            <p className="text-2xl font-bold text-slate-700">{stats.smallestCluster}</p>
+            <p className="text-sm text-slate-500">Smallest</p>
           </div>
         </div>
         
         <Link
           href="/clusters"
-          className="block w-full text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-[1.02] hover:shadow-lg"
+          className="block w-full text-center bg-slate-700 text-white py-3 px-6 rounded-lg font-medium hover:bg-slate-800 transition-all transform hover:scale-[1.02] hover:shadow-lg border border-slate-700"
         >
           View Cluster Visualization →
         </Link>

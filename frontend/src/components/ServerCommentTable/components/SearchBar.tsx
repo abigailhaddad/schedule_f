@@ -13,6 +13,7 @@ export function SearchBar({ value, onChange, placeholder = "Search comments..." 
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
+      lightTheme={true}
     />
   );
 } 

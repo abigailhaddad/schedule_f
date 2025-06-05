@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { ClusterPoint } from '@/lib/actions/clusters';
+import Badge from '@/components/ui/Badge';
 
 interface ClusterTooltipOverlayProps {
   point: ClusterPoint;
@@ -106,13 +107,10 @@ export default function ClusterTooltipOverlay({
         {point.stance && (
           <div className="flex items-center gap-2">
             <span className="text-gray-600">Stance:</span>
-            <span className={`px-2 py-1 rounded text-xs font-medium ${
-              point.stance === 'For' ? 'bg-green-100 text-green-800' :
-              point.stance === 'Against' ? 'bg-red-100 text-red-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {point.stance}
-            </span>
+            <Badge 
+              type={point.stance === 'For' ? 'success' : point.stance === 'Against' ? 'danger' : 'default'}
+              label={point.stance}
+            />
           </div>
         )}
         

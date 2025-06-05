@@ -34,17 +34,17 @@ export default function Button({
   const getVariantClasses = () => {
     switch (variant) {
       case 'primary':
-        return 'btn-primary';
+        return 'bg-slate-700 hover:bg-slate-800 text-white border border-slate-700';
       case 'secondary':
-        return 'btn-secondary';
+        return 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300';
       case 'outline':
-        return 'btn-outline-primary';
+        return 'bg-transparent hover:bg-slate-100 text-slate-700 border border-slate-300';
       case 'danger':
-        return 'btn-danger';
+        return 'bg-rose-600 hover:bg-rose-700 text-white border border-rose-600';
       case 'success':
-        return 'btn-success';
+        return 'bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600';
       default:
-        return 'btn-primary';
+        return 'bg-slate-700 hover:bg-slate-800 text-white border border-slate-700';
     }
   };
 
@@ -52,18 +52,18 @@ export default function Button({
   const getSizeClasses = () => {
     switch (size) {
       case 'sm':
-        return 'btn-sm';
+        return 'px-3 py-1.5 text-sm';
       case 'md':
-        return '';
+        return 'px-4 py-2 text-base';
       case 'lg':
-        return 'btn-lg';
+        return 'px-6 py-3 text-lg';
       default:
-        return '';
+        return 'px-4 py-2 text-base';
     }
   };
 
   // Combine all classes
-  const buttonClasses = `btn ${getVariantClasses()} ${getSizeClasses()} ${className}`;
+  const buttonClasses = `inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed ${getVariantClasses()} ${getSizeClasses()} ${className}`;
 
   return (
     <button

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { SimpleTooltip } from '@/components/ui/Tooltip';
 
 interface ClusterSummaryCardProps {
   clusterId: string;
@@ -43,14 +44,11 @@ export default function ClusterSummaryCard({
           <h4 className="font-semibold text-sm text-gray-900 flex items-center gap-1">
             Cluster {clusterId}
             {clusterDescription && (
-              <div className="group relative">
+              <SimpleTooltip content={clusterDescription} className="!w-64">
                 <svg className="w-4 h-4 text-gray-400 hover:text-gray-600 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <div className="absolute z-10 left-0 top-full mt-1 p-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none w-64">
-                  {clusterDescription}
-                </div>
-              </div>
+              </SimpleTooltip>
             )}
           </h4>
           <p className="text-xs text-gray-500">{label}</p>

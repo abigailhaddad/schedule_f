@@ -24,10 +24,10 @@ export function TableControls({
   columnVisibility 
 }: TableControlsProps) {
   return (
-    <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4">
+    <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 p-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h5 className="text-lg font-bold flex items-center">
-          <span className="mr-2">📋</span>
+        <h5 className="text-lg font-semibold text-slate-800 flex items-center">
+          <span className="mr-2 opacity-60">📋</span>
           {title}
         </h5>
         

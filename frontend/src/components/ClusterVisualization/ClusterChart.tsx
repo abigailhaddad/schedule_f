@@ -11,9 +11,9 @@ import ClusterTooltipOverlay from './ClusterTooltipOverlay';
 
 // Base colors for parent clusters - moved outside component to ensure it's always available
 const baseColors = [
-  "#e11d48", "#9333ea", "#3b82f6", "#10b981", "#f59e0b",
-  "#ec4899", "#6366f1", "#06b6d4", "#84cc16", "#f97316",
-  "#a855f7", "#14b8a6", "#eab308", "#ef4444", "#8b5cf6"
+  "#6366f1", "#10b981", "#f59e0b", "#ec4899", "#06b6d4",
+  "#8b5cf6", "#f97316", "#14b8a6", "#3b82f6", "#ef4444",
+  "#a855f7", "#0ea5e9", "#84cc16", "#f43f5e", "#2563eb"
 ];
 
 interface ClusterChartProps {
