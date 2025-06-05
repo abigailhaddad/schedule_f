@@ -1,98 +1,306 @@
 {
   "0": [
     "Strong opposition to proposed federal employment rule",
-    "This cluster contains a significant number of comments opposing the proposed Schedule F rule, emphasizing concerns about its impact on civil service and federal employees."
+    "This cluster contains a significant number of comments opposing the proposed Schedule F rule, emphasizing concerns about civil service integrity and political influence in federal employment."
   ],
   "0a": [
-    "Complete opposition from specific government positions",
-    "This sub-cluster reflects unanimous opposition from comments discussing the implications of the proposed rule on specific government positions and management."
+    "Focused opposition from civil service employees",
+    "This sub-cluster highlights strong opposition from civil service employees regarding the proposed rule, with a high purity of dissenting opinions."
+  ],
+  "0aa": [
+    "Concerns about federal personnel management",
+    "Comments in this sub-cluster express strong opposition to the proposed rule, particularly regarding its implications for federal personnel management."
+  ],
+  "0ab": [
+    "Opposition from federal workers",
+    "This sub-cluster captures the voices of federal workers who are uniformly against the proposed rule, emphasizing its potential negative impact on their careers."
+  ],
+  "0ac": [
+    "Civil service integrity concerns",
+    "Comments here reflect fears about the erosion of civil service integrity and the politicization of federal employment under the proposed rule."
+  ],
+  "0ad": [
+    "Strong opposition from civil employees",
+    "This sub-cluster shows a unified stance against the proposed rule from civil employees, highlighting their concerns about job security and political interference."
+  ],
+  "0ae": [
+    "Opposition related to government management",
+    "Comments in this sub-cluster focus on the implications of the proposed rule for government management and employee positions, expressing strong dissent."
   ],
   "0b": [
-    "High opposition regarding civil service and federal employees",
-    "This sub-cluster highlights strong opposition to the proposed rule, particularly from comments focused on civil service and the role of federal employees."
+    "General opposition from civil service community",
+    "This sub-cluster reflects a broad opposition from the civil service community, with comments emphasizing the negative consequences of the proposed rule."
   ],
   "0c": [
-    "Concerns about policy impact on civil service careers",
-    "This sub-cluster features comments that express opposition based on the potential negative effects of the proposed rule on civil service careers and policies."
+    "Concerns about policy implications for careers",
+    "Comments in this sub-cluster express worries about the policy implications of the proposed rule on civil service careers and employee positions."
   ],
   "0d": [
-    "Opposition related to health and public service",
-    "This sub-cluster includes comments opposing the proposed rule, particularly in relation to its implications for health and public service employees."
+    "Opposition to proposed public service changes",
+    "This sub-cluster captures opposition to changes in public service as proposed by Schedule F, with a focus on maintaining integrity in federal employment."
+  ],
+  "0da": [
+    "Concerns about agency positions and policies",
+    "Comments here express concerns about the proposed rule's impact on agency positions and the overall policy direction of federal employment."
+  ],
+  "0db": [
+    "Opposition to performance management changes",
+    "This sub-cluster highlights opposition to proposed changes in performance management within federal agencies, reflecting fears of politicization."
+  ],
+  "0dc": [
+    "Concerns about statistical integrity in public service",
+    "Comments in this sub-cluster express strong opposition to the proposed rule, particularly regarding its potential impact on statistical integrity in public service."
+  ],
+  "0dd": [
+    "Opposition from wildlife service employees",
+    "This sub-cluster captures the voices of wildlife service employees who are against the proposed rule, emphasizing conservation and workforce integrity."
+  ],
+  "0de": [
+    "Concerns about health service employees",
+    "Comments here reflect strong opposition from health service employees regarding the proposed rule and its implications for public health."
   ],
   "0e": [
-    "Scientific community's opposition to political influence",
-    "This sub-cluster showcases strong opposition from the scientific community regarding the proposed rule, emphasizing concerns about political influence on research and science."
+    "Opposition from scientific community",
+    "This sub-cluster represents strong opposition from the scientific community, with comments emphasizing the potential negative impact on research and scientific integrity."
   ],
   "1": [
-    "General opposition to federal employment rule",
-    "This cluster captures a broad range of comments opposing the proposed federal employment rule, with a focus on its implications for civil service and government employees."
+    "Mixed opposition with some support for the rule",
+    "This cluster shows a mix of opinions, with a significant portion opposing the proposed rule while some comments express support."
   ],
   "1a": [
-    "Concerns about employee performance evaluations",
-    "This sub-cluster reflects opposition centered on the proposed rule's impact on employee performance evaluations and management practices."
+    "Strong opposition from federal employees",
+    "This sub-cluster highlights strong opposition from federal employees regarding the proposed rule, with a high purity of dissenting opinions."
+  ],
+  "1aa": [
+    "Concerns about political influence on federal employees",
+    "Comments in this sub-cluster express strong opposition to the proposed rule, particularly regarding its implications for political influence on federal employees."
+  ],
+  "1ab": [
+    "Opposition from civil service regarding political appointees",
+    "This sub-cluster captures the voices of civil service employees who are against the proposed rule, emphasizing concerns about political appointees."
+  ],
+  "1ac": [
+    "Concerns about proposed rule's impact on employees",
+    "Comments here reflect fears about the proposed rule's impact on federal employees and their job security."
+  ],
+  "1ad": [
+    "Opposition related to employee performance",
+    "This sub-cluster shows opposition to the proposed rule's implications for employee performance and accountability."
+  ],
+  "1ae": [
+    "Concerns about poor performance management",
+    "Comments in this sub-cluster express concerns about the management of poor performance under the proposed rule."
   ],
   "1b": [
-    "Opposition from civil servants regarding political influence",
-    "This sub-cluster highlights strong opposition from civil servants concerned about the political implications of the proposed rule."
+    "Support for the rule from some federal employees",
+    "This sub-cluster captures a significant amount of support for the proposed rule from federal employees, highlighting differing opinions."
+  ],
+  "1ba": [
+    "Concerns about job security for federal workers",
+    "Comments here reflect concerns about job security for federal workers in light of the proposed rule."
+  ],
+  "1bb": [
+    "Opposition to political loyalty in federal employment",
+    "This sub-cluster highlights strong opposition to the idea of political loyalty influencing federal employment decisions."
+  ],
+  "1bc": [
+    "Concerns about political administration's impact",
+    "Comments in this sub-cluster express fears about the impact of the current political administration on federal employment."
+  ],
+  "1bd": [
+    "Support for accountability in federal employment",
+    "This sub-cluster captures strong support for accountability measures in federal employment, particularly from those favoring the proposed rule."
+  ],
+  "1be": [
+    "Opposition from civil service regarding political influence",
+    "Comments here reflect strong opposition from civil service employees regarding the influence of politics on their roles."
   ],
   "1c": [
-    "Unanimous opposition from federal workers",
-    "This sub-cluster contains comments that express complete opposition to the proposed rule from federal workers, emphasizing their concerns about its impact."
+    "Strong opposition to proposed rule changes",
+    "This sub-cluster shows a strong opposition to the proposed rule changes from civil service employees."
+  ],
+  "1ca": [
+    "Opposition from civil service regarding appointees",
+    "Comments in this sub-cluster express strong opposition to the proposed rule, particularly regarding political appointees."
+  ],
+  "1cb": [
+    "Concerns about political influence on civil service",
+    "This sub-cluster captures concerns about the potential for political influence on civil service under the proposed rule."
+  ],
+  "1cc": [
+    "Opposition to proposed management changes",
+    "Comments here reflect strong opposition to proposed management changes in federal service."
+  ],
+  "1cd": [
+    "Concerns about changes to civil service roles",
+    "This sub-cluster highlights concerns about the changes to civil service roles proposed by Schedule F."
+  ],
+  "1ce": [
+    "Opposition to political influence in federal roles",
+    "Comments in this sub-cluster express strong opposition to the potential for political influence in federal roles."
   ],
   "1d": [
-    "Opposition based on democratic principles",
-    "This sub-cluster features comments opposing the proposed rule, focusing on its implications for democracy and government accountability."
+    "General opposition to the proposed rule",
+    "This cluster reflects a general opposition to the proposed rule, with comments emphasizing the need to stop its implementation."
+  ],
+  "1da": [
+    "Strong opposition to proposed changes",
+    "Comments here express strong opposition to the proposed changes, emphasizing the need for a different approach."
+  ],
+  "1db": [
+    "Concerns about the negative impact of the proposal",
+    "This sub-cluster captures concerns about the negative impact of the proposed rule on federal employment."
+  ],
+  "1dc": [
+    "Opposition to the current administration's policies",
+    "Comments in this sub-cluster reflect opposition to the current administration's policies regarding federal employment."
+  ],
+  "1dd": [
+    "Concerns about democracy and federal employment",
+    "This sub-cluster highlights concerns about the implications of the proposed rule for democracy and federal employment."
   ],
   "1e": [
-    "Strong opposition from civil servants",
-    "This sub-cluster showcases overwhelming opposition from civil servants regarding the proposed rule and its potential effects on their roles."
+    "Strong opposition from civil service community",
+    "This sub-cluster shows strong opposition from the civil service community regarding the proposed rule."
   ],
   "2": [
-    "Opposition focused on Schedule F implications",
-    "This cluster contains comments that express strong opposition to the proposed Schedule F rule, particularly regarding its impact on civil service and government employees."
+    "Opposition to Schedule F and its implications",
+    "This cluster reflects strong opposition to Schedule F and its implications for civil service and federal employment."
   ],
   "3": [
-    "Opposition from scientific community on research funding",
-    "This cluster reflects significant opposition from the scientific community, with comments highlighting concerns about the proposed rule's impact on federal research and funding."
+    "Opposition focused on scientific integrity and research concerns",
+    "This cluster represents opposition from the scientific community, with comments highlighting concerns about the impact on federal research and grant processes."
   ],
   "3a": [
-    "Complete opposition from scientific researchers",
-    "This sub-cluster features unanimous opposition from scientific researchers regarding the proposed rule and its implications for research integrity."
+    "Strong opposition from scientific community",
+    "This sub-cluster captures strong opposition from the scientific community regarding the proposed rule and its implications for research."
   ],
   "3b": [
-    "Concerns about political influence on NIH and research",
-    "This sub-cluster highlights strong opposition from comments discussing the potential political influence on NIH and federal research positions."
+    "Concerns about political influence on scientific research",
+    "Comments in this sub-cluster express concerns about the potential for political influence on scientific research and funding."
   ],
   "3c": [
-    "Opposition focused on research integrity and funding",
-    "This sub-cluster contains comments opposing the proposed rule, emphasizing concerns about maintaining integrity in scientific research and funding."
+    "Opposition to proposed changes in research funding",
+    "This sub-cluster highlights opposition to proposed changes in research funding and the integrity of scientific processes."
   ],
   "3d": [
-    "Unanimous opposition from scientists on policy implications",
-    "This sub-cluster reflects complete opposition from scientists regarding the proposed rule, focusing on its implications for scientific policy and research."
+    "Concerns about appointees in scientific roles",
+    "Comments here reflect concerns about the implications of the proposed rule for appointees in scientific roles."
+  ],
+  "3da": [
+    "Opposition to political influence in scientific policy",
+    "This sub-cluster captures opposition to the potential for political influence in scientific policy and research."
+  ],
+  "3db": [
+    "Strong opposition to funding changes",
+    "Comments in this sub-cluster express strong opposition to proposed changes in funding for scientific research."
+  ],
+  "3dc": [
+    "Concerns about integrity in scientific research",
+    "This sub-cluster highlights concerns about maintaining integrity in scientific research under the proposed rule."
+  ],
+  "3dd": [
+    "Opposition to proposed scientific policies",
+    "Comments here reflect strong opposition to proposed scientific policies and their implications for research integrity."
+  ],
+  "3de": [
+    "Concerns about political influence on scientific integrity",
+    "This sub-cluster captures concerns about the potential for political influence on scientific integrity and research."
   ],
   "4": [
-    "General opposition to political influence in civil service",
-    "This cluster captures a wide range of comments opposing the proposed rule, particularly regarding its implications for civil service and political influence."
+    "Opposition to political influence in civil service",
+    "This cluster reflects strong opposition to the proposed rule and its implications for political influence in civil service."
   ],
   "4a": [
-    "Opposition from civil servants regarding political administration",
-    "This sub-cluster features strong opposition from civil servants concerned about the political implications of the proposed rule under the current administration."
+    "Concerns about civil service integrity",
+    "This sub-cluster highlights concerns about maintaining civil service integrity in light of the proposed rule."
+  ],
+  "4aa": [
+    "Opposition to political appointees in civil service",
+    "Comments in this sub-cluster express strong opposition to the role of political appointees in civil service."
+  ],
+  "4ab": [
+    "Concerns about nonpartisan civil service",
+    "This sub-cluster captures concerns about maintaining a nonpartisan civil service under the proposed rule."
+  ],
+  "4ac": [
+    "Opposition to partisan influence in civil service",
+    "Comments here reflect strong opposition to the potential for partisan influence in civil service roles."
+  ],
+  "4ad": [
+    "Concerns about accountability in civil service",
+    "This sub-cluster highlights concerns about accountability in civil service under the proposed rule."
+  ],
+  "4ae": [
+    "Opposition to political influence in federal roles",
+    "Comments in this sub-cluster express strong opposition to the potential for political influence in federal roles."
   ],
   "4b": [
-    "Complete opposition to partisan influence in civil service",
-    "This sub-cluster reflects unanimous opposition to the proposed rule, emphasizing the need to protect nonpartisan civil service from political influence."
+    "General opposition to proposed rule changes",
+    "This cluster reflects general opposition to proposed rule changes, with comments emphasizing the need for integrity in civil service."
+  ],
+  "4ba": [
+    "Concerns about political influence on government positions",
+    "This sub-cluster captures concerns about political influence on government positions and the implications for civil service."
+  ],
+  "4bb": [
+    "Opposition to politicization of public services",
+    "Comments here reflect strong opposition to the politicization of public services and its impact on civil service integrity."
+  ],
+  "4bc": [
+    "Concerns about public trust in civil service",
+    "This sub-cluster highlights concerns about maintaining public trust in civil service under the proposed rule."
+  ],
+  "4bd": [
+    "Opposition to political influence in civil service roles",
+    "Comments in this sub-cluster express strong opposition to the potential for political influence in civil service roles."
+  ],
+  "4be": [
+    "Concerns about nonpartisan civil service",
+    "This sub-cluster captures concerns about maintaining a nonpartisan civil service under the proposed rule."
   ],
   "4c": [
-    "Concerns about trust in government appointees",
-    "This sub-cluster highlights strong opposition regarding the proposed rule's impact on trust in government appointees and civil service integrity."
+    "Strong opposition to political appointees",
+    "This sub-cluster reflects strong opposition to the role of political appointees in civil service."
   ],
   "4d": [
-    "Unanimous opposition based on constitutional loyalty",
-    "This sub-cluster contains comments opposing the proposed rule, emphasizing the importance of loyalty to the constitution in public service."
+    "Concerns about loyalty and civil service",
+    "Comments here express concerns about loyalty and its implications for civil service under the proposed rule."
+  ],
+  "4da": [
+    "Opposition to loyalty tests for federal employees",
+    "This sub-cluster captures strong opposition to the idea of loyalty tests for federal employees."
+  ],
+  "4db": [
+    "Concerns about loyalty and public service",
+    "Comments in this sub-cluster reflect concerns about loyalty and its implications for public service."
+  ],
+  "4dc": [
+    "Opposition to loyalty requirements in civil service",
+    "This sub-cluster highlights strong opposition to loyalty requirements in civil service roles."
+  ],
+  "4dd": [
+    "Concerns about loyalty and political influence",
+    "Comments here express concerns about loyalty and its potential for political influence in civil service."
   ],
   "4e": [
-    "Opposition to changes in civil service positions",
-    "This sub-cluster reflects complete opposition to the proposed rule, focusing on concerns about changes to civil service positions and policies."
+    "Opposition to political influence in appointees",
+    "This sub-cluster captures strong opposition to the potential for political influence in appointees within federal roles."
+  ],
+  "4ea": [
+    "Concerns about political appointees in federal roles",
+    "Comments in this sub-cluster reflect concerns about the implications of political appointees in federal roles."
+  ],
+  "4eb": [
+    "Opposition to political influence in government positions",
+    "This sub-cluster highlights strong opposition to political influence in government positions."
+  ],
+  "4ec": [
+    "Concerns about political influence on civil service",
+    "Comments here express concerns about political influence on civil service and its implications for integrity."
+  ],
+  "4ed": [
+    "Opposition to proposed changes in civil service policy",
+    "This sub-cluster captures strong opposition to proposed changes in civil service policy and its implications for public service."
   ]
 }
