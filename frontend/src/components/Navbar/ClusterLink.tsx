@@ -10,7 +10,7 @@ type ClusterLinkProps = {
 const ClusterLink: React.FC<ClusterLinkProps> = ({ className = "", onClick, tabIndex }) => (
   <Link
     href="/clusters"
-    className={`flex items-center bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-200 transition-colors border border-slate-200 ${className}`}
+    className={`flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 border border-blue-700 font-medium shadow-sm hover:shadow-md ${className}`}
     onClick={onClick}
     tabIndex={tabIndex}
     aria-label="View clusters page"
