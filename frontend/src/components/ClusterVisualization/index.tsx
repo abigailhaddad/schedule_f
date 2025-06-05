@@ -237,6 +237,8 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
                     {clusterSummaries.highestFor && (
                       <ClusterSummaryCard
                         {...clusterSummaries.highestFor}
+                        clusterTitle={clusterSummaries.highestFor.clusterTitle ?? undefined}
+                        clusterDescription={clusterSummaries.highestFor.clusterDescription ?? undefined}
                         label="Highest support"
                       />
                     )}
@@ -245,6 +247,8 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
                      clusterSummaries.highestAgainst.clusterId !== clusterSummaries.highestFor?.clusterId && (
                       <ClusterSummaryCard
                         {...clusterSummaries.highestAgainst}
+                        clusterTitle={clusterSummaries.highestAgainst.clusterTitle ?? undefined}
+                        clusterDescription={clusterSummaries.highestAgainst.clusterDescription ?? undefined}
                         label="Highest opposition"
                       />
                     )}
@@ -254,6 +258,8 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
                      clusterSummaries.mostBalanced.clusterId !== clusterSummaries.highestAgainst?.clusterId && (
                       <ClusterSummaryCard
                         {...clusterSummaries.mostBalanced}
+                        clusterTitle={clusterSummaries.mostBalanced.clusterTitle ?? undefined}
+                        clusterDescription={clusterSummaries.mostBalanced.clusterDescription ?? undefined}
                         label="Most balanced views"
                       />
                     )}
@@ -264,6 +270,8 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
                      clusterSummaries.largest.clusterId !== clusterSummaries.mostBalanced?.clusterId && (
                       <ClusterSummaryCard
                         {...clusterSummaries.largest}
+                        clusterTitle={clusterSummaries.largest.clusterTitle ?? undefined}
+                        clusterDescription={clusterSummaries.largest.clusterDescription ?? undefined}
                         label="Largest cluster"
                       />
                     )}

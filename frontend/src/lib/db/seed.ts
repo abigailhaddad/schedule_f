@@ -2,7 +2,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
-import { NewComment, NewLookupTableEntry, NewClusterDescription, clusterDescriptions, stanceEnum } from './schema';
+import { NewComment, NewLookupTableEntry, NewClusterDescription, stanceEnum } from './schema';
 import fs from 'fs';
 import path from 'path';
 import { sql } from 'drizzle-orm';

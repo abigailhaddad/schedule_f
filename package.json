@@ -1,0 +1,21 @@
+{
+  "name": "schedule_f",
+  "version": "1.0.0",
+  "description": "This project provides tools to fetch and analyze public comments on regulatory proposals from regulations.gov.",
+  "main": "build_search_index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abigailhaddad/schedule_f.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/abigailhaddad/schedule_f/issues"
+  },
+  "homepage": "https://github.com/abigailhaddad/schedule_f#readme"
+}
