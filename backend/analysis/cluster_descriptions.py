@@ -36,8 +36,8 @@ def parse_cluster_report(report_path: str) -> List[Dict]:
     with open(report_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # Split by cluster sections
-    cluster_sections = re.split(r'\n  CLUSTER |\nCLUSTER ', content)
+    # Split by cluster sections (including sub-sub-clusters with 4 spaces)
+    cluster_sections = re.split(r'\n    CLUSTER |\n  CLUSTER |\nCLUSTER ', content)
     
     for section in cluster_sections[1:]:  # Skip header
         lines = section.strip().split('\n')

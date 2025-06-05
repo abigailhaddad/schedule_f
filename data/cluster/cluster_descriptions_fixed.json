@@ -1,0 +1,306 @@
+{
+  "0": [
+    "Cluster focused on civil, federal, service",
+    "Cluster focused on civil, federal, service, rule, proposed with against (96.6% purity)"
+  ],
+  "0a": [
+    "Cluster focused on federal, opm, rule",
+    "Cluster focused on federal, opm, rule, civil, government with against (99.5% purity)"
+  ],
+  "0aa": [
+    "Cluster focused on federal, opm, rule",
+    "Cluster focused on federal, opm, rule, our, government with against (99.5% purity)"
+  ],
+  "0ab": [
+    "Cluster focused on federal, workers, our",
+    "Cluster focused on federal, workers, our, government, civil with against (100.0% purity)"
+  ],
+  "0ac": [
+    "Cluster focused on civil, rule, opm",
+    "Cluster focused on civil, rule, opm, service, proposed with against (99.3% purity)"
+  ],
+  "0ad": [
+    "Cluster focused on federal, civil, employees",
+    "Cluster focused on federal, civil, employees, government, political with against (100.0% purity)"
+  ],
+  "0ae": [
+    "Cluster focused on government, political, who",
+    "Cluster focused on government, political, who, should, positions with against (100.0% purity)"
+  ],
+  "0b": [
+    "Cluster focused on civil, service, federal",
+    "Cluster focused on civil, service, federal, rule, proposed with against (99.3% purity)"
+  ],
+  "0c": [
+    "Cluster focused on policy, service, career",
+    "Cluster focused on policy, service, career, civil, rule with against (88.5% purity)"
+  ],
+  "0d": [
+    "Cluster focused on service, federal, civil",
+    "Cluster focused on service, federal, civil, proposed, rule with against (95.1% purity)"
+  ],
+  "0da": [
+    "Cluster focused on policy, opm, rule",
+    "Cluster focused on policy, opm, rule, comment, positions with against (72.6% purity)"
+  ],
+  "0db": [
+    "Cluster focused on service, proposed, rule",
+    "Cluster focused on service, proposed, rule, federal, opm with against (89.7% purity)"
+  ],
+  "0dc": [
+    "Cluster focused on federal, statistical, improving",
+    "Cluster focused on federal, statistical, improving, rule, proposed with against (99.2% purity)"
+  ],
+  "0dd": [
+    "Cluster focused on service, refuge, schedule",
+    "Cluster focused on service, refuge, schedule, public, wildlife with against (99.9% purity)"
+  ],
+  "0de": [
+    "Cluster focused on federal, service, civil",
+    "Cluster focused on federal, service, civil, health, rule with against (96.2% purity)"
+  ],
+  "0e": [
+    "Cluster focused on political, scientific, civil",
+    "Cluster focused on political, scientific, civil, federal, science with against (99.8% purity)"
+  ],
+  "1": [
+    "Cluster focused on civil, federal, rule",
+    "Cluster focused on civil, federal, rule, government, employees with against (83.5% purity)"
+  ],
+  "1a": [
+    "Cluster focused on federal, employees, rule",
+    "Cluster focused on federal, employees, rule, government, political with against (98.7% purity)"
+  ],
+  "1aa": [
+    "Cluster focused on government, federal, employees",
+    "Cluster focused on government, federal, employees, political, civil with against (99.8% purity)"
+  ],
+  "1ab": [
+    "Cluster focused on employees, rule, federal",
+    "Cluster focused on employees, rule, federal, government, civil with against (98.6% purity)"
+  ],
+  "1ac": [
+    "Cluster focused on rule, federal, government",
+    "Cluster focused on rule, federal, government, political, employees with against (99.7% purity)"
+  ],
+  "1ad": [
+    "Cluster focused on federal, government, employees",
+    "Cluster focused on federal, government, employees, people, our with against (98.2% purity)"
+  ],
+  "1ae": [
+    "Cluster focused on employees, performance, rule",
+    "Cluster focused on employees, performance, rule, who, people with against (89.8% purity)"
+  ],
+  "1b": [
+    "Cluster focused on federal, employees, government",
+    "Cluster focused on federal, employees, government, president, trump with for (63.0% purity)"
+  ],
+  "1ba": [
+    "Cluster focused on federal, government, employees",
+    "Cluster focused on federal, government, employees, people, our with against (89.3% purity)"
+  ],
+  "1bb": [
+    "Cluster focused on federal, employees, should",
+    "Cluster focused on federal, employees, should, president, based with against (99.1% purity)"
+  ],
+  "1bc": [
+    "Cluster focused on federal, employees, government",
+    "Cluster focused on federal, employees, government, our, political with against (99.5% purity)"
+  ],
+  "1bd": [
+    "Cluster focused on bureaucrats, federal, government",
+    "Cluster focused on bureaucrats, federal, government, employees, president with for (99.8% purity)"
+  ],
+  "1be": [
+    "Cluster focused on civil, employees, service",
+    "Cluster focused on civil, employees, service, servants, political with against (99.1% purity)"
+  ],
+  "1c": [
+    "Cluster focused on civil, service, federal",
+    "Cluster focused on civil, service, federal, political, oppose with against (99.8% purity)"
+  ],
+  "1ca": [
+    "Cluster focused on civil, service, political",
+    "Cluster focused on civil, service, political, federal, government with against (100.0% purity)"
+  ],
+  "1cb": [
+    "Cluster focused on civil, service, oppose",
+    "Cluster focused on civil, service, oppose, federal, should with against (100.0% purity)"
+  ],
+  "1cc": [
+    "Cluster focused on rule, proposed, oppose",
+    "Cluster focused on rule, proposed, oppose, federal, public with against (100.0% purity)"
+  ],
+  "1cd": [
+    "Cluster focused on civil, service, rule",
+    "Cluster focused on civil, service, rule, federal, government with against (98.5% purity)"
+  ],
+  "1ce": [
+    "Cluster focused on federal, government, political",
+    "Cluster focused on federal, government, political, workers, rule with against (100.0% purity)"
+  ],
+  "1d": [
+    "Cluster focused on our, government, rule",
+    "Cluster focused on our, government, rule, trump, people with against (93.6% purity)"
+  ],
+  "1da": [
+    "Cluster focused on rule, oppose, proposed",
+    "Cluster focused on rule, oppose, proposed, change, strongly with against (96.9% purity)"
+  ],
+  "1db": [
+    "Cluster focused on cid, idea, oppose",
+    "Cluster focused on cid, idea, oppose, should, change with against (84.9% purity)"
+  ],
+  "1dc": [
+    "Cluster focused on our, trump, government",
+    "Cluster focused on our, trump, government, people, stop with against (92.2% purity)"
+  ],
+  "1dd": [
+    "Cluster focused on our, government, people",
+    "Cluster focused on our, government, people, power, democracy with against (97.5% purity)"
+  ],
+  "1e": [
+    "Cluster focused on civil, rule, service",
+    "Cluster focused on civil, rule, service, servants, political with against (99.8% purity)"
+  ],
+  "2": [
+    "Cluster focused on schedule, civil, federal",
+    "Cluster focused on schedule, civil, federal, service, political with against (99.5% purity)"
+  ],
+  "3": [
+    "Cluster focused on political, scientific, science",
+    "Cluster focused on political, scientific, science, nih, research with against (99.2% purity)"
+  ],
+  "3a": [
+    "Cluster focused on science, schedule, scientific",
+    "Cluster focused on science, schedule, scientific, political, nih with against (100.0% purity)"
+  ],
+  "3b": [
+    "Cluster focused on nih, political, scientific",
+    "Cluster focused on nih, political, scientific, research, science with against (99.0% purity)"
+  ],
+  "3c": [
+    "Cluster focused on scientific, political, grants",
+    "Cluster focused on scientific, political, grants, grant, science with against (99.5% purity)"
+  ],
+  "3d": [
+    "Cluster focused on science, political, scientific",
+    "Cluster focused on science, political, scientific, research, scientists with against (98.5% purity)"
+  ],
+  "3da": [
+    "Cluster focused on science, research, political",
+    "Cluster focused on science, research, political, scientific, scientists with against (93.9% purity)"
+  ],
+  "3db": [
+    "Cluster focused on science, our, nsf",
+    "Cluster focused on science, our, nsf, scientific, world with against (100.0% purity)"
+  ],
+  "3dc": [
+    "Cluster focused on science, political, scientific",
+    "Cluster focused on science, political, scientific, scientists, appointees with against (99.6% purity)"
+  ],
+  "3dd": [
+    "Cluster focused on science, scientific, research",
+    "Cluster focused on science, scientific, research, political, our with against (100.0% purity)"
+  ],
+  "3de": [
+    "Cluster focused on science, political, scientists",
+    "Cluster focused on science, political, scientists, rule, scientific with against (100.0% purity)"
+  ],
+  "4": [
+    "Cluster focused on civil, political, service",
+    "Cluster focused on civil, political, service, government, servants with against (99.2% purity)"
+  ],
+  "4a": [
+    "Cluster focused on civil, service, political",
+    "Cluster focused on civil, service, political, servants, government with against (99.7% purity)"
+  ],
+  "4aa": [
+    "Cluster focused on civil, service, government",
+    "Cluster focused on civil, service, government, our, federal with against (100.0% purity)"
+  ],
+  "4ab": [
+    "Cluster focused on civil, servants, should",
+    "Cluster focused on civil, servants, should, political, remain with against (99.5% purity)"
+  ],
+  "4ac": [
+    "Cluster focused on civil, service, political",
+    "Cluster focused on civil, service, political, government, should with against (100.0% purity)"
+  ],
+  "4ad": [
+    "Cluster focused on civil, service, political",
+    "Cluster focused on civil, service, political, servants, public with against (99.2% purity)"
+  ],
+  "4ae": [
+    "Cluster focused on civil, servants, service",
+    "Cluster focused on civil, servants, service, trump, political with against (99.6% purity)"
+  ],
+  "4b": [
+    "Cluster focused on government, political, public",
+    "Cluster focused on government, political, public, our, federal with against (96.8% purity)"
+  ],
+  "4ba": [
+    "Cluster focused on government, people, political",
+    "Cluster focused on government, people, political, should, our with against (93.9% purity)"
+  ],
+  "4bb": [
+    "Cluster focused on public, government, services",
+    "Cluster focused on public, government, services, political, employees with against (100.0% purity)"
+  ],
+  "4bc": [
+    "Cluster focused on our, government, public",
+    "Cluster focused on our, government, public, civil, service with against (91.7% purity)"
+  ],
+  "4bd": [
+    "Cluster focused on political, federal, employees",
+    "Cluster focused on political, federal, employees, government, should with against (100.0% purity)"
+  ],
+  "4be": [
+    "Cluster focused on civil, servants, partisan",
+    "Cluster focused on civil, servants, partisan, non, nonpartisan with against (100.0% purity)"
+  ],
+  "4c": [
+    "Cluster focused on civil, political, servants",
+    "Cluster focused on civil, political, servants, government, appointees with against (100.0% purity)"
+  ],
+  "4d": [
+    "Cluster focused on loyalty, constitution, should",
+    "Cluster focused on loyalty, constitution, should, civil, our with against (100.0% purity)"
+  ],
+  "4da": [
+    "Cluster focused on federal, constitution, loyalty",
+    "Cluster focused on federal, constitution, loyalty, employees, rule with against (100.0% purity)"
+  ],
+  "4db": [
+    "Cluster focused on loyalty, our, tests",
+    "Cluster focused on loyalty, our, tests, should, government with against (100.0% purity)"
+  ],
+  "4dc": [
+    "Cluster focused on loyalty, constitution, our",
+    "Cluster focused on loyalty, constitution, our, should, tests with against (100.0% purity)"
+  ],
+  "4dd": [
+    "Cluster focused on civil, loyalty, servants",
+    "Cluster focused on civil, loyalty, servants, should, service with against (100.0% purity)"
+  ],
+  "4e": [
+    "Cluster focused on political, government, appointees",
+    "Cluster focused on political, government, appointees, these, positions with against (99.7% purity)"
+  ],
+  "4ea": [
+    "Cluster focused on political, government, federal",
+    "Cluster focused on political, government, federal, employees, people with against (100.0% purity)"
+  ],
+  "4eb": [
+    "Cluster focused on political, appointees, these",
+    "Cluster focused on political, appointees, these, government, our with against (99.4% purity)"
+  ],
+  "4ec": [
+    "Cluster focused on government, political, federal",
+    "Cluster focused on government, political, federal, people, idea with against (100.0% purity)"
+  ],
+  "4ed": [
+    "Cluster focused on positions, these, political",
+    "Cluster focused on positions, these, political, civil, change with against (100.0% purity)"
+  ]
+}
