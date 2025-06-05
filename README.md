@@ -6,18 +6,40 @@ A tool for analyzing public comments on the proposed "Schedule F" rule.
 
 ```
 regs/
-  ├── backend/             # Backend Python code
-  │   ├── fetch/           # Code for fetching comments from regulations.gov
-  │   ├── analysis/        # Code for analyzing comments with LLMs
-  │   ├── utils/           # Shared utilities
-  │   ├── pipeline.py      # Fresh analysis pipeline
-  │   └── resume_pipeline.py # Incremental update pipeline
-  ├── data/                # Current data files
-  ├── results/             # Pipeline outputs (timestamped directories)
-  ├── correct_labels/      # Manual correction interface
-  ├── frontend/            # Next.js frontend for viewing comments
-  ├── scripts/             # Utility scripts for running pipelines
-  └── README.md            # This file
+├── backend/                    # Backend Python code
+│   ├── fetch/                  # Data fetching modules
+│   │   ├── fetch_comments.py   # Fetch comments from regulations.gov API
+│   │   └── analyze_attachments.py # Extract text from attachments
+│   ├── analysis/               # Analysis modules
+│   │   ├── create_lookup_table.py # Create deduplicated lookup table
+│   │   ├── analyze_lookup_table.py # LLM analysis of comments
+│   │   ├── hierarchical_clustering.py # Semantic clustering
+│   │   ├── verify_lookup_quotes.py # Quote verification
+│   │   └── semantic_lookup.py  # Semantic search utilities
+│   ├── utils/                  # Shared utilities
+│   │   ├── comment_analyzer.py # LLM interface for analysis
+│   │   ├── logging_config.py   # Centralized logging
+│   │   └── validate_pipeline_output.py # Output validation
+│   ├── pipeline.py             # Main fresh analysis pipeline
+│   ├── resume_pipeline.py      # Incremental update pipeline
+│   └── config.py               # Configuration settings
+├── data/                       # Data directory (generated)
+│   ├── raw_data.json           # All fetched comments
+│   ├── lookup_table.json       # Deduplicated entries with analysis
+│   ├── attachments/            # Downloaded attachment files
+│   └── cluster/                # Clustering visualizations
+├── frontend/                   # Next.js web application
+│   ├── src/                    # Frontend source code
+│   │   ├── app/                # Next.js app router pages
+│   │   ├── components/         # React components
+│   │   └── lib/                # Frontend utilities
+│   └── scripts/                # Frontend utility scripts
+├── json-schemas/               # JSON schema definitions
+│   ├── data.schema.json        # Schema for data.json
+│   └── lookup_table.schema.json # Schema for lookup_table.json
+├── scripts/                    # Pipeline utility scripts
+├── tests/                      # Test suite
+└── requirements.txt            # Python dependencies
 ```
 
 ## Setup
@@ -109,20 +131,6 @@ python backend/analysis/hierarchical_clustering.py --input lookup_table.json
 
 **Note**: Quote verification runs automatically after LLM analysis to verify extracted quotes exist in original text.
 
-### Manual Corrections
-
-After running the pipeline, you can manually correct analysis labels:
-
-```bash
-# Start the correction interface
-cd correct_labels
-./run_lookup_corrections.sh
-
-# This will:
-# 1. Launch a web interface at http://localhost:5000
-# 2. Allow you to review and edit stance/themes/quotes
-# 3. Save corrections back to the lookup table
-```
 
 ### Frontend Development
 
@@ -158,7 +166,7 @@ The test suite includes:
 
 ## Architecture
 
-This project has three main components:
+This project consists of five main components:
 
 1. **Data Fetching**: Python scripts to fetch comments and attachments from regulations.gov API
 2. **Text Extraction**: Smart extraction from PDFs, DOCX, images with Gemini API fallback  
@@ -168,20 +176,45 @@ This project has three main components:
 
 ### Data Flow
 
-1. **Fetch**: Comments from regulations.gov → `raw_data.json` (all comments with metadata)
-2. **Deduplicate**: Create `lookup_table.json` with unique text patterns
-3. **Analyze**: LLM analysis adds stance, themes, quotes directly to `lookup_table.json`
-4. **Cluster**: Semantic clustering adds cluster information to `lookup_table.json`
-5. **Verify**: Quote verification creates separate verification reports
-6. **Merge**: (Optional) Combine raw + lookup → `data.json` for legacy frontend compatibility
-7. **View**: Frontend displays merged data
+```mermaid
+graph TD
+    A[CSV File] --> B[Fetch Comments]
+    B --> C[raw_data.json]
+    C --> D[Download Attachments]
+    D --> E[Extract Text from Attachments]
+    E --> F[Updated raw_data.json with attachment text]
+    F --> G[Create Lookup Table]
+    G --> H[lookup_table.json]
+    H --> I[LLM Analysis]
+    I --> J[Updated lookup_table.json with analysis]
+    J --> K[Semantic Clustering]
+    K --> L[Final lookup_table.json with clusters]
+    L --> M[Quote Verification]
+    M --> N[verification reports]
+    
+    style C fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#f9f,stroke:#333,stroke-width:2px
+    style H fill:#9ff,stroke:#333,stroke-width:2px
+    style J fill:#9ff,stroke:#333,stroke-width:2px
+    style L fill:#9ff,stroke:#333,stroke-width:2px
+```
+
+**Pipeline Steps:**
+
+1. **Fetch**: Read comments from CSV → `raw_data.json` (all comments with metadata)
+2. **Attachments**: Download and extract text from attachments → update `raw_data.json`
+3. **Deduplicate**: Create `lookup_table.json` with unique text patterns
+4. **Analyze**: LLM analysis adds stance, themes, quotes directly to `lookup_table.json`
+5. **Cluster**: Semantic clustering adds cluster information to `lookup_table.json`
+6. **Verify**: Quote verification creates separate verification reports
+7. **View**: Frontend displays the analyzed data
 
 ### Key Files
 
 - **`raw_data.json`**: All fetched comments with full metadata and attachment text
 - **`lookup_table.json`**: Deduplicated text patterns with complete analysis (stance, themes, quotes, clusters)
 - **`lookup_table_quote_verification.json`**: Quote verification results
-- **`data.json`**: (Optional) Final merged dataset for legacy frontend compatibility
+- **`data.json`**: Merged dataset created by `scripts/merge_data.sh` that combines raw_data.json with lookup_table.json for frontend compatibility
 
 ### Deduplication Strategy
 
@@ -221,7 +254,45 @@ Each pipeline run creates output in the specified directory containing:
 - `lookup_table_quote_verification.txt` - Human-readable verification report
 - `pipeline.log` or `resume_pipeline.log` - Execution log
 - `attachments/` - Downloaded attachment files with extracted text
-- `clustering_*/` - Clustering visualizations and reports (if clustering enabled)
+- `cluster/` - Clustering visualizations and reports (if clustering enabled)
+  - `hierarchical_cluster_report.txt` - Detailed cluster analysis
+  - `hierarchical_clusters_visualization.png` - Cluster visualization
+  - `main_dendrogram.png` - Hierarchical clustering dendrogram
+  - `main_elbow_curve.png` - Elbow curve for optimal clusters
+  - `cluster_descriptions.json` - AI-generated cluster descriptions
+
+### Creating data.json for Frontend
+
+After running the pipeline, create `data.json` by merging the lookup table with raw data:
+
+```bash
+# Merge data in the default data/ directory
+./scripts/merge_data.sh
+
+# Or specify a custom directory
+./scripts/merge_data.sh results/results_20250605
+
+# The script will:
+# 1. Validate that raw_data.json and lookup_table.json exist
+# 2. Merge lookup analysis into each comment
+# 3. Clean up any schema compliance issues
+# 4. Validate the output against the JSON schema
+# 5. Create data.json in the same directory
+```
+
+## Limitations
+
+This analysis system has two notable limitations:
+
+### Attachment Processing
+- Not all attachments are successfully processed. Some PDFs, images, or other file types may fail text extraction even with Gemini API fallback, or result in garbled attachment content. However, this affects a very small percentage of comments.
+
+### Model Categorization Accuracy
+- The LLM categorization is not perfect. Comments were much wider than expected in terms of content: there were some that we weren't even sure how to categorize doing manual review, which wasn't practical to do in general: we mainly used that to tweak the prompt, which you can see here: [backend/utils/comment_analyzer.py](backend/utils/comment_analyzer.py#L68-L127)  
+
+### Impact on Results
+- We believe these limitations don't significantly affect the top-level findings
+- The main impact is likely on the "neutral" category - manual review would probably recategorize many neutral comments as having a stance, making the already small neutral percentage even lower. 
 
 ## License
 
