@@ -21,7 +21,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ subtitle }) => (
       {/* GitHub repo – only if subtitle provided */}
       {subtitle && (
         <Link
-          href="https://github.com/your-repo"
+          href="https://github.com/abigailhaddad/schedule_f"
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 min-w-[120px] flex items-center bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-200 transition-colors justify-center border border-slate-200"
