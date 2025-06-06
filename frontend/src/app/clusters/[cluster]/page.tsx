@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getClusterData } from '@/lib/actions/clusters';
+import { getClusterData, getSingleClusterData } from '@/lib/actions/clusters';
 import ClusterVisualization from '@/components/ClusterVisualization';
 
 // Next.js 13+ App Router revalidation
@@ -33,13 +33,13 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { cluster } = await params;
   
-  // Get cluster data to find the descriptive title
-  const clusterResponse = await getClusterData();
+  // Get single cluster data to find the descriptive title
+  const clusterResponse = await getSingleClusterData(cluster);
   let clusterTitle = `Cluster ${cluster}`;
   let clusterDescription = `Visualization of comment cluster ${cluster} using PCA analysis`;
   
-  if (clusterResponse.success && clusterResponse.data) {
-    const clusterData = clusterResponse.data.clusters.find(([id]) => id === cluster);
+  if (clusterResponse.success && clusterResponse.data && clusterResponse.data.clusters.length > 0) {
+    const clusterData = clusterResponse.data.clusters[0];
     if (clusterData && clusterData[1].length > 0) {
       const firstPoint = clusterData[1][0];
       if (firstPoint.clusterTitle) {
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ClusterPage({ params }: PageProps) {
   const { cluster } = await params;
-  const clusterResponse = await getClusterData();
+  const clusterResponse = await getSingleClusterData(cluster);
 
   // Pass the data with the correct prop names
   return (

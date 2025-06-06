@@ -158,7 +158,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({ initialData
         <Card className="lg:col-span-2 shadow-lg h-full" collapsible={true}>
           <Card.Header>
             <h2 className="text-lg font-bold">
-              Cluster Scatter Plot ({clusterData.totalPoints} comments in {clusterData.clusters.length} clusters)
+              Cluster Scatter Plot
             </h2>
           </Card.Header>
           <Card.Body className="p-0 relative flex-1">

@@ -63,7 +63,7 @@ interface RawClusterPointRow {
   keyquote?: string | null;
 }
 
-export async function getClusterData(): Promise<ClusterDataResponse> {
+export async function getClusterData(samplingFraction: number = 1.0): Promise<ClusterDataResponse> {
   const fetchClusterData = async () => {
     try {
       const connection = await connectDb();
@@ -120,15 +120,34 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
         maxY = Math.max(maxY, point.pcaY);
       });
 
-      // Convert Map to Array for serialization
-      const clustersArray = Array.from(clustersMap.entries());
+      // Apply sampling if fraction is less than 1
+      let sampledClustersArray: Array<[string, ClusterPoint[]]>;
+      let sampledTotalPoints = 0;
+      
+      if (samplingFraction < 1.0) {
+        sampledClustersArray = Array.from(clustersMap.entries()).map(([clusterId, points]) => {
+          // Calculate how many points to sample from this cluster
+          const sampleSize = Math.max(1, Math.floor(points.length * samplingFraction));
+          
+          // Randomly sample points
+          const shuffled = [...points].sort(() => Math.random() - 0.5);
+          const sampledPoints = shuffled.slice(0, sampleSize);
+          
+          sampledTotalPoints += sampledPoints.length;
+          return [clusterId, sampledPoints];
+        });
+      } else {
+        // No sampling, use all points
+        sampledClustersArray = Array.from(clustersMap.entries());
+        sampledTotalPoints = result.length;
+      }
 
       return {
         success: true,
         data: {
-          clusters: clustersArray,
+          clusters: sampledClustersArray,
           bounds: { minX, maxX, minY, maxY },
-          totalPoints: result.length,
+          totalPoints: sampledTotalPoints,
         }
       };
     } catch (error) {
@@ -150,7 +169,7 @@ export async function getClusterData(): Promise<ClusterDataResponse> {
 
   const getCachedClusterData = unstable_cache(
     fetchClusterData,
-    ['cluster-data'],
+    [`cluster-data-${samplingFraction}`],
     {
       revalidate: 86400, // 24 hours
       tags: ['clusters']
@@ -226,4 +245,105 @@ export async function getClusterStats(): Promise<{
   );
   
   return getCachedStats();
+}
+
+// Get data for a single cluster
+export async function getSingleClusterData(clusterId: string): Promise<ClusterDataResponse> {
+  const fetchSingleClusterData = async () => {
+    try {
+      const connection = await connectDb();
+      if (!connection.success) {
+        throw new Error("Failed to connect to database");
+      }
+
+      // Fetch only the specific cluster data
+      const result = await db
+        .select({
+          id: comments.id,
+          title: comments.title,
+          stance: comments.stance,
+          clusterId: comments.clusterId,
+          pcaX: comments.pcaX,
+          pcaY: comments.pcaY,
+          keyQuote: comments.keyQuote,
+          themes: comments.themes,
+          clusterTitle: clusterDescriptions.title,
+          clusterDescription: clusterDescriptions.description,
+        })
+        .from(comments)
+        .leftJoin(clusterDescriptions, sql`${comments.clusterId} = ${clusterDescriptions.clusterId}`)
+        .where(sql`${comments.clusterId} = ${clusterId} AND ${comments.pcaX} IS NOT NULL AND ${comments.pcaY} IS NOT NULL`)
+        .execute();
+
+      if (result.length === 0) {
+        return {
+          success: false,
+          error: `Cluster ${clusterId} not found`
+        };
+      }
+
+      // Process the single cluster data
+      const clusterPoints: ClusterPoint[] = [];
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+
+      result.forEach((row: RawClusterPointRow) => {
+        const point: ClusterPoint = {
+          id: row.id,
+          title: row.title || 'Untitled',
+          stance: row.stance,
+          clusterId: (row.cluster_id || row.clusterId || row.clusterid)!,
+          pcaX: (row.pca_x || row.pcaX || row.pcax)!,
+          pcaY: (row.pca_y || row.pcaY || row.pcay)!,
+          keyQuote: (row.key_quote || row.keyQuote || row.keyquote) || null,
+          themes: row.themes,
+          clusterTitle: (row.cluster_title || row.clusterTitle) || null,
+          clusterDescription: (row.cluster_description || row.clusterDescription) || null,
+        };
+
+        clusterPoints.push(point);
+
+        // Update bounds
+        minX = Math.min(minX, point.pcaX);
+        maxX = Math.max(maxX, point.pcaX);
+        minY = Math.min(minY, point.pcaY);
+        maxY = Math.max(maxY, point.pcaY);
+      });
+
+      const clusters: [string, ClusterPoint[]][] = [[clusterId, clusterPoints]];
+      
+      return {
+        success: true,
+        data: {
+          clusters,
+          bounds: { minX, maxX, minY, maxY },
+          totalPoints: result.length,
+        }
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error fetching single cluster data:", errorMessage);
+      return {
+        success: false,
+        error: `Failed to fetch cluster data: ${errorMessage}`
+      };
+    }
+  };
+
+  // Use caching in production
+  const shouldSkipCache = process.env.NODE_ENV === 'development' && cacheConfig.disableCacheInDevelopment;
+  
+  if (shouldSkipCache) {
+    return fetchSingleClusterData();
+  }
+
+  const getCachedSingleClusterData = unstable_cache(
+    fetchSingleClusterData,
+    [`cluster-data-${clusterId}`],
+    {
+      revalidate: 86400, // 24 hours
+      tags: ['clusters', `cluster-${clusterId}`]
+    }
+  );
+  
+  return getCachedSingleClusterData();
 }
