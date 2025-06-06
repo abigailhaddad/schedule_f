@@ -36,8 +36,8 @@ def parse_cluster_report(report_path: str) -> List[Dict]:
     with open(report_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # Split by cluster sections
-    cluster_sections = re.split(r'\n  CLUSTER |\nCLUSTER ', content)
+    # Split by cluster sections (including sub-sub-clusters with 4 spaces)
+    cluster_sections = re.split(r'\n    CLUSTER |\n  CLUSTER |\nCLUSTER ', content)
     
     for section in cluster_sections[1:]:  # Skip header
         lines = section.strip().split('\n')
@@ -155,7 +155,7 @@ Return a JSON object with all clusters."""
                 {"role": "system", "content": "You are analyzing public comment clusters. Respond with valid JSON containing short and long descriptions for each cluster."},
                 {"role": "user", "content": prompt}
             ],
-            timeout=config.llm.timeout
+            timeout=300  # 5 minutes timeout
         )
         
         # Process the response
@@ -178,16 +178,7 @@ Return a JSON object with all clusters."""
         
     except Exception as e:
         print(f"❌ Error generating descriptions: {e}")
-        # Fallback: generate simple descriptions based on keywords
-        descriptions = {}
-        for cluster in clusters:
-            cluster_id = cluster['cluster_id']
-            keywords = cluster.get('keywords', [])[:5]
-            stance = cluster.get('dominant_stance', 'Unknown stance')
-            short = f"Cluster focused on {', '.join(keywords[:3])}"
-            long = f"Cluster focused on {', '.join(keywords)} with {stance.lower()}"
-            descriptions[cluster_id] = [short, long]
-        return descriptions
+        raise e  # Re-raise the exception instead of using fallback
 
 def save_cluster_descriptions(descriptions: Dict[str, List[str]], output_path: str):
     """Save cluster descriptions to JSON file"""
