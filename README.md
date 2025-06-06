@@ -1,227 +1,65 @@
 # Schedule F Comments Analysis
 
-A tool for analyzing public comments on the proposed "Schedule F" rule.
+An automated analysis of the 28,000+ public comments submitted on the proposed "Schedule F" federal employment rule.
 
-## Project Structure
+## What This Project Does
 
-```
-regs/
-  ├── backend/             # Backend Python code
-  │   ├── fetch/           # Code for fetching comments from regulations.gov
-  │   ├── analysis/        # Code for analyzing comments with LLMs
-  │   ├── utils/           # Shared utilities
-  │   ├── pipeline.py      # Fresh analysis pipeline
-  │   └── resume_pipeline.py # Incremental update pipeline
-  ├── data/                # Current data files
-  ├── results/             # Pipeline outputs (timestamped directories)
-  ├── correct_labels/      # Manual correction interface
-  ├── frontend/            # Next.js frontend for viewing comments
-  ├── scripts/             # Utility scripts for running pipelines
-  └── README.md            # This file
-```
+This project analyzes public comments submitted to regulations.gov about the proposed Schedule F rule, which would change employment protections for certain federal workers. The tool:
 
-## Setup
+- **Collects comments** from the official government database
+- **Processes attachments** like PDFs and images to extract text
+- **Categorizes comments** by stance (for/against/neutral) and themes
+- **Groups similar comments** to identify patterns
+- **Provides a searchable web interface** to explore the results
 
-### Install Requirements
+## Why We Built This
 
-```bash
-# Install Python dependencies
-pip install -r requirements.txt
+Analyzing thousands of public comments manually isn't practical, but understanding what people said about proposed policies is valuable. This tool makes that analysis possible and demonstrates how LLMs can help make sense of large datasets from government processes.
 
-# Install frontend dependencies
-cd frontend
-npm install
-```
+## Approach
 
-### Environment Variables
+We processed the comments through several steps:
 
-Create a `.env` file in the project root with:
+1. **Data Collection** - Downloaded bulk comment data from regulations.gov and fetched attachments via the regulations.gov API
+2. **Text Extraction** - Extracted text from PDFs using PyPDF2 and Word docs using python-docx. For images and complex documents, we use Gemini directly
+3. **Deduplication** - Grouped comments with identical first 1,000 characters together to avoid analyzing duplicates
+4. **LLM Analysis** - Used OpenAI models to categorize each unique comment's stance and themes
+5. **Clustering** - Used sentence-transformers to create embeddings, then hierarchical clustering to group comments by topic. Generated cluster descriptions using OpenAI
+6. **Web Interface** - Built a searchable frontend to explore the results
 
-```
-# For fetching comments
-REGS_API_KEY=your_regulations_gov_api_key
+This reduced the dataset from ~28,000 comments to ~21,000 unique patterns for analysis.
 
-# For analyzing comments
-OPENAI_API_KEY=your_openai_api_key
+## Technical Details
 
-# For attachment processing (optional)
-GEMINI_API_KEY=your_gemini_api_key
-```
+**Text Processing:**
+- PyPDF2 for PDF text extraction, python-docx for Word documents  
+- Gemini for images and complex documents that fail basic extraction
+- Deduplication based on first 1,000 characters of combined comment + attachment text
 
-## Usage
+**Analysis:**
+- OpenAI GPT models for stance classification and theme identification
+- sentence-transformers for creating semantic embeddings
+- Hierarchical clustering using Ward linkage to group similar comments
+- OpenAI-generated descriptions for each cluster based on representative comments
 
-### Running the Analysis Pipeline
+**Infrastructure:**
+- Python backend with JSON data storage
+- Next.js frontend with search and filtering capabilities
 
-#### Fresh Analysis (from scratch)
-```bash
-# Run complete pipeline on CSV file
-python backend/pipeline.py --csv comments.csv --output_dir results_2024
+## Limitations
 
-# With options
-python backend/pipeline.py --csv comments.csv --output_dir results_2024 \
-  --model gpt-4o-mini --truncate 1000 --skip-clustering
-```
+This analysis system has two notable limitations:
 
-#### Incremental Updates (resume)
-```bash
-# Resume from existing data
-python backend/resume_pipeline.py --csv comments.csv \
-  --raw_data data/raw_data.json --lookup_table data/lookup_table.json \
-  --truncate 1003
+### Attachment Processing
+- Not all attachments are successfully processed. Some PDFs, images, or other file types may fail text extraction even with Gemini API fallback, or result in garbled attachment content. However, this affects a very small percentage of comments.
 
-# Skip analysis (just fetch new comments)
-python backend/resume_pipeline.py --csv comments.csv \
-  --raw_data data/raw_data.json --lookup_table data/lookup_table.json \
-  --skip-analysis
-```
+### Model Categorization Accuracy
+- The LLM categorization is not perfect. Comments were much wider than expected in terms of content: there were some that we weren't even sure how to categorize doing manual review, which wasn't practical to do in general: we mainly used that to tweak the prompt, which you can see here: [backend/utils/comment_analyzer.py](backend/utils/comment_analyzer.py#L68-L127)
+- Previous iterations of this project included both formal testing and manual relabeling frameworks, but these added a degree of complexity that wasn't practical for this project. 
 
-#### Individual Analysis Steps
-```bash
-# Just create lookup table
-python backend/analysis/create_lookup_table.py --input raw_data.json \
-  --output lookup_table.json --truncate 1000
-
-# Just run LLM analysis
-python backend/analysis/analyze_lookup_table.py --input lookup_table.json
-
-# Just run clustering
-python backend/analysis/hierarchical_clustering.py --input lookup_table.json
-```
-
-### Pipeline Options
-
-#### Common Options
-- `--csv comments.csv` - Input CSV file with comment data
-- `--output_dir results/` - Output directory for results
-- `--model gpt-4o-mini` - LLM model for analysis (default: gpt-4o-mini)
-- `--truncate 1000` - Truncate text to N characters for analysis
-- `--limit 100` - Process only first N comments (for testing)
-
-#### Fresh Pipeline Options
-- `--skip-analysis` - Skip LLM analysis (only fetch and deduplicate)
-- `--skip-clustering` - Skip semantic clustering step
-
-#### Resume Pipeline Options  
-- `--raw_data path/to/raw_data.json` - Existing raw data file
-- `--lookup_table path/to/lookup_table.json` - Existing lookup table
-- `--skip-analysis` - Only fetch new comments (no LLM analysis)
-- `--skip-clustering` - Skip clustering step
-
-**Note**: Quote verification runs automatically after LLM analysis to verify extracted quotes exist in original text.
-
-### Manual Corrections
-
-After running the pipeline, you can manually correct analysis labels:
-
-```bash
-# Start the correction interface
-cd correct_labels
-./run_lookup_corrections.sh
-
-# This will:
-# 1. Launch a web interface at http://localhost:5000
-# 2. Allow you to review and edit stance/themes/quotes
-# 3. Save corrections back to the lookup table
-```
-
-### Frontend Development
-
-```bash
-# Start development server
-cd frontend
-npm run dev
-```
-
-### Testing
-
-The project includes a comprehensive test suite covering all major functionality:
-
-```bash
-# Run all tests
-cd tests
-python run_tests.py
-
-# Run specific test categories
-python -m unittest test_pipeline.TestPipelineIntegration -v
-python -m unittest test_pipeline.TestRealAPIIntegration -v
-```
-
-The test suite includes:
-- Data fetching and CSV parsing
-- Lookup table creation and deduplication
-- LLM analysis (with mock mode for CI)
-- Clustering and visualization
-- Resume pipeline functionality
-- Attachment processing with Gemini API
-- Schema validation
-- End-to-end workflow testing
-
-## Architecture
-
-This project has three main components:
-
-1. **Data Fetching**: Python scripts to fetch comments and attachments from regulations.gov API
-2. **Text Extraction**: Smart extraction from PDFs, DOCX, images with Gemini API fallback  
-3. **Analysis**: Python scripts using LLMs to analyze deduplicated comment text
-4. **Clustering**: Semantic clustering to group similar comments
-5. **Frontend**: Next.js application to view and search comments
-
-### Data Flow
-
-1. **Fetch**: Comments from regulations.gov → `raw_data.json` (all comments with metadata)
-2. **Deduplicate**: Create `lookup_table.json` with unique text patterns
-3. **Analyze**: LLM analysis adds stance, themes, quotes directly to `lookup_table.json`
-4. **Cluster**: Semantic clustering adds cluster information to `lookup_table.json`
-5. **Verify**: Quote verification creates separate verification reports
-6. **Merge**: (Optional) Combine raw + lookup → `data.json` for legacy frontend compatibility
-7. **View**: Frontend displays merged data
-
-### Key Files
-
-- **`raw_data.json`**: All fetched comments with full metadata and attachment text
-- **`lookup_table.json`**: Deduplicated text patterns with complete analysis (stance, themes, quotes, clusters)
-- **`lookup_table_quote_verification.json`**: Quote verification results
-- **`data.json`**: (Optional) Final merged dataset for legacy frontend compatibility
-
-### Deduplication Strategy
-
-The system reduces redundant LLM analysis significantly:
-- Comments with identical/similar text (after normalization) share one lookup entry
-- Each lookup entry has a `comment_ids` array listing all matching comments  
-- Analysis (expensive LLM calls) only happens once per unique text pattern
-- Typical efficiency: Analyze ~21,000 unique patterns instead of ~28,000 total comments
-- Speed improvement: ~25% reduction in API calls and analysis time
-
-## Pipeline Details
-
-### Fresh Pipeline (`pipeline.py`)
-1. Fetches all comments from CSV → `raw_data.json`
-2. Downloads and extracts attachments (PDF, DOCX, images)
-3. Creates deduplicated `lookup_table.json` from scratch
-4. Runs LLM analysis on unique text patterns (updates `lookup_table.json` in place)
-5. Performs semantic clustering (adds cluster data to `lookup_table.json`)
-6. Runs quote verification and creates verification reports
-7. Outputs to specified directory
-
-### Resume Pipeline (`resume_pipeline.py`)
-1. Compares CSV with existing `raw_data.json` to find new comments
-2. Fetches only new comments and appends to `raw_data.json`
-3. Downloads attachments for new comments
-4. Updates existing `lookup_table.json` with new text patterns
-5. Preserves all existing analysis and only analyzes new patterns
-6. Runs clustering and verification on the complete dataset
-7. Maintains perfect consistency with existing deduplication
-
-### Output Structure
-
-Each pipeline run creates output in the specified directory containing:
-- `raw_data.json` - All comments with attachment text
-- `lookup_table.json` - Deduplicated entries with complete analysis (stance, themes, quotes, clusters)
-- `lookup_table_quote_verification.json` - Quote verification results
-- `lookup_table_quote_verification.txt` - Human-readable verification report
-- `pipeline.log` or `resume_pipeline.log` - Execution log
-- `attachments/` - Downloaded attachment files with extracted text
-- `clustering_*/` - Clustering visualizations and reports (if clustering enabled)
+### Impact on Results
+- We believe these limitations don't significantly affect the top-level findings
+- The main impact is likely on the "neutral" category - manual review would probably recategorize many neutral comments as having a stance, making the already small neutral percentage even lower. 
 
 ## License
 
