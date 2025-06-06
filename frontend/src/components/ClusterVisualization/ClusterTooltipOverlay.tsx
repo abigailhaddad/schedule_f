@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { ClusterPoint } from '@/lib/actions/clusters';
 import Badge from '@/components/ui/Badge';
 
@@ -20,44 +20,54 @@ export default function ClusterTooltipOverlay({
   onNavigate
 }: ClusterTooltipOverlayProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const [adjustedPosition, setAdjustedPosition] = useState({ x: position.x, y: position.y });
+  const [tooltipDimensions, setTooltipDimensions] = useState({ width: 0, height: 0 });
 
+  // Only measure tooltip dimensions when it changes or when point changes
   useEffect(() => {
     if (tooltipRef.current) {
-      const tooltip = tooltipRef.current;
-      const tooltipRect = tooltip.getBoundingClientRect();
-      const parentRect = tooltip.offsetParent?.getBoundingClientRect();
-      
-      if (parentRect) {
-        let newX = position.x + 10;
-        let newY = position.y + 10;
-        
-        // Check if tooltip would go off the right edge
-        if (newX + tooltipRect.width > parentRect.width - 20) {
-          // Position to the left of the cursor instead
-          newX = position.x - tooltipRect.width - 10;
-        }
-        
-        // Check if tooltip would go off the bottom edge
-        if (newY + tooltipRect.height > parentRect.height - 20) {
-          // Position above the cursor instead
-          newY = position.y - tooltipRect.height - 10;
-        }
-        
-        // Ensure tooltip doesn't go off the left edge
-        if (newX < 10) {
-          newX = 10;
-        }
-        
-        // Ensure tooltip doesn't go off the top edge
-        if (newY < 10) {
-          newY = 10;
-        }
-        
-        setAdjustedPosition({ x: newX, y: newY });
-      }
+      const rect = tooltipRef.current.getBoundingClientRect();
+      setTooltipDimensions({ width: rect.width, height: rect.height });
     }
-  }, [position]);
+  }, [point.id]); // Only re-measure when the point changes
+
+  // Calculate adjusted position using useMemo to prevent recalculation on every render
+  const adjustedPosition = useMemo(() => {
+    if (!tooltipRef.current) {
+      return { x: position.x + 10, y: position.y + 10 };
+    }
+
+    const parentRect = tooltipRef.current.offsetParent?.getBoundingClientRect();
+    if (!parentRect) {
+      return { x: position.x + 10, y: position.y + 10 };
+    }
+
+    let newX = position.x + 10;
+    let newY = position.y + 10;
+    
+    // Check if tooltip would go off the right edge
+    if (newX + tooltipDimensions.width > parentRect.width - 20) {
+      // Position to the left of the cursor instead
+      newX = position.x - tooltipDimensions.width - 10;
+    }
+    
+    // Check if tooltip would go off the bottom edge
+    if (newY + tooltipDimensions.height > parentRect.height - 20) {
+      // Position above the cursor instead
+      newY = position.y - tooltipDimensions.height - 10;
+    }
+    
+    // Ensure tooltip doesn't go off the left edge
+    if (newX < 10) {
+      newX = 10;
+    }
+    
+    // Ensure tooltip doesn't go off the top edge
+    if (newY < 10) {
+      newY = 10;
+    }
+    
+    return { x: newX, y: newY };
+  }, [position.x, position.y, tooltipDimensions.width, tooltipDimensions.height]);
 
   // Use adjusted position for tooltip
   const tooltipStyle: React.CSSProperties = {

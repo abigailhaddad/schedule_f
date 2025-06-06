@@ -7,7 +7,7 @@
     "dev:no-docker": "DB_ENV=preprod next dev",
     "dev:preprod": "DB_ENV=preprod next dev",
     "dev:dangerously_use_prod_db": "DB_ENV=prod next dev",
-    "build": "next build",
+    "build": "DB_ENV=prod next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",

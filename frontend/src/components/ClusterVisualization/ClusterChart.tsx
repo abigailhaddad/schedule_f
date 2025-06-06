@@ -97,18 +97,35 @@ function ClusterChartContent({
   // Check for pinned comment ID in URL on mount
   useEffect(() => {
     const pinnedId = searchParams.get('pinned');
-    if (pinnedId && data) {
+    if (pinnedId && data && chartRef.current) {
       for (const series of data) {
         const point = series.data.find(p => p.id === pinnedId);
         if (point) {
           setClickedPoint(point);
-          // Set initial position to center of chart (will be adjusted by mouse move)
-          setTooltipPosition({ x: 300, y: 300 });
+          
+          // Calculate the actual position of the point on the chart
+          // Chart dimensions from the Nivo configuration
+          const chartWidth = chartRef.current.offsetWidth;
+          const chartHeight = chartRef.current.offsetHeight;
+          const margin = { top: 20, right: 20, bottom: 60, left: 60 };
+          
+          // Calculate the drawing area dimensions
+          const drawWidth = chartWidth - margin.left - margin.right;
+          const drawHeight = chartHeight - margin.top - margin.bottom;
+          
+          // Scale the point coordinates to pixel positions
+          const xRange = bounds.maxX * 1.1 - bounds.minX * 1.1;
+          const yRange = bounds.maxY * 1.1 - bounds.minY * 1.1;
+          
+          const pixelX = margin.left + ((point.x - bounds.minX * 1.1) / xRange) * drawWidth;
+          const pixelY = margin.top + drawHeight - ((point.y - bounds.minY * 1.1) / yRange) * drawHeight;
+          
+          setTooltipPosition({ x: pixelX, y: pixelY });
           break;
         }
       }
     }
-  }, [searchParams, data]);
+  }, [searchParams, data, bounds]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -126,11 +143,20 @@ function ClusterChartContent({
   // };
 
   const handleMouseMove = useCallback((event: React.MouseEvent) => {
-    if (chartRef.current && hoveredPoint && !clickedPoint) {
+    // Don't update position if we have a clicked point (tooltip is frozen)
+    if (clickedPoint) return;
+    
+    if (chartRef.current && hoveredPoint) {
       const rect = chartRef.current.getBoundingClientRect();
-      setTooltipPosition({
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+      const newX = event.clientX - rect.left;
+      const newY = event.clientY - rect.top;
+      
+      // Only update if position has changed significantly (more than 2 pixels)
+      setTooltipPosition(prev => {
+        if (Math.abs(prev.x - newX) > 2 || Math.abs(prev.y - newY) > 2) {
+          return { x: newX, y: newY };
+        }
+        return prev;
       });
     }
   }, [hoveredPoint, clickedPoint]);
@@ -184,8 +210,26 @@ function ClusterChartContent({
     } else {
       setClickedPoint(point);
       setHoveredPoint(null);
+      
+      // Calculate and set the position of the clicked point
+      if (chartRef.current) {
+        const chartWidth = chartRef.current.offsetWidth;
+        const chartHeight = chartRef.current.offsetHeight;
+        const margin = { top: 20, right: 20, bottom: 60, left: 60 };
+        
+        const drawWidth = chartWidth - margin.left - margin.right;
+        const drawHeight = chartHeight - margin.top - margin.bottom;
+        
+        const xRange = bounds.maxX * 1.1 - bounds.minX * 1.1;
+        const yRange = bounds.maxY * 1.1 - bounds.minY * 1.1;
+        
+        const pixelX = margin.left + ((point.pcaX - bounds.minX * 1.1) / xRange) * drawWidth;
+        const pixelY = margin.top + drawHeight - ((point.pcaY - bounds.minY * 1.1) / yRange) * drawHeight;
+        
+        setTooltipPosition({ x: pixelX, y: pixelY });
+      }
     }
-  }, [clickedPoint]);
+  }, [clickedPoint, bounds]);
 
   // Clear clicked point when clicking outside
   const handleChartClick = useCallback((event: React.MouseEvent) => {
@@ -214,6 +258,13 @@ function ClusterChartContent({
 
   // Memoize the chart data to prevent unnecessary re-renders
   const chartData = useMemo(() => data || [], [data]);
+
+  // Memoize event handlers to prevent re-creation on every render
+  const memoizedHandlers = useMemo(() => ({
+    onClick: handleClick,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+  }), [handleClick, handleMouseEnter, handleMouseLeave]);
 
   return (
     <div 
@@ -295,9 +346,9 @@ function ClusterChartContent({
           }
           return baseColors[0] || '#3b82f6'; // Fallback color with extra safety
         }}
-        onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onClick={memoizedHandlers.onClick}
+        onMouseEnter={memoizedHandlers.onMouseEnter}
+        onMouseLeave={memoizedHandlers.onMouseLeave}
         enableGridX={false}
         enableGridY={false}
         // Disable Nivo's built-in tooltip

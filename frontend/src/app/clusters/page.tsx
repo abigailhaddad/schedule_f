@@ -11,7 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ClustersPage() {
-  const clusterResponse = await getClusterData(); 
+  // Fetch 80% of data points from each cluster for the main view
+  const clusterResponse = await getClusterData(0.8); 
 
   // Pass the data with the correct prop names
   return (
