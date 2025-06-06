@@ -20,7 +20,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ isMenuOpen, setIsMenuOpen, subtit
     <div className="flex flex-col space-y-5">
       {subtitle && (
         <Link
-          href="https://github.com/your-repo"
+          href="https://github.com/abigailhaddad/schedule_f"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center bg-slate-100 text-slate-700 py-2 px-3 rounded-md hover:bg-slate-200 transition-colors border border-slate-200"
