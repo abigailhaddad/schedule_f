@@ -61,6 +61,10 @@ This analysis system has two notable limitations:
 - We believe these limitations don't significantly affect the top-level findings
 - The main impact is likely on the "neutral" category - manual review would probably recategorize many neutral comments as having a stance, making the already small neutral percentage even lower. 
 
+## Note
+
+This repo is archived. The bulk comment data files (`data/data.json`, `data/lookup_table.json`) have been removed. For a more general and maintained version of this approach, see [generic-comment-analyzer](https://github.com/abigailhaddad/generic-comment-analyzer).
+
 ## License
 
 MIT
